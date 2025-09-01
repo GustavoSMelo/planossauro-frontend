@@ -1,0 +1,104 @@
+@charset "UTF-8";
+
+.containerLP {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 100vw;
+    min-height: 100vh;
+    padding: 20px;
+    align-items: center;
+
+    .wrapper {
+        box-shadow: 1px 5px 10px #505050;
+        padding: 20px 50px;
+        border-radius: 10px;
+        width: 92%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .navbar {
+            display: flex;
+            flex-direction: row;
+            padding: 10px;
+            // background-color: #f00;
+            width: 90%;
+            justify-content: space-between;
+
+
+            figure,
+            button {
+                height: 80px;
+
+                img {
+                    width: 80px;
+                }
+            }
+
+            button {
+                background: none;
+                border: none;
+            }
+        }
+
+        .mainContent {
+            display: flex;
+            // background-color: #ff0;
+            align-items: center;
+            justify-content: space-around;
+            margin-top: 60px;
+
+            div {
+                width: 40%;
+                display: flex;
+                flex-direction: column;
+
+                h1 {
+                    font-size: 46pt;
+                }
+
+                h2 {
+                    font-size: 20pt;
+                }
+
+                p {
+                    font-size: 14pt;
+                    text-align: justify;
+                }
+
+                button.btnLogin {
+                    background-color: #D70A53;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 20px 0px;
+                    cursor: pointer;
+                    color: #fff;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                    font-size: 15pt;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                }
+
+                button.btnExamples {
+                    border: none;
+                    font-size: 16pt;
+                    background-color: transparent;
+                    color: #D70A53;
+                    font-weight: bold;
+                    padding: 15px 0px;
+                    cursor: pointer;
+                }
+            }
+
+            figure {
+
+                img {
+                    width: 400px;
+                }
+            }
+        }
+    }
+}
