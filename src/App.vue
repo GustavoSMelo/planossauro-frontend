@@ -1,23 +1,25 @@
 <script setup lang="ts">
 import './styles/app.style.scss';
+import 'primeicons/primeicons.css';
 </script>
 
 <template>
     <div class="containerLP">
         <div class="wrapper">
             <navbar class="navbar">
-                <figure class="dinoLogo">
-                    <img src="./assets/dino2.svg" alt="Planeja.ai dino logo" />
-                </figure>
+                <span></span>
 
                 <button>
-                    <img src="./assets/dino2.svg" alt="imageTheme" />
+                    <i class="pi pi-sun iconThemeSwitcher" />
                 </button>
             </navbar>
 
             <main class="mainContent">
                 <div>
-                    <h1>Projeta.ai</h1>
+                    <figure>
+                        <img src="./assets/DinoLogo.svg" alt="Dino Logo" />
+                        <figcaption> Projeta.ai</figcaption>
+                    </figure>
                     <h2>Seu planejador pessoal</h2>
                     <p>
                         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut nobis rem, perspiciatis nesciunt

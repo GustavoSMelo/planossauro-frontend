@@ -9,15 +9,19 @@
     min-height: 100vh;
     padding: 20px;
     align-items: center;
+    background-color: #fee7ef;
 
     .wrapper {
-        box-shadow: 1px 5px 10px #505050;
+        box-shadow: 1px 5px 10px #fdc9db;
         padding: 20px 50px;
         border-radius: 10px;
         width: 92%;
         display: flex;
         flex-direction: column;
         align-items: center;
+        background-color: #fff;
+        // border: 1px solid #fcabc7;
+        position: relative;
 
         .navbar {
             display: flex;
@@ -26,7 +30,8 @@
             // background-color: #f00;
             width: 90%;
             justify-content: space-between;
-
+            position: absolute;
+            right: 40px;
 
             figure,
             button {
@@ -40,6 +45,25 @@
             button {
                 background: none;
                 border: none;
+
+                i {
+                    font-size: 48pt;
+                    display: flex;
+                    align-items: center;
+                    border-radius: 400px;
+                    padding: 5px 8px;
+                    // border: solid 2px #fdc9db;
+                    color: #D70A53;
+                    cursor: pointer;
+                    transition: .4s;
+                    box-shadow: 1px 1px 2px #fee7ef;
+                }
+
+                i:hover {
+                    border: none;
+                    box-shadow: 3px 6px 8px #fdc9db;
+                    transition: .4s;
+                }
             }
         }
 
@@ -55,17 +79,29 @@
                 display: flex;
                 flex-direction: column;
 
-                h1 {
-                    font-size: 46pt;
+                figure {
+                    display: flex;
+
+                    img {
+                        width: 80px;
+                    }
+
+                    figcaption {
+                        font-size: 52pt;
+                        font-weight: bolder;
+                    }
                 }
 
                 h2 {
-                    font-size: 20pt;
+                    font-size: 30pt;
                 }
 
                 p {
                     font-size: 14pt;
                     text-align: justify;
+                    margin-top: 15px;
+                    margin-bottom: 15px;
+                    color: #101010;
                 }
 
                 button.btnLogin {
@@ -96,9 +132,114 @@
             figure {
 
                 img {
-                    width: 400px;
+                    width: 360px;
                 }
             }
         }
     }
 }
+
+@media screen and (max-width: 980px) {
+    .containerLP {
+        .wrapper {
+            .mainContent {
+                div {
+                    h2 {
+                        font-size: 18pt;
+                    }
+
+                    p {
+                        font-size: 12pt;
+                    }
+                }
+                figure {
+                    img {
+                        width: 240px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 670px) {
+    .containerLP {
+        .wrapper {
+            .navbar {
+                right: 10px;
+            }
+            .mainContent {
+                flex-direction: column-reverse;
+
+                div {
+                    width: 90%;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .containerLP {
+        .wrapper {
+            .navbar {
+                button {
+                    i {
+                        font-size: 30pt;
+                        padding: 3px 17px;
+                    }
+                }
+            }
+            .mainContent {
+                div {
+                    figure {
+                        figcaption {
+                            font-size: 40pt;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .containerLP {
+        .wrapper {
+            .navbar {
+                top: 0;
+            }
+
+            .mainContent {
+                div {
+                    figure {
+                        figcaption {
+                            font-size: 32pt;
+                        }
+                    }
+
+                    h2 {
+                        font-size: 15pt;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .containerLP {
+        .wrapper {
+            .mainContent {
+                div {
+                    figure {
+                        figcaption {
+                            font-size: 26pt;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
