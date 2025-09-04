@@ -7,6 +7,12 @@
 
 @font-face {
     font-family: Roboto;
+    src: url('../assets/fonts/Roboto/Roboto-Regular.ttf');
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: Roboto;
     src: url('../assets/fonts/Roboto/Roboto-Black.ttf');
     font-weight: bolder;
 }
@@ -29,11 +35,28 @@
     font-weight: lighter;
 }
 
+@font-face {
+    font-family: Roboto;
+    src: url('../assets/fonts/Roboto/Roboto_SemiCondensed-Medium.ttf');
+    font-weight: 600;
+}
+
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    border: 0;
+    font-family: 'Roboto', Verdana, Geneva, Tahoma, sans-serif;
+}
+
+html,
+body {
     max-width: 1920px;
-    min-height: 100%;
-    font-family: Roboto, Verdana, Geneva, Tahoma, sans-serif;
+    min-width: 320px;
+    margin: auto;
+    background-color: #fdc9db;
+}
+
+input:focus {
+    outline: none;
 }

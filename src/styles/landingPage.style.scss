@@ -10,12 +10,15 @@
     padding: 20px;
     align-items: center;
     background-color: #fee7ef;
+    // background-image: url('../assets/backgroundLightTheme.png');
+    // background-repeat: repeat;
+    // background-size: 70%;
 
     .wrapper {
         box-shadow: 1px 5px 10px #fdc9db;
         padding: 20px 50px;
         border-radius: 10px;
-        width: 92%;
+        width: 70%;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -73,6 +76,8 @@
             align-items: center;
             justify-content: space-around;
             margin-top: 60px;
+            position: relative;
+            z-index: 1;
 
             div {
                 width: 40%;
@@ -105,6 +110,7 @@
                 }
 
                 button.btnLogin {
+                    cursor: pointer;
                     background-color: #D70A53;
                     border: none;
                     border-radius: 5px;
@@ -137,6 +143,23 @@
             }
         }
     }
+
+    h4 {
+        margin-top: 40px;
+
+        a {
+            color: #000;
+            text-decoration: none;
+        }
+    }
+}
+
+@media screen and (max-width: 1600px) {
+    .containerLP {
+        .wrapper {
+            width: 80%;
+        }
+    }
 }
 
 @media screen and (max-width: 980px) {
@@ -162,7 +185,7 @@
     }
 }
 
-@media screen and (max-width: 670px) {
+@media screen and (max-width: 780px) {
     .containerLP {
         .wrapper {
             .navbar {
@@ -179,7 +202,7 @@
     }
 }
 
-@media screen and (max-width: 520px) {
+@media screen and (max-width: 600px) {
     .containerLP {
         .wrapper {
             .navbar {
@@ -203,9 +226,11 @@
     }
 }
 
-@media screen and (max-width: 420px) {
+@media screen and (max-width: 480px) {
     .containerLP {
         .wrapper {
+            width: 92%;
+
             .navbar {
                 top: 0;
             }
