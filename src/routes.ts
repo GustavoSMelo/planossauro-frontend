@@ -1,10 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LPComponent from './views/LandingPage.vue';
-import HomePage from './views/HomePage.vue';
+import type { IRoutes } from './interfaces/routes.interface';
 
-const routes = [
+const routes: Array<IRoutes> = [
     { path: '', component: LPComponent },
-    { path: '/home', component: HomePage}
 ];
 
 const router = createRouter({
