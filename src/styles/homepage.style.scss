@@ -1,0 +1,86 @@
+@charset "UTF-8";
+@import './colors.scss';
+
+.homePageContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 60px;
+    flex-direction: column;
+
+    .welcomeContainer {
+        background-color: $white;
+        width: 80%;
+        display: flex;
+        border-radius: 10px;
+        box-shadow: 1px 1px 8px $shadowLowPink;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 0;
+
+        h2 {
+            font-size: 22pt;
+
+            span {
+                font-size: 30pt;
+            }
+
+            span.goodDay {
+                color: $yellowDay;
+            }
+
+            span.goodAfternoon {
+                color: $orangeAfternoon;
+            }
+
+            span.goodNight {
+                color: $blueNight;
+            }
+        }
+
+        img {
+            width: 168px;
+        }
+    }
+
+
+    .tabsContentContainer {
+        display: flex;
+        background-color: $white;
+        margin-top: 50px;
+        width: 80%;
+        border-radius: 10px;
+        box-shadow: 1px 1px 8px $shadowLowPink;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 40px;
+
+        ul {
+            list-style: none;
+            display: flex;
+            width: 100%;
+            border-bottom: 1px solid $accentColor;
+
+            li {
+                margin-right: 10px;
+                padding: 14px;
+                background-color: $accentColor;
+                color: #fff;
+                font-size: 12pt;
+                font-weight: 500;
+                cursor: pointer;
+                i.pi {
+                    margin-right: 5px
+                }
+            }
+
+            li:nth-child(1) {
+                border-top-left-radius: 10px;
+            }
+        }
+
+        .tabsContent {
+            padding: 20px;
+        }
+    }
+}

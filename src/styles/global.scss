@@ -13,6 +13,12 @@
 
 @font-face {
     font-family: Roboto;
+    src: url('../assets/fonts/Roboto/Roboto-Regular.ttf');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: Roboto;
     src: url('../assets/fonts/Roboto/Roboto-Black.ttf');
     font-weight: bolder;
 }
@@ -59,4 +65,9 @@ body {
 
 input:focus {
     outline: none;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
 }

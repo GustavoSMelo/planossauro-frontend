@@ -1,0 +1,175 @@
+@charset "UTF-8";
+@import '../colors.scss';
+
+label {
+    margin-bottom: 5px;
+    font-size: 18pt;
+    margin-top: 10px;
+}
+
+input {
+    background-color: $white;
+    border: 1px solid $accentColor;
+    padding: 10px 30px 10px 8px;
+    color: $accentColor;
+    font-weight: 600;
+    border-radius: 5px;
+    font-size: 14pt;
+    width: 95%;
+}
+
+.btnTrash {
+    background-color: $white;
+    color: $accentColor;
+    cursor: pointer;
+    border: solid 1px $accentColor;
+    padding: 10px;
+    font-size: 14pt;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    margin-left: 5px;
+    transition: .4s;
+}
+
+.btnTrash:hover {
+    background-color: $red;
+    transition: .4s;
+    color: $black;
+    border-color: $red;
+}
+
+.planningContainer {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-left: 20px;
+
+    .planningSelect {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-bottom: 10px;
+        border-bottom: $lightGray solid 1px;
+
+        img {
+            width: 160px;
+            transform: scale(-1, 1);
+        }
+
+        span {
+            margin-left: 30px;
+
+            .planSelect {
+                background-color: $white;
+                color: $accentColor;
+                border: solid 1px $accentColor;
+                padding: 10px 30px 10px 8px;
+                border-radius: 5px;
+                font-size: 14pt;
+                text-align: left;
+                width: 240px;
+                margin-top: 10px;
+            }
+        }
+    }
+
+    form.dailyPlan>span {
+        display: flex;
+        flex-direction: column;
+    }
+
+    form.dailyPlan>.btnContainer {
+        display: flex;
+
+        button {
+            border-radius: 5px;
+            padding: 10px;
+            width: 240px;
+            display: flex;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            font-size: 16pt;
+        }
+
+        button:nth-child(1) {
+            background-color: $accentColor;
+            color: $white;
+            border: none;
+            transition: .4s;
+        }
+
+        button:nth-child(1):hover {
+            background-color: $accentColorDarker;
+            transition: .4s;
+        }
+
+        button:nth-child(2) {
+            color: $accentColor;
+            border: solid 3px $accentColor;
+            background-color: $white;
+            margin-left: 20px;
+            font-size: 15pt;
+            font-weight: 600;
+        }
+
+        button:nth-child(2):hover {
+            background-color: $accentColorLighter;
+            transition: .4s;
+        }
+    }
+
+    div.weeklyPlan {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 20px;
+        justify-content: center;
+
+        .weekPlan {
+            border: solid 1px $accentColor;
+            border-radius: 5px;
+            margin-top: 20px;
+            margin-right: 20px;
+
+            h2 {
+                background-color: $accentColor;
+                color: $white;
+                padding: 20px;
+            }
+
+            span.classContainer {
+                display: flex;
+                flex-direction: column;
+                padding: 5px 20px;
+
+                span>input {
+                    width: 320px;
+                }
+
+                .ghostButton {
+                    width: 41px;
+                }
+            }
+
+            .btnAddClassAtv {
+                border-radius: 5px;
+                padding: 10px;
+                width: 240px;
+                display: flex;
+                cursor: pointer;
+                align-items: center;
+                justify-content: center;
+                margin-top: 10px;
+                font-size: 16pt;
+                background-color: $accentColor;
+                color: #fff;
+                margin: 20px;
+                width: 320px;
+            }
+        }
+    }
+}
