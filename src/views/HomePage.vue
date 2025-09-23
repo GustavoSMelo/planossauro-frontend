@@ -29,7 +29,7 @@ const hourTime = new Date().getHours();
             </ul>
 
             <div class="tabsContent">
-                <HomeContent />
+                <PlanningContent />
             </div>
         </div>
     </main>

@@ -83,14 +83,14 @@
 .navbarControlsMobile {
     display: flex;
     flex-direction: row;
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
     z-index: 3;
     width: 100%;
     height: 100%;
     justify-content: space-between;
-    background-color: #00000076;
+    background-color: $transparentGray;
     overflow-x: hidden;
 
     .blur {
@@ -99,7 +99,7 @@
 
     .hamburgerMenu {
         background-color: $accentColor;
-        width: 50%;
+        width: 70%;
         padding: 20px;
         list-style: none;
         animation: menuHamburgerSpawn 0.5s normal;

@@ -172,4 +172,76 @@ input {
             }
         }
     }
+
+    .btnGeneratePlan {
+        background-color: $white;
+        border: solid 1px $accentColor;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $accentColor;
+        font-size: 16pt;
+        font-weight: 500;
+        margin-top: 30px;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 5px;
+        width: 320px;
+        margin: 30px auto;
+        transition: .4s;
+    }
+
+    .btnGeneratePlan:hover {
+        background-color: $accentColor;
+        color: $white;
+        transition: .4s;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    input {
+        width: 95%;
+    }
+
+    .planningContainer {
+        margin: 0;
+
+        .planningSelect {
+            flex-direction: column;
+
+            span {
+                margin-left: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
+        }
+
+        div.weeklyPlan {
+            .weekPlan {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                width: 100%;
+
+                h2 {
+                    width: 100%;
+                }
+
+                span.classContainer {
+                    span>input {
+                        width: 90%;
+                    }
+                }
+
+                button.btnAddClassAtv {
+                    width: 90%;
+                    margin: 10px 0;
+                }
+            }
+        }
+    }
 }
