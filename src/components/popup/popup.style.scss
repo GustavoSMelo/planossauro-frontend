@@ -1,0 +1,71 @@
+@charset "UTF-8";
+@import '../../styles/colors.scss';
+
+@keyframes popupAppears {
+    0% {
+        transform: translateY(200deg);
+    }
+
+    100% {
+        transform: translateY(0deg);
+    }
+}
+
+.popupContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .popup {
+        padding: 20px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 40%;
+        position: fixed;
+        top: 0;
+        margin-top: 20px;
+        border-radius: 5px;
+        box-shadow: 1px 1px 4px $black;
+        animation: popupAppears .6s forwards;
+        z-index: 15;
+
+        .popupLogo,
+        .popupClose {
+            font-size: 24pt;
+        }
+
+        .popupClose {
+            cursor: pointer;
+        }
+
+        .popupMessage {
+            width: 60%;
+            font-size: 18pt;
+            font-weight: 500;
+            text-align: center;
+        }
+    }
+
+    .error {
+        background-color: $darkerRed;
+        color: $white;
+    }
+
+    .info {
+        background-color: $blueInfo;
+        $color: $white;
+    }
+
+    .warning {
+        background-color: $orangeAfternoon;
+        color: $black;
+    }
+
+    .success {
+        background-color: $successGreen;
+    }
+
+}

@@ -1,0 +1,25 @@
+@charset "UTF-8";
+@import '../../styles/colors.scss';
+
+.loadingContainer {
+    position: fixed;
+    top: 0;
+    z-index: 10;
+    background-color: $transparentGray;
+    color: $white;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+
+    i {
+        font-size: 32pt;
+    }
+    h2 {
+        font-size: 26pt;
+        margin-top: 10px;
+    }
+}

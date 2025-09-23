@@ -1,0 +1,21 @@
+<script setup lang="ts">
+import { inject } from 'vue';
+import './popup.style.scss';
+import type { IPopupContext } from '../../interfaces/context/popup.interface';
+
+const popupContext = inject('popup') as IPopupContext;
+</script>
+<template>
+    <div class="popupContainer">
+        <div class="popup" :class="popupContext.popup.value.status">
+            <i v-if="popupContext.popup.value.status === 'error'" class="pi pi-exclamation-circle popupLogo"></i>
+            <i v-else-if="popupContext.popup.value.status === 'info'" class="pi pi-info-circle popupLogo"></i>
+            <i v-else-if="popupContext.popup.value.status === 'success'" class="pi pi-check-circle popupLogo"></i>
+            <i v-else class="pi pi-exclamation-triangle popupLogo"></i>
+
+            <p class="popupMessage">{{ popupContext.popup.value.message }}</p>
+
+            <i class="pi pi-times popupClose" @click="popupContext.handleChangePopupShow()"></i>
+        </div>
+    </div>
+</template>
