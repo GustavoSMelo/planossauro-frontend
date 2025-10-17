@@ -127,18 +127,22 @@ input {
         flex-direction: row;
         flex-wrap: wrap;
         margin-top: 20px;
-        justify-content: center;
 
         .weekPlan {
-            border: solid 1px $accentColor;
-            border-radius: 5px;
+            box-shadow: 4px 4px 12px $gray;
+            border-radius: 10px;
             margin-top: 20px;
             margin-right: 20px;
+            transition: .2s;
+            border: 3px solid transparent;
 
             h2 {
-                background-color: $accentColor;
-                color: $white;
+                background-color: $white;
+                color: $black;
                 padding: 20px;
+                border-top-left-radius: 9px;
+                border-top-right-radius: 9px;
+                border-bottom: 1px $accentColor solid;
             }
 
             span.classContainer {
@@ -148,6 +152,15 @@ input {
 
                 span>input {
                     width: 320px;
+                    border: solid 2px $gray;
+                }
+
+                span>input:hover {
+                    border: solid 2px $accentColor;
+                }
+
+                span > input:focus {
+                    border: solid 2px $accentColorDarker;
                 }
 
                 .ghostButton {
@@ -169,19 +182,29 @@ input {
                 color: #fff;
                 margin: 20px;
                 width: 320px;
+
+                .btnAddClass {
+                    margin-right: 10px;
+                }
             }
         }
+
+        .weekPlan:hover {
+            transition: .2s;
+            border: 3px $accentColor solid;
+        }
+
     }
 
     .btnGeneratePlan {
-        background-color: $white;
-        border: solid 1px $accentColor;
+        background-color: $greenDefault;
+        border: solid 1px $black;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: $accentColor;
+        color: $black;
         font-size: 16pt;
-        font-weight: 500;
+        font-weight: bold;
         margin-top: 30px;
         cursor: pointer;
         padding: 10px;

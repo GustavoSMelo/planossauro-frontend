@@ -21,7 +21,7 @@
     position: sticky;
     top: 0;
     box-shadow: 2px 2px 8px $shadowLowPink;
-    padding: 20px;
+    padding: 15px 20px;
     z-index: 2;
 
     .logoContainer {
@@ -30,12 +30,12 @@
         cursor: pointer;
 
         img {
-            width: 55px;
+            width: 35px;
             margin-right: 10px;
         }
 
         figcaption {
-            font-size: 28pt;
+            font-size: 16pt;
             font-weight: bold;
             color: $white;
         }
@@ -54,8 +54,8 @@
 
         .planInfo {
             background-color: $white;
-            padding: 15px 15px;
-            font-size: 14pt;
+            padding: 10px 10px;
+            font-size: 10pt;
             font-weight: 500;
             color: $accentColor;
             border-radius: 5px;
@@ -65,8 +65,8 @@
         .btnNavbar {
             background-color: $white;
             color: $accentColor;
-            font-size: 21pt;
-            padding: 15px 7px;
+            font-size: 12pt;
+            padding: 10px 1px;
             display: flex;
             align-items: center;
             justify-content: center;
