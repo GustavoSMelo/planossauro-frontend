@@ -125,84 +125,152 @@ input {
     div.weeklyPlan {
         display: flex;
         flex-direction: row;
-        flex-wrap: wrap;
         margin-top: 20px;
+        border: solid 2px $accentColor;
+        border-radius: 10px;
+        height: 500px;
 
-        .weekPlan {
-            box-shadow: 4px 4px 12px $gray;
-            border-radius: 10px;
-            margin-top: 20px;
-            margin-right: 20px;
-            transition: .2s;
-            border: 3px solid transparent;
+        .weekDays {
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            border-right: solid 2px $accentColor;
 
-            h2 {
+            li.btnWeekDays {
+                height: 25%;
                 background-color: $white;
-                color: $black;
+                color: $accentColor;
+                border-bottom: solid 1px $accentColor;
                 padding: 20px;
-                border-top-left-radius: 9px;
-                border-top-right-radius: 9px;
-                border-bottom: 1px $accentColor solid;
+                margin-right: 0;
+                font-size: 14pt;
+                display: flex;
+                align-items: center;
+
+                i.iconUncheck {
+                    color: $gray;
+                }
+
+                i.iconCheck {
+                    color: $darkGreen;
+                    font-weight: bold;
+                }
             }
 
-            span.classContainer {
+            li.btnWeekDays:last-child {
+                border: none;
+                border-bottom-left-radius: 10px;
+            }
+
+            li.selected {
+                background-color: $accentColor;
+                color: $white;
+            }
+        }
+
+
+        .classContentContainer {
+            padding: 10px;
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+
+            .classContent {
+                height: 85%;
+                overflow-y: scroll;
                 display: flex;
                 flex-direction: column;
-                padding: 5px 20px;
 
-                span>input {
-                    width: 320px;
-                    border: solid 2px $gray;
+                .classWrapper {
+                    display: flex;
+                    align-items: end;
+                    width: 100%;
+                    height: fit-content;
+
+                    .classDescription {
+                        display: block;
+                        margin-top: 20px;
+                        margin-bottom: 20px;
+                        width: 100%;
+                        height: fit-content;
+
+                        h2 {
+                            color: $gray;
+                        }
+
+                        input {
+                            width: 97%;
+                            border: solid 1px $gray;
+                            color: $accentColor;
+                            margin-top: 5px;
+                        }
+
+                        input::placeholder {
+                            color: $gray;
+                        }
+
+                        input:focus {
+                            border: solid 2px $accentColor;
+                        }
+                    }
+
+                    .btnRemoveClass,
+                    .btnRemoveClassCancel {
+                        height: fit-content;
+                        font-size: 21pt;
+                        margin-bottom: 20px;
+                        color: $accentColor;
+                        padding: 10px 10px 0 10px;
+                        background-color: $white;
+                        cursor: pointer;
+                        transition: .2s;
+                    }
+
+                    .btnRemoveClass:hover {
+                        transition: .2s;
+                        color: $darkerRed;
+                    }
+
+                    .btnRemoveClassCancel {
+                        color: $gray;
+                        cursor: not-allowed;
+                    }
                 }
 
-                span>input:hover {
-                    border: solid 2px $accentColor;
-                }
-
-                span > input:focus {
-                    border: solid 2px $accentColorDarker;
-                }
-
-                .ghostButton {
-                    width: 41px;
-                }
             }
 
-            .btnAddClassAtv {
-                border-radius: 5px;
-                padding: 10px;
-                width: 240px;
+            .btnControlsContainer {
+                width: 100%;
+                padding-top: 10px;
+                border-top: 1px solid $gray;
+                position: relative;
+                bottom: 0;
                 display: flex;
-                cursor: pointer;
-                align-items: center;
                 justify-content: center;
-                margin-top: 10px;
-                font-size: 16pt;
-                background-color: $accentColor;
-                color: #fff;
-                margin: 20px;
-                width: 320px;
 
-                .btnAddClass {
-                    margin-right: 10px;
+
+                button {
+                    height: fit-content;
+                    cursor: pointer;
+                    padding: 10px 50px;
+                    margin: 0 10px;
+                    background-color: $gray;
+                    color: $black;
+                    font-weight: bold;
+                    border-radius: 5px;
                 }
             }
         }
-
-        .weekPlan:hover {
-            transition: .2s;
-            border: 3px $accentColor solid;
-        }
-
     }
 
-    .btnGeneratePlan {
-        background-color: $greenDefault;
+    .btnGeneratePlan,
+    .btnGeneratePlanCancel {
+        background-color: $accentColor;
         border: solid 1px $black;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: $black;
+        color: $white;
         font-size: 16pt;
         font-weight: bold;
         margin-top: 30px;
@@ -218,6 +286,45 @@ input {
         background-color: $accentColor;
         color: $white;
         transition: .4s;
+    }
+
+    .btnGeneratePlanCancel {
+        background-color: $lightGray;
+        color: $gray;
+        cursor: not-allowed;
+    }
+}
+
+@media screen and (max-width: 920px) {
+    .planningContainer {
+        div.weeklyPlan {
+            flex-direction: column;
+
+            .weekDays {
+                flex-direction: row;
+                width: 100%;
+                overflow-x: scroll;
+
+                .weekDaysWrapper {
+                    li.btnWeekDays {
+                        width: 25%;
+                        height: 100%;
+                        border-bottom: 0;
+                        border-right: 1px solid $accentColor;
+                        font-size: 2vw;
+                    }
+
+                    li.btnWeekDays:nth-child(1) {
+                        border-top-left-radius: 5px;
+                    }
+
+                    li.btnWeekDays:last-child {
+                        border-top-right-radius: 5px;
+                        border-right: 0;
+                    }
+                }
+            }
+        }
     }
 }
 

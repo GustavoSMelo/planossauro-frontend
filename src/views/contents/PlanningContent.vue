@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
 import '../../styles/contents/planningcontent.style.scss';
-import type { IPlan, IDays } from '../../interfaces/plans.interface';
+import type { IPlan, IDays, IDaysDescritive } from '../../interfaces/plans.interface';
 import type { ILoadingContext } from '../../interfaces/context/loading.interface';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
 import { qsn } from '../../assets/qsn.json';
@@ -12,29 +12,79 @@ import type { IClassPlanResponse, IOllamaGemmaResponse } from '../../interfaces/
 import { saveAs } from 'file-saver';
 
 const plans = ref<IPlan>({ day1: [''], day2: [''], day3: [''], day4: [''], day5: [''] });
+const selectedDay = ref<IDays['days']>('day1');
 const planType = ref<'Diario' | 'Semanal'>('Semanal');
 const isLoadingContext = inject('isLoading') as ILoadingContext;
 const popupContext = inject('popup') as IPopupContext;
 
-const handleChangePlanType = (event: Event) => {
+const handleChangeSelectedDay = (changeSelectDay: IDays['days']): void => {
+    selectedDay.value = changeSelectDay;
+};
+
+const handleChangePlanType = (event: Event): void => {
     const target = event.target as HTMLInputElement;
     planType.value = target.value as 'Diario' | 'Semanal';
 };
 
-const handleChangePlanText = (day: IDays['days'], index: number, classAtv: string) => {
+const handleChangePlanText = (day: IDays['days'], index: number, classAtv: string): void => {
     plans.value[day][index] = classAtv.replaceAll(',', '');
-    console.log(plans.value);
 };
 
-const handleAddNewClassInPlanning = (day: IDays['days']) => {
+const handleAddNewClassInPlanning = (day: IDays['days']): void => {
     plans.value[day].push('');
 };
 
-const handleRemoveClassAtvFromPlan = (day: IDays['days'], index: number) => {
+const handleRemoveClassAtvFromPlan = (day: IDays['days'], index: number): void => {
+    if (index === 0) return;
     plans.value[day] = plans.value[day].filter((_, planIndex) => planIndex !== index);
 };
 
+const handleGoBack = (): void => {
+    const dayNumber = Number.parseInt(selectedDay.value.split('day')[1]);
+
+    if (dayNumber === 1) {
+        selectedDay.value = `day${5}`
+        return;
+    }
+
+    selectedDay.value = `day${dayNumber - 1}` as IDays['days'];
+};
+
+const handleGoFoward = (): void => {
+    console.log('click');
+    const dayNumber = Number.parseInt(selectedDay.value.split('day')[1]);
+
+    if (dayNumber === 5) {
+        selectedDay.value = `day${1}`
+        return;
+    }
+
+    selectedDay.value = `day${dayNumber + 1}` as IDays['days'];
+};
+
+const hasEmptyStringsInClasses = (): Array<boolean> => {
+    let day1IsEmpty = false;
+    let day2IsEmpty = false;
+    let day3IsEmpty = false;
+    let day4IsEmpty = false;
+    let day5IsEmpty = false;
+
+
+    plans.value['day1'].forEach(element => element.length <= 0 ? day1IsEmpty = true : null);
+    plans.value['day2'].forEach(element => element.length <= 0 ? day2IsEmpty = true : null);
+    plans.value['day3'].forEach(element => element.length <= 0 ? day3IsEmpty = true : null);
+    plans.value['day4'].forEach(element => element.length <= 0 ? day4IsEmpty = true : null);
+    plans.value['day5'].forEach(element => element.length <= 0 ? day5IsEmpty = true : null);
+
+    return [day1IsEmpty, day2IsEmpty, day3IsEmpty, day4IsEmpty, day5IsEmpty];
+};
+
 const generatePlan = async () => {
+    const hasEmptyStrings = hasEmptyStringsInClasses().find(element => element === true);
+    if (hasEmptyStrings) {
+        return;
+    }
+
     if (planType.value === 'Diario') {
         let hasEmptyFields = false;
 
@@ -224,16 +274,6 @@ const generatePlan = async () => {
         };
 
         doc.render(data);
-        console.log(responseDay1.eixo);
-
-        const b64Document = doc.getZip().generate({ type: 'base64' });
-        const byteChars = atob(b64Document);
-        const byteNumbers = new Array(byteChars.length);
-        for (let i = 0; i < byteChars.length; i++) {
-            byteNumbers[i] = byteChars.charCodeAt(i);
-        }
-
-        const byteArray = new Uint8Array(byteNumbers);
         const blob = new Blob([doc.toBlob()], {
             type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         });
@@ -268,7 +308,7 @@ const generatePlan = async () => {
                         @change="event => handleChangePlanText('day1', index, (event.target as HTMLInputElement).value)" />
                     <button v-if="index > 0" type="button" class="btnTrash"
                         @click="handleRemoveClassAtvFromPlan('day1', index)">
-                        <i class="pi pi-trash"></i> Adicionar aula
+                        <i class="pi pi-trash"></i>
                     </button>
                 </span>
             </span>
@@ -285,112 +325,64 @@ const generatePlan = async () => {
 
         <!-- Semanal -->
         <div v-else class="weeklyPlan">
-            <form class="day1Plan weekPlan">
-                <h2>Dia 1 (Segunda)</h2>
+            <ul class="weekDays">
+                <li @click="() => handleChangeSelectedDay('day1')"
+                    :class="['btnWeekDays', selectedDay === 'day1' ? 'selected' : '']">
+                    <i
+                        :class="['pi', hasEmptyStringsInClasses()[0] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
+                    Segunda
+                </li>
+                <li @click="() => handleChangeSelectedDay('day2')"
+                    :class="['btnWeekDays', selectedDay === 'day2' ? 'selected' : '']">
+                    <i
+                        :class="['pi', hasEmptyStringsInClasses()[1] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>Terca
+                </li>
+                <li @click="() => handleChangeSelectedDay('day3')"
+                    :class="['btnWeekDays', selectedDay === 'day3' ? 'selected' : '']">
+                    <i
+                        :class="['pi', hasEmptyStringsInClasses()[2] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
+                    Quarta
+                </li>
+                <li @click="() => handleChangeSelectedDay('day4')"
+                    :class="['btnWeekDays', selectedDay === 'day4' ? 'selected' : '']">
+                    <i
+                        :class="['pi', hasEmptyStringsInClasses()[3] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
+                    Quinta
+                </li>
+                <li @click="() => handleChangeSelectedDay('day5')"
+                    :class="['btnWeekDays', selectedDay === 'day5' ? 'selected' : '']">
+                    <i
+                        :class="['pi', hasEmptyStringsInClasses()[4] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
+                    Sexta
+                </li>
+            </ul>
 
-                <span class="classContainer" v-for="(plan, indexPlan) in plans.day1">
-                    <label>📚 Aula/Atividade {{ indexPlan + 1 }}</label>
-                    <span class="row">
-                        <input type="text" :value="plan" placeholder="Descreva sua aula/atividade sem usar virgulas"
-                            @change="event => handleChangePlanText('day1', indexPlan, (event.target as HTMLInputElement).value)" />
-                        <button v-if="indexPlan > 0" type="button" class="btnTrash"
-                            @click="handleRemoveClassAtvFromPlan('day1', indexPlan)">
-                            <i class="pi pi-trash"></i>
-                        </button>
-                        <div v-else class="ghostButton"></div>
-                    </span>
+            <div class="classContentContainer">
+
+                <div class="classContent">
+                    <div v-for="value, index in plans[selectedDay]" class="classWrapper">
+                        <span class="classDescription">
+                            <h2>📚 Aula/Atividade {{ index + 1 }}: </h2>
+                            <input type="text" placeholder="Insira a descricao da atividade... " :value="value"
+                                @change="(event) => handleChangePlanText(selectedDay, index, (event.target! as HTMLInputElement).value)" />
+                        </span>
+                        <button @click="() => handleRemoveClassAtvFromPlan(selectedDay, index)"
+                            :class="index === 0 ? 'btnRemoveClassCancel' : 'btnRemoveClass'"><i
+                                class="pi pi-trash"></i></button>
+                    </div>
+                </div>
+
+                <span class="btnControlsContainer">
+                    <button @click="() => handleGoBack()"><i class="pi pi-arrow-left"></i> Voltar</button>
+                    <button @click="() => handleAddNewClassInPlanning(selectedDay)"><i class="pi pi-plus-circle"></i>
+                        Adicionar atividade</button>
+                    <button @click="() => handleGoFoward()">Avancar <i class="pi pi-arrow-right"></i></button>
                 </span>
-
-                <button type="button" class="btnAddClassAtv" @click="handleAddNewClassInPlanning('day1')">
-                    <p class="btnAddClass">Adicionar aula</p> <i class="pi pi-plus-circle"></i>
-                </button>
-            </form>
-
-            <form class="day2Plan weekPlan">
-                <h2>Dia 2 (Terca)</h2>
-
-                <span class="classContainer" v-for="(plan, indexPlan) in plans.day2">
-                    <label>📚 Aula/Atividade {{ indexPlan + 1 }}</label>
-                    <span class="row">
-                        <input type="text" :value="plan" placeholder="Descreva sua aula/atividade sem usar virgulas"
-                            @change="event => handleChangePlanText('day2', indexPlan, (event.target as HTMLInputElement).value)" />
-                        <button v-if="indexPlan > 0" type="button" class="btnTrash"
-                            @click="handleRemoveClassAtvFromPlan('day2', indexPlan)">
-                            <i class="pi pi-trash"></i>
-                        </button>
-                        <div v-else class="ghostButton"></div>
-                    </span>
-                </span>
-
-                <button type="button" class="btnAddClassAtv" @click="handleAddNewClassInPlanning('day2')">
-                    <p class="btnAddClass">Adicionar aula</p> <i class="pi pi-plus-circle"></i>
-                </button>
-            </form>
-
-            <form class="day3Plan weekPlan">
-                <h2>Dia 3 (Quarta)</h2>
-
-                <span class="classContainer" v-for="(plan, indexPlan) in plans.day3">
-                    <label>📚 Aula/Atividade {{ indexPlan + 1 }}</label>
-                    <span class="row">
-                        <input type="text" :value="plan" placeholder="Descreva sua aula/atividade sem usar virgulas"
-                            @change="event => handleChangePlanText('day3', indexPlan, (event.target as HTMLInputElement).value)" />
-                        <button v-if="indexPlan > 0" type="button" class="btnTrash"
-                            @click="handleRemoveClassAtvFromPlan('day3', indexPlan)">
-                            <i class="pi pi-trash"></i>
-                        </button>
-                        <div v-else class="ghostButton"></div>
-                    </span>
-                </span>
-
-                <button type="button" class="btnAddClassAtv" @click="handleAddNewClassInPlanning('day3')">
-                    <p class="btnAddClass">Adicionar aula</p> <i class="pi pi-plus-circle"></i>
-                </button>
-            </form>
-
-            <form class="day4Plan weekPlan">
-                <h2>Dia 4 (Quinta)</h2>
-
-                <span class="classContainer" v-for="(plan, indexPlan) in plans.day4">
-                    <label>📚 Aula/Atividade {{ indexPlan + 1 }}</label>
-                    <span class="row">
-                        <input type="text" :value="plan" placeholder="Descreva sua aula/atividade sem usar virgulas"
-                            @change="event => handleChangePlanText('day4', indexPlan, (event.target as HTMLInputElement).value)" />
-                        <button v-if="indexPlan > 0" type="button" class="btnTrash"
-                            @click="handleRemoveClassAtvFromPlan('day4', indexPlan)">
-                            <i class="pi pi-trash"></i>
-                        </button>
-                        <div v-else class="ghostButton"></div>
-                    </span>
-                </span>
-
-                <button type="button" class="btnAddClassAtv" @click="handleAddNewClassInPlanning('day4')">
-                    <p class="btnAddClass">Adicionar aula</p> <i class="pi pi-plus-circle"></i>
-                </button>
-            </form>
-
-            <form class="day5Plan weekPlan">
-                <h2>Dia 5 (Sexta)</h2>
-
-                <span class="classContainer" v-for="(plan, indexPlan) in plans.day5">
-                    <label>📚 Aula/Atividade {{ indexPlan + 1 }}</label>
-                    <span class="row">
-                        <input type="text" :value="plan" placeholder="Descreva sua aula/atividade sem usar virgulas"
-                            @change="event => handleChangePlanText('day5', indexPlan, (event.target as HTMLInputElement).value)" />
-                        <button v-if="indexPlan > 0" type="button" class="btnTrash"
-                            @click="handleRemoveClassAtvFromPlan('day5', indexPlan)">
-                            <p class="btnAddClass">Adicionar aula</p> <i class="pi pi-trash"></i>
-                        </button>
-                        <div v-else class="ghostButton"></div>
-                    </span>
-                </span>
-
-                <button type="button" class="btnAddClassAtv" @click="handleAddNewClassInPlanning('day5')">
-                    <p class="btnAddClass">Adicionar aula</p> <i class="pi pi-plus-circle"></i>
-                </button>
-            </form>
+            </div>
         </div>
-        <button class="btnGeneratePlan" v-if="planType === 'Semanal'" type="button" @click="generatePlan()">Gerar
+        <button
+            :class="hasEmptyStringsInClasses().find(element => element === true) ? 'btnGeneratePlanCancel' : 'btnGeneratePlan'"
+            v-if="planType === 'Semanal'" type="button" @click="generatePlan()">Gerar
             planejamento</button>
     </div>
 </template>

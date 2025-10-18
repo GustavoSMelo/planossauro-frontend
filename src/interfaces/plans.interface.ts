@@ -10,4 +10,8 @@ interface IDays {
     days: 'day1' | 'day2' | 'day3' | 'day4' | 'day5'
 }
 
-export type { IPlan, IDays };
+interface IDaysDescritive {
+    days: 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
+}
+
+export type { IPlan, IDays, IDaysDescritive };
