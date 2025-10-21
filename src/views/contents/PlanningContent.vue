@@ -10,15 +10,18 @@ import PizZip from 'pizzip';
 import Docxtemplater from "docxtemplater";
 import type { IClassPlanResponse, IOllamaGemmaResponse } from '../../interfaces/ollama.res';
 import { saveAs } from 'file-saver';
+import dayConverter from '../../helpers/dayConverter';
 
 const plans = ref<IPlan>({ day1: [''], day2: [''], day3: [''], day4: [''], day5: [''] });
 const selectedDay = ref<IDays['days']>('day1');
 const planType = ref<'Diario' | 'Semanal'>('Semanal');
+const isOpenPlanMobileMenu = ref<boolean>(false);
 const isLoadingContext = inject('isLoading') as ILoadingContext;
 const popupContext = inject('popup') as IPopupContext;
 
 const handleChangeSelectedDay = (changeSelectDay: IDays['days']): void => {
     selectedDay.value = changeSelectDay;
+    isOpenPlanMobileMenu.value = !isOpenPlanMobileMenu.value;
 };
 
 const handleChangePlanType = (event: Event): void => {
@@ -62,6 +65,10 @@ const handleGoFoward = (): void => {
     selectedDay.value = `day${dayNumber + 1}` as IDays['days'];
 };
 
+const handleMobileMenu = (): void => {
+    isOpenPlanMobileMenu.value = !isOpenPlanMobileMenu.value;
+};
+
 const hasEmptyStringsInClasses = (): Array<boolean> => {
     let day1IsEmpty = false;
     let day2IsEmpty = false;
@@ -80,51 +87,52 @@ const hasEmptyStringsInClasses = (): Array<boolean> => {
 };
 
 const generatePlan = async () => {
-    const hasEmptyStrings = hasEmptyStringsInClasses().find(element => element === true);
-    if (hasEmptyStrings) {
-        return;
-    }
-
-    if (planType.value === 'Diario') {
-        let hasEmptyFields = false;
-
-        plans.value.day1.forEach(element => {
-            if (element.length <= 0) {
-                hasEmptyFields = true
-            }
-        });
-
-        if (hasEmptyFields) {
-            popupContext.handleChangePopupInfo('Preencha todos os campos e tente novamente', 'warning', true);
-
+    try {
+        const hasEmptyStrings = hasEmptyStringsInClasses().find(element => element === true);
+        if (hasEmptyStrings) {
             return;
         }
-    } else {
-        let hasEmptyFields = false;
 
-        for (let i = 1; i < 6; i++) {
-            const dayValue = `day${i}` as IDays['days'];
-            plans.value[dayValue].forEach(element => {
+        if (planType.value === 'Diario') {
+            let hasEmptyFields = false;
+
+            plans.value.day1.forEach(element => {
                 if (element.length <= 0) {
-                    hasEmptyFields = true;
+                    hasEmptyFields = true
                 }
             });
+
+            if (hasEmptyFields) {
+                popupContext.handleChangePopupInfo('Preencha todos os campos e tente novamente', 'warning', true);
+
+                return;
+            }
+        } else {
+            let hasEmptyFields = false;
+
+            for (let i = 1; i < 6; i++) {
+                const dayValue = `day${i}` as IDays['days'];
+                plans.value[dayValue].forEach(element => {
+                    if (element.length <= 0) {
+                        hasEmptyFields = true;
+                    }
+                });
+            }
+
+            if (hasEmptyFields) {
+                popupContext.handleChangePopupInfo('Preencha todos os campos e tente novamente', 'warning', true);
+
+                return;
+            }
         }
 
-        if (hasEmptyFields) {
-            popupContext.handleChangePopupInfo('Preencha todos os campos e tente novamente', 'warning', true);
+        await isLoadingContext.handleChangeIsLoading(true);
 
-            return;
-        }
-    }
+        if (planType.value === 'Diario') {
+            let activities = [];
+            activities.push({ day1: plans.value.day1.map(classAtv => classAtv) });
 
-    await isLoadingContext.handleChangeIsLoading(true);
-
-    if (planType.value === 'Diario') {
-        let activities = [];
-        activities.push({ day1: plans.value.day1.map(classAtv => classAtv) });
-
-        const prompt = `
+            const prompt = `
         -- ${JSON.stringify(qsn)}
         -- atividades: ${JSON.stringify(activities)}
         -- baseado no json e nas atividades que lhe enviei, gere uma resposta apenas em formato json as seguintes informacoes:
@@ -149,26 +157,26 @@ const generatePlan = async () => {
         }
         `;
 
-        const response = await axios.post(import.meta.env.VITE_API_URL, {
-            model: import.meta.env.VITE_LLM_MODEL,
-            prompt,
-            stream: false
-        });
+            const response = await axios.post(import.meta.env.VITE_API_URL, {
+                model: import.meta.env.VITE_LLM_MODEL,
+                prompt,
+                stream: false
+            });
 
-        console.log(response.data);
-    } else {
-        let activities = [];
-        for (let i = 1; i < 6; i++) {
+            console.log(response.data);
+        } else {
+            let activities = [];
+            for (let i = 1; i < 6; i++) {
 
-            const dayValue = `day${i}` as IDays['days'];
-            const temp = {} as any;
-            temp[dayValue] = plans.value[dayValue].map(classAtv => classAtv)
+                const dayValue = `day${i}` as IDays['days'];
+                const temp = {} as any;
+                temp[dayValue] = plans.value[dayValue].map(classAtv => classAtv)
 
-            activities.push({ ...temp });
-        }
+                activities.push({ ...temp });
+            }
 
-        const [responseDay1, responseDay2, responseDay3, responseDay4, responseDay5] = await Promise.all(activities.map(async (item, index) => {
-            const prompt = `
+            const [responseDay1, responseDay2, responseDay3, responseDay4, responseDay5] = await Promise.all(activities.map(async (item, index) => {
+                const prompt = `
                     -- ${JSON.stringify(qsn)}
                     -- atividades: ${JSON.stringify(item)}
                     -- baseado no json e nas atividades que lhe enviei, gere uma resposta apenas em formato json as seguintes informacoes:
@@ -193,95 +201,97 @@ const generatePlan = async () => {
                     }
                     `;
 
-            const response = await axios.post(import.meta.env.VITE_API_URL, {
-                model: import.meta.env.VITE_LLM_MODEL,
-                prompt,
-                stream: false
+                const response = await axios.post(import.meta.env.VITE_API_URL, {
+                    model: import.meta.env.VITE_LLM_MODEL,
+                    prompt,
+                    stream: false
+                });
+
+                return JSON.parse((response.data as IOllamaGemmaResponse)
+                    .response
+                    .replaceAll(/\\/g, '')
+                    .replaceAll('\n', '')
+                    .replaceAll('`', '')
+                    .replaceAll('json', '')) as IClassPlanResponse;
+            }
+            ));
+            console.log(responseDay1, responseDay2, responseDay3, responseDay4, responseDay5);
+
+            console.log(responseDay1);
+
+            const planejamentoQSNFetch = await fetch('/planejamentoQSN.docx');
+            const [arrayBuffer] = await Promise.all([planejamentoQSNFetch.arrayBuffer()]);
+            const planZip = new PizZip(arrayBuffer);
+            const doc = new Docxtemplater(planZip, { paragraphLoop: true, linebreaks: true });
+
+            const data = {
+                // day 1
+                eixo1: responseDay1.eixo,
+                saber1: `${responseDay1.saber01}\n \n${responseDay1.saber02}`,
+                aprendizagem1: `${responseDay1.aprendizagem01}\n \n${responseDay1.aprendizagem02}`,
+                atividade1_1: plans.value.day1[0],
+                atividade1_2: plans.value.day1[1],
+                atividade1_3: plans.value.day1[2],
+                contextualizacao1: responseDay1.contextualizacao,
+                foco1: responseDay1.foco_avaliativo,
+                materiais1: responseDay1.materiais,
+
+                // day 2
+                eixo2: responseDay2.eixo,
+                saber2: `${responseDay2.saber01}\n${responseDay2.saber02}`,
+                aprendizagem2: `${responseDay2.aprendizagem01}\n${responseDay2.aprendizagem02}`,
+                atividade2_1: plans.value.day2[0],
+                atividade2_2: plans.value.day2[1],
+                atividade2_3: plans.value.day2[2],
+                contextualizacao2: responseDay2.contextualizacao,
+                foco2: responseDay2.foco_avaliativo,
+                materiais2: responseDay2.materiais,
+
+                // day 3
+                eixo3: responseDay3.eixo,
+                saber3: `${responseDay3.saber01}\n \n${responseDay3.saber02}`,
+                aprendizagem3: `${responseDay3.aprendizagem01}\n \n${responseDay3.aprendizagem02}`,
+                atividade3_1: plans.value.day3[0],
+                atividade3_2: plans.value.day3[1],
+                atividade3_3: plans.value.day3[2],
+                contextualizacao3: responseDay3.contextualizacao,
+                foco3: responseDay3.foco_avaliativo,
+                materiais3: responseDay3.materiais,
+
+                // day 4
+                eixo4: responseDay4.eixo,
+                saber4: `${responseDay4.saber01}\n \n${responseDay4.saber02}`,
+                aprendizagem4: `${responseDay4.aprendizagem01}\n \n${responseDay4.aprendizagem02}`,
+                atividade4_1: plans.value.day4[0],
+                atividade4_2: plans.value.day4[1],
+                atividade4_3: plans.value.day4[2],
+                contextualizacao4: responseDay4.contextualizacao,
+                foco4: responseDay4.foco_avaliativo,
+                materiais4: responseDay4.materiais,
+
+                // day 5
+                eixo5: responseDay5.eixo,
+                saber5: `${responseDay5.saber01}\n \n${responseDay5.saber02}`,
+                aprendizagem5: `${responseDay5.aprendizagem01}\n \n${responseDay5.aprendizagem02}`,
+                atividade5_1: plans.value.day5[0],
+                atividade5_2: plans.value.day5[1],
+                atividade5_3: plans.value.day5[2],
+                contextualizacao5: responseDay5.contextualizacao,
+                foco5: responseDay5.foco_avaliativo,
+                materiais5: responseDay5.materiais,
+            };
+
+            doc.render(data);
+            const blob = new Blob([doc.toBlob()], {
+                type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
             });
 
-            return JSON.parse((response.data as IOllamaGemmaResponse)
-                .response
-                .replaceAll(/\\/g, '')
-                .replaceAll('\n', '')
-                .replaceAll('`', '')
-                .replaceAll('json', '')) as IClassPlanResponse;
+            saveAs(blob, 'planejamento.docx');
         }
-        ));
-        console.log(responseDay1, responseDay2, responseDay3, responseDay4, responseDay5);
-
-        console.log(responseDay1);
-
-        const planejamentoQSNFetch = await fetch('/planejamentoQSN.docx');
-        const [arrayBuffer] = await Promise.all([planejamentoQSNFetch.arrayBuffer()]);
-        const planZip = new PizZip(arrayBuffer);
-        const doc = new Docxtemplater(planZip, { paragraphLoop: true, linebreaks: true });
-
-        const data = {
-            // day 1
-            eixo1: responseDay1.eixo,
-            saber1: `${responseDay1.saber01}\n \n${responseDay1.saber02}`,
-            aprendizagem1: `${responseDay1.aprendizagem01}\n \n${responseDay1.aprendizagem02}`,
-            atividade1_1: plans.value.day1[0],
-            atividade1_2: plans.value.day1[1],
-            atividade1_3: plans.value.day1[2],
-            contextualizacao1: responseDay1.contextualizacao,
-            foco1: responseDay1.foco_avaliativo,
-            materiais1: responseDay1.materiais,
-
-            // day 2
-            eixo2: responseDay2.eixo,
-            saber2: `${responseDay2.saber01}\n${responseDay2.saber02}`,
-            aprendizagem2: `${responseDay2.aprendizagem01}\n${responseDay2.aprendizagem02}`,
-            atividade2_1: plans.value.day2[0],
-            atividade2_2: plans.value.day2[1],
-            atividade2_3: plans.value.day2[2],
-            contextualizacao2: responseDay2.contextualizacao,
-            foco2: responseDay2.foco_avaliativo,
-            materiais2: responseDay2.materiais,
-
-            // day 3
-            eixo3: responseDay3.eixo,
-            saber3: `${responseDay3.saber01}\n \n${responseDay3.saber02}`,
-            aprendizagem3: `${responseDay3.aprendizagem01}\n \n${responseDay3.aprendizagem02}`,
-            atividade3_1: plans.value.day3[0],
-            atividade3_2: plans.value.day3[1],
-            atividade3_3: plans.value.day3[2],
-            contextualizacao3: responseDay3.contextualizacao,
-            foco3: responseDay3.foco_avaliativo,
-            materiais3: responseDay3.materiais,
-
-            // day 4
-            eixo4: responseDay4.eixo,
-            saber4: `${responseDay4.saber01}\n \n${responseDay4.saber02}`,
-            aprendizagem4: `${responseDay4.aprendizagem01}\n \n${responseDay4.aprendizagem02}`,
-            atividade4_1: plans.value.day4[0],
-            atividade4_2: plans.value.day4[1],
-            atividade4_3: plans.value.day4[2],
-            contextualizacao4: responseDay4.contextualizacao,
-            foco4: responseDay4.foco_avaliativo,
-            materiais4: responseDay4.materiais,
-
-            // day 5
-            eixo5: responseDay5.eixo,
-            saber5: `${responseDay5.saber01}\n \n${responseDay5.saber02}`,
-            aprendizagem5: `${responseDay5.aprendizagem01}\n \n${responseDay5.aprendizagem02}`,
-            atividade5_1: plans.value.day5[0],
-            atividade5_2: plans.value.day5[1],
-            atividade5_3: plans.value.day5[2],
-            contextualizacao5: responseDay5.contextualizacao,
-            foco5: responseDay5.foco_avaliativo,
-            materiais5: responseDay5.materiais,
-        };
-
-        doc.render(data);
-        const blob = new Blob([doc.toBlob()], {
-            type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-        });
-
-        saveAs(blob, 'planejamento.docx');
+        await isLoadingContext.handleChangeIsLoading(false);
+    } catch (err) {
+        await isLoadingContext.handleChangeIsLoading(false);
     }
-    await isLoadingContext.handleChangeIsLoading(false);
-
 };
 
 </script>
@@ -356,6 +366,45 @@ const generatePlan = async () => {
                     Sexta
                 </li>
             </ul>
+
+            <div class="weekDaysMobile">
+                <div class="selectedDay">
+                    <h2 class="selectedWeekDayMobile"><i
+                            :class="['pi', hasEmptyStringsInClasses()[Number.parseInt(selectedDay.split('day')[1])- 1]
+                            ? 'pi-clock iconUncheck' : 'pi-verified iconCheck' ]"></i>{{
+                                dayConverter(selectedDay) }}</h2>
+                    <button class="btnChangeWeekMobile" @click="() => handleMobileMenu()"><i
+                            :class="['pi', isOpenPlanMobileMenu ? 'pi-chevron-up' : 'pi-chevron-down']"></i></button>
+                </div>
+                <ul v-if="isOpenPlanMobileMenu === true" class="mobileDayLists">
+                    <li @click="() => handleChangeSelectedDay('day1')">
+                        <i
+                            :class="['pi', hasEmptyStringsInClasses()[0] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
+                        Segunda
+                    </li>
+                    <li @click="() => handleChangeSelectedDay('day2')">
+                        <i
+                            :class="['pi', hasEmptyStringsInClasses()[1] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
+                        Terca
+                    </li>
+                    <li @click="() => handleChangeSelectedDay('day3')">
+                        <i
+                            :class="['pi', hasEmptyStringsInClasses()[2] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
+                        Quarta
+                    </li>
+                    <li @click="() => handleChangeSelectedDay('day4')">
+                        <i
+                            :class="['pi', hasEmptyStringsInClasses()[3] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
+                        Quinta
+                    </li>
+                    <li @click="() => handleChangeSelectedDay('day5')">
+                        <i
+                            :class="['pi', hasEmptyStringsInClasses()[4] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
+                        Sexta
+                    </li>
+                </ul>
+                <span v-else></span>
+            </div>
 
             <div class="classContentContainer">
 

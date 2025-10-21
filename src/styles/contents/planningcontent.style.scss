@@ -1,6 +1,7 @@
 @charset "UTF-8";
 @import '../colors.scss';
 
+
 label {
     margin-bottom: 5px;
     font-size: 18pt;
@@ -129,6 +130,10 @@ input {
         border: solid 2px $accentColor;
         border-radius: 10px;
         height: 500px;
+
+        .weekDaysMobile {
+            display: none;
+        }
 
         .weekDays {
             width: 30%;
@@ -299,31 +304,80 @@ input {
     .planningContainer {
         div.weeklyPlan {
             flex-direction: column;
+            height: fit-content;
 
             .weekDays {
-                flex-direction: row;
-                width: 100%;
-                overflow-x: scroll;
+                display: none;
+            }
 
-                .weekDaysWrapper {
-                    li.btnWeekDays {
-                        width: 25%;
-                        height: 100%;
+            .weekDaysMobile {
+                display: flex;
+                flex-direction: column;
+
+
+                .selectedDay {
+                    display: flex;
+                    justify-content: space-between;
+                    border-bottom: 2px solid $accentColor;
+
+                    .selectedWeekDayMobile {
+                        padding: 14px;
+
+
+                        i.iconUncheck {
+                            color: $gray;
+                            margin-right: 5px;
+                        }
+
+                        i.iconCheck {
+                            color: $darkGreen;
+                            font-weight: bold;
+                            margin-right: 5px;
+                        }
+                    }
+
+                    .btnChangeWeekMobile {
+                        padding: 10px;
+                        width: 40%;
+                        background-color: transparent;
+                        cursor: pointer;
+                        text-align: right;
+                    }
+                }
+
+                .mobileDayLists {
+                    display: flex;
+                    flex-direction: column;
+                    width: 100%;
+
+                    li {
+                        border-radius: 0;
+                        margin-right: 0;
+                        border-bottom: 1px solid $gray;
+                    }
+
+                    li:last-child {
                         border-bottom: 0;
-                        border-right: 1px solid $accentColor;
-                        font-size: 2vw;
-                    }
-
-                    li.btnWeekDays:nth-child(1) {
-                        border-top-left-radius: 5px;
-                    }
-
-                    li.btnWeekDays:last-child {
-                        border-top-right-radius: 5px;
-                        border-right: 0;
                     }
                 }
             }
+
+            .classContentContainer {
+                .btnControlsContainer {
+                    display: flex;
+                    flex-direction: column;
+                    width: 100%;
+
+                    button {
+                        margin: 10px 0px;
+                    }
+                }
+            }
+        }
+
+        .btnGeneratePlan,
+        .btnGeneratePlanCancel {
+            width: 100%;
         }
     }
 }
