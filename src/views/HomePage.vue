@@ -3,11 +3,13 @@ import '../styles/homepage.style.scss';
 import Navbar from '../components/navbar/Navbar.vue';
 import HomeContent from './contents/HomeContent.vue';
 import PlanningContent from './contents/PlanningContent.vue';
+import PreviewDocs from '../components/previewDocs/PreviewDocs.vue';
 
 const hourTime = new Date().getHours();
 </script>
 <template>
     <Navbar />
+    <PreviewDocs />
     <main class="homePageContainer">
         <div class="welcomeContainer">
             <h2 v-if="hourTime >= 6 && hourTime <= 12"><span class="goodDay">Bom dia</span><br /> Professor
