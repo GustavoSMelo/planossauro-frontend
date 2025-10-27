@@ -3,9 +3,11 @@ import { RouterView } from 'vue-router';
 import { provide, ref, watch } from 'vue';
 import Loading from './components/loading/Loading.vue';
 import type { IPopup } from './interfaces/popup.interface';
+import type { IShowPreview } from './interfaces/context/showPreview.interface';
 import Popup from './components/popup/Popup.vue';
+import PreviewDocs from './components/previewDocs/PreviewDocs.vue';
 
-let timeoutId: number;
+let timeoutId: NodeJS.Timeout;
 
 // refs
 const isLoading = ref(false);
@@ -14,7 +16,12 @@ const popup = ref<IPopup>({
     status: 'error',
     show: false
 });
-
+const showPreview = ref<IShowPreview>({
+    show: false,
+    customURLDoc: '',
+    isCustomDocs: 'false',
+    showChooseTemplate: 'true'
+});
 
 watch(popup, () => {
     timeoutId = setTimeout(() => {
@@ -39,13 +46,20 @@ const handleChangePopupShow = (): void => {
     clearTimeout(timeoutId);
 };
 
+const handleChangeShowPreview = (newValue: IShowPreview): void => {
+    showPreview.value = { ...newValue };
+};
+
 // defining context
 provide('isLoading', { isLoading, handleChangeIsLoading });
 provide('popup', { popup, handleChangePopupInfo, handleChangePopupShow });
+provide('showPreview', { showPreview, handleChangeShowPreview });
 </script>
 
 <template>
     <RouterView />
+    <PreviewDocs v-if="showPreview.show" :customURLDoc="showPreview.customURLDoc"
+        :isCustomDocs="showPreview.isCustomDocs" :showChooseTemplate="showPreview.showChooseTemplate" />
     <Loading v-if="isLoading" />
     <Popup v-if="popup.show && popup.message.length > 0" />
 </template>
