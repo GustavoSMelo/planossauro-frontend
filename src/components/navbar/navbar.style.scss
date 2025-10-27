@@ -20,9 +20,9 @@
     flex-direction: row;
     position: sticky;
     top: 0;
-    box-shadow: 2px 2px 8px $shadowLowPink;
+    box-shadow: 2px 2px 8px $darkGray;
     padding: 15px 20px;
-    z-index: 2;
+    z-index: 5;
 
     .logoContainer {
         display: flex;
@@ -86,7 +86,7 @@
     position: fixed;
     top: 0;
     right: 0;
-    z-index: 3;
+    z-index: 10;
     width: 100%;
     height: 100%;
     justify-content: space-between;

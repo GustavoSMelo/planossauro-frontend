@@ -1,21 +1,25 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
 import '../../styles/contents/planningcontent.style.scss';
-import type { IPlan, IDays, IDaysDescritive } from '../../interfaces/plans.interface';
+import type { IPlan, IDays } from '../../interfaces/plans.interface';
 import type { ILoadingContext } from '../../interfaces/context/loading.interface';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
+import type { IClassPlanResponse, IOllamaGemmaResponse } from '../../interfaces/ollama.res';
 import { qsn } from '../../assets/qsn.json';
+import { saveAs } from 'file-saver';
 import axios from 'axios';
 import PizZip from 'pizzip';
 import Docxtemplater from "docxtemplater";
-import type { IClassPlanResponse, IOllamaGemmaResponse } from '../../interfaces/ollama.res';
-import { saveAs } from 'file-saver';
 import dayConverter from '../../helpers/dayConverter';
 
 const plans = ref<IPlan>({ day1: [''], day2: [''], day3: [''], day4: [''], day5: [''] });
 const selectedDay = ref<IDays['days']>('day1');
 const planType = ref<'Diario' | 'Semanal'>('Semanal');
 const isOpenPlanMobileMenu = ref<boolean>(false);
+const schoolName = ref('');
+const className = ref('');
+const planDate = ref('');
+const showAditionalInformation = ref(false);
 const isLoadingContext = inject('isLoading') as ILoadingContext;
 const popupContext = inject('popup') as IPopupContext;
 
@@ -84,6 +88,29 @@ const hasEmptyStringsInClasses = (): Array<boolean> => {
     plans.value['day5'].forEach(element => element.length <= 0 ? day5IsEmpty = true : null);
 
     return [day1IsEmpty, day2IsEmpty, day3IsEmpty, day4IsEmpty, day5IsEmpty];
+};
+
+const handleChangeSchoolName = (event: Event): void => {
+    const target = event.target as HTMLInputElement;
+    schoolName.value = target.value;
+};
+
+const handleChangeClassName = (event: Event): void => {
+    const target = event.target as HTMLInputElement;
+    className.value = target.value;
+};
+
+const handleChangeClassDate = (event: Event): void => {
+    const target = event.target as HTMLInputElement;
+    planDate.value = target.value;
+};
+
+const isAditionInformationMissing = (): boolean => {
+    return schoolName.value.length > 0 && className.value.length > 0 && planDate.value.length > 0 ? false : true;
+};
+
+const stopPropagation = (event: Event): void => {
+    event.stopPropagation();
 };
 
 const generatePlan = async () => {
@@ -297,6 +324,37 @@ const generatePlan = async () => {
 </script>
 <template>
     <div class="planningContainer">
+        <section class="aditionalInformationsContainer" v-if="showAditionalInformation"
+            @click="() => showAditionalInformation = false">
+            <form class="aditionalInformationsForm" @click="event => stopPropagation(event)">
+                <h2>Informacoes adicionais: </h2>
+
+                <label>Nome da escola: </label>
+                <input type="text" :value="schoolName" placeholder="Nome da escola..."
+                    @change="event => handleChangeSchoolName(event)" />
+
+                <label>Classe/Serie: </label>
+                <input type="text" :value="className" placeholder="Classe ou Serie"
+                    @change="event => handleChangeClassName(event)" />
+
+                <label>Data do planejamento: </label>
+                <input type="date" :value="planDate" @change="event => handleChangeClassDate(event)" />
+
+                <span class="btnControlsContainer">
+                    <button :class="isAditionInformationMissing() ? 'btnChooseTemplateCancel' : 'btnChooseTemplate'"
+                        type="button">Escolher Template
+                    </button>
+                    <button
+                        @click="() => showAditionalInformation = false"
+                        class="btnChooseTemplateCancel"
+                        type="button"
+                    >
+                        Cancelar
+                    </button>
+                </span>
+            </form>
+        </section>
+
         <div class="planningSelect">
             <img src="../../assets/dinoPlanejador.png" alt="Dino planejador" />
             <span>
@@ -369,10 +427,9 @@ const generatePlan = async () => {
 
             <div class="weekDaysMobile">
                 <div class="selectedDay">
-                    <h2 class="selectedWeekDayMobile"><i
-                            :class="['pi', hasEmptyStringsInClasses()[Number.parseInt(selectedDay.split('day')[1])- 1]
-                            ? 'pi-clock iconUncheck' : 'pi-verified iconCheck' ]"></i>{{
-                                dayConverter(selectedDay) }}</h2>
+                    <h2 class="selectedWeekDayMobile"><i :class="['pi', hasEmptyStringsInClasses()[Number.parseInt(selectedDay.split('day')[1]) - 1]
+                        ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>{{
+                            dayConverter(selectedDay) }}</h2>
                     <button class="btnChangeWeekMobile" @click="() => handleMobileMenu()"><i
                             :class="['pi', isOpenPlanMobileMenu ? 'pi-chevron-up' : 'pi-chevron-down']"></i></button>
                 </div>
@@ -431,7 +488,6 @@ const generatePlan = async () => {
         </div>
         <button
             :class="hasEmptyStringsInClasses().find(element => element === true) ? 'btnGeneratePlanCancel' : 'btnGeneratePlan'"
-            v-if="planType === 'Semanal'" type="button" @click="generatePlan()">Gerar
-            planejamento</button>
+            v-if="planType === 'Semanal'" type="button" @click="() => showAditionalInformation = true">Avancar</button>
     </div>
 </template>

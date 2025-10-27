@@ -1,18 +1,58 @@
 @charset "UTF-8";
+@import "../../styles/colors.scss";
 
 .showPreviewContainer {
     position: fixed;
     width: 100vw;
-    height: 100vh;
-    z-index: 30;
-    background-color: #70707090;
+    min-height: 100vh;
+    z-index: 2;
+    background-color: $gray;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+    top: 0;
 
     .showPreview {
         width: 95%;
-        height: 70%;
+        height: 360px;
     }
 
+    .rowContainerButton {
+        display: flex;
+        align-items: center;
+        margin-top: 40px;
+
+        button {
+            margin: 0px 20px;
+            width: 200px;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 16pt;
+            border-radius: 10px;
+            box-shadow: 2px 2px 8px $darkGray;
+        }
+    }
+
+    .btnChooseTemplate {
+        padding: 20px 60px;
+        background-color: $accentColor;
+        color: $white;
+        font-weight: bold;
+        border: solid 2px $white;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+        font-size: 16pt;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .showPreviewContainer {
+        .rowContainerButton {
+            button {
+                width: 128px;
+            }
+        }
+    }
 }
