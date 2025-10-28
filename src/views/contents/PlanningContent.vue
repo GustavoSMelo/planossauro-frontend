@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, inject } from 'vue';
+import { ref, inject, nextTick } from 'vue';
 import '../../styles/contents/planningcontent.style.scss';
 import type { IPlan, IDays } from '../../interfaces/plans.interface';
 import type { ILoadingContext } from '../../interfaces/context/loading.interface';
@@ -11,6 +11,8 @@ import axios from 'axios';
 import PizZip from 'pizzip';
 import Docxtemplater from "docxtemplater";
 import dayConverter from '../../helpers/dayConverter';
+import type { IShowPreviewContext } from '../../interfaces/context/showPreview.interface';
+import { debounce } from 'lodash-es';
 
 const plans = ref<IPlan>({ day1: [''], day2: [''], day3: [''], day4: [''], day5: [''] });
 const selectedDay = ref<IDays['days']>('day1');
@@ -22,6 +24,7 @@ const planDate = ref('');
 const showAditionalInformation = ref(false);
 const isLoadingContext = inject('isLoading') as ILoadingContext;
 const popupContext = inject('popup') as IPopupContext;
+const showPreviewContext = inject('showPreview') as IShowPreviewContext;
 
 const handleChangeSelectedDay = (changeSelectDay: IDays['days']): void => {
     selectedDay.value = changeSelectDay;
@@ -46,28 +49,33 @@ const handleRemoveClassAtvFromPlan = (day: IDays['days'], index: number): void =
     plans.value[day] = plans.value[day].filter((_, planIndex) => planIndex !== index);
 };
 
-const handleGoBack = (): void => {
+const handleGoBack = debounce(async () => {
     const dayNumber = Number.parseInt(selectedDay.value.split('day')[1]);
-
     if (dayNumber === 1) {
-        selectedDay.value = `day${5}`
+        selectedDay.value = `day${5}`;
+        await nextTick();
         return;
     }
 
     selectedDay.value = `day${dayNumber - 1}` as IDays['days'];
-};
+    await nextTick();
+    return;
+}, 300);
 
-const handleGoFoward = (): void => {
-    console.log('click');
+const handleGoFoward = debounce(async () => {
     const dayNumber = Number.parseInt(selectedDay.value.split('day')[1]);
+    console.log(dayNumber);
 
     if (dayNumber === 5) {
         selectedDay.value = `day${1}`
+        await nextTick();
         return;
     }
 
     selectedDay.value = `day${dayNumber + 1}` as IDays['days'];
-};
+    await nextTick();
+    return;
+}, 300)
 
 const handleMobileMenu = (): void => {
     isOpenPlanMobileMenu.value = !isOpenPlanMobileMenu.value;
@@ -111,6 +119,14 @@ const isAditionInformationMissing = (): boolean => {
 
 const stopPropagation = (event: Event): void => {
     event.stopPropagation();
+};
+
+const showTemplatePreviewChoose = () => {
+    console.log(showPreviewContext._value.show);
+    showAditionalInformation.value = false;
+    showPreviewContext._value.isCustomDocs = 'false';
+    showPreviewContext._value.showChooseTemplate = 'true';
+    showPreviewContext._value.show = true;
 };
 
 const generatePlan = async () => {
@@ -342,13 +358,11 @@ const generatePlan = async () => {
 
                 <span class="btnControlsContainer">
                     <button :class="isAditionInformationMissing() ? 'btnChooseTemplateCancel' : 'btnChooseTemplate'"
-                        type="button">Escolher Template
+                        type="button" @click="() => showTemplatePreviewChoose()">
+                        Escolher Template
                     </button>
-                    <button
-                        @click="() => showAditionalInformation = false"
-                        class="btnChooseTemplateCancel"
-                        type="button"
-                    >
+                    <button @click="() => showAditionalInformation = false" class="btnChooseTemplateCancel"
+                        type="button">
                         Cancelar
                     </button>
                 </span>
@@ -403,7 +417,8 @@ const generatePlan = async () => {
                 <li @click="() => handleChangeSelectedDay('day2')"
                     :class="['btnWeekDays', selectedDay === 'day2' ? 'selected' : '']">
                     <i
-                        :class="['pi', hasEmptyStringsInClasses()[1] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>Terca
+                        :class="['pi', hasEmptyStringsInClasses()[1] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
+                    Terca
                 </li>
                 <li @click="() => handleChangeSelectedDay('day3')"
                     :class="['btnWeekDays', selectedDay === 'day3' ? 'selected' : '']">

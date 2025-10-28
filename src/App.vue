@@ -53,7 +53,7 @@ const handleChangeShowPreview = (newValue: IShowPreview): void => {
 // defining context
 provide('isLoading', { isLoading, handleChangeIsLoading });
 provide('popup', { popup, handleChangePopupInfo, handleChangePopupShow });
-provide('showPreview', { showPreview, handleChangeShowPreview });
+provide('showPreview', { ...showPreview, handleChangeShowPreview });
 </script>
 
 <template>
