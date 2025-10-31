@@ -5,8 +5,9 @@ interface IShowPreview {
     customURLDoc: string;
 };
 
-interface IShowPreviewContext {
-    _value: IShowPreview;
-};
+interface IShowPreviewContext  {
+    showPreview: IShowPreview;
+    handleChangeShowPreview: (newShowPreview: IShowPreview) => void;
+}
 
 export type { IShowPreview, IShowPreviewContext };

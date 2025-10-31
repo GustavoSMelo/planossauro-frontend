@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, inject, nextTick } from 'vue';
+import { ref, inject, nextTick, watch, watchEffect } from 'vue';
 import '../../styles/contents/planningcontent.style.scss';
 import type { IPlan, IDays } from '../../interfaces/plans.interface';
 import type { ILoadingContext } from '../../interfaces/context/loading.interface';
@@ -11,8 +11,9 @@ import axios from 'axios';
 import PizZip from 'pizzip';
 import Docxtemplater from "docxtemplater";
 import dayConverter from '../../helpers/dayConverter';
-import type { IShowPreviewContext } from '../../interfaces/context/showPreview.interface';
+import type { IShowPreview, IShowPreviewContext } from '../../interfaces/context/showPreview.interface';
 import { debounce } from 'lodash-es';
+import type { ITemplateChooseContext } from '../../interfaces/context/templateChoose.interface';
 
 const plans = ref<IPlan>({ day1: [''], day2: [''], day3: [''], day4: [''], day5: [''] });
 const selectedDay = ref<IDays['days']>('day1');
@@ -25,6 +26,7 @@ const showAditionalInformation = ref(false);
 const isLoadingContext = inject('isLoading') as ILoadingContext;
 const popupContext = inject('popup') as IPopupContext;
 const showPreviewContext = inject('showPreview') as IShowPreviewContext;
+const templateChooseContext = inject('templateChoose') as ITemplateChooseContext;
 
 const handleChangeSelectedDay = (changeSelectDay: IDays['days']): void => {
     selectedDay.value = changeSelectDay;
@@ -122,11 +124,12 @@ const stopPropagation = (event: Event): void => {
 };
 
 const showTemplatePreviewChoose = () => {
-    console.log(showPreviewContext._value.show);
     showAditionalInformation.value = false;
-    showPreviewContext._value.isCustomDocs = 'false';
-    showPreviewContext._value.showChooseTemplate = 'true';
-    showPreviewContext._value.show = true;
+    const showPreviewContextHelper = { isCustomDocs: 'false', showChooseTemplate: 'true', show: true } as IShowPreview;
+
+    console.log(showPreviewContext);
+
+    showPreviewContext.handleChangeShowPreview({ ...showPreviewContextHelper });
 };
 
 const generatePlan = async () => {
@@ -262,7 +265,8 @@ const generatePlan = async () => {
 
             console.log(responseDay1);
 
-            const planejamentoQSNFetch = await fetch('/planejamentoQSN.docx');
+            const planejamentoQSNFetch = await fetch(`../../../public/planejamento${templateChooseContext.templateChoose.templateType}${templateChooseContext.templateChoose.templateStyle}.docx`);
+            console.log(planejamentoQSNFetch);
             const [arrayBuffer] = await Promise.all([planejamentoQSNFetch.arrayBuffer()]);
             const planZip = new PizZip(arrayBuffer);
             const doc = new Docxtemplater(planZip, { paragraphLoop: true, linebreaks: true });
@@ -331,11 +335,20 @@ const generatePlan = async () => {
 
             saveAs(blob, 'planejamento.docx');
         }
+
+        await templateChooseContext.handleChangeTemplateChoose({ choosed: false, templateStyle: 1, templateType: 'Semanal' });
         await isLoadingContext.handleChangeIsLoading(false);
     } catch (err) {
         await isLoadingContext.handleChangeIsLoading(false);
     }
 };
+
+watchEffect(() => {
+    console.log('teste');
+    if (templateChooseContext.templateChoose.choosed) {
+        generatePlan();
+    }
+});
 
 </script>
 <template>

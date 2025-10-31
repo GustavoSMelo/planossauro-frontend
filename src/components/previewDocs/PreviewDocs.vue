@@ -11,13 +11,15 @@ const {
 
 import { inject, ref } from 'vue';
 import './previewdocs.style.scss';
-import type { IShowPreviewContext } from '../../interfaces/context/showPreview.interface';
+import type { ITemplateChoose, ITemplateChooseContext } from '../../interfaces/context/templateChoose.interface';
+import type { IShowPreview, IShowPreviewContext } from '../../interfaces/context/showPreview.interface';
 
 type TPlanType = 'Semanal' | 'Diario';
 type TPlanVersion = 1 | 2 | 3 | 4 | 5 | 6;
 
 const planType = ref<TPlanType>('Semanal');
 const planVersion = ref<TPlanVersion>(1);
+const templateChooseContext = inject('templateChoose') as ITemplateChooseContext;
 const showPreviewContext = inject('showPreview') as IShowPreviewContext;
 const urlDoc = ref(isCustomDocs.trim().toLowerCase() === 'true' ? customURLDoc : `../../../public/planejamento${planType.value}${planVersion.value}.pdf`);
 
@@ -47,9 +49,18 @@ const handlePreviousButton = (): void => {
 };
 
 const handleClose = (): void => {
-    showPreviewContext._value.show = false;
+    showPreviewContext.handleChangeShowPreview({ show: false, customURLDoc: '', isCustomDocs: 'false', showChooseTemplate: 'false' });
 };
 
+const handleChooseTemplate = (event: Event) => {
+    event.stopPropagation();
+
+    console.log(templateChooseContext);
+    const newTemplateChoose = { choosed: true, templateStyle: planVersion, templateType: planType } as unknown as ITemplateChoose;
+    templateChooseContext.handleChangeTemplateChoose({ ...newTemplateChoose });
+
+    return;
+};
 
 </script>
 
@@ -62,8 +73,8 @@ const handleClose = (): void => {
             <button type="button" @click="() => handleNextButton()"><i class="pi pi-arrow-right"></i></button>
         </div>
 
-        <button @click="(event) => stopPropagation(event)" v-if="showChooseTemplate.trim().toLowerCase() === 'true'"
-            type="button" class="btnChooseTemplate">
+        <button @click="(event) => handleChooseTemplate(event)"
+            v-if="showChooseTemplate.trim().toLowerCase() === 'true'" type="button" class="btnChooseTemplate">
             Escolher template
         </button>
     </div>

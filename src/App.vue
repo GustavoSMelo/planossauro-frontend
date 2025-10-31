@@ -1,31 +1,37 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
-import { provide, ref, watch } from 'vue';
+import { provide, reactive, ref, watch } from 'vue';
 import Loading from './components/loading/Loading.vue';
 import type { IPopup } from './interfaces/popup.interface';
 import type { IShowPreview } from './interfaces/context/showPreview.interface';
 import Popup from './components/popup/Popup.vue';
 import PreviewDocs from './components/previewDocs/PreviewDocs.vue';
+import type { ITemplateChoose } from './interfaces/context/templateChoose.interface';
 
 let timeoutId: NodeJS.Timeout;
 
 // refs
 const isLoading = ref(false);
-const popup = ref<IPopup>({
+const popup = reactive<IPopup>({
     message: '',
     status: 'error',
     show: false
 });
-const showPreview = ref<IShowPreview>({
+const showPreview = reactive<IShowPreview>({
     show: false,
     customURLDoc: '',
     isCustomDocs: 'false',
     showChooseTemplate: 'true'
 });
+const templateChoose = reactive<ITemplateChoose>({
+    choosed: false,
+    templateStyle: 1,
+    templateType: 'Semanal'
+});
 
 watch(popup, () => {
     timeoutId = setTimeout(() => {
-        popup.value = { ...popup.value, show: false }
+        popup.show = false
     }, 4000);
 });
 
@@ -36,24 +42,34 @@ const handleChangeIsLoading = (newValue: boolean) => {
 
 const handleChangePopupInfo = (message: string, status: IPopup['status'], show: boolean): void => {
     clearTimeout(timeoutId);
-    popup.value = {
-        message, show, status
-    };
+    popup.message = message;
+    popup.status = status;
+    popup.show = show;
 };
 
 const handleChangePopupShow = (): void => {
-    popup.value = { ...popup.value, show: !popup.value.show };
+    popup.show = !popup.show;
     clearTimeout(timeoutId);
 };
 
 const handleChangeShowPreview = (newValue: IShowPreview): void => {
-    showPreview.value = { ...newValue };
+    showPreview.customURLDoc = newValue.customURLDoc;
+    showPreview.isCustomDocs = newValue.isCustomDocs;
+    showPreview.show = newValue.show;
+    showPreview.showChooseTemplate = newValue.showChooseTemplate;
+};
+
+const handleChangeTemplateChoose = (newTemplateChoose: ITemplateChoose): void => {
+    templateChoose.choosed = newTemplateChoose.choosed;
+    templateChoose.templateStyle = newTemplateChoose.templateStyle;
+    templateChoose.templateType = newTemplateChoose.templateType;
 };
 
 // defining context
 provide('isLoading', { isLoading, handleChangeIsLoading });
 provide('popup', { popup, handleChangePopupInfo, handleChangePopupShow });
-provide('showPreview', { ...showPreview, handleChangeShowPreview });
+provide('showPreview', { showPreview, handleChangeShowPreview });
+provide('templateChoose', { templateChoose, handleChangeTemplateChoose });
 </script>
 
 <template>
