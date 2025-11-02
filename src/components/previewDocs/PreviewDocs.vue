@@ -15,7 +15,7 @@ import type { ITemplateChoose, ITemplateChooseContext } from '../../interfaces/c
 import type { IShowPreview, IShowPreviewContext } from '../../interfaces/context/showPreview.interface';
 
 type TPlanType = 'Semanal' | 'Diario';
-type TPlanVersion = 1 | 2 | 3 | 4 | 5 | 6;
+type TPlanVersion = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 const planType = ref<TPlanType>('Semanal');
 const planVersion = ref<TPlanVersion>(1);
@@ -30,7 +30,7 @@ const stopPropagation = (event: Event): void => {
 };
 
 const handleNextButton = (): void => {
-    if (planVersion.value === 6) {
+    if (planVersion.value === 7) {
         planVersion.value = 1;
         return;
     }
@@ -41,7 +41,7 @@ const handleNextButton = (): void => {
 
 const handlePreviousButton = (): void => {
     if (planVersion.value === 1) {
-        planVersion.value = 6;
+        planVersion.value = 7;
         return;
     }
     planVersion.value = planVersion.value - 1 as TPlanVersion;
