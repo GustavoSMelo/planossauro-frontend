@@ -336,10 +336,10 @@ const generatePlan = async () => {
             saveAs(blob, 'planejamento.docx');
         }
 
-        await templateChooseContext.handleChangeTemplateChoose({ choosed: false, templateStyle: 1, templateType: 'Semanal' });
-        await isLoadingContext.handleChangeIsLoading(false);
+        templateChooseContext.handleChangeTemplateChoose({ choosed: false, templateStyle: 1, templateType: 'Semanal' });
+        isLoadingContext.handleChangeIsLoading(false);
     } catch (err) {
-        await isLoadingContext.handleChangeIsLoading(false);
+        isLoadingContext.handleChangeIsLoading(false);
     }
 };
 
@@ -347,6 +347,8 @@ watchEffect(() => {
     console.log('teste');
     if (templateChooseContext.templateChoose.choosed) {
         generatePlan();
+        templateChooseContext
+            .handleChangeTemplateChoose({ choosed: false, templateStyle: 1, templateType: 'Semanal' });
     }
 });
 
