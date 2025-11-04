@@ -114,6 +114,11 @@ input {
 
             button.btnChooseTemplateCancel {
                 background-color: $gray;
+                cursor: not-allowed;
+            }
+
+            button.btnChooseTemplateCancel:nth-child(2) {
+                cursor: pointer;
             }
 
             button.btnChooseTemplateCancel:hover {
@@ -497,6 +502,20 @@ input {
 
     .planningContainer {
         margin: 0;
+
+        .aditionalInformationsContainer > .aditionalInformationsForm {
+            width: 100%;
+            transform: scale(0.8);
+
+            .btnControlsContainer {
+                flex-direction: column;
+                display: flex;
+
+                button {
+                    margin-bottom: 5px;
+                }
+            }
+        }
 
         .planningSelect {
             flex-direction: column;

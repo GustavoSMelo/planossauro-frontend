@@ -14,6 +14,7 @@ import dayConverter from '../../helpers/dayConverter';
 import type { IShowPreview, IShowPreviewContext } from '../../interfaces/context/showPreview.interface';
 import { debounce } from 'lodash-es';
 import type { ITemplateChooseContext } from '../../interfaces/context/templateChoose.interface';
+import { isWeekend } from '../../helpers/isWeekend';
 
 const plans = ref<IPlan>({ day1: [''], day2: [''], day3: [''], day4: [''], day5: [''] });
 const selectedDay = ref<IDays['days']>('day1');
@@ -21,7 +22,8 @@ const planType = ref<'Diario' | 'Semanal'>('Semanal');
 const isOpenPlanMobileMenu = ref<boolean>(false);
 const schoolName = ref('');
 const className = ref('');
-const planDate = ref('');
+const planDateStart = ref('');
+const planDateEnd = ref('');
 const showAditionalInformation = ref(false);
 const isLoadingContext = inject('isLoading') as ILoadingContext;
 const popupContext = inject('popup') as IPopupContext;
@@ -66,7 +68,6 @@ const handleGoBack = debounce(async () => {
 
 const handleGoFoward = debounce(async () => {
     const dayNumber = Number.parseInt(selectedDay.value.split('day')[1]);
-    console.log(dayNumber);
 
     if (dayNumber === 5) {
         selectedDay.value = `day${1}`
@@ -110,13 +111,22 @@ const handleChangeClassName = (event: Event): void => {
     className.value = target.value;
 };
 
-const handleChangeClassDate = (event: Event): void => {
+const handleChangeClassDateStart = (event: Event): void => {
     const target = event.target as HTMLInputElement;
-    planDate.value = target.value;
+    planDateStart.value = target.value;
+};
+
+const handleChangeClassDateEnd = (event: Event): void => {
+    const target = event.target as HTMLInputElement;
+    planDateEnd.value = target.value;
 };
 
 const isAditionInformationMissing = (): boolean => {
-    return schoolName.value.length > 0 && className.value.length > 0 && planDate.value.length > 0 ? false : true;
+    return schoolName.value.length > 0 &&
+        className.value.length > 0 &&
+        planDateStart.value.length > 0 &&
+        planDateEnd.value.length > 0
+        ? false : true;
 };
 
 const stopPropagation = (event: Event): void => {
@@ -124,10 +134,29 @@ const stopPropagation = (event: Event): void => {
 };
 
 const showTemplatePreviewChoose = () => {
+    if (isAditionInformationMissing()) {
+        popupContext.handleChangePopupInfo('Preencha todas as informacoes \n e tente novamente', 'warning', true);
+        return;
+    }
+
+    if (isWeekend(planDateStart.value) || isWeekend(planDateEnd.value)) {
+        popupContext.handleChangePopupInfo('O seu planejamento esta sendo inserido nos finais de semana', 'error', true);
+        return;
+    }
+
+    const dateStart = new Date(planDateStart.value);
+    const dateEnd = new Date(planDateEnd.value);
+    const dateDiffInMilliseconds = new Date(Number(dateEnd) - Number(dateStart));
+
+    const dateDiffInDays = (Number(dateDiffInMilliseconds) / (1000 * 60 * 60 * 24)) + 1;
+
+    if (dateDiffInDays !== 5) {
+        popupContext.handleChangePopupInfo('A data de inicio ou fim do planejamento, nao confere com uma semana', 'error', true);
+        return;
+    }
+
     showAditionalInformation.value = false;
     const showPreviewContextHelper = { isCustomDocs: 'false', showChooseTemplate: 'true', show: true } as IShowPreview;
-
-    console.log(showPreviewContext);
 
     showPreviewContext.handleChangeShowPreview({ ...showPreviewContextHelper });
 };
@@ -203,13 +232,12 @@ const generatePlan = async () => {
         }
         `;
 
-            const response = await axios.post(import.meta.env.VITE_API_URL, {
+            await axios.post(import.meta.env.VITE_API_URL, {
                 model: import.meta.env.VITE_LLM_MODEL,
                 prompt,
                 stream: false
             });
 
-            console.log(response.data);
         } else {
             let activities = [];
             for (let i = 1; i < 6; i++) {
@@ -261,17 +289,21 @@ const generatePlan = async () => {
                     .replaceAll('json', '')) as IClassPlanResponse;
             }
             ));
-            console.log(responseDay1, responseDay2, responseDay3, responseDay4, responseDay5);
-
-            console.log(responseDay1);
 
             const planejamentoQSNFetch = await fetch(`../../../public/planejamento${templateChooseContext.templateChoose.templateType}${templateChooseContext.templateChoose.templateStyle}.docx`);
-            console.log(planejamentoQSNFetch);
             const [arrayBuffer] = await Promise.all([planejamentoQSNFetch.arrayBuffer()]);
             const planZip = new PizZip(arrayBuffer);
             const doc = new Docxtemplater(planZip, { paragraphLoop: true, linebreaks: true });
 
             const data = {
+                // header
+                nomeEscola: schoolName,
+                sala: className,
+                diaStart: planDateStart.value.split('-')[2],
+                diaEnd: planDateEnd.value.split('-')[2],
+                mes: planDateEnd.value.split('-')[1],
+                ano: planDateEnd.value.split('-')[0],
+
                 // day 1
                 eixo1: responseDay1.eixo,
                 saber1: `${responseDay1.saber01}\n \n${responseDay1.saber02}`,
@@ -338,13 +370,13 @@ const generatePlan = async () => {
 
         templateChooseContext.handleChangeTemplateChoose({ choosed: false, templateStyle: 1, templateType: 'Semanal' });
         isLoadingContext.handleChangeIsLoading(false);
+        popupContext.handleChangePopupInfo('Documento gerado com sucesso', 'success', true);
     } catch (err) {
         isLoadingContext.handleChangeIsLoading(false);
     }
 };
 
 watchEffect(() => {
-    console.log('teste');
     if (templateChooseContext.templateChoose.choosed) {
         generatePlan();
         templateChooseContext
@@ -368,8 +400,11 @@ watchEffect(() => {
                 <input type="text" :value="className" placeholder="Classe ou Serie"
                     @change="event => handleChangeClassName(event)" />
 
-                <label>Data do planejamento: </label>
-                <input type="date" :value="planDate" @change="event => handleChangeClassDate(event)" />
+                <label>Data do planejamento (inicio): </label>
+                <input type="date" :value="planDateStart" @change="event => handleChangeClassDateStart(event)" />
+
+                <label>Data do planejamento (fim): </label>
+                <input type="date" :value="planDateEnd" @change="event => handleChangeClassDateEnd(event)" />
 
                 <span class="btnControlsContainer">
                     <button :class="isAditionInformationMissing() ? 'btnChooseTemplateCancel' : 'btnChooseTemplate'"
@@ -518,6 +553,7 @@ watchEffect(() => {
         </div>
         <button
             :class="hasEmptyStringsInClasses().find(element => element === true) ? 'btnGeneratePlanCancel' : 'btnGeneratePlan'"
-            v-if="planType === 'Semanal'" type="button" @click="() => showAditionalInformation = true">Avancar</button>
+            v-if="planType === 'Semanal'" type="button"
+            @click="() => showAditionalInformation = hasEmptyStringsInClasses().find(element => element === true) ? false : true">Avancar</button>
     </div>
 </template>

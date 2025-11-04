@@ -23,8 +23,6 @@ const templateChooseContext = inject('templateChoose') as ITemplateChooseContext
 const showPreviewContext = inject('showPreview') as IShowPreviewContext;
 const urlDoc = ref(isCustomDocs.trim().toLowerCase() === 'true' ? customURLDoc : `../../../public/planejamento${planType.value}${planVersion.value}.pdf`);
 
-console.log(urlDoc);
-
 const stopPropagation = (event: Event): void => {
     event.stopPropagation();
 };
@@ -56,7 +54,6 @@ const handleClose = (): void => {
 const handleChooseTemplate = (event: Event) => {
     event.stopPropagation();
 
-    console.log(templateChooseContext);
     const newTemplateChoose = { choosed: true, templateStyle: planVersion, templateType: planType } as unknown as ITemplateChoose;
     templateChooseContext.handleChangeTemplateChoose({ ...newTemplateChoose });
 
