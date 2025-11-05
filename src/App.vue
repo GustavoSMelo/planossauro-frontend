@@ -21,7 +21,8 @@ const showPreview = reactive<IShowPreview>({
     show: false,
     customURLDoc: '',
     isCustomDocs: 'false',
-    showChooseTemplate: 'true'
+    showChooseTemplate: 'true',
+    planType: 'Semanal',
 });
 const templateChoose = reactive<ITemplateChoose>({
     choosed: false,
@@ -57,6 +58,7 @@ const handleChangeShowPreview = (newValue: IShowPreview): void => {
     showPreview.isCustomDocs = newValue.isCustomDocs;
     showPreview.show = newValue.show;
     showPreview.showChooseTemplate = newValue.showChooseTemplate;
+    showPreview.planType = newValue.planType;
 };
 
 const handleChangeTemplateChoose = (newTemplateChoose: ITemplateChoose): void => {
@@ -74,8 +76,12 @@ provide('templateChoose', { templateChoose, handleChangeTemplateChoose });
 
 <template>
     <RouterView />
-    <PreviewDocs v-if="showPreview.show" :customURLDoc="showPreview.customURLDoc"
-        :isCustomDocs="showPreview.isCustomDocs" :showChooseTemplate="showPreview.showChooseTemplate" />
+    <PreviewDocs v-if="showPreview.show"
+        :customURLDoc="showPreview.customURLDoc"
+        :isCustomDocs="showPreview.isCustomDocs"
+        :showChooseTemplate="showPreview.showChooseTemplate"
+        :planType="showPreview.planType"
+    />
     <Loading v-if="isLoading" />
     <Popup v-if="popup.show && popup.message.length > 0" />
 </template>

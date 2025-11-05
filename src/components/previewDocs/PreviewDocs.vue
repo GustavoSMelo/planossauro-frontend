@@ -2,11 +2,13 @@
 const {
     showChooseTemplate = 'false',
     isCustomDocs = 'false',
-    customURLDoc = ''
+    customURLDoc = '',
+    planType = 'Semanal',
 } = defineProps<{
     showChooseTemplate: 'false' | 'true',
     isCustomDocs: 'false' | 'true',
-    customURLDoc: string
+    customURLDoc: string,
+    planType: 'Semanal' | 'Diario'
 }>();
 
 import { inject, ref } from 'vue';
@@ -14,14 +16,12 @@ import './previewdocs.style.scss';
 import type { ITemplateChoose, ITemplateChooseContext } from '../../interfaces/context/templateChoose.interface';
 import type { IShowPreviewContext } from '../../interfaces/context/showPreview.interface';
 
-type TPlanType = 'Semanal' | 'Diario';
 type TPlanVersion = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
-const planType = ref<TPlanType>('Semanal');
 const planVersion = ref<TPlanVersion>(1);
 const templateChooseContext = inject('templateChoose') as ITemplateChooseContext;
 const showPreviewContext = inject('showPreview') as IShowPreviewContext;
-const urlDoc = ref(isCustomDocs.trim().toLowerCase() === 'true' ? customURLDoc : `../../../public/planejamento${planType.value}${planVersion.value}.pdf`);
+const urlDoc = ref(isCustomDocs.trim().toLowerCase() === 'true' ? customURLDoc : `../../../public/planejamento${planType}${planVersion.value}.pdf`);
 
 const stopPropagation = (event: Event): void => {
     event.stopPropagation();
@@ -34,7 +34,7 @@ const handleNextButton = (): void => {
         planVersion.value = planVersion.value + 1 as TPlanVersion;
     }
 
-    urlDoc.value = `../../../public/planejamento${planType.value}${planVersion.value}.pdf`
+    urlDoc.value = `../../../public/planejamento${planType}${planVersion.value}.pdf`
 };
 
 const handlePreviousButton = (): void => {
@@ -44,7 +44,7 @@ const handlePreviousButton = (): void => {
         planVersion.value = planVersion.value - 1 as TPlanVersion;
     }
 
-    urlDoc.value = `../../../public/planejamento${planType.value}${planVersion.value}.pdf`
+    urlDoc.value = `../../../public/planejamento${planType}${planVersion.value}.pdf`
 };
 
 const handleClose = (): void => {

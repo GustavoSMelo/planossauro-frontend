@@ -18,7 +18,7 @@ import { isWeekend } from '../../helpers/isWeekend';
 
 const plans = ref<IPlan>({ day1: [''], day2: [''], day3: [''], day4: [''], day5: [''] });
 const selectedDay = ref<IDays['days']>('day1');
-const planType = ref<'Diario' | 'Semanal'>('Semanal');
+const planType = ref<IShowPreview['planType']>('Semanal');
 const isOpenPlanMobileMenu = ref<boolean>(false);
 const schoolName = ref('');
 const className = ref('');
@@ -101,6 +101,14 @@ const hasEmptyStringsInClasses = (): Array<boolean> => {
     return [day1IsEmpty, day2IsEmpty, day3IsEmpty, day4IsEmpty, day5IsEmpty];
 };
 
+const hasEmptyStringsInDiary = (): boolean => {
+    let dayIsEmpty = false;
+
+    plans.value['day1'].forEach(element => element.length <= 0 ? dayIsEmpty = true : null);
+
+    return dayIsEmpty;
+}
+
 const handleChangeSchoolName = (event: Event): void => {
     const target = event.target as HTMLInputElement;
     schoolName.value = target.value;
@@ -156,7 +164,7 @@ const showTemplatePreviewChoose = () => {
     }
 
     showAditionalInformation.value = false;
-    const showPreviewContextHelper = { isCustomDocs: 'false', showChooseTemplate: 'true', show: true } as IShowPreview;
+    const showPreviewContextHelper = { isCustomDocs: 'false', showChooseTemplate: 'true', show: true, planType, customURLDoc: '' } as unknown as IShowPreview;
 
     showPreviewContext.handleChangeShowPreview({ ...showPreviewContextHelper });
 };
@@ -165,6 +173,7 @@ const generatePlan = async () => {
     try {
         const hasEmptyStrings = hasEmptyStringsInClasses().find(element => element === true);
         if (hasEmptyStrings) {
+            popupContext.handleChangePopupInfo('Preencha os campos para escolher o template', 'error', true);
             return;
         }
 
@@ -446,11 +455,12 @@ watchEffect(() => {
             </span>
             <div class="btnContainer">
                 <button class="btnAddClassAtv" type="button" @click="handleAddNewClassInPlanning('day1')">
-                    <i class="pi pi-plus-circle"></i>
+                    <i class="pi pi-plus-circle"></i> Adicionar aula
                 </button>
 
-                <button type="button" @click="generatePlan">
-                    Gerar planejamento
+                <button :class="hasEmptyStringsInDiary() ? 'btnDiaryGenerateCancel' : 'btnDiaryGenerate'" type="button"
+                    @click="() => showAditionalInformation = hasEmptyStringsInDiary() ? false : true">
+                    Avancar
                 </button>
             </div>
         </form>

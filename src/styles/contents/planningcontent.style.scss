@@ -102,7 +102,8 @@ input {
                 margin-bottom: 20px;
             }
 
-            button.btnChooseTemplateCancel, button.btnChooseTemplate {
+            button.btnChooseTemplateCancel,
+            button.btnChooseTemplate {
                 padding: 12px 40px;
                 border-radius: 5px;
                 font-weight: bold;
@@ -171,6 +172,12 @@ input {
     form.dailyPlan>span {
         display: flex;
         flex-direction: column;
+
+        label {
+            font-weight: bold;
+            color: $gray;
+            padding-top: 7px;
+        }
     }
 
     form.dailyPlan>.btnContainer {
@@ -189,28 +196,52 @@ input {
         }
 
         button:nth-child(1) {
-            background-color: $accentColor;
-            color: $white;
+            background-color: $gray;
+            color: $black;
             border: none;
             transition: .4s;
+            font-weight: 500;
+
+            i {
+                margin-right: 5px;
+            }
         }
 
         button:nth-child(1):hover {
-            background-color: $accentColorDarker;
+            background-color: $darkGray;
+            color: $white;
             transition: .4s;
         }
 
         button:nth-child(2) {
-            color: $accentColor;
-            border: solid 3px $accentColor;
-            background-color: $white;
             margin-left: 20px;
             font-size: 15pt;
             font-weight: 600;
         }
 
-        button:nth-child(2):hover {
-            background-color: $accentColorLighter;
+        .btnDiaryGenerateCancel {
+            background-color: $gray;
+            color: $black;
+            transition: .4s;
+            border: $gray;
+            cursor: not-allowed;
+        }
+
+        .btnDiaryGenerateCancel:hover {
+            background-color: $darkGray;
+            transition: .4s;
+            color: $black;
+        }
+
+        .btnDiaryGenerate {
+            color: $white;
+            border: solid 3px $accentColor;
+            background-color: $accentColor;
+            transition: .4s;
+        }
+
+        .btnDiaryGenerate:hover {
+            background-color: $accentColorDarker;
             transition: .4s;
         }
     }
@@ -503,7 +534,7 @@ input {
     .planningContainer {
         margin: 0;
 
-        .aditionalInformationsContainer > .aditionalInformationsForm {
+        .aditionalInformationsContainer>.aditionalInformationsForm {
             width: 100%;
             transform: scale(0.8);
 

@@ -3,6 +3,7 @@ interface IShowPreview {
     showChooseTemplate: 'true' | 'false';
     isCustomDocs: 'true' | 'false';
     customURLDoc: string;
+    planType: 'Semanal' | 'Diario';
 };
 
 interface IShowPreviewContext  {
