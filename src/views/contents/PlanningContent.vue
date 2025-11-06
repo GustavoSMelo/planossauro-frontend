@@ -296,11 +296,7 @@ const generatePlan = async () => {
                     .replaceAll('\n', '')
                     .replaceAll('`', '')
                     .replaceAll('json', '')) as IClassPlanResponse;
-            }
-            ));
-
-            console.log(templateChooseContext.templateChoose.templateStyle);
-            console.log(templateChooseContext.templateChoose.templateType);
+            }));
 
             const planejamentoQSNFetch = await fetch(`../../../public/planejamento${templateChooseContext.templateChoose.templateType}${templateChooseContext.templateChoose.templateStyle}.docx`);
             const [arrayBuffer] = await Promise.all([planejamentoQSNFetch.arrayBuffer()]);
@@ -502,27 +498,32 @@ watchEffect(() => {
                             :class="['pi', isOpenPlanMobileMenu ? 'pi-chevron-up' : 'pi-chevron-down']"></i></button>
                 </div>
                 <ul v-if="isOpenPlanMobileMenu === true" class="mobileDayLists">
-                    <li @click="() => handleChangeSelectedDay('day1')">
+                    <li :class="['mobileDayItemList', selectedDay === 'day1' ? 'mobileDaySelected' : '']"
+                        @click="() => handleChangeSelectedDay('day1')">
                         <i
                             :class="['pi', hasEmptyStringsInClasses()[0] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
                         Segunda
                     </li>
-                    <li @click="() => handleChangeSelectedDay('day2')">
+                    <li :class="['mobileDayItemList', selectedDay === 'day2' ? 'mobileDaySelected' : '']"
+                        @click="() => handleChangeSelectedDay('day2')">
                         <i
                             :class="['pi', hasEmptyStringsInClasses()[1] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
                         Terca
                     </li>
-                    <li @click="() => handleChangeSelectedDay('day3')">
+                    <li :class="['mobileDayItemList', selectedDay === 'day3' ? 'mobileDaySelected' : '']"
+                        @click="() => handleChangeSelectedDay('day3')">
                         <i
                             :class="['pi', hasEmptyStringsInClasses()[2] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
                         Quarta
                     </li>
-                    <li @click="() => handleChangeSelectedDay('day4')">
+                    <li :class="['mobileDayItemList', selectedDay === 'day4' ? 'mobileDaySelected' : '']"
+                        @click="() => handleChangeSelectedDay('day4')">
                         <i
                             :class="['pi', hasEmptyStringsInClasses()[3] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
                         Quinta
                     </li>
-                    <li @click="() => handleChangeSelectedDay('day5')">
+                    <li :class="['mobileDayItemList', selectedDay === 'day5' ? 'mobileDaySelected' : '']"
+                        @click="() => handleChangeSelectedDay('day5')">
                         <i
                             :class="['pi', hasEmptyStringsInClasses()[4] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
                         Sexta

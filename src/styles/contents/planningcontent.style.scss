@@ -8,6 +8,7 @@
     }
 
     99% {
+        display: none;
         opacity: .4;
     }
 
@@ -23,8 +24,14 @@
         transform: translateX(-180deg);
     }
 
+    99% {
+        display: none;
+        opacity: .4;
+    }
+
     100% {
         opacity: 1;
+        display: flex;
         transform: translateX(0deg);
     }
 }
@@ -277,11 +284,13 @@ input {
 
                 i.iconUncheck {
                     color: $gray;
+                    margin-right: 7px;
                 }
 
                 i.iconCheck {
                     color: $darkGreen;
                     font-weight: bold;
+                    margin-right: 7px;
                 }
             }
 
@@ -473,36 +482,40 @@ input {
                     width: 100%;
                     overflow-y: hidden;
 
-                    li {
+                    li.mobileDayItemList {
+                        cursor: pointer;
                         border-radius: 0;
                         margin-right: 0;
                         border-bottom: 1px solid $gray;
+                        padding: 10px 20px;
                         animation: 0.4s weekDaysMobileAnimation forwards;
                     }
 
-                    li:nth-child(1) {
+                    li.mobileDayItemList:nth-child(1) {
                         animation: 0.5s weekDaysMobileAnimation forwards;
                     }
 
-                    li:nth-child(2) {
+                    li.mobileDayItemList:nth-child(2) {
                         animation: 0.6s weekDaysMobileAnimation forwards;
                     }
 
-                    li:nth-child(3) {
+                    li.mobileDayItemList:nth-child(3) {
                         animation: 0.7s weekDaysMobileAnimation forwards;
                     }
 
-                    li:nth-child(4) {
+                    li.mobileDayItemList:nth-child(4) {
                         animation: 0.8s weekDaysMobileAnimation forwards;
                     }
 
-                    li:nth-child(5) {
+                    li.mobileDayItemList:nth-child(5) {
                         animation: 1s weekDaysMobileAnimation forwards;
                     }
 
-                    li:last-child {
-                        border-bottom: 0;
+                    li.mobileDaySelected {
+                        background-color: $accentColor;
+                        color: $white;
                     }
+
                 }
             }
 
