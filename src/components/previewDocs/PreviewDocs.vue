@@ -48,7 +48,10 @@ const handlePreviousButton = (): void => {
 };
 
 const handleClose = (): void => {
-    showPreviewContext.handleChangeShowPreview({ show: false, customURLDoc: '', isCustomDocs: 'false', showChooseTemplate: 'false' });
+    showPreviewContext.handleChangeShowPreview({
+        show: false, customURLDoc: '', isCustomDocs: 'false', showChooseTemplate: 'false',
+        planType: 'Semanal'
+    });
 };
 
 const handleChooseTemplate = (event: Event) => {

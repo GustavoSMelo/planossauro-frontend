@@ -299,6 +299,9 @@ const generatePlan = async () => {
             }
             ));
 
+            console.log(templateChooseContext.templateChoose.templateStyle);
+            console.log(templateChooseContext.templateChoose.templateType);
+
             const planejamentoQSNFetch = await fetch(`../../../public/planejamento${templateChooseContext.templateChoose.templateType}${templateChooseContext.templateChoose.templateStyle}.docx`);
             const [arrayBuffer] = await Promise.all([planejamentoQSNFetch.arrayBuffer()]);
             const planZip = new PizZip(arrayBuffer);
@@ -317,9 +320,7 @@ const generatePlan = async () => {
                 eixo1: responseDay1.eixo,
                 saber1: `${responseDay1.saber01}\n \n${responseDay1.saber02}`,
                 aprendizagem1: `${responseDay1.aprendizagem01}\n \n${responseDay1.aprendizagem02}`,
-                atividade1_1: plans.value.day1[0],
-                atividade1_2: plans.value.day1[1],
-                atividade1_3: plans.value.day1[2],
+                atividade1: plans.value.day1.map(item => `${item.toString()} \n \n`),
                 contextualizacao1: responseDay1.contextualizacao,
                 foco1: responseDay1.foco_avaliativo,
                 materiais1: responseDay1.materiais,
@@ -328,9 +329,7 @@ const generatePlan = async () => {
                 eixo2: responseDay2.eixo,
                 saber2: `${responseDay2.saber01}\n${responseDay2.saber02}`,
                 aprendizagem2: `${responseDay2.aprendizagem01}\n${responseDay2.aprendizagem02}`,
-                atividade2_1: plans.value.day2[0],
-                atividade2_2: plans.value.day2[1],
-                atividade2_3: plans.value.day2[2],
+                atividade2: plans.value.day2.map(item => `${item.toString()} \n \n`),
                 contextualizacao2: responseDay2.contextualizacao,
                 foco2: responseDay2.foco_avaliativo,
                 materiais2: responseDay2.materiais,
@@ -339,9 +338,7 @@ const generatePlan = async () => {
                 eixo3: responseDay3.eixo,
                 saber3: `${responseDay3.saber01}\n \n${responseDay3.saber02}`,
                 aprendizagem3: `${responseDay3.aprendizagem01}\n \n${responseDay3.aprendizagem02}`,
-                atividade3_1: plans.value.day3[0],
-                atividade3_2: plans.value.day3[1],
-                atividade3_3: plans.value.day3[2],
+                atividade3: plans.value.day3.map(item => `${item.toString()} \n \n`),
                 contextualizacao3: responseDay3.contextualizacao,
                 foco3: responseDay3.foco_avaliativo,
                 materiais3: responseDay3.materiais,
@@ -350,9 +347,7 @@ const generatePlan = async () => {
                 eixo4: responseDay4.eixo,
                 saber4: `${responseDay4.saber01}\n \n${responseDay4.saber02}`,
                 aprendizagem4: `${responseDay4.aprendizagem01}\n \n${responseDay4.aprendizagem02}`,
-                atividade4_1: plans.value.day4[0],
-                atividade4_2: plans.value.day4[1],
-                atividade4_3: plans.value.day4[2],
+                atividade4: plans.value.day4.map(item => `${item.toString()} \n \n`),
                 contextualizacao4: responseDay4.contextualizacao,
                 foco4: responseDay4.foco_avaliativo,
                 materiais4: responseDay4.materiais,
@@ -361,9 +356,7 @@ const generatePlan = async () => {
                 eixo5: responseDay5.eixo,
                 saber5: `${responseDay5.saber01}\n \n${responseDay5.saber02}`,
                 aprendizagem5: `${responseDay5.aprendizagem01}\n \n${responseDay5.aprendizagem02}`,
-                atividade5_1: plans.value.day5[0],
-                atividade5_2: plans.value.day5[1],
-                atividade5_3: plans.value.day5[2],
+                atividade5: plans.value.day5.map(item => `${item.toString()} \n \n`),
                 contextualizacao5: responseDay5.contextualizacao,
                 foco5: responseDay5.foco_avaliativo,
                 materiais5: responseDay5.materiais,
