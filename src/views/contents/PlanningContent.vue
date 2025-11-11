@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref, inject, nextTick, watch, watchEffect } from 'vue';
-import '../../styles/contents/planningcontent.style.scss';
+import { ref, inject, nextTick, watchEffect } from 'vue';
 import type { IPlan, IDays } from '../../interfaces/plans.interface';
 import type { ILoadingContext } from '../../interfaces/context/loading.interface';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
@@ -561,3 +560,5 @@ watchEffect(() => {
             @click="() => showAditionalInformation = hasEmptyStringsInClasses().find(element => element === true) ? false : true">Avancar</button>
     </div>
 </template>
+
+<style src="../../styles/contents/planningcontent.style.scss" scoped lang="scss" />

@@ -1,6 +1,3 @@
-<script setup lang="ts">
-import '../../styles/contents/homecontent.style.scss';
-</script>
 <template>
     <div class="homeContentContainer">
         <img src="../../assets/dino_party.png" alt="Dino Party" />
@@ -10,3 +7,5 @@ import '../../styles/contents/homecontent.style.scss';
         </h1>
     </div>
 </template>
+
+<style lang="scss" scoped src="../../styles/contents/homecontent.style.scss" />

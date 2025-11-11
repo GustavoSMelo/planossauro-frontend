@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import './navbar.style.scss';
 const hamburgerMenuActive = ref(false);
 
 const changeMenuHamburgerState = () => {
@@ -36,3 +35,5 @@ const changeMenuHamburgerState = () => {
         </ul>
     </span>
 </template>
+
+<style scoped src="./navbar.style.scss" lang="scss" />

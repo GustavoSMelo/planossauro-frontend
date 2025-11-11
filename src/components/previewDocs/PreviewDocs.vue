@@ -12,7 +12,6 @@ const {
 }>();
 
 import { inject, ref } from 'vue';
-import './previewdocs.style.scss';
 import type { ITemplateChoose, ITemplateChooseContext } from '../../interfaces/context/templateChoose.interface';
 import type { IShowPreviewContext } from '../../interfaces/context/showPreview.interface';
 
@@ -80,3 +79,5 @@ const handleChooseTemplate = (event: Event) => {
         </button>
     </div>
 </template>
+
+<style lang="scss" scoped src="./previewdocs.style.scss" />

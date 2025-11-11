@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { inject } from 'vue';
-import './popup.style.scss';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
 
 const popupContext = inject('popup') as IPopupContext;
@@ -19,3 +18,5 @@ const popupContext = inject('popup') as IPopupContext;
         </div>
     </div>
 </template>
+
+<style src="./popup.style.scss" lang="scss" scoped />

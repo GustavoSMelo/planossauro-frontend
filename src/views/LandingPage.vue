@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import '../styles/landingPage.style.scss';
 import 'primeicons/primeicons.css';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
 const goToLoginPage = () => {
-    router.push({ path: '/home' });
+    router.push({ path: '/login' });
 };
 
 </script>
@@ -53,3 +52,5 @@ const goToLoginPage = () => {
         </h4>
     </div>
 </template>
+
+<style lang="scss" scoped src="../styles/landingPage.style.scss" />

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 
-import '../styles/homepage.style.scss';
 import Navbar from '../components/navbar/Navbar.vue';
 import HomeContent from './contents/HomeContent.vue';
 import PlanningContent from './contents/PlanningContent.vue';
@@ -91,4 +90,4 @@ const hourTime = new Date().getHours();
         </div>
     </main>
 </template>
-<style />
+<style lang="scss" scoped src="../styles/homepage.style.scss" />
