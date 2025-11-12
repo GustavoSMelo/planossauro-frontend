@@ -5,7 +5,7 @@ const clickFooter = () => {
 };
 
 const loginGithubPage = () => {
-    window.location.assign(`https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&scope=read:user,user:email`);
+    window.location.assign(`https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&scope=read:user,user:email,`);
 };
 
 </script>

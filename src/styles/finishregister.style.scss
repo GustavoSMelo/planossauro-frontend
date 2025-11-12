@@ -1,0 +1,94 @@
+@charset "UTF-8";
+@import './colors.scss';
+
+@keyframes appersLoginWrapper {
+    0% {
+        transform: translateY(-4000px);
+        opacity: 0;
+    };
+
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    };
+}
+
+.finishRegisterContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+
+    .formContainer {
+        background-color: $white;
+        box-shadow: 2px 2px 6px $shadowLowPink;
+        padding: 20px;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        width: 60%;
+        animation: appersLoginWrapper .8s forwards;
+
+        h2 {
+            margin-bottom: 20px;
+            border-bottom: 1px $lightGray solid;
+            padding-bottom: 10px;
+            font-size: 20pt;
+        }
+
+        label {
+            font-weight: 500;
+            font-size: 16pt;
+            margin-top: 20px;
+        }
+
+        input {
+            box-shadow: 2px 2px 6px $lightGray;
+            padding: 15px;
+            border: solid 1px $lightGray;
+            border-radius: 5px;
+            margin-top: 4px;
+            transition: .3s;
+        }
+
+        input:focus {
+            transition: .3s;
+            border: solid 1px $accentColor;
+            color: $accentColor;
+            font-weight: bold;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 15pt;
+            font-weight: bold;
+            border-radius: 5px;
+            color: $darkGray;
+            cursor: not-allowed;
+            transition: .4s;
+        }
+
+        button.btnProceedRegister {
+            background-color: $accentColor;
+            color: $white;
+            border: solid 3px $accentColorDarker;
+            cursor: pointer;
+        }
+
+        button.btnProceedRegister:hover {
+            background-color: $accentColorDarker;
+            border-color: $accentColor;
+            transition: .4s;
+        }
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .finishRegisterContainer {
+        .formContainer {
+            width: 80%;
+        }
+    }
+}
