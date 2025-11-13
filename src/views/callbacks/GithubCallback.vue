@@ -29,6 +29,7 @@ watchEffect(async () => {
                 return;
             }
 
+            sessionStorage.setItem('loginType', 'github');
             sessionStorage.setItem('githubEmail', data.data.email);
             sessionStorage.setItem('githubId', Number(data.data.id).toString());
             sessionStorage.setItem('accessToken', data.accessToken);

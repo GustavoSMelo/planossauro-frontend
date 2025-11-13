@@ -92,8 +92,6 @@ const handleGithubSave = async () => {
         } as unknown as ICreateUser;
 
         const { data: responseData }: { data: ICreateUserResponse } = await backendApi.post('/user', userData);
-        console.log(responseData);
-        console.log(responseData.data);
 
         if (responseData.data.uuid) {
             validationCode.value = responseData.validation_code;
@@ -142,7 +140,7 @@ const resendEmail = async () => {
         });
 
         loadingContext.handleChangeIsLoading(false);
-         popupContext.handleChangePopupInfo('Email reenviado com sucesso', 'success', true);
+        popupContext.handleChangePopupInfo('Email reenviado com sucesso', 'success', true);
     } catch (err) {
         console.error(err);
         loadingContext.handleChangeIsLoading(false);
@@ -150,11 +148,29 @@ const resendEmail = async () => {
     }
 };
 
+const finishValidation = async () => {
+    try {
+        if (validationCode.value.toString() !== validationCodeInput.value.toString()) {
+            popupContext.handleChangePopupInfo('Codigo de validacao invalido', 'error', true);
+            return;
+        }
+        loadingContext.handleChangeIsLoading(true);
+
+        await backendApi.patch(`/user/validate/email/${user.value?.uuid}`);
+        loadingContext.handleChangeIsLoading(false);
+        popupContext.handleChangePopupInfo('Validacao realizada com sucesso', 'success', true);
+        router.push('/home');
+    } catch (err) {
+        console.error(err);
+        loadingContext.handleChangeIsLoading(false);
+        popupContext.handleChangePopupInfo('Ocorreu um erro ao\n realizar a validacao', 'error', true);
+    }
+};
 </script>
 
 <template>
     <div class="finishRegisterContainer">
-        <form class="formContainer" v-if="!showCodeConfirmationScreen">
+        <form class="formContainer" v-if="!showCodeConfirmationScreen && !user?.is_validated">
             <h2>Finalize seu cadastro: </h2>
 
             <label>Nome completo: </label>
@@ -183,7 +199,7 @@ const resendEmail = async () => {
                 <button type="button" @click="() => router.push('/home')">Validar mais tarde</button>
                 <span>
                     <button type="button" @click="resendEmail">Re-enviar email</button>
-                    <button :class="validationCodeInput.length === 5 ? 'btnFinish' : ''"
+                    <button @click="finishValidation" :class="validationCodeInput.length === 5 ? 'btnFinish' : ''"
                         type="button">Finalizar</button>
                 </span>
             </div>

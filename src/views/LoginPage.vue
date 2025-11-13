@@ -16,13 +16,13 @@ const loginGithubPage = () => {
             <h2>Conecte suas contas para continuar: </h2>
 
             <button type="button" class="btnSocialMediaLogin btnGoogle firstButton">
-                <i class="pi pi-google"></i>Login com o Google
+                <i class="pi pi-google"></i>Continuar com o Google
             </button>
 
             <small>ou</small>
 
             <button type="button" class="btnSocialMediaLogin btnGithub" @click="loginGithubPage()">
-                <i class="pi pi-github"></i>Logar com Github
+                <i class="pi pi-github"></i>Continuar com o Github
             </button>
         </div>
         <h1 @click="clickFooter()">Desenvolvido por Gustavo S. Melo</h1>
