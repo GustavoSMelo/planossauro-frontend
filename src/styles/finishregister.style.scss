@@ -5,12 +5,16 @@
     0% {
         transform: translateY(-4000px);
         opacity: 0;
-    };
+    }
+
+    ;
 
     100% {
         opacity: 1;
         transform: translateY(0px);
-    };
+    }
+
+    ;
 }
 
 .finishRegisterContainer {
@@ -81,6 +85,101 @@
             background-color: $accentColorDarker;
             border-color: $accentColor;
             transition: .4s;
+        }
+    }
+
+    .validationContainer {
+        background-color: $white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 2px 2px 6px $shadowLowPink;
+        display: flex;
+        flex-direction: column;
+        width: 70%;
+
+        h2 {
+            padding-bottom: 5px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid $lightGray;
+        }
+
+        .validationForm {
+            display: flex;
+            flex-direction: column;
+
+            label {
+                font-weight: 500;
+                margin-top: 20px;
+            }
+
+            input {
+                box-shadow: 2px 2px 6px $lightGray;
+                padding: 15px;
+                border: solid 1px $lightGray;
+                border-radius: 5px;
+                margin-top: 4px;
+                transition: .3s;
+            }
+
+            input:focus {
+                transition: .3s;
+                border: solid 1px $accentColor;
+                color: $accentColor;
+                font-weight: bold;
+            }
+        }
+
+        .buttonsContainer {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+
+            button {
+                font-weight: 500;
+                padding: 10px 20px;
+                box-shadow: 2px 2px 6px $lightGray;
+                border-radius: 5px;
+                background-color: $white;
+                border: solid 1px $lightGray;
+                cursor: pointer;
+                color: $accentColor;
+                transition: .5s;
+            }
+
+            button:hover {
+                box-shadow: 6px 6px 12px $lightGray;
+                transition: .5s;
+                transform: scale(1.05);
+            }
+
+            span {
+                button:nth-child(1) {
+                    margin-right: 10px;
+                }
+
+                button:nth-child(2) {
+                    background-color: $gray;
+                    color: $black;
+                    cursor: not-allowed;
+                    transition: .4s;
+                }
+
+                button:nth-child(2):hover {
+                    background-color: $darkGray;
+                    color: $white;
+                    transition: .4s;
+                }
+
+                button.btnFinish {
+                    background-color: $accentColor;
+                    color: $white;
+                }
+
+                button.btnFinish:hover {
+                    background-color: $accentColorDarker;
+                    cursor: pointer;
+                }
+            }
         }
     }
 }

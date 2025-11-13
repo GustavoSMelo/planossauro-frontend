@@ -14,27 +14,38 @@ watchEffect(async () => {
     const codeParam = urlParams.get('code')
 
     const { data }: { data: IGithubCallbackResponse } = await axios.get(`${import.meta.env.VITE_BACKEND_URI}/auth/github/${codeParam}`);
+    try {
+        if (data.accessToken && data.accessToken.length) {
+            const { data: userData }: { data: IUser } = await axios.get(`${import.meta.env.VITE_BACKEND_URI}/user/github/${data.data.email}`);
+            const userHasUuid = Object.keys(userData).find(key => key === 'uuid') ? true : false;
 
-    if (data.accessToken && data.accessToken.length) {
-        const { data: userData }: { data: IUser } = await axios.get(`${import.meta.env.VITE_BACKEND_URI}/user/github/${data.data.email}`);
-        const userHasUuid = Object.keys(userData).find(key => key === 'uuid') ? true : false;
+            if (userHasUuid) {
+                sessionStorage.setItem('user', JSON.stringify(userData));
+                sessionStorage.setItem('loginType', 'github');
+                sessionStorage.setItem('accessToken', data.accessToken);
+                popupContext.handleChangePopupInfo('Login realizado com sucess', 'success', true);
 
-        if (userHasUuid) {
-            sessionStorage.setItem('user', JSON.stringify(userData));
-            sessionStorage.setItem('loginType', 'github');
+                router.push('/home');
+                return;
+            }
+
+            sessionStorage.setItem('githubEmail', data.data.email);
+            sessionStorage.setItem('githubId', Number(data.data.id).toString());
             sessionStorage.setItem('accessToken', data.accessToken);
-            popupContext.handleChangePopupInfo('Login realizado com sucess', 'success', true);
+            sessionStorage.setItem('fullName', data.data.name);
 
-            router.push('/home');
-            return;
+            router.push('/finish/login');
         }
-
+    } catch (err) {
+        sessionStorage.setItem('loginType', 'github');
         sessionStorage.setItem('githubEmail', data.data.email);
         sessionStorage.setItem('githubId', Number(data.data.id).toString());
         sessionStorage.setItem('accessToken', data.accessToken);
         sessionStorage.setItem('fullName', data.data.name);
+
         router.push('/finish/login');
     }
+
 });
 
 </script>

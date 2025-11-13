@@ -1,8 +1,22 @@
+<style lang="scss" scoped src="../styles/finishregister.style.scss" />
+
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
+import type { IPopupContext } from '../interfaces/context/popup.interface';
+import type { ILoadingContext } from '../interfaces/context/loading.interface';
+import type { ICreateUser, ICreateUserResponse, IUser } from '../interfaces/api/user.interface';
+import backendApi from '../api/api';
+import { useRouter } from 'vue-router';
 
 const fullName = ref(window.sessionStorage.getItem('fullName') || '');
 const cellphoneNumber = ref('');
+const popupContext = inject('popup') as IPopupContext;
+const loadingContext = inject('isLoading') as ILoadingContext;
+const validationCodeInput = ref('');
+const validationCode = ref(0);
+const showCodeConfirmationScreen = ref(false);
+const user = ref<IUser>();
+const router = useRouter();
 
 const handleChangeFullName = (event: Event): void => {
     const target = event.target as HTMLInputElement;
@@ -11,14 +25,17 @@ const handleChangeFullName = (event: Event): void => {
 
 const handleChangeCellphoneNumber = (event: Event): void => {
     let { value } = event.target as HTMLInputElement;
-    value = value.replaceAll(/[a-zA-Z@#!$%^&*_+=]+/g, '').trim();
-
+    value = value.replace(/[a-zA-Z!@#$%^&*_+=]/g, '').trim();
 
     if (value[value.length - 1] === '(' || value[value.length - 1] === ')') {
         console.log(true);
-        if (Boolean(value.length !== 0) || Boolean(value.length !== 4)) {
-            return;
+        if (Boolean(value.length !== 0) && Boolean(value.length !== 4)) {
+            value = value.slice(0, value.length - 1);
         }
+    }
+
+    if (value[value.length - 1] === '-' && value.length !== 11) {
+        value = value.slice(0, value.length - 1);
     }
 
     if (value.length > 15) {
@@ -32,7 +49,6 @@ const handleChangeCellphoneNumber = (event: Event): void => {
     if (value.length === 5 && !value.includes(' ')) {
         const lastChar = value[value.length - 1];
         const cellphoneContentArray = value.slice(0, value.length - 1).split('');
-
         let cellphoneContentString = '';
 
         cellphoneContentArray.forEach(el => cellphoneContentString += el);
@@ -49,25 +65,96 @@ const handleChangeCellphoneNumber = (event: Event): void => {
     if (value.length === 11 && !value.includes('-')) {
         const lastChar = value[value.length - 1];
         const cellphoneContentArray = value.slice(0, value.length - 1).split('');
-
         let cellphoneContentString = '';
 
         cellphoneContentArray.forEach(el => cellphoneContentString += el);
-
         value = `${cellphoneContentString}-${lastChar}`;
     }
-
-    console.log('teste');
     cellphoneNumber.value = value;
 };
 
 const isFormCompleted = (): boolean => {
-    return fullName.value.length && cellphoneNumber.value.length ? true : false;
+    return fullName.value.length > 3 && cellphoneNumber.value.length === 15 ? true : false;
 };
+
+const handleGithubSave = async () => {
+    try {
+        loadingContext.handleChangeIsLoading(true);
+        const githubEmail = sessionStorage.getItem('githubEmail');
+        const githubId = sessionStorage.getItem('githubId');
+
+        const userData = {
+            'full_name': fullName.value,
+            'cellphone_number': cellphoneNumber.value,
+            'github_email': githubEmail,
+            'github_id': githubId,
+            'google_email': null,
+        } as unknown as ICreateUser;
+
+        const { data: responseData }: { data: ICreateUserResponse } = await backendApi.post('/user', userData);
+        console.log(responseData);
+        console.log(responseData.data);
+
+        if (responseData.data.uuid) {
+            validationCode.value = responseData.validation_code;
+            user.value = responseData.data;
+            showCodeConfirmationScreen.value = true;
+            console.log(showCodeConfirmationScreen.value);
+            popupContext.handleChangePopupInfo('Cadastro realizado com sucesso', 'success', true);
+        }
+        loadingContext.handleChangeIsLoading(false);
+    } catch (err) {
+        popupContext.handleChangePopupInfo('Erro ao envio de email', 'error', true);
+        console.error(err);
+        loadingContext.handleChangeIsLoading(false);
+    }
+};
+
+const handleProceed = async (): Promise<void> => {
+    if (!isFormCompleted()) return;
+
+    const loginType = sessionStorage.getItem('loginType');
+
+    if (!loginType || loginType !== 'github' && loginType !== 'google') {
+        popupContext.handleChangePopupInfo('Tipo de login nao autorizado', 'error', true);
+        return;
+    }
+
+    if (loginType === 'github') return await handleGithubSave();
+};
+
+const handleChangeValidationCodeInput = (event: Event): void => {
+    let { value } = event.target as HTMLInputElement;
+    value = value.replace(/[a-zA-Z!@#$%^&*_+=()-]/g, '').trim();
+
+    if (value.length > 5) value = value.slice(0, 5);
+    validationCodeInput.value = value;
+};
+
+const resendEmail = async () => {
+    try {
+        loadingContext.handleChangeIsLoading(true);
+
+        const loginType = sessionStorage.getItem('loginType');
+        await backendApi.post('/user/resend/validationcode', {
+            'uuid': user.value?.uuid,
+            loginType
+        });
+
+        loadingContext.handleChangeIsLoading(false);
+         popupContext.handleChangePopupInfo('Email reenviado com sucesso', 'success', true);
+    } catch (err) {
+        console.error(err);
+        loadingContext.handleChangeIsLoading(false);
+        popupContext.handleChangePopupInfo('Erro ao reenviar email', 'error', true);
+    }
+};
+
 </script>
+
 <template>
     <div class="finishRegisterContainer">
-        <form class="formContainer">
+        <form class="formContainer" v-if="!showCodeConfirmationScreen">
             <h2>Finalize seu cadastro: </h2>
 
             <label>Nome completo: </label>
@@ -75,12 +162,31 @@ const isFormCompleted = (): boolean => {
                 @change="event => handleChangeFullName(event)" />
 
             <label>Telefone celular: </label>
-            <input type="text" placeholder="Insira seu telefone aqui... " :value="cellphoneNumber"
-                @input="event => handleChangeCellphoneNumber(event)" />
+            <input type="text" placeholder="Insira seu telefone aqui... " v-model="cellphoneNumber"
+                @input="handleChangeCellphoneNumber" />
 
-            <button :class="isFormCompleted() ? 'btnProceedRegister' : ''" type="button">Avancar</button>
+            <button :class="isFormCompleted() ? 'btnProceedRegister' : ''" type="button" @click="handleProceed">
+                Avancar
+            </button>
         </form>
+
+        <div class="validationContainer" v-else>
+            <h2>Validacao da conta: </h2>
+            <form class="validationForm">
+                <label>Insira o codigo de validacao</label>
+                <input type="text" placeholder="Codigo de validacao..." @input="handleChangeValidationCodeInput"
+                    v-model="validationCodeInput" />
+                <small>Se nao encontrar o codigo, de uma olhada na caixa de spam</small>
+            </form>
+
+            <div class="buttonsContainer">
+                <button type="button" @click="() => router.push('/home')">Validar mais tarde</button>
+                <span>
+                    <button type="button" @click="resendEmail">Re-enviar email</button>
+                    <button :class="validationCodeInput.length === 5 ? 'btnFinish' : ''"
+                        type="button">Finalizar</button>
+                </span>
+            </div>
+        </div>
     </div>
 </template>
-
-<style lang="scss" scoped src="../styles/finishregister.style.scss" />
