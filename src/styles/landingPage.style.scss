@@ -1,4 +1,49 @@
 @charset "UTF-8";
+@import "./colors.scss";
+
+@keyframes bg-animation {
+    0% {
+        background-position: 0 0;
+    }
+
+    25% {
+        background-position: -100px -300px;
+    }
+
+    50% {
+        background-position: 0 0;
+    }
+
+    75% {
+        background-position: 40px 300px;
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}
+
+@keyframes kids-dancing {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    40% {
+        transform: rotate(-10deg);
+    }
+
+    65% {
+        transform: rotate(0deg);
+    }
+
+    85% {
+        transform: rotate(-10deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
 
 .containerLP {
     display: flex;
@@ -10,6 +55,10 @@
     padding: 20px;
     align-items: center;
     background-color: #fee7ef;
+    background-image: url('../assets/backgroundLightTheme.png');
+    background-size: 70%;
+    background-repeat: repeat;
+        animation: bg-animation 30s linear infinite;
 
     .wrapper {
         box-shadow: 1px 5px 10px #fdc9db;
@@ -118,6 +167,12 @@
                     font-size: 15pt;
                     font-weight: bold;
                     text-transform: uppercase;
+                    transition: .4s;
+                }
+
+                button.btnLogin:hover {
+                    transition: .4s;
+                    transform: scale(1.1);
                 }
 
                 button.btnExamples {
@@ -128,6 +183,12 @@
                     font-weight: bold;
                     padding: 15px 0px;
                     cursor: pointer;
+                    transition: .4s;
+                }
+
+                button.btnExamples:hover {
+                    color: $accentColorDarker;
+                    transform: scale(1.1);
                 }
             }
 
@@ -135,6 +196,7 @@
 
                 img {
                     width: 360px;
+                    animation: kids-dancing 6s forwards infinite;
                 }
             }
         }

@@ -34,19 +34,6 @@ const hourTime = new Date().getHours();
 <template>
     <Navbar />
     <main class="homePageContainer">
-        <div class="welcomeContainer">
-            <h2 v-if="hourTime >= 6 && hourTime <= 12"><span class="goodDay">Bom dia</span><br /> Professor
-                Gustavo,<br /> bem-vindo
-                de
-                volta</h2>
-            <h2 v-else-if="hourTime > 12 && hourTime < 19"><span class="goodAfternoon">Boa tarde</span><br /> Professor
-                Gustavo,<br />
-                bem-vindo de volta</h2>
-            <h2 v-else><span class="goodNight">Boa noite</span><br /> Professor Gustavo, bem-vindo de volta</h2>
-
-            <img src="../assets/mushroom.png" alt="DinoWelcome" />
-        </div>
-
         <div class="tabsContentContainer">
             <ul class="tabs">
                 <li :class="currentContent === 'home' ? 'focusContent' : ''" id="homeTab"

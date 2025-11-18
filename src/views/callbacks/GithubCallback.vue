@@ -23,7 +23,7 @@ watchEffect(async () => {
                 sessionStorage.setItem('user', JSON.stringify(userData));
                 sessionStorage.setItem('loginType', 'github');
                 sessionStorage.setItem('accessToken', data.accessToken);
-                popupContext.handleChangePopupInfo('Login realizado com sucess', 'success', true);
+                popupContext.handleChangePopupInfo('Login realizado com sucesso', 'success', true);
 
                 router.push('/home');
                 return;

@@ -23,9 +23,12 @@
 .homePageContainer {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding-top: 60px;
+    padding-top: 20px;
     flex-direction: column;
+    background-image: url('../assets/backgroundLightTheme.png');
+    background-size: 70%;
+    background-repeat: repeat;
+    min-height: 100vh;
 
     .welcomeContainer {
         background-color: $white;
@@ -186,7 +189,7 @@
         }
 
         .tabsContent {
-            padding: 20px;
+            padding: 0 20px;
         }
     }
 }

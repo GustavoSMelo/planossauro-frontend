@@ -79,7 +79,6 @@ input {
     display: flex;
     flex-direction: column;
     margin-top: 20px;
-    margin-left: 20px;
 
     .aditionalInformationsContainer {
         display: flex;
@@ -259,7 +258,7 @@ input {
         margin-top: 20px;
         border: solid 2px $accentColor;
         border-radius: 10px;
-        height: 500px;
+        height: 400px;
 
         .weekDaysMobile {
             display: none;
