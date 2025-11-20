@@ -1,30 +1,54 @@
 <template>
-    <div class="homeContentContainerTitle">
-        <img src="../../assets/profileDino.png" alt="Dino Party" />
-        <h1>
-            Voce esta na pagina inicial <br />
-            Para utilizar nosso sistema, use as abas
-        </h1>
+    <div class="homeContentContainer">
+        <h1>Home Page</h1>
+        <section class="initialHomeContent">
+            <div class="planInfoContainer">
+                <h1>Seu plano atual </h1>
+
+                <img src="../../assets/cellphone_pink.png" alt="dino from plan" />
+                <h2>Premium</h2>
+                <button type="button">Gerenciar plano</button>
+            </div>
+
+            <aside class="fullColumnContentContainer">
+                <h2 class="planningInfoTitle">Informacoes do planejamento</h2>
+                <div class="planningInfoContainer firstPlanningInfoContainer">
+                    <div>
+                        <img src="../../assets/cracha_yellow.png" />
+                    </div>
+                    <div class="planningDetailsContainer">
+                        <h2>Planejamento semanal</h2>
+                        <span>
+                            <h4>0/ 10</h4>
+                            <progress value="10" max="10"></progress>
+                        </span>
+                    </div>
+                    <button type="button">Planejar</button>
+                </div>
+
+                <div class="planningInfoContainer">
+                    <div>
+                        <img src="../../assets/cracha_yellow.png" />
+                    </div>
+                    <div class="planningDetailsContainer">
+                        <h2>Planejamento diario</h2>
+                        <span>
+                            <h4>0/ 10</h4>
+                            <progress value="0" max="10"></progress>
+                        </span>
+                    </div>
+                    <button type="button">Planejar</button>
+                </div>
+            </aside>
+        </section>
+        <section class="aditionalInformationsContainer">
+            <span>
+                <h2>Duvidas sobre o pagamento ?</h2>
+                <button type="button">Confirir pagamentos</button>
+            </span>
+            <img src="../../assets/bills_dino.png" />
+        </section>
     </div>
-    <section class="infoContainer">
-        <div class="planInfoContainer">
-            <h2>Seu plano atual:</h2>
-
-            <img src="../../assets/dino_premium.png" alt="dino premium" />
-
-            <h4>Premium</h4>
-            <button type="button">Acessar plano</button>
-        </div>
-        <div class="planningsInfoContainer">
-            <h2>Seus planejamentos:</h2>
-
-            <img src="../../assets/DinoConsultaPlanejamentos.png" alt="dino premium" />
-
-            <h4 class="first">Semanais: 25/100</h4>
-            <h4>Mensais: 24/100</h4>
-            <button type="button">Ver planejamentos</button>
-        </div>
-    </section>
 </template>
 
 <style lang="scss" scoped src="../../styles/contents/homecontent.style.scss" />

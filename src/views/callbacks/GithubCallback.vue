@@ -25,7 +25,7 @@ watchEffect(async () => {
                 sessionStorage.setItem('accessToken', data.accessToken);
                 popupContext.handleChangePopupInfo('Login realizado com sucesso', 'success', true);
 
-                router.push('/home');
+                router.push('/app');
                 return;
             }
 

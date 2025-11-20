@@ -159,7 +159,7 @@ const finishValidation = async () => {
         await backendApi.patch(`/user/validate/email/${user.value?.uuid}`);
         loadingContext.handleChangeIsLoading(false);
         popupContext.handleChangePopupInfo('Validacao realizada com sucesso', 'success', true);
-        router.push('/home');
+        router.push('/app');
     } catch (err) {
         console.error(err);
         loadingContext.handleChangeIsLoading(false);
@@ -196,7 +196,7 @@ const finishValidation = async () => {
             </form>
 
             <div class="buttonsContainer">
-                <button type="button" @click="() => router.push('/home')">Validar mais tarde</button>
+                <button type="button" @click="() => router.push('/app')">Validar mais tarde</button>
                 <span>
                     <button type="button" @click="resendEmail">Re-enviar email</button>
                     <button @click="finishValidation" :class="validationCodeInput.length === 5 ? 'btnFinish' : ''"
