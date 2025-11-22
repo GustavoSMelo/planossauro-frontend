@@ -30,6 +30,8 @@ const templateChoose = reactive<ITemplateChoose>({
     templateType: 'Semanal'
 });
 
+const hamburgueMenuToggle = ref(false);
+
 watch(popup, () => {
     timeoutId = setTimeout(() => {
         popup.show = false
@@ -67,21 +69,23 @@ const handleChangeTemplateChoose = (newTemplateChoose: ITemplateChoose): void =>
     templateChoose.templateType = newTemplateChoose.templateType;
 };
 
+const handleHamburgueMenuToggle = (toggle: boolean) => {
+    hamburgueMenuToggle.value = toggle;
+};
+
 // defining context
 provide('isLoading', { isLoading, handleChangeIsLoading });
 provide('popup', { popup, handleChangePopupInfo, handleChangePopupShow });
 provide('showPreview', { showPreview, handleChangeShowPreview });
 provide('templateChoose', { templateChoose, handleChangeTemplateChoose });
+provide('hamburgueMenuToggle', { hamburgueMenuToggle, handleHamburgueMenuToggle });
 </script>
 
 <template>
     <RouterView />
-    <PreviewDocs v-if="showPreview.show"
-        :customURLDoc="showPreview.customURLDoc"
-        :isCustomDocs="showPreview.isCustomDocs"
-        :showChooseTemplate="showPreview.showChooseTemplate"
-        :planType="showPreview.planType"
-    />
+    <PreviewDocs v-if="showPreview.show" :customURLDoc="showPreview.customURLDoc"
+        :isCustomDocs="showPreview.isCustomDocs" :showChooseTemplate="showPreview.showChooseTemplate"
+        :planType="showPreview.planType" />
     <Loading v-if="isLoading" />
     <Popup v-if="popup.show && popup.message.length > 0" />
 </template>

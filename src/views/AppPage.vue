@@ -3,8 +3,10 @@
 import Navbar from '../components/navbar/Navbar.vue';
 import HomeContent from './contents/HomeContent.vue';
 import PlanningContent from './contents/PlanningContent.vue';
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import type { IPageContent } from '../interfaces/pageContents.interface';
+import NavbarMobile from '../components/navbarMobile/NavbarMobile.vue';
+import type { IHamburgueMenuToggleContext } from '../interfaces/context/hamburgueMenuToggle.interface';
 
 const currentContent = ref<IPageContent['contents']>('home');
 
@@ -12,9 +14,15 @@ const handleChangeCurrentContent = (newValue: IPageContent['contents']) => {
     currentContent.value = newValue;
 };
 
+const { hamburgueMenuToggle } = inject('hamburgueMenuToggle') as IHamburgueMenuToggleContext;
 </script>
 <template>
-    <main class="homePageContainer">
+    <NavbarMobile
+        v-if="hamburgueMenuToggle === true"
+        :current-content="currentContent"
+        :handle-change-current-content="handleChangeCurrentContent"
+    />
+    <main class="appPageContainer">
         <div class="fullContentContainer">
             <Navbar :handle-change-current-content="handleChangeCurrentContent" :current-content="currentContent" />
             <HomeContent v-if="currentContent === 'home'" />

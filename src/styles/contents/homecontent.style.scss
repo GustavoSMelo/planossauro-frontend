@@ -10,6 +10,7 @@
         text-align: center;
         font-size: 18pt;
         color: $textColor;
+        padding-bottom: 10px;
     }
 
     .initialHomeContent {
@@ -156,7 +157,7 @@
         border: solid 1px $lightGray;
         box-shadow: 4px 4px 8px $lightGray;
         align-items: center;
-        justify-content: center;
+        justify-content: space-around;
         margin-top: 20px;
         border-radius: 5px;
         padding: 10px;
@@ -269,6 +270,7 @@
             justify-content: center;
             text-align: center;
             padding: 20px;
+
             img {
                 display: none;
             }

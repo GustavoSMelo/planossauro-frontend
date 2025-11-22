@@ -1,25 +1,6 @@
 @charset "UTF-8";
 @import '../../styles/colors.scss';
 
-@keyframes menuHamburgerSpawn {
-    0% {
-        transform: translateX(200%);
-    }
-
-    100% {
-        transform: translateX(0%);
-    }
-}
-
-@keyframes menuHamburgerDispawn {
-    0% {
-        transform: translateX(0%);
-    }
-
-    100% {
-        transform: translateX(200%);
-    }
-}
 
 .navbarContainer {
     width: 100%;
@@ -83,87 +64,6 @@
         .mobileIcon {
             display: none;
         }
-    }
-}
-
-.navbarControlsMobile {
-    display: flex;
-    flex-direction: row;
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 10;
-    width: 100%;
-    height: 100%;
-    justify-content: space-between;
-    background-color: $transparentGray;
-    overflow: hidden;
-
-
-    .blur {
-        width: 50%;
-    }
-
-    .hamburgerMenu {
-        background-color: $white;
-        width: 70%;
-        padding: 20px;
-        list-style: none;
-        animation: menuHamburgerSpawn 0.5s normal;
-        border-left: solid 3px $accentColor;
-
-        li:nth-child(1) {
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            border-bottom: 2px solid $lowPinkBG;
-            padding-bottom: 20px;
-
-            h4 {
-                font-size: 20pt;
-                color: $accentColor;
-            }
-        }
-
-        .planInfo {
-            background-color: $accentColor;
-            padding: 15px 15px;
-            font-size: 14pt;
-            font-weight: 500;
-            color: $white;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        hr {
-            margin-top: 10px;
-            border: solid 1px $lowPinkBG;
-        }
-
-        .btnNavbar {
-            margin-top: 15px;
-            cursor: pointer;
-            font-size: 18pt;
-            display: flex;
-            align-items: center;
-            color: $textColor;
-            font-weight: 500;
-
-            .pi {
-                margin-right: 4px;
-            }
-        }
-
-        .choosed {
-            font-weight: bold;
-            color: $accentColor;
-        }
-    }
-
-    .menuCloseAnimation {
-        animation: 0.5s menuHamburgerDispawn forwards;
     }
 }
 
