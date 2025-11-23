@@ -386,16 +386,21 @@ input {
                 display: flex;
                 justify-content: center;
 
-
                 button {
                     height: fit-content;
                     cursor: pointer;
                     padding: 10px 50px;
                     margin: 0 10px;
-                    background-color: $gray;
-                    color: $black;
+                    background-color: $white;
+                    color: $accentColor;
+                    border: solid 2px $accentColor;
                     font-weight: bold;
                     border-radius: 5px;
+                }
+
+                button:last-child {
+                    background-color: $accentColor;
+                    color: $white;
                 }
             }
         }

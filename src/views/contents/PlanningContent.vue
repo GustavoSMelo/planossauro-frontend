@@ -27,7 +27,7 @@ const showAditionalInformation = ref(false);
 const isLoadingContext = inject('isLoading') as ILoadingContext;
 const popupContext = inject('popup') as IPopupContext;
 const showPreviewContext = inject('showPreview') as IShowPreviewContext;
-const templateChooseContext = inject('templateChoose') as ITemplateChooseContext;
+const { templateChoose, handleChangeTemplateChoose } = inject('templateChoose') as ITemplateChooseContext;
 
 const handleChangeSelectedDay = (changeSelectDay: IDays['days']): void => {
     selectedDay.value = changeSelectDay;
@@ -297,7 +297,7 @@ const generatePlan = async () => {
                     .replaceAll('json', '')) as IClassPlanResponse;
             }));
 
-            const planejamentoQSNFetch = await fetch(`../../../public/planejamento${templateChooseContext.templateChoose.templateType}${templateChooseContext.templateChoose.templateStyle}.docx`);
+            const planejamentoQSNFetch = await fetch(`../../../public/planejamento${templateChoose.templateType}${templateChoose.templateStyle}.docx`);
             const [arrayBuffer] = await Promise.all([planejamentoQSNFetch.arrayBuffer()]);
             const planZip = new PizZip(arrayBuffer);
             const doc = new Docxtemplater(planZip, { paragraphLoop: true, linebreaks: true });
@@ -365,19 +365,17 @@ const generatePlan = async () => {
             saveAs(blob, 'planejamento.docx');
         }
 
-        templateChooseContext.handleChangeTemplateChoose({ choosed: false, templateStyle: 1, templateType: 'Semanal' });
         isLoadingContext.handleChangeIsLoading(false);
         popupContext.handleChangePopupInfo('Documento gerado com sucesso', 'success', true);
+        handleChangeTemplateChoose({...templateChoose, choosed: false});
     } catch (err) {
         isLoadingContext.handleChangeIsLoading(false);
     }
 };
 
 watchEffect(() => {
-    if (templateChooseContext.templateChoose.choosed) {
+    if (templateChoose.choosed) {
         generatePlan();
-        templateChooseContext
-            .handleChangeTemplateChoose({ choosed: false, templateStyle: 1, templateType: 'Semanal' });
     }
 });
 

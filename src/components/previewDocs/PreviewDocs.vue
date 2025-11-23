@@ -18,7 +18,7 @@ import type { IShowPreviewContext } from '../../interfaces/context/showPreview.i
 type TPlanVersion = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 const planVersion = ref<TPlanVersion>(1);
-const templateChooseContext = inject('templateChoose') as ITemplateChooseContext;
+const { handleChangeTemplateChoose } = inject('templateChoose') as ITemplateChooseContext;
 const showPreviewContext = inject('showPreview') as IShowPreviewContext;
 const urlDoc = ref(isCustomDocs.trim().toLowerCase() === 'true' ? customURLDoc : `../../../public/planejamento${planType}${planVersion.value}.pdf`);
 
@@ -57,7 +57,7 @@ const handleChooseTemplate = (event: Event) => {
     event.stopPropagation();
 
     const newTemplateChoose = { choosed: true, templateStyle: planVersion, templateType: planType } as unknown as ITemplateChoose;
-    templateChooseContext.handleChangeTemplateChoose({ ...newTemplateChoose });
+    handleChangeTemplateChoose({ ...newTemplateChoose });
 
     return;
 };

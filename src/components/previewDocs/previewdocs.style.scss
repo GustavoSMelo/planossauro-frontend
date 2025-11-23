@@ -6,7 +6,7 @@
     width: 100vw;
     min-height: 100vh;
     z-index: 2;
-    background-color: $gray;
+    background-color: $transparentGray;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -14,8 +14,8 @@
     top: 0;
 
     .showPreview {
-        width: 95%;
-        height: 360px;
+        width: 90%;
+        height: 500px;
     }
 
     .rowContainerButton {
