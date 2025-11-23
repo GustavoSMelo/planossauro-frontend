@@ -178,16 +178,26 @@ input {
     form.dailyPlan>span {
         display: flex;
         flex-direction: column;
+        margin-left: 20px;
+        margin-right: 20px;
 
         label {
             font-weight: bold;
             color: $gray;
             padding-top: 7px;
         }
+
+        span > input {
+            width: 100%;
+        }
     }
 
     form.dailyPlan>.btnContainer {
         display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 20px;
+        gap: 10px;
 
         button {
             border-radius: 5px;
@@ -202,9 +212,9 @@ input {
         }
 
         button:nth-child(1) {
-            background-color: $gray;
-            color: $black;
-            border: none;
+            background-color: $white;
+            color: $accentColor;
+            border: solid 2px $accentColor;
             transition: .4s;
             font-weight: 500;
 
@@ -214,13 +224,12 @@ input {
         }
 
         button:nth-child(1):hover {
-            background-color: $darkGray;
+            background-color: $accentColor;
             color: $white;
             transition: .4s;
         }
 
         button:nth-child(2) {
-            margin-left: 20px;
             font-size: 15pt;
             font-weight: 600;
         }
