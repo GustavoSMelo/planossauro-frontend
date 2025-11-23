@@ -21,7 +21,10 @@ const hamburgerMenuContext: IHamburgueMenuToggleContext = inject('hamburgueMenuT
                 :class="[currentContent == 'planning' ? 'choosed' : '', 'btnNavbar']">
                 Planejar
             </li>
-            <li :class="['btnNavbar']">Planejamentos</li>
+            <li @click="handleChangeCurrentContent('planning_list')"
+                :class="[currentContent == 'planning_list' ? 'choosed' : '', 'btnNavbar']">
+                Planejamentos
+            </li>
             <li :class="['btnNavbar']">Planos</li>
             <li :class="['btnNavbar']">Perfil</li>
             <li :class="['btnNavbar']">Sair</li>

@@ -259,6 +259,8 @@ input {
         border: solid 2px $accentColor;
         border-radius: 10px;
         height: 400px;
+        margin-left: 20px;
+        margin-right: 20px;
 
         .weekDaysMobile {
             display: none;
@@ -533,7 +535,7 @@ input {
 
         .btnGeneratePlan,
         .btnGeneratePlanCancel {
-            width: 100%;
+            width: 92%;
         }
     }
 }

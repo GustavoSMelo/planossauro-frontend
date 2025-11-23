@@ -1,0 +1,143 @@
+@charset "UTF-8";
+@import '../colors.scss';
+
+.searchFormContainer {
+    display: flex;
+    width: 90%;
+    border-bottom: solid 1px $lightGray;
+    padding: 10px;
+    align-items: end;
+    justify-content: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+
+    span {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+    }
+
+    input,
+    select,
+    button {
+        border: solid 1px $accentColor;
+        width: 200px;
+        padding: 10px;
+        border-radius: 4px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+
+    button {
+        background-color: $accentColor;
+        color: $white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: .4s;
+    }
+
+    button:hover {
+        background-color: $accentColorDark;
+        transition: .4s;
+    }
+}
+
+.listingContainer {
+    width: 90%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    table {
+        border: solid 2px $lightGray;
+        border-radius: 3px;
+        box-shadow: 6px 6px 8px $lightGray;
+        width: 100%;
+        overflow-x: scroll;
+        max-width: 100%;
+
+        thead>tr {
+            border: 1px solid $gray;
+
+            th {
+                padding-top: 10px;
+                padding-bottom: 10px;
+                color: $accentColor;
+                border-bottom: 2px solid $lightGray;
+                // border-right: 2px solid $lightGray;
+                border-left: 2px solid $lightGray;
+            }
+
+            th:nth-child(1) {
+                border-left: 0;
+            }
+        }
+
+        tbody>tr {
+            border-bottom: solid 2px $lightGray;
+
+            td {
+                padding-top: 10px;
+                padding-bottom: 10px;
+                border-bottom: 2px solid $lightGray;
+                border-left: 2px solid $lightGray;
+                text-align: center;
+                font-weight: 500;
+            }
+
+
+            td:nth-child(1) {
+                border-left: 0;
+            }
+
+
+            td.btnCellEdit,
+            td.btnCellRemove {
+                cursor: pointer;
+            }
+
+            td.btnCellEdit {
+                color: $orangeAfternoon;
+            }
+
+            td.btnCellRemove {
+                color: $darkerRed;
+            }
+        }
+
+        tbody > tr:nth-of-type(2n) {
+            background-color: $lowPinkBG;
+        }
+
+        tfoot {
+            tr {
+                td {
+                    width: 100%;
+                    text-align: center;
+                    padding: 11px;
+                    font-weight: bold;
+                    color: $accentColor;
+                    cursor: pointer;
+                    transition: .4s;
+                }
+
+                td:hover {
+                    transition: .4s;
+                    color: $accentColorDark;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 800px) {
+    table {
+        tbody {
+            tr > td {
+                display: block;
+                border-left: 0;
+                border-bottom: 0;
+            }
+        }
+    }
+}

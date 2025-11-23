@@ -1,5 +1,5 @@
 interface IPageContent {
-    contents: 'home' | 'planning';
+    contents: 'home' | 'planning' | 'planning_list';
 }
 
 export type { IPageContent };
