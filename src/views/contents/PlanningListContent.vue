@@ -35,20 +35,38 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Serie A3</td>
-                    <td>Epg Mauro roudao neto</td>
-                    <td>Semanal</td>
-                    <td>10/10/2010 ~ 10/10/2010</td>
-                    <td class="btnCellEdit"><i class="pi pi-pencil"></i></td>
-                    <td class="btnCellRemove"><i class="pi pi-trash"></i></td>
+                    <td data-cell="Serie: ">Serie A3</td>
+                    <td data-cell="Escola: ">Epg Mauro roudao neto</td>
+                    <td data-cell="Tipo planejamento: ">Semanal</td>
+                    <td data-cell="Data planejamento: ">10/10/2010 ~ 10/10/2010</td>
+                    <td data-cell="Editar: " class="btnCellEdit"><i class="pi pi-pencil"></i></td>
+                    <td data-cell="Editar: " class="btnCellRemove"><i class="pi pi-trash"></i></td>
                 </tr>
                 <tr>
-                    <td data-cell="serie">Serie A3</td>
-                    <td data-cell="escola">Epg Mauro roudao neto</td>
-                    <td data-cell="tipo planj.">Semanal</td>
-                    <td data-cell="data planj.">10/10/2010 ~ 10/10/2010</td>
-                    <td class="btnCellEdit"><i class="pi pi-pencil"></i></td>
-                    <td class="btnCellRemove"><i class="pi pi-trash"></i></td>
+                    <td data-cell="Serie: ">Serie A3</td>
+                    <td data-cell="Escola: ">Epg Mauro roudao neto</td>
+                    <td data-cell="Tipo planejamento: ">Semanal</td>
+                    <td data-cell="Data planejamento: ">10/10/2010 ~ 10/10/2010</td>
+                    <td data-cell="Editar: " class="btnCellEdit"><i class="pi pi-pencil"></i></td>
+                    <td data-cell="Editar: " class="btnCellRemove"><i class="pi pi-trash"></i></td>
+                </tr>
+
+                                <tr>
+                    <td data-cell="Serie: ">Serie A3</td>
+                    <td data-cell="Escola: ">Epg Mauro roudao neto</td>
+                    <td data-cell="Tipo planejamento: ">Semanal</td>
+                    <td data-cell="Data planejamento: ">10/10/2010 ~ 10/10/2010</td>
+                    <td data-cell="Editar: " class="btnCellEdit"><i class="pi pi-pencil"></i></td>
+                    <td data-cell="Editar: " class="btnCellRemove"><i class="pi pi-trash"></i></td>
+                </tr>
+
+                                <tr>
+                    <td data-cell="Serie: ">Serie A3</td>
+                    <td data-cell="Escola: ">Epg Mauro roudao neto</td>
+                    <td data-cell="Tipo planejamento: ">Semanal</td>
+                    <td data-cell="Data planejamento: ">10/10/2010 ~ 10/10/2010</td>
+                    <td data-cell="Editar: " class="btnCellEdit"><i class="pi pi-pencil"></i></td>
+                    <td data-cell="Editar: " class="btnCellRemove"><i class="pi pi-trash"></i></td>
                 </tr>
             </tbody>
             <tfoot>

@@ -55,6 +55,8 @@
         width: 100%;
         overflow-x: scroll;
         max-width: 100%;
+        padding: 0;
+        margin: 0;
 
         thead>tr {
             border: 1px solid $gray;
@@ -105,7 +107,7 @@
             }
         }
 
-        tbody > tr:nth-of-type(2n) {
+        tbody>tr:nth-of-type(2n) {
             background-color: $lowPinkBG;
         }
 
@@ -131,12 +133,36 @@
 }
 
 @media screen and (max-width: 800px) {
-    table {
-        tbody {
-            tr > td {
-                display: block;
-                border-left: 0;
-                border-bottom: 0;
+    .listingContainer {
+        table {
+            thead {
+                tr {
+                    display: none;
+                }
+            }
+
+            tbody {
+                tr {
+                    border-bottom: solid 1px $lightGray;
+                    td {
+                        display: block;
+                        border-left: 0;
+                        border-bottom: 0;
+                        text-align: left;
+                        border-bottom: solid 1px $lightGray;
+                    }
+
+                    td.btnCellRemove {
+                        border-bottom: 0;
+                    }
+
+                    td::before {
+                        content: attr(data-cell);
+                        font-weight: bold;
+                        color: $accentColor;
+                        margin-right: 10px;
+                    }
+                }
             }
         }
     }
