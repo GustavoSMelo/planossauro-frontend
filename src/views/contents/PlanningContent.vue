@@ -14,6 +14,9 @@ import type { IShowPreview, IShowPreviewContext } from '../../interfaces/context
 import { debounce } from 'lodash-es';
 import type { ITemplateChooseContext } from '../../interfaces/context/templateChoose.interface';
 import { isWeekend } from '../../helpers/isWeekend';
+import getPrompt from '../../helpers/prompt';
+import backendApi from '../../api/api';
+import monthConverter from '../../helpers/monthConverter';
 
 const plans = ref<IPlan>({ day1: [''], day2: [''], day3: [''], day4: [''], day5: [''] });
 const selectedDay = ref<IDays['days']>('day1');
@@ -157,7 +160,7 @@ const showTemplatePreviewChoose = () => {
 
     const dateDiffInDays = (Number(dateDiffInMilliseconds) / (1000 * 60 * 60 * 24)) + 1;
 
-    if (dateDiffInDays !== 5) {
+    if (planType.value === 'Semanal' && dateDiffInDays !== 5) {
         popupContext.handleChangePopupInfo('A data de inicio ou fim do planejamento, nao confere com uma semana', 'error', true);
         return;
     }
@@ -214,35 +217,12 @@ const generatePlan = async () => {
         if (planType.value === 'Diario') {
             let activities = [];
             activities.push({ day1: plans.value.day1.map(classAtv => classAtv) });
-
-            const prompt = `
-        -- ${JSON.stringify(qsn)}
-        -- atividades: ${JSON.stringify(activities)}
-        -- baseado no json e nas atividades que lhe enviei, gere uma resposta apenas em formato json as seguintes informacoes:
-        contexto: gere o contexto da aula com todas as atividades de forma corrida, descreva como a atividade vai auxiliar na educacao do educando
-        eixo: identifique qual o melhor eixo baseado no json fornecido
-        saber: identifique qual o melhor saber que se encaixa nessa aula com base no eixo
-        saber2: identifique outro saber qual o melhor saber que se encaixa nessa aula com base no eixo
-        aprendizagem: identifique qual a melhor aprendizagem que se encaixa nessa aula com base no saber
-        aprendizagem: identifique qual a melhor aprendizagem que se encaixa nessa aula com base no saber2
-        foco_avaliativo: faca uma pergunta de nota mental para o educador que se encaixa dentro do contexto dessa aula
-        materiais: identifique os materiais que foram utilizados nessa aula
-
-        a resposta deve ser exatamente essa, nao gere texto a mais ou a menos: {
-            contextualizacao: resposta,
-            eixo: resposta
-            saber01: resposta,
-            saber02: resposta,
-            aprendizagem01: resposta,
-            aprendizagem02: resposta,
-            foco_avaliativo: resposta,
-            materiais: resposta
-        }
-        `;
+            const qsnstring = JSON.stringify(qsn);
+            const activity = JSON.stringify(activities);
 
             await axios.post(import.meta.env.VITE_API_URL, {
                 model: import.meta.env.VITE_LLM_MODEL,
-                prompt,
+                prompt: getPrompt(qsnstring, activity),
                 stream: false
             });
 
@@ -257,35 +237,13 @@ const generatePlan = async () => {
                 activities.push({ ...temp });
             }
 
-            const [responseDay1, responseDay2, responseDay3, responseDay4, responseDay5] = await Promise.all(activities.map(async (item, index) => {
-                const prompt = `
-                    -- ${JSON.stringify(qsn)}
-                    -- atividades: ${JSON.stringify(item)}
-                    -- baseado no json e nas atividades que lhe enviei, gere uma resposta apenas em formato json as seguintes informacoes:
-                    contexto: gere o contexto da aula com todas as atividades de forma corrida, descreva como a atividade vai auxiliar na educacao do educando
-                    eixo: identifique qual o melhor eixo baseado no json fornecido
-                    saber: identifique qual o melhor saber que se encaixa nessa aula com base no eixo
-                    saber2: identifique outro saber qual o melhor saber que se encaixa nessa aula com base no eixo
-                    aprendizagem: identifique qual a melhor aprendizagem que se encaixa nessa aula com base no saber
-                    aprendizagem: identifique qual a melhor aprendizagem que se encaixa nessa aula com base no saber2
-                    foco_avaliativo: faca uma pergunta de nota mental para o educador que se encaixa dentro do contexto dessa aula
-                    materiais: identifique os materiais que foram utilizados nessa aula
-
-                    a resposta deve ser exatamente essa, nao gere texto a mais ou a menos: {
-                        contextualizacao: resposta,
-                        eixo: resposta
-                        saber01: resposta,
-                        saber02: resposta,
-                        aprendizagem01: resposta,
-                        aprendizagem02: resposta,
-                        foco_avaliativo: resposta,
-                        materiais: resposta
-                    }
-                    `;
+            const [responseDay1, responseDay2, responseDay3, responseDay4, responseDay5] = await Promise.all(activities.map(async (item) => {
+                const qsnstring = JSON.stringify(qsn);
+                const activity = JSON.stringify(item);
 
                 const response = await axios.post(import.meta.env.VITE_API_URL, {
                     model: import.meta.env.VITE_LLM_MODEL,
-                    prompt,
+                    prompt: getPrompt(qsnstring, activity),
                     stream: false
                 });
 
@@ -304,11 +262,11 @@ const generatePlan = async () => {
 
             const data = {
                 // header
-                nomeEscola: schoolName,
-                sala: className,
+                nomeEscola: schoolName.value,
+                sala: className.value,
                 diaStart: planDateStart.value.split('-')[2],
                 diaEnd: planDateEnd.value.split('-')[2],
-                mes: planDateEnd.value.split('-')[1],
+                mes: monthConverter(planDateEnd.value.split('-')[1]),
                 ano: planDateEnd.value.split('-')[0],
 
                 // day 1
@@ -361,15 +319,26 @@ const generatePlan = async () => {
             const blob = new Blob([doc.toBlob()], {
                 type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
             });
-
             saveAs(blob, 'planejamento.docx');
+
+            const docB64 = doc.toBase64();
+
+            await backendApi.post('/planning', {
+                'document_b64': docB64,
+                'start_plan': planDateStart.value,
+                'end_plan': planType.value === 'Semanal' ? planDateEnd.value : planDateStart.value,
+                'school_name': schoolName.value,
+                'class_name': className.value
+            });
         }
 
         isLoadingContext.handleChangeIsLoading(false);
         popupContext.handleChangePopupInfo('Documento gerado com sucesso', 'success', true);
-        handleChangeTemplateChoose({...templateChoose, choosed: false});
+        handleChangeTemplateChoose({ ...templateChoose, choosed: false });
     } catch (err) {
         isLoadingContext.handleChangeIsLoading(false);
+        popupContext.handleChangePopupInfo('Erro ao gerar documento', 'error', true);
+        handleChangeTemplateChoose({ ...templateChoose, choosed: false });
     }
 };
 
