@@ -98,6 +98,7 @@ const handleGithubSave = async () => {
             user.value = responseData.data;
             showCodeConfirmationScreen.value = true;
             console.log(showCodeConfirmationScreen.value);
+            sessionStorage.setItem('uuid', responseData.data.uuid);
             popupContext.handleChangePopupInfo('Cadastro realizado com sucesso', 'success', true);
         }
         loadingContext.handleChangeIsLoading(false);

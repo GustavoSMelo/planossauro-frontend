@@ -19,10 +19,16 @@ watchEffect(async () => {
             const { data: userData }: { data: IUser } = await axios.get(`${import.meta.env.VITE_BACKEND_URI}/user/github/${data.data.email}`);
             const userHasUuid = Object.keys(userData).find(key => key === 'uuid') ? true : false;
 
+            console.log(userData);
+
             if (userHasUuid) {
+                userData.validation_code = null;
+                userData.sms_validation_code = null;
+
                 sessionStorage.setItem('user', JSON.stringify(userData));
                 sessionStorage.setItem('loginType', 'github');
                 sessionStorage.setItem('accessToken', data.accessToken);
+                sessionStorage.setItem('uuid', userData.uuid);
                 popupContext.handleChangePopupInfo('Login realizado com sucesso', 'success', true);
 
                 router.push('/app');

@@ -322,13 +322,17 @@ const generatePlan = async () => {
             saveAs(blob, 'planejamento.docx');
 
             const docB64 = doc.toBase64();
+            const uuid = sessionStorage.getItem('uuid');
+
+            console.log(uuid);
 
             await backendApi.post('/planning', {
                 'document_b64': docB64,
                 'start_plan': planDateStart.value,
                 'end_plan': planType.value === 'Semanal' ? planDateEnd.value : planDateStart.value,
                 'school_name': schoolName.value,
-                'class_name': className.value
+                'class_name': className.value,
+                'user_id': uuid
             });
         }
 

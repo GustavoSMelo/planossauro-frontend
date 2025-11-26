@@ -5,7 +5,10 @@ interface IUser {
     github_id: number | null;
     cellphone_number: string;
     uuid: string;
-    is_validated: boolean
+    is_validated: boolean;
+    validation_code: number | null;
+    sms_validation_code: number | null;
+    sms_is_validated: boolean;
 }
 
 interface ICreateUser {

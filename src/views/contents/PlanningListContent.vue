@@ -51,7 +51,7 @@
                     <td data-cell="Editar: " class="btnCellRemove"><i class="pi pi-trash"></i></td>
                 </tr>
 
-                                <tr>
+                <tr>
                     <td data-cell="Serie: ">Serie A3</td>
                     <td data-cell="Escola: ">Epg Mauro roudao neto</td>
                     <td data-cell="Tipo planejamento: ">Semanal</td>
@@ -60,7 +60,7 @@
                     <td data-cell="Editar: " class="btnCellRemove"><i class="pi pi-trash"></i></td>
                 </tr>
 
-                                <tr>
+                <tr>
                     <td data-cell="Serie: ">Serie A3</td>
                     <td data-cell="Escola: ">Epg Mauro roudao neto</td>
                     <td data-cell="Tipo planejamento: ">Semanal</td>
