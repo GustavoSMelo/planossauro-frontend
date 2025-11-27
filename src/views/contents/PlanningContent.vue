@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, inject, nextTick, watchEffect } from 'vue';
-import type { IPlan, IDays } from '../../interfaces/plans.interface';
+import type { IPlanningDay, IDays } from '../../interfaces/plans.interface';
 import type { ILoadingContext } from '../../interfaces/context/loading.interface';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
 import type { IClassPlanResponse, IOllamaGemmaResponse } from '../../interfaces/ollama.res';
@@ -18,7 +18,7 @@ import getPrompt from '../../helpers/prompt';
 import backendApi from '../../api/api';
 import monthConverter from '../../helpers/monthConverter';
 
-const plans = ref<IPlan>({ day1: [''], day2: [''], day3: [''], day4: [''], day5: [''] });
+const plans = ref<IPlanningDay>({ day1: [''], day2: [''], day3: [''], day4: [''], day5: [''] });
 const selectedDay = ref<IDays['days']>('day1');
 const planType = ref<IShowPreview['planType']>('Semanal');
 const isOpenPlanMobileMenu = ref<boolean>(false);

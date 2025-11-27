@@ -94,7 +94,8 @@
 
 
             td.btnCellEdit,
-            td.btnCellRemove {
+            td.btnCellRemove,
+            td.btnCellDownload {
                 cursor: pointer;
             }
 
@@ -104,6 +105,10 @@
 
             td.btnCellRemove {
                 color: $darkerRed;
+            }
+
+            td.btnCellDownload {
+                color: $blueInfo;
             }
         }
 

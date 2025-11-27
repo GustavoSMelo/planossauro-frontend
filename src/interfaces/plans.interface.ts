@@ -1,4 +1,4 @@
-interface IPlan {
+interface IPlanningDay {
     day1: Array<string>;
     day2: Array<string>;
     day3: Array<string>;
@@ -14,4 +14,4 @@ interface IDaysDescritive {
     days: 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
 }
 
-export type { IPlan, IDays, IDaysDescritive };
+export type { IPlanningDay, IDays, IDaysDescritive };
