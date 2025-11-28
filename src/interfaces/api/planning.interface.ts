@@ -5,6 +5,8 @@ interface IPlanning {
     class_name: string;
     user_id: string;
     document_b64: string;
+    uuid: string;
+    deleted_at: Date;
 };
 
 export type { IPlanning };

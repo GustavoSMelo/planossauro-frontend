@@ -50,7 +50,7 @@
 
     table {
         border: solid 2px $lightGray;
-        border-radius: 3px;
+        border-radius: 5px;
         box-shadow: 6px 6px 8px $lightGray;
         width: 100%;
         overflow-x: scroll;
@@ -135,6 +135,49 @@
             }
         }
     }
+
+    .notFoundContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        img {
+            width: 200px;
+        }
+
+        h1 {
+            font-size: 20pt;
+            color: $textColor;
+            text-align: center;
+        }
+
+        button {
+            width: 240px;
+            padding: 12px;
+            font-size: 14pt;
+            font-weight: 500;
+            margin-top: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: solid 2px $accentColor;
+            color: $accentColor;
+            transition: .4s;
+
+            i {
+                margin-right: 10px;
+            }
+        }
+
+        button.btnGotoPlan {
+            background-color: $accentColor;
+            color: $white;
+            transition: .4s;
+        }
+
+        button.btnGotoPlan:hover {
+            background-color: $accentColorDark;
+            transition: .4s;
+        }
+    }
 }
 
 @media screen and (max-width: 800px) {
@@ -148,17 +191,16 @@
 
             tbody {
                 tr {
-                    border-bottom: solid 1px $lightGray;
                     td {
                         display: block;
                         border-left: 0;
                         border-bottom: 0;
                         text-align: left;
                         border-bottom: solid 1px $lightGray;
+                        padding-left: 10px;
                     }
-
-                    td.btnCellRemove {
-                        border-bottom: 0;
+                    td:first-child {
+                        border-top: solid 1px $textColor;
                     }
 
                     td::before {

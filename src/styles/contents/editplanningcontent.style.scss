@@ -1,0 +1,135 @@
+@charset "UTF-8";
+@import '../../styles/colors.scss';
+
+.editPlanningContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    padding: 10px;
+
+    .editPlanningForm {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .titleForm {
+            color: $textColor;
+            border-bottom: solid 1px $lightGray;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            text-align: center;
+
+            h1 {
+                padding: 10px;
+                text-align: center;
+                color: $textColor;
+            }
+
+            p {
+                font-weight: bold;
+            }
+        }
+
+        label,
+        select,
+        input {
+            margin: auto;
+            width: 80%;
+            text-align: left;
+        }
+
+        label {
+            font-size: 14pt;
+            margin-bottom: 5px;
+        }
+
+        input,
+        select {
+            border: solid 2px $accentColor;
+            padding: 10px;
+            font-size: 14pt;
+            font-weight: 500;
+            color: $accentColor;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+
+        .dateContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            span {
+                width: 39.5%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: center;
+
+                label {
+                    width: 100%;
+                    margin-left: 0;
+                    margin-bottom: 5px;
+                }
+
+                input {
+                    width: 100%;
+                }
+            }
+
+            span:first-child {
+                margin-right: 10px;
+            }
+        }
+
+        span.btnContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            button {
+                width: 240px;
+                padding: 10px;
+                font-size: 16pt;
+                margin: 10px;
+                border: solid 2px $accentColor;
+                border-radius: 5px;
+                background-color: $white;
+                color: $accentColor;
+                font-weight: bold;
+                transition: .4s;
+                cursor: pointer;
+            }
+
+            button:nth-child(2) {
+                background-color: $accentColor;
+                color: $white;
+            }
+
+            button:hover {
+                transition: .4s;
+                transform: scale(1.04);
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .editPlanningContainer {
+        .editPlanningForm {
+            .dateContainer {
+                flex-direction: column;
+
+                span {
+                    width: 80%;
+                }
+
+                span:first-child { margin-right: 0; }
+            }
+        }
+    }
+}
