@@ -10,6 +10,7 @@ import type { IPageContent } from '../interfaces/pageContents.interface';
 import type { IHamburgueMenuToggleContext } from '../interfaces/context/hamburgueMenuToggle.interface';
 import EditPlanningContent from './contents/EditPlanningContent.vue';
 import RemovePlanningContent from './contents/RemovePlanningContent.vue';
+import ProfileContent from './contents/ProfileContent.vue';
 
 const currentContent = ref<IPageContent['contents']>('home');
 const handleChangeCurrentContent = (newValue: IPageContent['contents']) => {
@@ -23,7 +24,7 @@ const { hamburgueMenuToggle } = inject('hamburgueMenuToggle') as IHamburgueMenuT
     <main class="appPageContainer">
         <div class="fullContentContainer">
             <Navbar :handle-change-current-content="handleChangeCurrentContent" :current-content="currentContent" />
-            <HomeContent v-if="currentContent === 'home'" />
+            <ProfileContent v-if="currentContent === 'home'" />
             <PlanningContent v-else-if="currentContent === 'planning'" />
             <PlanningListContent v-else-if="currentContent === 'planning_list'"
                 :handle-change-current-content="handleChangeCurrentContent" />

@@ -1,0 +1,146 @@
+@charset "UTF-8";
+@import '../colors.scss';
+
+.profileContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px;
+    margin-top: 40px;
+
+    .profileDetails {
+        border: solid 1px $lightGray;
+        padding: 20px;
+        box-shadow: 4px 4px 12px $lightGray;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 400px;
+
+        img {
+            border: solid 1px $lightGray;
+            width: 200px;
+        }
+
+        h3 {
+
+            margin-top: 25px;
+            text-align: left;
+            width: 100%;
+            border-bottom: 1px solid $lightGray;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        h4 {
+            width: 100%;
+        }
+
+        span {
+            width: 100%;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            p {
+                border: solid 2px $lightGray;
+                border-radius: 4px;
+                padding: 5px 10px;
+                margin-left: 10px;
+                width: 70%;
+            }
+
+            button {
+                background-color: $accentColor;
+                // padding: 10px;
+                padding: 7px 20px;
+                margin-left: 10px;
+                font-weight: bold;
+                color: $white;
+                border-radius: 5px;
+                cursor: pointer;
+                width: 70%;
+            }
+        }
+
+        .btnChangeProfile {
+            background-color: $white;
+            color: $accentColor;
+            border: solid 2px $accentColor;
+            width: 100%;
+            padding: 7px;
+            font-weight: bold;
+            font-size: 14pt;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: .4s;
+        }
+
+        .btnChangeProfile:hover {
+            background-color: $accentColor;
+            color: $white;
+            transition: .4s;
+        }
+
+        .profileAdditionalDetails {
+            border-top: solid 1px $lightGray;
+            padding-top: 6px;
+            margin-top: 10px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+
+            button {
+                cursor: pointer;
+                padding: 5px;
+                border: solid 1px $white;
+                background-color: $darkerRed;
+                color: $white;
+                margin-top: 4px;
+                border-radius: 5px;
+            }
+
+            p {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                button {
+                    padding: 5px;
+                    margin: 5px;
+                    font-size: 12pt;
+                    border-radius: 2px;
+                    color: $black;
+
+                    i {
+                        margin-right: 10px;
+                    }
+                }
+
+                button.checked {
+                    background-color: $green;
+                }
+
+                button.unchecked {
+                    background-color: $orangeAfternoon;
+                    cursor: pointer;
+                }
+            }
+
+            p.createdAtText {
+                border-top: solid 1px $lightGray;
+                margin-top: 10px;
+                margin-bottom: 3px;
+                padding-top: 10px;
+                text-align: center;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    }
+}
