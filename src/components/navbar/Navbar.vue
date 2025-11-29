@@ -18,15 +18,16 @@ const hamburgerMenuContext: IHamburgueMenuToggleContext = inject('hamburgueMenuT
 
         <ul class="navbarControls">
             <li @click="handleChangeCurrentContent('planning')"
-                :class="[currentContent == 'planning' ? 'choosed' : '', 'btnNavbar']">
+                :class="[currentContent == 'planning' ? 'choosed' : 'btnNavbar']">
                 Planejar
             </li>
             <li @click="handleChangeCurrentContent('planning_list')"
-                :class="[currentContent == 'planning_list' ? 'choosed' : '', 'btnNavbar']">
+                :class="[currentContent == 'planning_list' ? 'choosed' : 'btnNavbar']">
                 Planejamentos
             </li>
             <li :class="['btnNavbar']">Planos</li>
-            <li :class="['btnNavbar']">Perfil</li>
+            <li @click="handleChangeCurrentContent('profile')"
+                :class="[currentContent == 'profile' ? 'choosed': 'btnNavbar']">Perfil</li>
             <li :class="['btnNavbar']">Sair</li>
             <li class="mobileIcon"><i class="pi pi-bars"
                     @click="hamburgerMenuContext.handleHamburgueMenuToggle(true)"></i></li>

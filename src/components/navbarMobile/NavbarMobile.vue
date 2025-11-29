@@ -31,9 +31,10 @@ const handleRemoveMenuHamburguer = () => {
             </li>
             <li class="planInfo">Plano free</li>
             <hr />
-            <li :class="[currentContent === 'planning' ? 'choosed' : '', 'btnNavbar']">Planejamentos</li>
+            <li @click="handleChangeCurrentContent('planning')" :class="[currentContent === 'planning' ? 'choosed' : '', 'btnNavbar']">Planejar</li>
+            <li @click="handleChangeCurrentContent('planning_list')" :class="[currentContent === 'planning_list' ? 'choosed' : '', 'btnNavbar']">Planejamentos</li>
             <li :class="['btnNavbar']">Planos</li>
-            <li :class="['btnNavbar']">Perfil</li>
+            <li @click="handleChangeCurrentContent('profile')" :class="[currentContent === 'profile' ? 'choosed' : '', 'btnNavbar']">Perfil</li>
             <li :class="['btnNavbar']">Sair</li>
         </ul>
     </div>

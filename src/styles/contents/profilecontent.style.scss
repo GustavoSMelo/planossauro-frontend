@@ -3,10 +3,11 @@
 
 .profileContainer {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     margin: 30px;
     margin-top: 40px;
+    width: 90%;
+    padding: 0 20px;
 
     .profileDetails {
         border: solid 1px $lightGray;
@@ -16,7 +17,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 400px;
+        width: 45%;
 
         img {
             border: solid 1px $lightGray;
@@ -44,7 +45,7 @@
             align-items: center;
             justify-content: space-between;
 
-            p {
+            input {
                 border: solid 2px $lightGray;
                 border-radius: 4px;
                 padding: 5px 10px;
@@ -140,6 +141,97 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+            }
+        }
+    }
+
+    .appSettings {
+        width: 50%;
+
+        summary {
+            border-bottom: solid 1px $black;
+            font-size: 18pt;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        div {
+            border-bottom: solid 1px $lightGray;
+            padding: 10px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            select {
+                background-color: $white;
+                border: solid 2px $accentColor;
+                padding: 10px;
+                cursor: pointer;
+                border-radius: 3px;
+
+                option {
+                    font-weight: 14pt;
+                }
+            }
+
+            button {
+                background-color: $sleepBlue;
+                padding: 10px 20px;
+                cursor: pointer;
+                border: solid 1px $black;
+                border-radius: 5px;
+                font-weight: bold;
+                transition: .4s;
+                width: 140px;
+            }
+
+            button:hover {
+                background-color: $blueNight;
+                transition: .4s;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .profileContainer {
+        flex-direction: column;
+        align-items: center;
+
+        .profileDetails {
+            width: 80%;
+        }
+
+        .appSettings {
+            width: 80%;
+            margin-top: 40px;
+        }
+    }
+}
+
+@media screen and (max-width: 680px) {
+    .profileContainer {
+        width: 100%;
+
+        .profileDetails,
+        .appSettings {
+            width: 95%;
+        }
+    }
+}
+
+@media screen and (max-width: 430px) {
+    .profileContainer {
+        .appSettings {
+            details {
+                div {
+                    display: flex;
+                    flex-direction: column;
+
+                    button, select {
+                        margin-top: 20px;
+                    }
+                }
             }
         }
     }

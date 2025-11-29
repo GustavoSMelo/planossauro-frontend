@@ -24,13 +24,15 @@ const { hamburgueMenuToggle } = inject('hamburgueMenuToggle') as IHamburgueMenuT
     <main class="appPageContainer">
         <div class="fullContentContainer">
             <Navbar :handle-change-current-content="handleChangeCurrentContent" :current-content="currentContent" />
-            <ProfileContent v-if="currentContent === 'home'" />
+            <HomeContent v-if="currentContent === 'home'" />
             <PlanningContent v-else-if="currentContent === 'planning'" />
             <PlanningListContent v-else-if="currentContent === 'planning_list'"
                 :handle-change-current-content="handleChangeCurrentContent" />
             <EditPlanningContent v-else-if="currentContent === 'edit_planning'"
                 :handle-change-current-content="handleChangeCurrentContent" />
-            <RemovePlanningContent v-else-if="currentContent === 'remove_planning'" :handle-change-current-content="handleChangeCurrentContent" />
+            <RemovePlanningContent v-else-if="currentContent === 'remove_planning'"
+                :handle-change-current-content="handleChangeCurrentContent" />
+            <ProfileContent v-else-if="currentContent === 'profile'" />
         </div>
     </main>
 </template>
