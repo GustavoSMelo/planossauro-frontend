@@ -9,6 +9,8 @@ interface IUser {
     validation_code: number | null;
     sms_validation_code: number | null;
     sms_is_validated: boolean;
+    created_at: Date | string | null;
+    updated_at: Date | string | null;
 }
 
 interface ICreateUser {

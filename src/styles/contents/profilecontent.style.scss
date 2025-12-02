@@ -53,6 +53,12 @@
                 width: 70%;
             }
 
+            input.ableToEdit {
+                border: solid 2px $accentColor;
+                color: $accentColor;
+                font-weight: bold;
+            }
+
             button {
                 background-color: $accentColor;
                 // padding: 10px;
@@ -63,6 +69,24 @@
                 border-radius: 5px;
                 cursor: pointer;
                 width: 70%;
+                transition: .4s;
+            }
+
+            button:hover {
+                background-color: $accentColorDarker;
+            }
+
+            .btnChangeSocialMediaProfile {
+                background-color: $white;
+                color: $accentColor;
+                border: solid 2px $accentColor;
+                transition: .4s;
+            }
+
+            .btnChangeSocialMediaProfile:hover {
+                background-color: $accentColor;
+                color: $white;
+                transition: .4s;
             }
         }
 
@@ -84,6 +108,31 @@
             background-color: $accentColor;
             color: $white;
             transition: .4s;
+        }
+
+        .btnChangeProfileAction {
+            background-color: $accentColor;
+            color: $white;
+        }
+        .btnChangeProfileAction:hover {
+            background-color: $accentColorDarker;
+            border: 2px solid $accentColorDarker;
+        }
+
+        .btnCancel {
+            background-color: $lightGray;
+            color: $black;
+        }
+
+        .btnCancel {
+            background-color: $gray;
+            color: $black;
+            border: none;
+        }
+
+        .btnCancel:hover {
+            background-color: $darkGray;
+            color: $white;
         }
 
         .profileAdditionalDetails {
@@ -110,11 +159,13 @@
                 align-items: center;
 
                 button {
-                    padding: 5px;
+                    padding: 10px;
                     margin: 5px;
-                    font-size: 12pt;
+                    font-weight: bold;
                     border-radius: 2px;
                     color: $black;
+                    width: 130px;
+                    border: solid 1px $black;
 
                     i {
                         margin-right: 10px;
@@ -228,7 +279,8 @@
                     display: flex;
                     flex-direction: column;
 
-                    button, select {
+                    button,
+                    select {
                         margin-top: 20px;
                     }
                 }
