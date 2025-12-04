@@ -34,6 +34,18 @@
             margin-bottom: 10px;
         }
 
+        .fullNameInput {
+            margin-top: 30px;
+            margin-bottom: 10px;
+            border: 2px solid $accentColor;
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 5px;
+            color: $accentColor;
+            font-weight: bold;
+
+        }
+
         h4 {
             width: 100%;
         }

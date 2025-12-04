@@ -68,7 +68,7 @@ const handleChangeCellphoneNumber = (event: Event): void => {
         let cellphoneContentString = '';
 
         cellphoneContentArray.forEach(el => cellphoneContentString += el);
-        value = `${cellphoneContentString}-${lastChar}`;
+    value = `${cellphoneContentString}-${lastChar}`;
     }
     cellphoneNumber.value = value;
 };
@@ -94,11 +94,13 @@ const handleGithubSave = async () => {
         const { data: responseData }: { data: ICreateUserResponse } = await backendApi.post('/user', userData);
 
         if (responseData.data.uuid) {
-            validationCode.value = responseData.validation_code;
+            validationCode.value = responseData.github_validation_code;
             user.value = responseData.data;
+            user.value.github_is_validated = false;
             showCodeConfirmationScreen.value = true;
             console.log(showCodeConfirmationScreen.value);
             sessionStorage.setItem('uuid', responseData.data.uuid);
+            sessionStorage.setItem('user', JSON.stringify(user.value));
             popupContext.handleChangePopupInfo('Cadastro realizado com sucesso', 'success', true);
         }
         loadingContext.handleChangeIsLoading(false);
@@ -157,9 +159,12 @@ const finishValidation = async () => {
         }
         loadingContext.handleChangeIsLoading(true);
 
-        await backendApi.patch(`/user/validate/email/${user.value?.uuid}`);
+        await backendApi.patch(`/user/validate/github/email/${user.value?.uuid}`);
         loadingContext.handleChangeIsLoading(false);
         popupContext.handleChangePopupInfo('Validacao realizada com sucesso', 'success', true);
+        user.value!.github_is_validated = true;
+
+        sessionStorage.setItem('user', JSON.stringify(user.value));
         router.push('/app');
     } catch (err) {
         console.error(err);
@@ -171,7 +176,7 @@ const finishValidation = async () => {
 
 <template>
     <div class="finishRegisterContainer">
-        <form class="formContainer" v-if="!showCodeConfirmationScreen && !user?.is_validated">
+        <form class="formContainer" v-if="!showCodeConfirmationScreen && !user?.github_is_validated">
             <h2>Finalize seu cadastro: </h2>
 
             <label>Nome completo: </label>

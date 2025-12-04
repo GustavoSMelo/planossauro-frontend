@@ -1,23 +1,26 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import type { IUser } from '../../interfaces/api/user.interface';
 import convertIsoDateToBR from '../../helpers/dateIsoConvertToBR';
-const user = ref<IUser>();
-const duplicateUser = ref<IUser>();
-const editProfile = ref(false);
+import type { ILoadingContext } from '../../interfaces/context/loading.interface';
+import type { IPopupContext } from '../../interfaces/context/popup.interface';
+import backendApi from '../../api/api';
 
+const user = ref<IUser>({} as IUser);
+const duplicateUser = ref<IUser>({} as IUser);
+const editProfile = ref(false);
+const { handleChangeIsLoading } = inject('isLoading') as ILoadingContext;
+const { handleChangePopupInfo } = inject('popup') as IPopupContext;
 const userFromSession = sessionStorage.getItem('user') as string;
+
 user.value = { ...JSON.parse(userFromSession) };
 duplicateUser.value = { ...JSON.parse(userFromSession) };
 
-console.log(userFromSession);
-
-const handleChangeCellphone = (event: Event) => {
+const handleChangeCellphone = (event: Event): void => {
     let { value } = event.target as HTMLInputElement;
     value = value.replace(/[a-zA-Z!@#$%^&*_+=]/g, '').trim();
 
     if (value[value.length - 1] === '(' || value[value.length - 1] === ')') {
-        console.log(true);
         if (Boolean(value.length !== 0) && Boolean(value.length !== 4)) {
             value = value.slice(0, value.length - 1);
         }
@@ -63,18 +66,60 @@ const handleChangeCellphone = (event: Event) => {
     user.value!.cellphone_number = value;
 };
 
+const handleChangeFullName = (event: Event): void => {
+    const target = event.target as HTMLInputElement;
+    user.value.full_name = target.value;
+};
+
+const handleCancelAndResetInfo = () => {
+    user.value = { ...duplicateUser.value };
+    editProfile.value = false;
+};
+
+const handleEditProfile = async () => {
+    try {
+        if (user.value.full_name.length < 5) {
+            handleChangePopupInfo('Nome de usuario invalido', 'warning', true);
+            return;
+        }
+
+        if (user.value.cellphone_number.length < 15 || !user.value.cellphone_number.includes('(') || !user.value.cellphone_number.includes(')') || !user.value.cellphone_number.includes('-')) {
+            handleChangePopupInfo('Numero de celular invalido', 'warning', true);
+            return;
+        }
+
+        handleChangeIsLoading(true);
+
+        await backendApi.put(`/user/${user.value.uuid}`, { ...user.value });
+
+        duplicateUser.value = { ...user.value };
+        sessionStorage.setItem('user', JSON.stringify(user.value));
+        editProfile.value = false
+
+        handleChangeIsLoading(false);
+        handleChangePopupInfo('Usuario editado com sucesso', 'success', true);
+
+    } catch (err) {
+        handleChangePopupInfo('Erro ao editar usuario', 'error', true);
+        handleChangeIsLoading(false);
+    }
+};
+
 </script>
 <template>
     <div class="profileContainer">
         <div class="profileDetails">
             <img src="../../assets/dino_profile_logo.png" alt="Dino user profile logo" />
-            <h3>{{ user?.full_name }}</h3>
+            <h3 v-if="!editProfile">{{ user?.full_name }}</h3>
+            <input v-if="editProfile" type="text" :value="user.full_name" @input="handleChangeFullName"
+                placeholder="Insira seu nome..." class="fullNameInput" />
 
             <span>
                 <b><i class="pi pi-github"></i> Github:</b>
                 <input v-if="user?.github_email?.length && !editProfile" :disabled="true" type="text"
                     :value="user.github_email" placeholder="Seu email aqui..." />
-                <button v-else-if="user?.github_email?.length && editProfile" class="btnChangeSocialMediaProfile">Mudar perfil Github</button>
+                <button v-else-if="user?.github_email?.length && editProfile" class="btnChangeSocialMediaProfile">Mudar
+                    perfil Github</button>
                 <button v-else type="button">Conectar</button>
             </span>
             <span>
@@ -88,26 +133,30 @@ const handleChangeCellphone = (event: Event) => {
             </span>
             <span>
                 <b><i class="pi pi-phone"></i> Celular:</b>
-                <input :disabled="editProfile ? false : true" type="text" :value="user?.cellphone_number"
-                    placeholder="Seu celular aqui..." :class="editProfile ? 'ableToEdit' : ''" />
+                <input :disabled="editProfile ? false : true" type="text" v-model="user.cellphone_number"
+                    placeholder="Seu celular aqui..." :class="editProfile ? 'ableToEdit' : ''"
+                    @input="handleChangeCellphone" />
             </span>
             <button v-if="!editProfile" class="btnChangeProfile" type="button" @click="editProfile = true">Habilitar
                 edicao</button>
 
-            <button v-if="editProfile" class="btnChangeProfile btnChangeProfileAction" type="button">Editar perfil</button>
+            <button v-if="editProfile" class="btnChangeProfile btnChangeProfileAction" type="button"
+                @click="handleEditProfile">
+                Editar perfil
+            </button>
             <button v-if="editProfile" class="btnChangeProfile btnCancel" type="button"
-                @click="editProfile = false">Cancelar</button>
+                @click="handleCancelAndResetInfo">Cancelar</button>
             <div class="profileAdditionalDetails">
                 <p>
-                    <b>Email validado:</b>
-                    <button type="button" :class="user?.is_validated ? 'checked' : 'unchecked'">
-                        <i class="pi pi-verified"></i>{{ user?.is_validated ? 'Validado' : 'Validar' }}
+                    <b><i class="pi pi-github"></i> Github validado:</b>
+                    <button type="button" :class="user?.github_is_validated ? 'checked' : 'unchecked'">
+                        <i :class="['pi', user.github_is_validated ? 'pi-verified' : 'pi-unlock'] "></i>{{ user?.github_is_validated ? 'Validado' : 'Validar' }}
                     </button>
                 </p>
                 <p>
                     <b>SMS validado: </b>
                     <button type="button" class="unchecked">
-                        <i class="pi pi-unlock"></i>
+                        <i :class="['pi', user.sms_is_validated ? 'pi-verified' : 'pi-unlock']"></i>
                         Validar
                     </button>
                 </p>

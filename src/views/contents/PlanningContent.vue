@@ -401,17 +401,19 @@ watchEffect(() => {
         <!-- Diario -->
 
         <form v-if="planType === 'Diario'" class="dailyPlan">
-            <span v-for="(plano, index) in plans.day1">
-                <label>📚 Aula/Atividade {{ index + 1 }}</label>
-                <span class="row">
-                    <input type="text" :value="plano" placeholder="Descreva sua aula/atividade sem usar virgulas"
-                        @change="event => handleChangePlanText('day1', index, (event.target as HTMLInputElement).value)" />
-                    <button v-if="index > 0" type="button" class="btnTrash"
-                        @click="handleRemoveClassAtvFromPlan('day1', index)">
-                        <i class="pi pi-trash"></i>
-                    </button>
-                </span>
-            </span>
+            <div class="dailyPlanContentContainer">
+                <section v-for="(plano, index) in plans.day1">
+                    <label>📚 Aula/Atividade {{ index + 1 }}</label>
+                    <span class="row">
+                        <input type="text" :value="plano" placeholder="Descreva sua aula/atividade sem usar virgulas"
+                            @change="event => handleChangePlanText('day1', index, (event.target as HTMLInputElement).value)" />
+                        <button v-if="index > 0" type="button" class="btnTrash"
+                            @click="handleRemoveClassAtvFromPlan('day1', index)">
+                            <i class="pi pi-trash"></i>
+                        </button>
+                    </span>
+                </section>
+            </div>
             <div class="btnContainer">
                 <button class="btnAddClassAtv" type="button" @click="handleAddNewClassInPlanning('day1')">
                     <i class="pi pi-plus-circle"></i> Adicionar aula

@@ -20,7 +20,7 @@ watchEffect(async () => {
             const userHasUuid = Object.keys(userData).find(key => key === 'uuid') ? true : false;
 
             if (userHasUuid) {
-                userData.validation_code = null;
+                userData.github_validation_code = null;
                 userData.sms_validation_code = null;
 
                 sessionStorage.setItem('user', JSON.stringify(userData));

@@ -175,29 +175,42 @@ input {
         }
     }
 
-    form.dailyPlan>span {
-        display: flex;
-        flex-direction: column;
-        margin-left: 20px;
-        margin-right: 20px;
 
-        label {
-            font-weight: bold;
-            color: $gray;
-            padding-top: 7px;
-        }
+    .dailyPlanContentContainer {
+        overflow: scroll;
+        margin-top: 20px;
+        position: relative;
 
-        span > input {
-            width: 100%;
+        section {
+            display: flex;
+            flex-direction: column;
+            margin-left: 20px;
+            margin-right: 20px;
+
+            label {
+                font-weight: bold;
+                color: $gray;
+                padding-top: 7px;
+            }
+
+            span>input {
+                width: 100%;
+            }
         }
+    }
+
+    .dailyPlan {
+        min-height: 500px;
+        position: relative;
     }
 
     form.dailyPlan>.btnContainer {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        margin-bottom: 20px;
+        margin-bottom: 30px;
         gap: 10px;
+        bottom: 0;
 
         button {
             border-radius: 5px;
@@ -230,7 +243,6 @@ input {
         }
 
         button:nth-child(2) {
-            font-size: 15pt;
             font-weight: 600;
         }
 
@@ -554,6 +566,17 @@ input {
     }
 }
 
+@media screen and (max-width: 640px) {
+    .planningContainer {
+        form.dailyPlan>.btnContainer {
+            margin-top: 30px;
+            button {
+                width: 91%;
+            }
+        }
+    }
+}
+
 @media screen and (max-width: 600px) {
     input {
         width: 95%;
@@ -591,6 +614,7 @@ input {
 
         div.weeklyPlan {
             margin: 15px;
+
             .weekPlan {
                 display: flex;
                 align-items: center;

@@ -5,16 +5,12 @@
     0% {
         transform: translateY(-4000px);
         opacity: 0;
-    }
-
-    ;
+    };
 
     100% {
         opacity: 1;
         transform: translateY(0px);
-    }
-
-    ;
+    };
 }
 
 .finishRegisterContainer {

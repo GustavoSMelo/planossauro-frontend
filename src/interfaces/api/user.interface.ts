@@ -3,10 +3,10 @@ interface IUser {
     google_email: string | null;
     github_email: string | null;
     github_id: number | null;
+    github_is_validated: boolean;
+    github_validation_code: number | null;
     cellphone_number: string;
     uuid: string;
-    is_validated: boolean;
-    validation_code: number | null;
     sms_validation_code: number | null;
     sms_is_validated: boolean;
     created_at: Date | string | null;
@@ -23,7 +23,7 @@ interface ICreateUser {
 
 interface ICreateUserResponse {
     message: string;
-    validation_code: number;
+    github_validation_code: number;
     data: IUser;
 }
 

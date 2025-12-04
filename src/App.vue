@@ -32,9 +32,13 @@ const templateChoose = reactive<ITemplateChoose>({
 
 const hamburgueMenuToggle = ref(false);
 
-watch(popup, () => {
+watch(() => popup.show, (show) => {
+    if (!show) return;
+
     timeoutId = setTimeout(() => {
-        popup.show = false
+        popup.show = false;
+        const popupContainer = window.document.querySelector('.popup');
+        popupContainer?.classList.remove('popupDesappearsAnimation');
     }, 4000);
 });
 
@@ -88,4 +92,5 @@ provide('hamburgueMenuToggle', { hamburgueMenuToggle, handleHamburgueMenuToggle 
         :planType="showPreview.planType" />
     <Loading v-if="isLoading" />
     <Popup v-if="popup.show && popup.message.length > 0" />
+    <!-- <Popup /> -->
 </template>

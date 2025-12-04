@@ -3,11 +3,19 @@
 
 @keyframes popupAppears {
     0% {
-        transform: translateY(200deg);
+        transform: translateY(200%);
+    }
+
+    20% {
+        transform: translateY(0%);
+    }
+
+    75% {
+        transform: translateY(0%);
     }
 
     100% {
-        transform: translateY(0deg);
+        transform: translateY(200%);
     }
 }
 
@@ -23,14 +31,13 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        width: 80%;
+        width: 100%;
         position: fixed;
-        bottom: 15px;
-        margin-top: 20px;
+        bottom: 0;
         border-radius: 5px;
         box-shadow: 1px 1px 4px $black;
-        animation: popupAppears .6s forwards;
         z-index: 15;
+        animation: popupAppears 4s forwards;
 
         .popupLogo,
         .popupClose {
