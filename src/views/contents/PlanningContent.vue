@@ -144,6 +144,7 @@ const stopPropagation = (event: Event): void => {
 };
 
 const showTemplatePreviewChoose = () => {
+    console.log('teste');
     if (isAditionInformationMissing()) {
         popupContext.handleChangePopupInfo('Preencha todas as informacoes \n e tente novamente', 'warning', true);
         return;
@@ -174,7 +175,7 @@ const showTemplatePreviewChoose = () => {
 const generatePlan = async () => {
     try {
         const hasEmptyStrings = hasEmptyStringsInClasses().find(element => element === true);
-        if (hasEmptyStrings) {
+        if (planType.value === 'Semanal' && hasEmptyStrings) {
             popupContext.handleChangePopupInfo('Preencha os campos para escolher o template', 'error', true);
             return;
         }
@@ -220,12 +221,63 @@ const generatePlan = async () => {
             const qsnstring = JSON.stringify(qsn);
             const activity = JSON.stringify(activities);
 
-            await axios.post(import.meta.env.VITE_API_URL, {
+            const response = await axios.post(import.meta.env.VITE_API_URL, {
                 model: import.meta.env.VITE_LLM_MODEL,
                 prompt: getPrompt(qsnstring, activity),
                 stream: false
             });
 
+            const planejamentoQSNFetch = await fetch(`../../../public/planejamento${templateChoose.templateType}${templateChoose.templateStyle}.docx`);
+            const [arrayBuffer] = await Promise.all([planejamentoQSNFetch.arrayBuffer()]);
+            const planZip = new PizZip(arrayBuffer);
+            const doc = new Docxtemplater(planZip, { paragraphLoop: true, linebreaks: true });
+
+            const responseData = JSON.parse((response.data as IOllamaGemmaResponse)
+                .response
+                .replaceAll(/\\/g, '')
+                .replaceAll('\n', '')
+                .replaceAll('`', '')
+                .replaceAll('json', '')) as IClassPlanResponse;
+
+            const data = {
+                // header
+                nomeEscola: schoolName.value,
+                sala: className.value,
+                diaStart: planDateStart.value.split('-')[2],
+                diaEnd: planDateEnd.value.split('-')[2],
+                mes: monthConverter(planDateEnd.value.split('-')[1]),
+                ano: planDateEnd.value.split('-')[0],
+
+                // day 1
+                eixo1: responseData.eixo,
+                saber1: `${responseData.saber01}\n \n${responseData.saber02}`,
+                aprendizagem1: `${responseData.aprendizagem01}\n \n${responseData.aprendizagem02}`,
+                atividade1: plans.value.day1.map(item => `${item.toString()} \n \n`),
+                contextualizacao1: responseData.contextualizacao,
+                foco1: responseData.foco_avaliativo,
+                materiais1: responseData.materiais,
+            }
+
+            doc.render(data);
+            const blob = new Blob([doc.toBlob()], {
+                type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            });
+            console.log(blob);
+            saveAs(blob, 'planejamento.docx');
+
+            const docB64 = doc.toBase64();
+            const uuid = sessionStorage.getItem('uuid');
+
+            console.log(uuid);
+
+            await backendApi.post('/planning', {
+                'document_b64': docB64,
+                'start_plan': planDateStart.value,
+                'end_plan': planDateStart.value,
+                'school_name': schoolName.value,
+                'class_name': className.value,
+                'user_id': uuid
+            });
         } else {
             let activities = [];
             for (let i = 1; i < 6; i++) {
@@ -319,6 +371,7 @@ const generatePlan = async () => {
             const blob = new Blob([doc.toBlob()], {
                 type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
             });
+            console.log(blob);
             saveAs(blob, 'planejamento.docx');
 
             const docB64 = doc.toBase64();
