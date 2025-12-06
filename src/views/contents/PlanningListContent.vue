@@ -174,7 +174,7 @@ onMounted(() => {
                     <td data-cell="Tipo planejamento: ">{{ planning.start_plan === planning.end_plan ? 'Diario' :
                         'Semanal' }}</td>
                     <td data-cell="Data planejamento: ">{{ planning.start_plan }} {{ planning.start_plan !==
-                        planning.end_plan && `~ ${planning.end_plan}` }}</td>
+                        planning.end_plan ? `~ ${planning.end_plan}` : '' }}</td>
                     <td data-cell="Editar: " class="btnCellEdit" @click="handleEditPlanningInformations(planning.uuid)">
                         <i class="pi pi-pencil"></i></td>
                     <td data-cell="Remover: " class="btnCellRemove" @click="handleDeletePlanning(planning.uuid)"><i
