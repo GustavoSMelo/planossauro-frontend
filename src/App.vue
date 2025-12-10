@@ -15,7 +15,8 @@ const isLoading = ref(false);
 const popup = reactive<IPopup>({
     message: '',
     status: 'error',
-    show: false
+    show: false,
+    id: ''
 });
 const showPreview = reactive<IShowPreview>({
     show: false,
@@ -32,13 +33,9 @@ const templateChoose = reactive<ITemplateChoose>({
 
 const hamburgueMenuToggle = ref(false);
 
-watch(() => popup.show, (show) => {
-    if (!show) return;
-
+watch(popup, () => {
     timeoutId = setTimeout(() => {
         popup.show = false;
-        const popupContainer = window.document.querySelector('.popup');
-        popupContainer?.classList.remove('popupDesappearsAnimation');
     }, 4000);
 });
 
@@ -49,9 +46,12 @@ const handleChangeIsLoading = (newValue: boolean) => {
 
 const handleChangePopupInfo = (message: string, status: IPopup['status'], show: boolean): void => {
     clearTimeout(timeoutId);
+    popup.show = false;
+
     popup.message = message;
     popup.status = status;
     popup.show = show;
+    popup.id = Date.now();
 };
 
 const handleChangePopupShow = (): void => {

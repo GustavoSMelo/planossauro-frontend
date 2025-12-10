@@ -8,13 +8,14 @@ import type { ICreateUser, ICreateUserResponse, IUser } from '../interfaces/api/
 import backendApi from '../api/api';
 import { useRouter } from 'vue-router';
 
+const urlParams = new URLSearchParams(window.location.search);
 const fullName = ref(window.sessionStorage.getItem('fullName') || '');
 const cellphoneNumber = ref('');
 const popupContext = inject('popup') as IPopupContext;
 const loadingContext = inject('isLoading') as ILoadingContext;
 const validationCodeInput = ref('');
 const validationCode = ref(0);
-const showCodeConfirmationScreen = ref(false);
+const showCodeConfirmationScreen = ref(urlParams.has('jumpToValidationCode'));
 const user = ref<IUser>();
 const router = useRouter();
 

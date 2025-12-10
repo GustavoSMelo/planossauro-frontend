@@ -5,6 +5,7 @@ import type { IGithubCallbackResponse } from '../../interfaces/githubCallback.in
 import { useRouter } from 'vue-router';
 import type { IUser } from '../../interfaces/api/user.interface';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
+import backendApi from '../../api/api';
 
 watchEffect(async () => {
     const popupContext: IPopupContext = inject('popup') as IPopupContext;
@@ -12,16 +13,51 @@ watchEffect(async () => {
     const searchQueryString = window.location.search;
     const urlParams = new URLSearchParams(searchQueryString);
     const codeParam = urlParams.get('code')
+    const error = urlParams.get('error');
+    const userJson = sessionStorage.getItem('user');
+
+    let user;
+
+    if (userJson?.length) {
+        user = JSON.parse(userJson) as IUser;
+    }
+
+    if (error) {
+        popupContext.handleChangePopupInfo('Login nao autorizado pelo usuario', 'error', true);
+        router.push('/');
+        return;
+    }
 
     const { data }: { data: IGithubCallbackResponse } = await axios.get(`${import.meta.env.VITE_BACKEND_URI}/auth/github/${codeParam}`);
+    if (data.data.email === null) {
+        popupContext.handleChangePopupInfo('Email do github nao esta publico, torne-o publico e tente novamente', 'info', true);
+        router.push('/login');
+        return;
+    }
+
     try {
+        console.log(data);
         if (data.accessToken && data.accessToken.length) {
-            const { data: userData }: { data: IUser } = await axios.get(`${import.meta.env.VITE_BACKEND_URI}/user/github/${data.data.email}`);
+            let { data: userData }: { data: IUser } = await backendApi.get(`/user/github/${data.data.email}`);
             const userHasUuid = Object.keys(userData).find(key => key === 'uuid') ? true : false;
 
+            console.log(userData);
+
             if (userHasUuid) {
+                if (user && user.uuid && (userData.uuid === user.uuid)) {
+                    const updatedUser = await backendApi.put(`/user/${user.uuid}`, {
+                        ...user,
+                        github_id: userData.github_id,
+                        github_email: userData.github_email,
+                        github_is_validated: false
+                    });
+
+                    userData = { ...updatedUser.data.user };
+                }
                 userData.github_validation_code = null;
                 userData.sms_validation_code = null;
+
+                console.log(userData);
 
                 sessionStorage.setItem('user', JSON.stringify(userData));
                 sessionStorage.setItem('loginType', 'github');
@@ -29,7 +65,13 @@ watchEffect(async () => {
                 sessionStorage.setItem('uuid', userData.uuid);
                 popupContext.handleChangePopupInfo('Login realizado com sucesso', 'success', true);
 
-                router.push('/app');
+                const editProfile = Boolean(sessionStorage.getItem('editProfile'));
+
+                if (user && user.uuid === userData.uuid && editProfile && !userData.github_is_validated) {
+                    router.push('/finish/login?jumpToValidationCode=true');
+                } else {
+                    router.push('/app');
+                }
                 return;
             }
 
@@ -37,7 +79,7 @@ watchEffect(async () => {
             sessionStorage.setItem('githubEmail', data.data.email);
             sessionStorage.setItem('githubId', Number(data.data.id).toString());
             sessionStorage.setItem('accessToken', data.accessToken);
-            sessionStorage.setItem('fullName', data.data.name);
+            sessionStorage.setItem('fullName', data.data.name ? data.data.name : data.data.login);
 
             router.push('/finish/login');
         }
@@ -46,7 +88,7 @@ watchEffect(async () => {
         sessionStorage.setItem('githubEmail', data.data.email);
         sessionStorage.setItem('githubId', Number(data.data.id).toString());
         sessionStorage.setItem('accessToken', data.accessToken);
-        sessionStorage.setItem('fullName', data.data.name);
+        sessionStorage.setItem('fullName', data.data.name ? data.data.name : data.data.login);
 
         router.push('/finish/login');
     }

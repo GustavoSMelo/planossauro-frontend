@@ -5,6 +5,7 @@ import convertIsoDateToBR from '../../helpers/dateIsoConvertToBR';
 import type { ILoadingContext } from '../../interfaces/context/loading.interface';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
 import backendApi from '../../api/api';
+import axios from 'axios';
 
 const user = ref<IUser>({} as IUser);
 const duplicateUser = ref<IUser>({} as IUser);
@@ -105,6 +106,25 @@ const handleEditProfile = async () => {
     }
 };
 
+const handleChangeGithubAccount = async () => {
+    const user = JSON.parse(sessionStorage.getItem('user') as string) as IUser;
+
+    // if (!user.google_email || !user.google_email.length) {
+    //     handleChangePopupInfo('Vincule uma conta google primeiro', 'warning', true);
+    //     return;
+    // }
+
+    const logoutPage = window.open('https://github.com/logout', 'githubLogout', 'width=600,height=700');
+
+    sessionStorage.setItem('editProfile', 'true');
+    const timer = setInterval(() => {
+        if (logoutPage?.closed) {
+            clearInterval(timer);
+            window.location.assign(`https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&scope=read:user,user:email&allow_signup=true`);
+        }
+    }, 300);
+};
+
 </script>
 <template>
     <div class="profileContainer">
@@ -118,7 +138,8 @@ const handleEditProfile = async () => {
                 <b><i class="pi pi-github"></i> Github:</b>
                 <input v-if="user?.github_email?.length && !editProfile" :disabled="true" type="text"
                     :value="user.github_email" placeholder="Seu email aqui..." />
-                <button v-else-if="user?.github_email?.length && editProfile" class="btnChangeSocialMediaProfile">Mudar
+                <button v-else-if="user?.github_email?.length && editProfile" @click="handleChangeGithubAccount"
+                    class="btnChangeSocialMediaProfile">Mudar
                     perfil Github</button>
                 <button v-else type="button">Conectar</button>
             </span>
@@ -150,7 +171,8 @@ const handleEditProfile = async () => {
                 <p>
                     <b><i class="pi pi-github"></i> Github validado:</b>
                     <button type="button" :class="user?.github_is_validated ? 'checked' : 'unchecked'">
-                        <i :class="['pi', user.github_is_validated ? 'pi-verified' : 'pi-unlock'] "></i>{{ user?.github_is_validated ? 'Validado' : 'Validar' }}
+                        <i :class="['pi', user.github_is_validated ? 'pi-verified' : 'pi-unlock']"></i>{{
+                            user?.github_is_validated ? 'Validado' : 'Validar' }}
                     </button>
                 </p>
                 <p>

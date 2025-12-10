@@ -4,6 +4,7 @@ interface IGithubCallbackResponse {
         email: string;
         id: number;
         name: string;
+        login: string;
     }
 }
 
