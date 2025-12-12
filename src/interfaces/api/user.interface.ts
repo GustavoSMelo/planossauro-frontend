@@ -1,6 +1,9 @@
 interface IUser {
     full_name: string;
     google_email: string | null;
+    google_id: number| null;
+    google_validation_code: number | null;
+    google_is_validated: boolean;
     github_email: string | null;
     github_id: number | null;
     github_is_validated: boolean;
@@ -24,6 +27,7 @@ interface ICreateUser {
 interface ICreateUserResponse {
     message: string;
     github_validation_code: number;
+    google_validation_code: number;
     data: IUser;
 }
 

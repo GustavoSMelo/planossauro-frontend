@@ -142,6 +142,7 @@ input {
             button.btnChooseTemplate:hover {
                 background-color: $accentColorDarker;
                 transition: .4s;
+                border: solid 1px $accentColorDarker;
             }
         }
     }
@@ -262,7 +263,6 @@ input {
 
         .btnDiaryGenerate {
             color: $white;
-            border: solid 3px $accentColor;
             background-color: $accentColor;
             transition: .4s;
         }

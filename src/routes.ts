@@ -5,18 +5,24 @@ import AppPage from './views/AppPage.vue';
 import LoginPage from './views/LoginPage.vue';
 import GithubCallback from './views/callbacks/GithubCallback.vue';
 import FinishRegister from './views/FinishRegister.vue';
+import BackendOffline from './views/errors/BackendOffline.vue';
+import NotFound from './views/errors/NotFound.vue';
+import GoogleCallback from './views/callbacks/GoogleCallback.vue';
 
 const routes: Array<IRoutes> = [
+    { path: '/:catchAll(.*)', component: NotFound },
     { path: '', component: LPComponent },
     { path: '/app', component: AppPage },
     { path: '/login', component: LoginPage },
     { path: '/finish/login', component: FinishRegister },
     { path: '/callback/github', component: GithubCallback },
+    { path: '/callback/google', component: GoogleCallback },
+    { path: '/offline', component: BackendOffline }
 ];
 
 const router = createRouter({
     routes,
-    history: createWebHistory()
+    history: createWebHistory(),
 });
 
 export default router;

@@ -69,7 +69,7 @@ const handleChangeCellphoneNumber = (event: Event): void => {
         let cellphoneContentString = '';
 
         cellphoneContentArray.forEach(el => cellphoneContentString += el);
-    value = `${cellphoneContentString}-${lastChar}`;
+        value = `${cellphoneContentString}-${lastChar}`;
     }
     cellphoneNumber.value = value;
 };
@@ -89,15 +89,49 @@ const handleGithubSave = async () => {
             'cellphone_number': cellphoneNumber.value,
             'github_email': githubEmail,
             'github_id': githubId,
-            'google_email': null,
+        } as unknown as ICreateUser;
+
+        const { data: responseData }: { data: ICreateUserResponse } = (await backendApi.post('/user', userData)).data;
+
+        if (JSON.parse(responseData.data.uuid)) {
+            validationCode.value = responseData.github_validation_code;
+            user.value = responseData.data;
+            user.value.github_is_validated = false;
+            showCodeConfirmationScreen.value = true;
+            console.log(showCodeConfirmationScreen.value);
+            sessionStorage.setItem('uuid', responseData.data.uuid);
+            sessionStorage.setItem('user', JSON.stringify(user.value));
+            popupContext.handleChangePopupInfo('Cadastro realizado com sucesso', 'success', true);
+        }
+        loadingContext.handleChangeIsLoading(false);
+    } catch (err) {
+        popupContext.handleChangePopupInfo('Erro ao envio de email', 'error', true);
+        console.error(err);
+        loadingContext.handleChangeIsLoading(false);
+    }
+};
+
+const handleGoogleSave = async () => {
+    try {
+        loadingContext.handleChangeIsLoading(true);
+        const googleEmail = sessionStorage.getItem('googleEmail');
+        const googleId = sessionStorage.getItem('googleId');
+
+        const userData = {
+            'full_name': fullName.value,
+            'cellphone_number': cellphoneNumber.value,
+            'google_email': googleEmail,
+            'google_id': googleId,
         } as unknown as ICreateUser;
 
         const { data: responseData }: { data: ICreateUserResponse } = await backendApi.post('/user', userData);
 
+        console.log(responseData);
+
         if (responseData.data.uuid) {
-            validationCode.value = responseData.github_validation_code;
+            validationCode.value = responseData.google_validation_code;
             user.value = responseData.data;
-            user.value.github_is_validated = false;
+            user.value.google_is_validated = false;
             showCodeConfirmationScreen.value = true;
             console.log(showCodeConfirmationScreen.value);
             sessionStorage.setItem('uuid', responseData.data.uuid);
@@ -123,6 +157,7 @@ const handleProceed = async (): Promise<void> => {
     }
 
     if (loginType === 'github') return await handleGithubSave();
+    if (loginType === 'google') return await handleGoogleSave();
 };
 
 const handleChangeValidationCodeInput = (event: Event): void => {

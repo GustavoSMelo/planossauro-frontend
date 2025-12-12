@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router';
 import type { IUser } from '../../interfaces/api/user.interface';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
 import backendApi from '../../api/api';
+import isApiHealth from '../../api/healthCheck';
 
 watchEffect(async () => {
     const popupContext: IPopupContext = inject('popup') as IPopupContext;
@@ -15,6 +16,12 @@ watchEffect(async () => {
     const codeParam = urlParams.get('code')
     const error = urlParams.get('error');
     const userJson = sessionStorage.getItem('user');
+
+    const apiIsRunning = await isApiHealth();
+
+    if (apiIsRunning === false) {
+        router.push('/offline');
+    }
 
     let user;
 
@@ -55,6 +62,7 @@ watchEffect(async () => {
                     userData = { ...updatedUser.data.user };
                 }
                 userData.github_validation_code = null;
+                userData.google_validation_code = null;
                 userData.sms_validation_code = null;
 
                 console.log(userData);
