@@ -73,13 +73,13 @@
         button.btnProceedRegister {
             background-color: $accentColor;
             color: $white;
-            border: solid 3px $accentColorDarker;
+            border: solid 3px $accentColor;
             cursor: pointer;
         }
 
         button.btnProceedRegister:hover {
-            background-color: $accentColorDarker;
-            border-color: $accentColor;
+            background-color: $accentColorDark;
+            border-color: $accentColorDark;
             transition: .4s;
         }
     }

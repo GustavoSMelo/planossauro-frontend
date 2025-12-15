@@ -6,10 +6,12 @@ import type { ILoadingContext } from '../../interfaces/context/loading.interface
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
 import backendApi from '../../api/api';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 const user = ref<IUser>({} as IUser);
 const duplicateUser = ref<IUser>({} as IUser);
 const editProfile = ref(false);
+const router = useRouter();
 const { handleChangeIsLoading } = inject('isLoading') as ILoadingContext;
 const { handleChangePopupInfo } = inject('popup') as IPopupContext;
 const userFromSession = sessionStorage.getItem('user') as string;
@@ -125,6 +127,16 @@ const handleChangeGithubAccount = async () => {
     }, 300);
 };
 
+const handleConectGithubAccout = async () => {
+    window.location.assign(`https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&scope=read:user,user:email,`);
+};
+
+const logout = () => {
+    sessionStorage.clear();
+    handleChangePopupInfo('Deslogado', 'info', true);
+    router.push('/');
+};
+
 </script>
 <template>
     <div class="profileContainer">
@@ -141,14 +153,17 @@ const handleChangeGithubAccount = async () => {
                 <button v-else-if="user?.github_email?.length && editProfile" @click="handleChangeGithubAccount"
                     class="btnChangeSocialMediaProfile">Mudar
                     perfil Github</button>
-                <button v-else type="button">Conectar</button>
+                <button v-else type="button" @click="handleConectGithubAccout">Conectar</button>
             </span>
             <span>
                 <b><i class="pi pi-google"></i> Google:</b>
-                <input v-if="user?.google_email?.length" :disabled="editProfile ? false : true"
+                <input v-if="user?.google_email?.length && !editProfile" :disabled="true" type="text"
                     :value="user.google_email" placeholder="Seu email aqui..."
                     :class="editProfile ? 'ableToEdit' : ''" />
-                <button v-else-if="user?.google_email?.length && editProfile">Mudar perfil gmail</button>
+
+                <button v-else-if="user?.google_email?.length && editProfile" class="btnChangeSocialMediaProfile">
+                    Mudar perfil gmail
+                </button>
 
                 <button v-else type="button">Conectar</button>
             </span>
@@ -169,6 +184,13 @@ const handleChangeGithubAccount = async () => {
                 @click="handleCancelAndResetInfo">Cancelar</button>
             <div class="profileAdditionalDetails">
                 <p>
+                    <b><i class="pi pi-google"></i> Google validado:</b>
+                    <button type="button" :class="user?.google_is_validated ? 'checked' : 'unchecked'">
+                        <i :class="['pi', user.google_is_validated ? 'pi-verified' : 'pi-unlock']"></i>{{
+                            user?.google_is_validated ? 'Validado' : 'Validar' }}
+                    </button>
+                </p>
+                <p>
                     <b><i class="pi pi-github"></i> Github validado:</b>
                     <button type="button" :class="user?.github_is_validated ? 'checked' : 'unchecked'">
                         <i :class="['pi', user.github_is_validated ? 'pi-verified' : 'pi-unlock']"></i>{{
@@ -176,7 +198,7 @@ const handleChangeGithubAccount = async () => {
                     </button>
                 </p>
                 <p>
-                    <b>SMS validado: </b>
+                    <b><i class="pi pi-phone"></i> SMS validado: </b>
                     <button type="button" class="unchecked">
                         <i :class="['pi', user.sms_is_validated ? 'pi-verified' : 'pi-unlock']"></i>
                         Validar
@@ -222,7 +244,7 @@ const handleChangeGithubAccount = async () => {
                 <div>
                     <h3><i class="pi pi-sign-out"></i> Sair: </h3>
 
-                    <button>Deslogar / Sair</button>
+                    <button type="button" @click="logout">Deslogar / Sair</button>
                 </div>
                 <div>
                     <h3>Versao do app: </h3>

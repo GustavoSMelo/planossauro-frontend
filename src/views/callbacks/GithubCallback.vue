@@ -21,6 +21,7 @@ watchEffect(async () => {
 
     if (apiIsRunning === false) {
         router.push('/offline');
+        return;
     }
 
     let user;

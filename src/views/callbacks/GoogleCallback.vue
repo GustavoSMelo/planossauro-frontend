@@ -16,6 +16,7 @@ onMounted(async () => {
 
     if (isApiOnline === false) {
         router.push('/offline');
+        return;
     }
 
     let user;

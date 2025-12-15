@@ -14,7 +14,6 @@ const cellphoneNumber = ref('');
 const popupContext = inject('popup') as IPopupContext;
 const loadingContext = inject('isLoading') as ILoadingContext;
 const validationCodeInput = ref('');
-const validationCode = ref(0);
 const showCodeConfirmationScreen = ref(urlParams.has('jumpToValidationCode'));
 const user = ref<IUser>();
 const router = useRouter();
@@ -91,15 +90,19 @@ const handleGithubSave = async () => {
             'github_id': githubId,
         } as unknown as ICreateUser;
 
-        const { data: responseData }: { data: ICreateUserResponse } = (await backendApi.post('/user', userData)).data;
+        const responseUserCreated = await backendApi.post('/user', userData);
+        const responseData: ICreateUserResponse['data'] = responseUserCreated.data.data;
 
-        if (JSON.parse(responseData.data.uuid)) {
-            validationCode.value = responseData.github_validation_code;
-            user.value = responseData.data;
+        console.log(responseUserCreated);
+        console.log(responseData);
+
+
+        if (responseData.uuid) {
+            user.value = {...responseData};
             user.value.github_is_validated = false;
             showCodeConfirmationScreen.value = true;
             console.log(showCodeConfirmationScreen.value);
-            sessionStorage.setItem('uuid', responseData.data.uuid);
+            sessionStorage.setItem('uuid', responseData.uuid);
             sessionStorage.setItem('user', JSON.stringify(user.value));
             popupContext.handleChangePopupInfo('Cadastro realizado com sucesso', 'success', true);
         }
@@ -115,7 +118,7 @@ const handleGoogleSave = async () => {
     try {
         loadingContext.handleChangeIsLoading(true);
         const googleEmail = sessionStorage.getItem('googleEmail');
-        const googleId = sessionStorage.getItem('googleId');
+        const googleId = sessionStorage.getItem('googleId') || '';
 
         const userData = {
             'full_name': fullName.value,
@@ -129,7 +132,6 @@ const handleGoogleSave = async () => {
         console.log(responseData);
 
         if (responseData.data.uuid) {
-            validationCode.value = responseData.google_validation_code;
             user.value = responseData.data;
             user.value.google_is_validated = false;
             showCodeConfirmationScreen.value = true;
@@ -189,23 +191,32 @@ const resendEmail = async () => {
 
 const finishValidation = async () => {
     try {
-        if (validationCode.value.toString() !== validationCodeInput.value.toString()) {
+        const loginType = sessionStorage.getItem('loginType') || '';
+        console.log(validationCodeInput.value);
+
+        const isValidatedResponse = await backendApi.patch(`/user/validate/${user.value?.uuid}`, {
+            loginType,
+            'validationCode': validationCodeInput.value
+        });
+
+        if (isValidatedResponse.status !== 200) {
             popupContext.handleChangePopupInfo('Codigo de validacao invalido', 'error', true);
             return;
         }
         loadingContext.handleChangeIsLoading(true);
 
-        await backendApi.patch(`/user/validate/github/email/${user.value?.uuid}`);
         loadingContext.handleChangeIsLoading(false);
         popupContext.handleChangePopupInfo('Validacao realizada com sucesso', 'success', true);
-        user.value!.github_is_validated = true;
+
+        if (loginType === 'github') user.value!.github_is_validated = true;
+        else user.value!.google_is_validated = true;
 
         sessionStorage.setItem('user', JSON.stringify(user.value));
         router.push('/app');
     } catch (err) {
         console.error(err);
         loadingContext.handleChangeIsLoading(false);
-        popupContext.handleChangePopupInfo('Ocorreu um erro ao\n realizar a validacao', 'error', true);
+        popupContext.handleChangePopupInfo('Ocorreu um erro ao\n realizar a validacao\n\n ou codigo invalido', 'error', true);
     }
 };
 </script>

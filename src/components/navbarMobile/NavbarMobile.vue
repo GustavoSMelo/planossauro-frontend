@@ -2,11 +2,21 @@
 import { inject } from 'vue';
 import type { IHamburgueMenuToggleContext } from '../../interfaces/context/hamburgueMenuToggle.interface';
 import type { IPageContent } from '../../interfaces/pageContents.interface';
+import type { IPopupContext } from '../../interfaces/context/popup.interface';
+import { useRouter } from 'vue-router';
 
 const { handleChangeCurrentContent, currentContent } = defineProps<{
     handleChangeCurrentContent: (newValue: IPageContent['contents']) => void,
     currentContent: IPageContent['contents']
 }>();
+const router = useRouter();
+const { handleChangePopupInfo } = inject('popup') as IPopupContext;
+
+const logout = () => {
+    sessionStorage.clear();
+    handleChangePopupInfo('Deslogado', 'info', true);
+    router.push('/');
+};
 
 const { handleHamburgueMenuToggle }= inject('hamburgueMenuToggle') as IHamburgueMenuToggleContext;
 
@@ -40,7 +50,7 @@ const handleChangeMobilePage = (page: IPageContent['contents']) => {
             <li @click="handleChangeMobilePage('planning_list')" :class="[currentContent === 'planning_list' ? 'choosed' : '', 'btnNavbar']">Planejamentos</li>
             <li :class="['btnNavbar']">Planos</li>
             <li @click="handleChangeMobilePage('profile')" :class="[currentContent === 'profile' ? 'choosed' : '', 'btnNavbar']">Perfil</li>
-            <li :class="['btnNavbar']">Sair</li>
+            <li :class="['btnNavbar']" @click="logout">Sair</li>
         </ul>
     </div>
 </template>
