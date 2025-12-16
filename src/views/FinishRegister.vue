@@ -7,16 +7,18 @@ import type { ILoadingContext } from '../interfaces/context/loading.interface';
 import type { ICreateUser, ICreateUserResponse, IUser } from '../interfaces/api/user.interface';
 import backendApi from '../api/api';
 import { useRouter } from 'vue-router';
+import type { AxiosResponse } from 'axios';
 
 const urlParams = new URLSearchParams(window.location.search);
 const fullName = ref(window.sessionStorage.getItem('fullName') || '');
-const cellphoneNumber = ref('');
 const popupContext = inject('popup') as IPopupContext;
 const loadingContext = inject('isLoading') as ILoadingContext;
 const validationCodeInput = ref('');
 const showCodeConfirmationScreen = ref(urlParams.has('jumpToValidationCode'));
 const user = ref<IUser>();
 const router = useRouter();
+const userFromSession: IUser | null = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user') as string) : null;
+const cellphoneNumber = ref(userFromSession?.cellphone_number ? userFromSession.cellphone_number : '');
 
 const handleChangeFullName = (event: Event): void => {
     const target = event.target as HTMLInputElement;
@@ -90,15 +92,17 @@ const handleGithubSave = async () => {
             'github_id': githubId,
         } as unknown as ICreateUser;
 
-        const responseUserCreated = await backendApi.post('/user', userData);
-        const responseData: ICreateUserResponse['data'] = responseUserCreated.data.data;
+        let responseUserCreated: AxiosResponse<any, any, {}>;
 
-        console.log(responseUserCreated);
-        console.log(responseData);
-
+        if (userFromSession && userFromSession.uuid) {
+            responseUserCreated = await backendApi.put(`/user/${userFromSession.uuid}`, {...userFromSession, ...userData });
+        } else {
+            responseUserCreated = await backendApi.post('/user', { ...userData });
+        }
+        const responseData: ICreateUserResponse['data'] = userFromSession?.uuid ? responseUserCreated.data.user : responseUserCreated.data.data;
 
         if (responseData.uuid) {
-            user.value = {...responseData};
+            user.value = { ...responseData };
             user.value.github_is_validated = false;
             showCodeConfirmationScreen.value = true;
             console.log(showCodeConfirmationScreen.value);
@@ -127,16 +131,21 @@ const handleGoogleSave = async () => {
             'google_id': googleId,
         } as unknown as ICreateUser;
 
-        const { data: responseData }: { data: ICreateUserResponse } = await backendApi.post('/user', userData);
+        let responseUserCreated: AxiosResponse<any, any, {}>;
 
-        console.log(responseData);
+        if (userFromSession && userFromSession.uuid) {
+            responseUserCreated = await backendApi.put(`/user/${userFromSession.uuid}`, { ...userData, ...userFromSession });
+        } else {
+            responseUserCreated = await backendApi.post('/user', { ...userData });
+        }
+        const responseData: ICreateUserResponse['data'] = responseUserCreated.data.data;
 
-        if (responseData.data.uuid) {
-            user.value = responseData.data;
+        if (responseData.uuid) {
+            user.value = { ...responseData };
             user.value.google_is_validated = false;
             showCodeConfirmationScreen.value = true;
             console.log(showCodeConfirmationScreen.value);
-            sessionStorage.setItem('uuid', responseData.data.uuid);
+            sessionStorage.setItem('uuid', responseData.uuid);
             sessionStorage.setItem('user', JSON.stringify(user.value));
             popupContext.handleChangePopupInfo('Cadastro realizado com sucesso', 'success', true);
         }
