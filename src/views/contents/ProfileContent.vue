@@ -1,12 +1,19 @@
 <script lang="ts" setup>
-import { inject, ref } from 'vue';
+import { inject, ref, watch, watchEffect } from 'vue';
 import type { IUser } from '../../interfaces/api/user.interface';
 import convertIsoDateToBR from '../../helpers/dateIsoConvertToBR';
 import type { ILoadingContext } from '../../interfaces/context/loading.interface';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
 import backendApi from '../../api/api';
-import axios from 'axios';
 import { useRouter } from 'vue-router';
+import type { ILoginType } from '../../interfaces/loginType.interface';
+import type { IPageContent } from '../../interfaces/pageContents.interface';
+
+const { handleChangeCurrentContent, handleChangeValidationLoginType } = defineProps<{
+    handleChangeCurrentContent: (newValue: IPageContent["contents"]) => void
+    handleChangeValidationLoginType: (newValue: ILoginType["types"]) => void
+}
+>();
 
 const user = ref<IUser>({} as IUser);
 const duplicateUser = ref<IUser>({} as IUser);
@@ -137,6 +144,35 @@ const logout = () => {
     router.push('/');
 };
 
+const handleSendValidationEmail = async (loginType: ILoginType['types']) => {
+    if (loginType === 'github' && user.value.github_is_validated) return;
+    if (loginType === 'google' && user.value.google_is_validated) return;
+
+    handleChangeIsLoading(true);
+
+    const userResponse: IUser = (await backendApi.get(`/user/${user.value.uuid}`)).data;
+
+    if ((loginType === 'google' && userResponse.google_is_validated) || !userResponse.google_email?.length) {
+        handleChangeIsLoading(false);
+        return;
+    };
+
+    if ((loginType === 'github' && userResponse.github_is_validated) || !userResponse.github_email?.length) {
+        handleChangeIsLoading(false);
+        return;
+    };
+
+    await backendApi.post('/user/resend/validationcode', {
+        uuid: user.value.uuid,
+        loginType
+    });
+
+    handleChangeValidationLoginType(loginType);
+    handleChangePopupInfo('Codigo enviado para seu email', 'success', true);
+    handleChangeIsLoading(false);
+    handleChangeCurrentContent('validation_code');
+};
+
 </script>
 <template>
     <div class="profileContainer">
@@ -185,14 +221,16 @@ const logout = () => {
             <div class="profileAdditionalDetails">
                 <p>
                     <b><i class="pi pi-google"></i> Google validado:</b>
-                    <button type="button" :class="user?.google_is_validated ? 'checked' : 'unchecked'">
+                    <button @click="handleSendValidationEmail('google')" type="button"
+                        :class="user?.google_is_validated ? 'checked' : 'unchecked'">
                         <i :class="['pi', user.google_is_validated ? 'pi-verified' : 'pi-unlock']"></i>{{
                             user?.google_is_validated ? 'Validado' : 'Validar' }}
                     </button>
                 </p>
                 <p>
                     <b><i class="pi pi-github"></i> Github validado:</b>
-                    <button type="button" :class="user?.github_is_validated ? 'checked' : 'unchecked'">
+                    <button @click="handleSendValidationEmail('github')" type="button"
+                        :class="user?.github_is_validated ? 'checked' : 'unchecked'">
                         <i :class="['pi', user.github_is_validated ? 'pi-verified' : 'pi-unlock']"></i>{{
                             user?.github_is_validated ? 'Validado' : 'Validar' }}
                     </button>

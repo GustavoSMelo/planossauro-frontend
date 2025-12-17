@@ -4,7 +4,8 @@ interface IPageContent {
     'planning_list' |
     'edit_planning' |
     'remove_planning' |
-    'profile';
+    'profile' |
+    'validation_code';
 }
 
 export type { IPageContent };

@@ -11,11 +11,20 @@ import type { IHamburgueMenuToggleContext } from '../interfaces/context/hamburgu
 import EditPlanningContent from './contents/EditPlanningContent.vue';
 import RemovePlanningContent from './contents/RemovePlanningContent.vue';
 import ProfileContent from './contents/ProfileContent.vue';
+import ValidationCodeInputBox from '../components/validationCodeInputBox/ValidationCodeInputBox.vue';
+import type { ILoginType } from '../interfaces/loginType.interface';
 
 const currentContent = ref<IPageContent['contents']>('home');
+const validationLoginType = ref<ILoginType['types']>('github');
+
 const handleChangeCurrentContent = (newValue: IPageContent['contents']) => {
     currentContent.value = newValue;
 };
+
+const handleChangeValidationLoginType = (newValue: ILoginType['types']) => {
+    validationLoginType.value = newValue;
+};
+
 const { hamburgueMenuToggle } = inject('hamburgueMenuToggle') as IHamburgueMenuToggleContext;
 </script>
 <template>
@@ -24,6 +33,7 @@ const { hamburgueMenuToggle } = inject('hamburgueMenuToggle') as IHamburgueMenuT
     <main class="appPageContainer">
         <div class="fullContentContainer">
             <Navbar :handle-change-current-content="handleChangeCurrentContent" :current-content="currentContent" />
+
             <HomeContent v-if="currentContent === 'home'" />
             <PlanningContent v-else-if="currentContent === 'planning'" />
             <PlanningListContent v-else-if="currentContent === 'planning_list'"
@@ -32,7 +42,12 @@ const { hamburgueMenuToggle } = inject('hamburgueMenuToggle') as IHamburgueMenuT
                 :handle-change-current-content="handleChangeCurrentContent" />
             <RemovePlanningContent v-else-if="currentContent === 'remove_planning'"
                 :handle-change-current-content="handleChangeCurrentContent" />
-            <ProfileContent v-else-if="currentContent === 'profile'" />
+            <ProfileContent :handle-change-current-content="handleChangeCurrentContent"
+                :handle-change-validation-login-type="handleChangeValidationLoginType"
+                v-else-if="currentContent === 'profile'" />
+            <ValidationCodeInputBox v-else-if="currentContent === 'validation_code'"
+                :validation-login-type="validationLoginType"
+                :handle-change-current-content="handleChangeCurrentContent" />
         </div>
     </main>
 </template>

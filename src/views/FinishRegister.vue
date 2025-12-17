@@ -8,6 +8,7 @@ import type { ICreateUser, ICreateUserResponse, IUser } from '../interfaces/api/
 import backendApi from '../api/api';
 import { useRouter } from 'vue-router';
 import type { AxiosResponse } from 'axios';
+import type { ILoginType } from '../interfaces/loginType.interface';
 
 const urlParams = new URLSearchParams(window.location.search);
 const fullName = ref(window.sessionStorage.getItem('fullName') || '');
@@ -95,7 +96,7 @@ const handleGithubSave = async () => {
         let responseUserCreated: AxiosResponse<any, any, {}>;
 
         if (userFromSession && userFromSession.uuid) {
-            responseUserCreated = await backendApi.put(`/user/${userFromSession.uuid}`, {...userFromSession, ...userData });
+            responseUserCreated = await backendApi.put(`/user/${userFromSession.uuid}`, { ...userFromSession, ...userData });
         } else {
             responseUserCreated = await backendApi.post('/user', { ...userData });
         }
@@ -200,7 +201,7 @@ const resendEmail = async () => {
 
 const finishValidation = async () => {
     try {
-        const loginType = sessionStorage.getItem('loginType') || '';
+        const loginType = sessionStorage.getItem('loginType') as ILoginType['types'];
         console.log(validationCodeInput.value);
 
         const isValidatedResponse = await backendApi.patch(`/user/validate/${user.value?.uuid}`, {
