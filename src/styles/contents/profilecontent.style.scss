@@ -238,10 +238,10 @@
             }
 
             button {
-                background-color: $sleepBlue;
+                background-color: $accentColor;
+                color: $white;
                 padding: 10px 20px;
                 cursor: pointer;
-                border: solid 1px $black;
                 border-radius: 5px;
                 font-weight: bold;
                 transition: .4s;
@@ -249,7 +249,7 @@
             }
 
             button:hover {
-                background-color: $blueNight;
+                background-color: $accentColorDark;
                 transition: .4s;
             }
         }

@@ -36,7 +36,8 @@ const logout = () => {
                 :class="[currentContent == 'planning_list' ? 'choosed' : 'btnNavbar']">
                 Planejamentos
             </li>
-            <li :class="['btnNavbar']">Planos</li>
+            <li @click="handleChangeCurrentContent('plan')"
+                :class="[currentContent == 'plan' ? 'choosed' : 'btnNavbar']">Planos</li>
             <li @click="handleChangeCurrentContent('profile')"
                 :class="[currentContent == 'profile' ? 'choosed' : 'btnNavbar']">Perfil</li>
             <li :class="['btnNavbar']" @click="logout">Sair</li>

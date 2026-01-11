@@ -588,6 +588,7 @@ input {
 
     .planningContainer {
         margin: 0;
+        width: 95%;
 
         .aditionalInformationsContainer>.aditionalInformationsForm {
             width: 100%;
@@ -613,6 +614,11 @@ input {
                 align-items: center;
                 justify-content: center;
                 text-align: center;
+                width: 94%;
+
+                .planSelect {
+                    width: 100%;
+                }
             }
         }
 

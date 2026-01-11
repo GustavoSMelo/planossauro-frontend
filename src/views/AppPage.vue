@@ -13,6 +13,7 @@ import RemovePlanningContent from './contents/RemovePlanningContent.vue';
 import ProfileContent from './contents/ProfileContent.vue';
 import ValidationCodeInputBox from '../components/validationCodeInputBox/ValidationCodeInputBox.vue';
 import type { ILoginType } from '../interfaces/loginType.interface';
+import PlanContent from './contents/PlanContent.vue';
 
 const currentContent = ref<IPageContent['contents']>('home');
 const validationLoginType = ref<ILoginType['types']>('github');
@@ -40,6 +41,7 @@ const { hamburgueMenuToggle } = inject('hamburgueMenuToggle') as IHamburgueMenuT
                 :handle-change-current-content="handleChangeCurrentContent" />
             <EditPlanningContent v-else-if="currentContent === 'edit_planning'"
                 :handle-change-current-content="handleChangeCurrentContent" />
+            <PlanContent v-else-if="currentContent === 'plan'" />
             <RemovePlanningContent v-else-if="currentContent === 'remove_planning'"
                 :handle-change-current-content="handleChangeCurrentContent" />
             <ProfileContent :handle-change-current-content="handleChangeCurrentContent"

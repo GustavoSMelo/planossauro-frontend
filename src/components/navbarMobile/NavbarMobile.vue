@@ -18,7 +18,7 @@ const logout = () => {
     router.push('/');
 };
 
-const { handleHamburgueMenuToggle }= inject('hamburgueMenuToggle') as IHamburgueMenuToggleContext;
+const { handleHamburgueMenuToggle } = inject('hamburgueMenuToggle') as IHamburgueMenuToggleContext;
 
 const handleRemoveMenuHamburguer = () => {
     const hamburgerMenu = window.document.querySelector('.hamburgerMenu');
@@ -46,10 +46,14 @@ const handleChangeMobilePage = (page: IPageContent['contents']) => {
             </li>
             <li class="planInfo">Plano free</li>
             <hr />
-            <li @click="handleChangeMobilePage('planning')" :class="[currentContent === 'planning' ? 'choosed' : '', 'btnNavbar']">Planejar</li>
-            <li @click="handleChangeMobilePage('planning_list')" :class="[currentContent === 'planning_list' ? 'choosed' : '', 'btnNavbar']">Planejamentos</li>
-            <li :class="['btnNavbar']">Planos</li>
-            <li @click="handleChangeMobilePage('profile')" :class="[currentContent === 'profile' ? 'choosed' : '', 'btnNavbar']">Perfil</li>
+            <li @click="handleChangeMobilePage('planning')"
+                :class="[currentContent === 'planning' ? 'choosed' : '', 'btnNavbar']">Planejar</li>
+            <li @click="handleChangeMobilePage('planning_list')"
+                :class="[currentContent === 'planning_list' ? 'choosed' : '', 'btnNavbar']">Planejamentos</li>
+            <li @click="handleChangeMobilePage('plan')"
+                :class="[currentContent === 'plan' ? 'choosed' : '', 'btnNavbar']">Planos</li>
+            <li @click="handleChangeMobilePage('profile')"
+                :class="[currentContent === 'profile' ? 'choosed' : '', 'btnNavbar']">Perfil</li>
             <li :class="['btnNavbar']" @click="logout">Sair</li>
         </ul>
     </div>

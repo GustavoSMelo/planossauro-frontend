@@ -57,6 +57,7 @@
         max-width: 100%;
         padding: 0;
         margin: 0;
+        border-collapse: collapse;
 
         thead>tr {
             border: 1px solid $gray;
@@ -68,6 +69,7 @@
                 border-bottom: 2px solid $lightGray;
                 // border-right: 2px solid $lightGray;
                 border-left: 2px solid $lightGray;
+                padding: 10px;
             }
 
             th:nth-child(1) {
@@ -181,6 +183,24 @@
 }
 
 @media screen and (max-width: 800px) {
+    .searchFormContainer {
+        padding: 0;
+        padding-top: 20px;
+        padding-bottom: 20px;
+
+        span {
+            width: 100%;
+        }
+
+        select, input, button {
+            width: 100%;
+        }
+
+        button {
+            margin-right: 0;
+        }
+    }
+
     .listingContainer {
         table {
             thead {
