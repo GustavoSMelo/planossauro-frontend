@@ -1,0 +1,220 @@
+@charset "UTF-8";
+@use '../colors.scss' as colors;
+
+.plansContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    .plansTitle {
+        margin: 40px 0;
+    }
+
+    .currentPlanContainer {
+        display: flex;
+        border: solid 1px colors.$lightGray;
+        border-radius: 5px;
+        flex-direction: column;
+        width: 80%;
+        box-shadow: 4px 4px 12px colors.$lightGray;
+        margin-bottom: 20px;
+
+        h2 {
+            background-color: colors.$accentColor;
+            color: colors.$white;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 14pt;
+            padding: 5px;
+            border-top-right-radius: 5px;
+            border-top-left-radius: 5px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 10px;
+
+            li {
+                font-size: 12pt;
+                margin-bottom: 5px;
+                display: flex;
+                align-items: center;
+                margin-top: 5px;
+
+                b {
+                    margin-right: 5px;
+                    color: colors.$accentColor;
+                }
+
+                .statusActive {
+                    background-color: colors.$green;
+                    padding: 5px 15px;
+                    border-radius: 15px;
+                    font-weight: bold;
+                    border: solid 1px colors.$black;
+                }
+
+                img {
+                    width: 30px;
+                    margin-right: 10px;
+                }
+            }
+        }
+
+        .btnContainers {
+            width: 100%;
+            display: flex;
+            padding: 10px;
+
+            button {
+                background-color: colors.$accentColor;
+                color: colors.$white;
+                font-weight: bold;
+                padding: 10px;
+                font-size: 12pt;
+                margin-right: 10px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: .4s;
+            }
+
+            button:hover {
+                transition: .4s;
+                transform: scale(1.05);
+            }
+        }
+    }
+
+    .paymentHistoryListContainer {
+        display: flex;
+        border: solid 1px colors.$lightGray;
+        border-radius: 5px;
+        flex-direction: column;
+        width: 80%;
+        box-shadow: 4px 4px 12px colors.$lightGray;
+        margin-bottom: 20px;
+
+        h2 {
+            background-color: colors.$accentColor;
+            color: colors.$white;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 14pt;
+            padding: 5px;
+            border-top-right-radius: 5px;
+            border-top-left-radius: 5px;
+        }
+
+        table {
+            margin: 20px;
+            border-collapse: collapse;
+
+            thead {
+                tr {
+                    th {
+                        border-bottom: 2px solid #000;
+                        color: colors.$accentColor;
+                    }
+                }
+            }
+
+            tbody {
+                tr {
+                    td {
+                        border-bottom: 2px solid colors.$lightGray;
+                        text-align: center;
+                        padding: 10px;
+
+                        img {
+                            width: 24px;
+                        }
+
+                        button {
+                            cursor: pointer;
+                            background-color: colors.$blueInfo;
+                            color: colors.$white;
+                            padding: 5px 10px;
+                            font-weight: bold;
+                            border-radius: 3px;
+                            transition: .4s;
+                        }
+
+                        button:hover {
+                            transition: .4s;
+                            background-color: colors.$blueNight;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .paymentNotFound {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 30px;
+
+        img {
+            width: 160px;
+        }
+    }
+}
+
+@media screen and (max-width: 940px) {
+    .plansContainer {
+        .currentPlanContainer {
+            width: 90%;
+        }
+
+        .paymentHistoryListContainer {
+            width: 90%;
+        }
+    }
+}
+
+@media screen and (max-width: 880px) {
+    .plansContainer {
+        .paymentHistoryListContainer {
+            table {
+                thead {
+                    display: none;
+                }
+
+                tbody {
+                    tr {
+                        border-bottom: solid 2px colors.$black;
+                        td:before {
+                            content: attr(data-cell);
+                            font-weight: bold;
+                            color: colors.$accentColor;
+                            margin-right: 10px;
+                        }
+
+                        td {
+                            display: flex;
+                            padding: 10px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 430px) {
+    .plansContainer {
+        .currentPlanContainer {
+            .btnContainers {
+                flex-direction: column;
+
+                button {
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
+}
