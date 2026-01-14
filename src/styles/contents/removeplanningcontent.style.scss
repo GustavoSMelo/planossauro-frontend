@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import '../colors.scss';
+@use '../colors.scss' as colors;
 
 .deletePlanningContainer {
     display: flex;
@@ -9,13 +9,13 @@
 
     h1 {
         font-size: 21pt;
-        color: $textColor;
+        color: colors.$textColor;
         margin-top: 30px;
         text-align: center;
     }
 
     p {
-        color: $textColor;
+        color: colors.$textColor;
         font-weight: 500;
         text-align: center;
     }
@@ -31,7 +31,7 @@
 
     span {
         display: flex;
-        border-top: solid 1px $lightGray;
+        border-top: solid 1px colors.$lightGray;
         width: 100%;
         margin-top: 20px;
         margin-bottom: 20px;
@@ -45,19 +45,19 @@
                 padding: 10px;
                 font-size: 16pt;
                 margin: 10px;
-                border: solid 2px $accentColor;
+                border: solid 2px colors.$accentColor;
                 border-radius: 5px;
-                background-color: $white;
-                color: $accentColor;
+                background-color: colors.$white;
+                color: colors.$accentColor;
                 font-weight: bold;
                 transition: .4s;
                 cursor: pointer;
             }
 
             button:nth-child(2) {
-                background-color: $darkerRed;
-                color: $white;
-                border: $darkGray;
+                background-color: colors.$darkerRed;
+                color: colors.$white;
+                border: colors.$darkGray;
             }
 
             button:hover {

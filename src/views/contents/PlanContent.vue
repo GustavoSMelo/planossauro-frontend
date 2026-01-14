@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 
-const hasPayments = ref(false);
+const hasPayments = ref(true);
 </script>
 <template>
     <div class="plansContainer">
@@ -38,6 +38,7 @@ const hasPayments = ref(false);
                     <tr>
                         <th>Data</th>
                         <th>Descricao</th>
+                        <th>Plano</th>
                         <th>Bandeira</th>
                         <th>Cartao</th>
                         <th>Valor</th>
@@ -49,6 +50,7 @@ const hasPayments = ref(false);
                     <tr>
                         <td data-cell="Data: ">10/10/2010</td>
                         <td data-cell="Descricao: ">Pagamento referente ao mes de janeiro</td>
+                        <td data-cell="Plano: ">Plano free</td>
                         <td data-cell="Bandeira: ">
                             <img src="../../assets/mastercard_logo.svg" alt="bandeira logo" />
                         </td>

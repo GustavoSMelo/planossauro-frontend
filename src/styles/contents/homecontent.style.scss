@@ -1,15 +1,15 @@
 @charset "UTF-8";
-@import "../colors.scss";
+@use "../colors.scss" as colors;
 
 .homeContentContainer {
     width: 100%;
     padding: 20px;
-    color: $textColor;
+    color: colors.$textColor;
 
     h1 {
         text-align: center;
         font-size: 18pt;
-        color: $textColor;
+        color: colors.$textColor;
         padding-bottom: 10px;
     }
 
@@ -21,8 +21,8 @@
     .planInfoContainer {
         display: flex;
         flex-direction: column;
-        box-shadow: 3px 3px 8px $lightGray;
-        border: solid 2px $lightGray;
+        box-shadow: 3px 3px 8px colors.$lightGray;
+        border: solid 2px colors.$lightGray;
         border-radius: 5px;
         padding: 10px;
         transition: .4s;
@@ -41,15 +41,15 @@
             margin-top: 10px;
             padding-top: 10px;
             padding-bottom: 5px;
-            border-top: solid 1px $lightGray;
+            border-top: solid 1px colors.$lightGray;
             font-size: 18pt;
             text-align: center;
             width: 100%;
         }
 
         button {
-            background-color: $accentColor;
-            color: $white;
+            background-color: colors.$accentColor;
+            color: colors.$white;
             font-weight: 500;
             padding: 7px;
             font-size: 18pt;
@@ -61,7 +61,7 @@
 
         button:hover {
             transition: .4s;
-            background-color: $accentColorDark;
+            background-color: colors.$accentColorDark;
         }
     }
 
@@ -87,8 +87,8 @@
     }
 
     .planningInfoContainer {
-        box-shadow: 3px 3px 8px $lightGray;
-        border: solid 2px $lightGray;
+        box-shadow: 3px 3px 8px colors.$lightGray;
+        border: solid 2px colors.$lightGray;
         margin: 0px 15px;
         height: fit-content;
         padding: 20px;
@@ -110,23 +110,23 @@
 
             progress {
                 width: 100%;
-                color: $accentColor;
-                border: solid 1px $accentColor;
+                color: colors.$accentColor;
+                border: solid 1px colors.$accentColor;
                 border-radius: 3px;
             }
 
             progress::-moz-progress-bar {
-                background: $accentColor;
+                background: colors.$accentColor;
             }
 
             progress::-webkit-progress-value {
-                background: $accentColor;
+                background: colors.$accentColor;
             }
         }
 
         button {
-            background-color: $accentColor;
-            color: $white;
+            background-color: colors.$accentColor;
+            color: colors.$white;
             font-weight: bold;
             padding: 20px;
             border-radius: 3px;
@@ -137,7 +137,7 @@
 
         button:hover {
             transition: .4s;
-            background-color: $accentColorDark;
+            background-color: colors.$accentColorDark;
         }
     }
 
@@ -154,8 +154,8 @@
     .aditionalInformationsContainer {
         display: flex;
         width: 100%;
-        border: solid 1px $lightGray;
-        box-shadow: 4px 4px 8px $lightGray;
+        border: solid 1px colors.$lightGray;
+        box-shadow: 4px 4px 8px colors.$lightGray;
         align-items: center;
         justify-content: space-around;
         margin-top: 20px;
@@ -164,10 +164,10 @@
         transition: .4s;
 
         button {
-            background-color: $accentColor;
+            background-color: colors.$accentColor;
             padding: 12px;
             font-weight: bold;
-            color: $white;
+            color: colors.$white;
             cursor: pointer;
             margin-top: 10px;
             border-radius: 3px;
@@ -184,7 +184,7 @@
         transition: .4s;
 
         button:hover {
-            background-color: $accentColorDark;
+            background-color: colors.$accentColorDark;
             transition: .4s;
         }
     }

@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import '../../styles/colors.scss';
+@use '../../styles/colors.scss' as colors;
 
 .editPlanningContainer {
     width: 100%;
@@ -16,8 +16,8 @@
         width: 100%;
 
         .titleForm {
-            color: $textColor;
-            border-bottom: solid 1px $lightGray;
+            color: colors.$textColor;
+            border-bottom: solid 1px colors.$lightGray;
             margin-bottom: 20px;
             padding-bottom: 20px;
             text-align: center;
@@ -25,7 +25,7 @@
             h1 {
                 padding: 10px;
                 text-align: center;
-                color: $textColor;
+                color: colors.$textColor;
             }
 
             p {
@@ -48,11 +48,11 @@
 
         input,
         select {
-            border: solid 2px $accentColor;
+            border: solid 2px colors.$accentColor;
             padding: 10px;
             font-size: 14pt;
             font-weight: 500;
-            color: $accentColor;
+            color: colors.$accentColor;
             border-radius: 5px;
             margin-bottom: 20px;
             background-color: #fff;
@@ -96,18 +96,18 @@
                 padding: 10px;
                 font-size: 16pt;
                 margin: 10px;
-                border: solid 2px $accentColor;
+                border: solid 2px colors.$accentColor;
                 border-radius: 5px;
-                background-color: $white;
-                color: $accentColor;
+                background-color: colors.$white;
+                color: colors.$accentColor;
                 font-weight: bold;
                 transition: .4s;
                 cursor: pointer;
             }
 
             button:nth-child(2) {
-                background-color: $accentColor;
-                color: $white;
+                background-color: colors.$accentColor;
+                color: colors.$white;
             }
 
             button:hover {

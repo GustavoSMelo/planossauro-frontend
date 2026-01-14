@@ -1,12 +1,12 @@
 @charset "UTF-8";
-@import "../../styles/colors.scss";
+@use "../../styles/colors.scss" as colors;
 
 .showPreviewContainer {
     position: fixed;
     width: 100vw;
     min-height: 100vh;
     z-index: 2;
-    background-color: $transparentGray;
+    background-color: colors.$transparentGray;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -30,16 +30,16 @@
             cursor: pointer;
             font-size: 16pt;
             border-radius: 10px;
-            box-shadow: 2px 2px 8px $darkGray;
+            box-shadow: 2px 2px 8px colors.$darkGray;
         }
     }
 
     .btnChooseTemplate {
         padding: 20px 60px;
-        background-color: $accentColor;
-        color: $white;
+        background-color: colors.$accentColor;
+        color: colors.$white;
         font-weight: bold;
-        border: solid 2px $white;
+        border: solid 2px colors.$white;
         border-radius: 5px;
         cursor: pointer;
         margin-top: 20px;

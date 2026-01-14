@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import '../../styles/colors.scss';
+@use '../../styles/colors.scss' as colors;
 
 @keyframes menuHamburgerSpawn {
     0% {
@@ -31,7 +31,7 @@
     width: 100%;
     height: 100%;
     justify-content: space-between;
-    background-color: $transparentGray;
+    background-color: colors.$transparentGray;
     overflow: hidden;
     border-radius: 5px;
 
@@ -40,32 +40,32 @@
     }
 
     .hamburgerMenu {
-        background-color: $white;
+        background-color: colors.$white;
         width: 70%;
         padding: 20px;
         list-style: none;
         animation: menuHamburgerSpawn 0.5s normal;
-        border-left: solid 3px $accentColor;
+        border-left: solid 3px colors.$accentColor;
 
         li:nth-child(1) {
             display: flex;
             align-items: center;
             flex-direction: column;
-            border-bottom: 2px solid $lowPinkBG;
+            border-bottom: 2px solid colors.$lowPinkBG;
             padding-bottom: 20px;
 
             h4 {
                 font-size: 20pt;
-                color: $accentColor;
+                color: colors.$accentColor;
             }
         }
 
         .planInfo {
-            background-color: $accentColor;
+            background-color: colors.$accentColor;
             padding: 15px 15px;
             font-size: 14pt;
             font-weight: 500;
-            color: $white;
+            color: colors.$white;
             border-radius: 5px;
             cursor: pointer;
             text-align: center;
@@ -74,7 +74,7 @@
 
         hr {
             margin-top: 10px;
-            border: solid 1px $lowPinkBG;
+            border: solid 1px colors.$lowPinkBG;
         }
 
         .btnNavbar {
@@ -83,7 +83,7 @@
             font-size: 18pt;
             display: flex;
             align-items: center;
-            color: $textColor;
+            color: colors.$textColor;
             font-weight: 500;
 
             .pi {
@@ -93,7 +93,7 @@
 
         .choosed {
             font-weight: bold;
-            color: $accentColor;
+            color: colors.$accentColor;
         }
     }
 

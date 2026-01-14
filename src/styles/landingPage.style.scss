@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import "./colors.scss";
+@use "./colors.scss" as colors;
 
 @keyframes bg-animation {
     0% {
@@ -156,7 +156,7 @@
 
                 button.btnLogin {
                     cursor: pointer;
-                    background-color: $accentColor;
+                    background-color: colors.$accentColor;
                     border-radius: 5px;
                     padding: 20px 0px;
                     cursor: pointer;
@@ -178,7 +178,7 @@
                     border: none;
                     font-size: 16pt;
                     background-color: transparent;
-                    color: $accentColor;
+                    color: colors.$accentColor;
                     font-weight: bold;
                     padding: 15px 0px;
                     cursor: pointer;
@@ -186,7 +186,7 @@
                 }
 
                 button.btnExamples:hover {
-                    color: $accentColorDark;
+                    color: colors.$accentColorDark;
                     transform: scale(1.1);
                 }
             }

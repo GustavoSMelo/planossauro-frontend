@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import '../colors.scss';
+@use '../colors.scss' as colors;
 
 .backendOfflineErrorContainer {
     background-image: url('../../assets/backgroundLightTheme.png');
@@ -12,14 +12,14 @@
     justify-content: center;
 
     .backendOfflineError {
-        background-color: $white;
+        background-color: colors.$white;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         padding: 30px;
         border-radius: 10px;
-        box-shadow: 4px 4px 10px $shadowLowPink;
+        box-shadow: 4px 4px 10px colors.$shadowLowPink;
 
         img {
             width: 200px;
@@ -29,14 +29,14 @@
             font-size: 20pt;
             margin-top: 40px;
             margin-bottom: 10px;
-            color: $accentColor;
+            color: colors.$accentColor;
         }
 
         button {
             margin-top: 20px;
             width: 100%;
-            background-color: $accentColor;
-            color: $white;
+            background-color: colors.$accentColor;
+            color: colors.$white;
             font-weight: bold;
             padding: 12px;
             border-radius: 5px;

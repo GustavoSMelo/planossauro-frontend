@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import './colors.scss';
+@use './colors.scss' as colors;
 
 @keyframes contentAnimationSpawn {
     0% {
@@ -26,11 +26,11 @@
     // overflow-x: hidden;
 
     .fullContentContainer {
-        background-color: $white;
+        background-color: colors.$white;
         width: 65%;
         display: flex;
         border-radius: 10px;
-        box-shadow: 1px 1px 8px $shadowLowPink;
+        box-shadow: 1px 1px 8px colors.$shadowLowPink;
         align-items: center;
         justify-content: center;
         flex-direction: column;

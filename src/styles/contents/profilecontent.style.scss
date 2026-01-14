@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import '../colors.scss';
+@use '../colors.scss' as colors;
 
 .profileContainer {
     display: flex;
@@ -10,9 +10,9 @@
     padding: 0 20px;
 
     .profileDetails {
-        border: solid 1px $lightGray;
+        border: solid 1px colors.$lightGray;
         padding: 20px;
-        box-shadow: 4px 4px 12px $lightGray;
+        box-shadow: 4px 4px 12px colors.$lightGray;
         border-radius: 5px;
         display: flex;
         flex-direction: column;
@@ -20,7 +20,7 @@
         width: 45%;
 
         img {
-            border: solid 1px $lightGray;
+            border: solid 1px colors.$lightGray;
             width: 200px;
         }
 
@@ -29,7 +29,7 @@
             margin-top: 25px;
             text-align: left;
             width: 100%;
-            border-bottom: 1px solid $lightGray;
+            border-bottom: 1px solid colors.$lightGray;
             padding-bottom: 5px;
             margin-bottom: 10px;
         }
@@ -37,11 +37,11 @@
         .fullNameInput {
             margin-top: 30px;
             margin-bottom: 10px;
-            border: 2px solid $accentColor;
+            border: 2px solid colors.$accentColor;
             width: 100%;
             padding: 8px 10px;
             border-radius: 5px;
-            color: $accentColor;
+            color: colors.$accentColor;
             font-weight: bold;
 
         }
@@ -58,7 +58,7 @@
             justify-content: space-between;
 
             input {
-                border: solid 2px $lightGray;
+                border: solid 2px colors.$lightGray;
                 border-radius: 4px;
                 padding: 5px 10px;
                 margin-left: 10px;
@@ -66,18 +66,18 @@
             }
 
             input.ableToEdit {
-                border: solid 2px $accentColor;
-                color: $accentColor;
+                border: solid 2px colors.$accentColor;
+                color: colors.$accentColor;
                 font-weight: bold;
             }
 
             button {
-                background-color: $accentColor;
+                background-color: colors.$accentColor;
                 // padding: 10px;
                 padding: 7px 20px;
                 margin-left: 10px;
                 font-weight: bold;
-                color: $white;
+                color: colors.$white;
                 border-radius: 5px;
                 cursor: pointer;
                 width: 70%;
@@ -85,27 +85,27 @@
             }
 
             button:hover {
-                background-color: $accentColorDarker;
+                background-color: colors.$accentColorDarker;
             }
 
             .btnChangeSocialMediaProfile {
-                background-color: $white;
-                color: $accentColor;
-                border: solid 2px $accentColor;
+                background-color: colors.$white;
+                color: colors.$accentColor;
+                border: solid 2px colors.$accentColor;
                 transition: .4s;
             }
 
             .btnChangeSocialMediaProfile:hover {
-                background-color: $accentColor;
-                color: $white;
+                background-color: colors.$accentColor;
+                color: colors.$white;
                 transition: .4s;
             }
         }
 
         .btnChangeProfile {
-            background-color: $white;
-            color: $accentColor;
-            border: solid 2px $accentColor;
+            background-color: colors.$white;
+            color: colors.$accentColor;
+            border: solid 2px colors.$accentColor;
             width: 100%;
             padding: 7px;
             font-weight: bold;
@@ -117,38 +117,38 @@
         }
 
         .btnChangeProfile:hover {
-            background-color: $accentColor;
-            color: $white;
+            background-color: colors.$accentColor;
+            color: colors.$white;
             transition: .4s;
         }
 
         .btnChangeProfileAction {
-            background-color: $accentColor;
-            color: $white;
+            background-color: colors.$accentColor;
+            color: colors.$white;
         }
         .btnChangeProfileAction:hover {
-            background-color: $accentColorDarker;
-            border: 2px solid $accentColorDarker;
+            background-color: colors.$accentColorDarker;
+            border: 2px solid colors.$accentColorDarker;
         }
 
         .btnCancel {
-            background-color: $lightGray;
-            color: $black;
+            background-color: colors.$lightGray;
+            color: colors.$black;
         }
 
         .btnCancel {
-            background-color: $gray;
-            color: $black;
+            background-color: colors.$gray;
+            color: colors.$black;
             border: none;
         }
 
         .btnCancel:hover {
-            background-color: $darkGray;
-            color: $white;
+            background-color: colors.$darkGray;
+            color: colors.$white;
         }
 
         .profileAdditionalDetails {
-            border-top: solid 1px $lightGray;
+            border-top: solid 1px colors.$lightGray;
             padding-top: 6px;
             margin-top: 10px;
             width: 100%;
@@ -158,9 +158,9 @@
             button {
                 cursor: pointer;
                 padding: 5px;
-                border: solid 1px $white;
-                background-color: $darkerRed;
-                color: $white;
+                border: solid 1px colors.$white;
+                background-color: colors.$darkerRed;
+                color: colors.$white;
                 margin-top: 4px;
                 border-radius: 5px;
             }
@@ -175,9 +175,9 @@
                     margin: 5px;
                     font-weight: bold;
                     border-radius: 2px;
-                    color: $black;
+                    color: colors.$black;
                     width: 130px;
-                    border: solid 1px $black;
+                    border: solid 1px colors.$black;
 
                     i {
                         margin-right: 10px;
@@ -185,17 +185,17 @@
                 }
 
                 button.checked {
-                    background-color: $green;
+                    background-color: colors.$green;
                 }
 
                 button.unchecked {
-                    background-color: $orangeAfternoon;
+                    background-color: colors.$orangeAfternoon;
                     cursor: pointer;
                 }
             }
 
             p.createdAtText {
-                border-top: solid 1px $lightGray;
+                border-top: solid 1px colors.$lightGray;
                 margin-top: 10px;
                 margin-bottom: 3px;
                 padding-top: 10px;
@@ -212,22 +212,22 @@
         width: 50%;
 
         summary {
-            border-bottom: solid 1px $black;
+            border-bottom: solid 1px colors.$black;
             font-size: 18pt;
             margin-bottom: 20px;
             cursor: pointer;
         }
 
         div {
-            border-bottom: solid 1px $lightGray;
+            border-bottom: solid 1px colors.$lightGray;
             padding: 10px 10px;
             display: flex;
             align-items: center;
             justify-content: space-between;
 
             select {
-                background-color: $white;
-                border: solid 2px $accentColor;
+                background-color: colors.$white;
+                border: solid 2px colors.$accentColor;
                 padding: 10px;
                 cursor: pointer;
                 border-radius: 3px;
@@ -238,8 +238,8 @@
             }
 
             button {
-                background-color: $accentColor;
-                color: $white;
+                background-color: colors.$accentColor;
+                color: colors.$white;
                 padding: 10px 20px;
                 cursor: pointer;
                 border-radius: 5px;
@@ -249,7 +249,7 @@
             }
 
             button:hover {
-                background-color: $accentColorDark;
+                background-color: colors.$accentColorDark;
                 transition: .4s;
             }
         }

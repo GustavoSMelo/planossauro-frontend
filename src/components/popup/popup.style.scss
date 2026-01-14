@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import '../../styles/colors.scss';
+@use '../../styles/colors.scss' as colors;
 
 @keyframes popupAppears {
     0% {
@@ -35,7 +35,7 @@
         position: fixed;
         bottom: 0;
         border-radius: 5px;
-        box-shadow: 1px 1px 4px $black;
+        box-shadow: 1px 1px 4px colors.$black;
         z-index: 15;
         animation: popupAppears 4s forwards;
 
@@ -57,22 +57,22 @@
     }
 
     .error {
-        background-color: $darkerRed;
-        color: $white;
+        background-color: colors.$darkerRed;
+        color: colors.$white;
     }
 
     .info {
-        background-color: $blueInfo;
-        $color: $white;
+        background-color: colors.$blueInfo;
+        color: colors.$white;
     }
 
     .warning {
-        background-color: $orangeAfternoon;
-        color: $black;
+        background-color: colors.$orangeAfternoon;
+        color: colors.$black;
     }
 
     .success {
-        background-color: $successGreen;
+        background-color: colors.$successGreen;
     }
 
 }

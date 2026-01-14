@@ -1,8 +1,8 @@
 @charset "UTF-8";
-@import '../../styles/colors.scss';
+@use '../../styles/colors.scss' as colors;
 
 .validationCodeContainer {
-    background-color: $white;
+    background-color: colors.$white;
     padding: 20px;
     border-radius: 5px;
     display: flex;
@@ -15,7 +15,7 @@
     }
 
     input {
-        border: solid $accentColor 2px;
+        border: solid colors.$accentColor 2px;
         border-radius: 5px;
         padding: 7px;
         font-size: 14pt;
@@ -29,7 +29,7 @@
         width: 100%;
         flex-direction: row;
         justify-content: space-between;
-        border-top: solid 1px $lightGray;
+        border-top: solid 1px colors.$lightGray;
 
         button {
             width: 48%;
@@ -48,13 +48,13 @@
 
         button:nth-child(1) {
             background-color: white;
-            color: $accentColor;
-            border: solid 2px $accentColor;
+            color: colors.$accentColor;
+            border: solid 2px colors.$accentColor;
         }
 
         button:nth-child(2) {
-            background-color: $accentColor;
-            color: $white;
+            background-color: colors.$accentColor;
+            color: colors.$white;
         }
     }
 }

@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import '../../styles/colors.scss';
+@use '../../styles/colors.scss' as colors;
 
 
 .navbarContainer {
@@ -7,11 +7,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: $white;
+    background-color: colors.$white;
     flex-direction: row;
     position: sticky;
     top: 0;
-    border-bottom: 1px solid $lightGray;
+    border-bottom: 1px solid colors.$lightGray;
     border-radius: 5px;
     padding: 15px 20px;
     z-index: 5;
@@ -29,7 +29,7 @@
         figcaption {
             font-size: 16pt;
             font-weight: bold;
-            color: $accentColor;
+            color: colors.$accentColor;
         }
     }
 
@@ -46,18 +46,18 @@
 
         .btnNavbar {
             font-weight: 500;
-            color: $textColor;
+            color: colors.$textColor;
             cursor: pointer;
             transition: .4s;
         }
 
         .btnNavbar:hover {
-            color: $accentColor;
+            color: colors.$accentColor;
             transition: .4s;
         }
 
         .choosed {
-            color: $accentColor;
+            color: colors.$accentColor;
             font-weight: bold;
         }
 
@@ -88,7 +88,7 @@
                 display: flex;
                 font-size: 24pt;
                 cursor: pointer;
-                color: $accentColor;
+                color: colors.$accentColor;
             }
         }
     }

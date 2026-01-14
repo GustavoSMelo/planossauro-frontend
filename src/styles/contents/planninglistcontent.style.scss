@@ -1,10 +1,10 @@
 @charset "UTF-8";
-@import '../colors.scss';
+@use '../colors.scss' as colors;
 
 .searchFormContainer {
     display: flex;
     width: 90%;
-    border-bottom: solid 1px $lightGray;
+    border-bottom: solid 1px colors.$lightGray;
     padding: 10px;
     align-items: end;
     justify-content: center;
@@ -20,7 +20,7 @@
     input,
     select,
     button {
-        border: solid 1px $accentColor;
+        border: solid 1px colors.$accentColor;
         width: 200px;
         padding: 10px;
         border-radius: 4px;
@@ -30,15 +30,15 @@
     }
 
     button {
-        background-color: $accentColor;
-        color: $white;
+        background-color: colors.$accentColor;
+        color: colors.$white;
         font-weight: bold;
         cursor: pointer;
         transition: .4s;
     }
 
     button:hover {
-        background-color: $accentColorDark;
+        background-color: colors.$accentColorDark;
         transition: .4s;
     }
 }
@@ -49,9 +49,9 @@
     margin-bottom: 20px;
 
     table {
-        border: solid 2px $lightGray;
+        border: solid 2px colors.$lightGray;
         border-radius: 5px;
-        box-shadow: 6px 6px 8px $lightGray;
+        box-shadow: 6px 6px 8px colors.$lightGray;
         width: 100%;
         overflow-x: scroll;
         max-width: 100%;
@@ -60,15 +60,15 @@
         border-collapse: collapse;
 
         thead>tr {
-            border: 1px solid $gray;
+            border: 1px solid colors.$gray;
 
             th {
                 padding-top: 10px;
                 padding-bottom: 10px;
-                color: $accentColor;
-                border-bottom: 2px solid $lightGray;
-                // border-right: 2px solid $lightGray;
-                border-left: 2px solid $lightGray;
+                color: colors.$accentColor;
+                border-bottom: 2px solid colors.$lightGray;
+                // border-right: 2px solid colors.$lightGray;
+                border-left: 2px solid colors.$lightGray;
                 padding: 10px;
             }
 
@@ -78,13 +78,13 @@
         }
 
         tbody>tr {
-            border-bottom: solid 2px $lightGray;
+            border-bottom: solid 2px colors.$lightGray;
 
             td {
                 padding-top: 10px;
                 padding-bottom: 10px;
-                border-bottom: 2px solid $lightGray;
-                border-left: 2px solid $lightGray;
+                border-bottom: 2px solid colors.$lightGray;
+                border-left: 2px solid colors.$lightGray;
                 text-align: center;
                 font-weight: 500;
             }
@@ -102,20 +102,20 @@
             }
 
             td.btnCellEdit {
-                color: $orangeAfternoon;
+                color: colors.$orangeAfternoon;
             }
 
             td.btnCellRemove {
-                color: $darkerRed;
+                color: colors.$darkerRed;
             }
 
             td.btnCellDownload {
-                color: $blueInfo;
+                color: colors.$blueInfo;
             }
         }
 
         tbody>tr:nth-of-type(2n) {
-            background-color: $lowPinkBG;
+            background-color: colors.$lowPinkBG;
         }
 
         tfoot {
@@ -125,14 +125,14 @@
                     text-align: center;
                     padding: 11px;
                     font-weight: bold;
-                    color: $accentColor;
+                    color: colors.$accentColor;
                     cursor: pointer;
                     transition: .4s;
                 }
 
                 td:hover {
                     transition: .4s;
-                    color: $accentColorDark;
+                    color: colors.$accentColorDark;
                 }
             }
         }
@@ -148,7 +148,7 @@
 
         h1 {
             font-size: 20pt;
-            color: $textColor;
+            color: colors.$textColor;
             text-align: center;
         }
 
@@ -160,8 +160,8 @@
             margin-top: 15px;
             border-radius: 5px;
             cursor: pointer;
-            border: solid 2px $accentColor;
-            color: $accentColor;
+            border: solid 2px colors.$accentColor;
+            color: colors.$accentColor;
             transition: .4s;
 
             i {
@@ -170,13 +170,13 @@
         }
 
         button.btnGotoPlan {
-            background-color: $accentColor;
-            color: $white;
+            background-color: colors.$accentColor;
+            color: colors.$white;
             transition: .4s;
         }
 
         button.btnGotoPlan:hover {
-            background-color: $accentColorDark;
+            background-color: colors.$accentColorDark;
             transition: .4s;
         }
     }
@@ -216,14 +216,14 @@
                         border-left: 0;
                         border-bottom: 0;
                         text-align: left;
-                        border-bottom: solid 1px $lightGray;
+                        border-bottom: solid 1px colors.$lightGray;
                         padding-left: 10px;
                     }
 
                     td::before {
                         content: attr(data-cell);
                         font-weight: bold;
-                        color: $accentColor;
+                        color: colors.$accentColor;
                         margin-right: 10px;
                     }
                 }
