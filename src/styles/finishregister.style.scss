@@ -180,10 +180,34 @@
     }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 620px) {
     .finishRegisterContainer {
-        .formContainer {
-            width: 80%;
+        .validationContainer {
+            width: 90%;
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .finishRegisterContainer {
+        .validationContainer {
+            .buttonsContainer {
+                display: flex;
+                flex-direction: column;
+
+                span {
+                    display: flex;
+                    flex-direction: column;
+
+                    button:nth-child(1) {
+                        margin-right: 0;
+                    }
+
+                    button {
+                        margin-top: 15px;
+                    }
+                }
+            }
         }
     }
 }

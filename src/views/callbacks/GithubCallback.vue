@@ -36,7 +36,7 @@ watchEffect(async () => {
         return;
     }
 
-    const { data }: { data: IGithubCallbackResponse } = await axios.get(`${import.meta.env.VITE_BACKEND_URI}/auth/github/${codeParam}`);
+    const { data }: { data: IGithubCallbackResponse } = await axios.get(`${import.meta.env.VITE_BACKEND_URI}/token/github/${codeParam}`);
     if (data.data.email === null) {
         popupContext.handleChangePopupInfo('Email do github nao esta publico, torne-o publico e tente novamente', 'info', true);
         router.push('/login');

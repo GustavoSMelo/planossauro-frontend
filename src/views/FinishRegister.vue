@@ -201,6 +201,8 @@ const resendEmail = async () => {
 
 const finishValidation = async () => {
     try {
+        if (!validationCodeInput.value.length) return;
+
         const loginType = sessionStorage.getItem('loginType') as ILoginType['types'];
         console.log(validationCodeInput.value);
 
