@@ -152,13 +152,17 @@ const handleSendValidationEmail = async (loginType: ILoginType['types']) => {
 
     const userResponse: IUser = (await backendApi.get(`/user/${user.value.uuid}`)).data;
 
-    if ((loginType === 'google' && userResponse.google_is_validated) || !userResponse.google_email?.length) {
+    console.log(userResponse);
+
+    if ((loginType === 'google' && userResponse.google_is_validated) || (loginType === 'google' && !userResponse.google_email?.length)) {
         handleChangeIsLoading(false);
+        handleChangePopupInfo('Conecte uma conta google', 'info', true);
         return;
     };
 
-    if ((loginType === 'github' && userResponse.github_is_validated) || !userResponse.github_email?.length) {
+    if ((loginType === 'github' && userResponse.github_is_validated) || (loginType === 'github' && !userResponse.github_email?.length)) {
         handleChangeIsLoading(false);
+        handleChangePopupInfo('Conecte uma conta github', 'info', true);
         return;
     };
 

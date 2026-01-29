@@ -2,13 +2,15 @@
 
 <script lang="ts" setup>
 import { inject, ref } from 'vue';
+import backendApi from '../api/api';
+import { useRouter } from 'vue-router';
 import type { IPopupContext } from '../interfaces/context/popup.interface';
 import type { ILoadingContext } from '../interfaces/context/loading.interface';
 import type { ICreateUser, ICreateUserResponse, IUser } from '../interfaces/api/user.interface';
-import backendApi from '../api/api';
-import { useRouter } from 'vue-router';
 import type { AxiosResponse } from 'axios';
 import type { ILoginType } from '../interfaces/loginType.interface';
+import type { IAccessSanctumToken } from '../interfaces/auth.interface';
+import { setToken } from '../helpers/token';
 
 const urlParams = new URLSearchParams(window.location.search);
 const fullName = ref(window.sessionStorage.getItem('fullName') || '');
@@ -103,6 +105,11 @@ const handleGithubSave = async () => {
         const responseData: ICreateUserResponse['data'] = userFromSession?.uuid ? responseUserCreated.data.user : responseUserCreated.data.data;
 
         if (responseData.uuid) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const at = urlParams.get('at');
+            const sanctumResponse = (await backendApi.get(`/auth/github/${at}`)).data as IAccessSanctumToken;
+
+            setToken(sanctumResponse.token.plainTextToken);
             user.value = { ...responseData };
             user.value.github_is_validated = false;
             showCodeConfirmationScreen.value = true;

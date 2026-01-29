@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { inject, watchEffect } from 'vue';
-import axios from 'axios';
-import type { IGithubCallbackResponse } from '../../interfaces/githubCallback.interface';
 import { useRouter } from 'vue-router';
-import type { IUser } from '../../interfaces/api/user.interface';
-import type { IPopupContext } from '../../interfaces/context/popup.interface';
+import { setToken } from '../../helpers/token';
 import backendApi from '../../api/api';
 import isApiHealth from '../../api/healthCheck';
+import type { IGithubCallbackResponse } from '../../interfaces/githubCallback.interface';
+import type { IUser } from '../../interfaces/api/user.interface';
+import type { IPopupContext } from '../../interfaces/context/popup.interface';
+import type { IAccessSanctumToken } from '../../interfaces/auth.interface';
 
 watchEffect(async () => {
     const popupContext: IPopupContext = inject('popup') as IPopupContext;
@@ -36,7 +37,7 @@ watchEffect(async () => {
         return;
     }
 
-    const { data }: { data: IGithubCallbackResponse } = await axios.get(`${import.meta.env.VITE_BACKEND_URI}/token/github/${codeParam}`);
+    const { data }: { data: IGithubCallbackResponse } = await backendApi.get(`/token/github/${codeParam}`);
     if (data.data.email === null) {
         popupContext.handleChangePopupInfo('Email do github nao esta publico, torne-o publico e tente novamente', 'info', true);
         router.push('/login');
@@ -67,7 +68,9 @@ watchEffect(async () => {
                 userData.sms_validation_code = null;
 
                 console.log(userData);
+                const response = (await backendApi.get(`/auth/github/${data.accessToken}`)).data as IAccessSanctumToken;
 
+                setToken(response.token.plainTextToken);
                 sessionStorage.setItem('user', JSON.stringify(userData));
                 sessionStorage.setItem('loginType', 'github');
                 sessionStorage.setItem('accessToken', data.accessToken);
@@ -90,7 +93,7 @@ watchEffect(async () => {
             sessionStorage.setItem('accessToken', data.accessToken);
             sessionStorage.setItem('fullName', data.data.name ? data.data.name : data.data.login);
 
-            router.push('/finish/login');
+            router.push(`/finish/login?at=${data.accessToken}`);
         }
     } catch (err) {
         sessionStorage.setItem('loginType', 'github');
@@ -99,7 +102,7 @@ watchEffect(async () => {
         sessionStorage.setItem('accessToken', data.accessToken);
         sessionStorage.setItem('fullName', data.data.name ? data.data.name : data.data.login);
 
-        router.push('/finish/login');
+        router.push(`/finish/login?githubCode=${codeParam}`);
     }
 
 });

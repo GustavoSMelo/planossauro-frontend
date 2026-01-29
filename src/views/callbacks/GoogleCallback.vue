@@ -3,10 +3,12 @@ import { inject, onMounted } from 'vue';
 import isApiHealth from '../../api/healthCheck';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import type { IGoogleResponse } from '../../interfaces/api/googleResponse.interface';
 import backendApi from '../../api/api';
+import { setToken } from '../../helpers/token';
+import type { IGoogleResponse } from '../../interfaces/api/googleResponse.interface';
 import type { IUser } from '../../interfaces/api/user.interface';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
+import type { IAccessSanctumToken } from '../../interfaces/auth.interface';
 
 onMounted(async () => {
     const popupContext = inject('popup') as IPopupContext;
@@ -61,6 +63,9 @@ onMounted(async () => {
             userData.google_validation_code = null;
             userData.sms_validation_code = null;
 
+            const response = (await backendApi.get(`/auth/google/${accessToken}`)).data as IAccessSanctumToken;
+
+            setToken(response.token.plainTextToken);
             sessionStorage.setItem('user', JSON.stringify(userData));
             sessionStorage.setItem('loginType', 'github');
             sessionStorage.setItem('accessToken', accessToken);

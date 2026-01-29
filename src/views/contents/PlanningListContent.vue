@@ -79,7 +79,7 @@ const handleChangeSchoolName = (event: Event) => {
 
 const handleChangeArchivedFile = (event: Event) => {
     const target = event.target as HTMLInputElement;
-    archived.value = Boolean(target.value);
+    archived.value = target.value === 'true' ? true : false;
 }
 
 const searchByFilterParameters = async () => {
@@ -137,8 +137,8 @@ onMounted(() => {
         <span>
             <label>Arquivado: </label>
             <select @change="handleChangeArchivedFile" :value="archived">
-                <option :value="false">Nao</option>
-                <option :value="true">Sim</option>
+                <option value="false">Nao</option>
+                <option value="true">Sim</option>
             </select>
         </span>
         <span>

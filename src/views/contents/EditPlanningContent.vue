@@ -32,7 +32,7 @@ const handleChangeClassName = (event: Event) => {
 
 const handleChangeArchived = (event: Event) => {
     const target = event.target as HTMLInputElement;
-    archived.value = Boolean(target.value);
+    archived.value = target.value === 'true' ? true : false;
 };
 
 const handleChangeStartPlan = (event: Event) => {
@@ -47,13 +47,6 @@ const handleChangeEndPlan = (event: Event) => {
 
 const handleUpdatePlanning = async () => {
     try {
-        const dateDiffInMilliseconds = new Date(Number(new Date(end_date.value)) - Number(new Date(start_date.value)));
-        const dateDiffInDays = (Number(dateDiffInMilliseconds) / (1000 * 60 * 60 * 24)) + 1;
-        console.log(dateDiffInDays);
-        if (start_date.value !== end_date.value && dateDiffInDays !== 5) {
-            return handleChangePopupInfo('Periodo de planejamento nao permitido', 'warning', true);
-        }
-
         handleChangeIsLoading(true);
         await backendApi.put(`/planning/${uuid}`, {
             ...planning.value,
