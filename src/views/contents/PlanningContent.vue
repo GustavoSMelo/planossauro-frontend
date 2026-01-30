@@ -17,6 +17,7 @@ import { isWeekend } from '../../helpers/isWeekend';
 import getPrompt from '../../helpers/prompt';
 import backendApi from '../../api/api';
 import monthConverter from '../../helpers/monthConverter';
+import type { IDashboard } from '../../interfaces/dashboard.interface';
 
 const plans = ref<IPlanningDay>({ day1: [''], day2: [''], day3: [''], day4: [''], day5: [''] });
 const selectedDay = ref<IDays['days']>('day1');
@@ -174,6 +175,21 @@ const showTemplatePreviewChoose = () => {
 
 const generatePlan = async () => {
     try {
+        const uuid = sessionStorage.getItem('uuid');
+        const dashboardResponse = (await backendApi.get(`/subscription/dashboard/${uuid}`)).data as IDashboard;
+
+        if (planType.value === 'Semanal') {
+            if (dashboardResponse.used_weekly_planning >= dashboardResponse.max_amount_planning_week) {
+                popupContext.handleChangePopupInfo('Todos os tokens semanais foram utilizados', 'error', true);
+                return;
+            }
+        } else {
+            if (dashboardResponse.used_daily_planning >= dashboardResponse.max_amount_planning_daily) {
+                popupContext.handleChangePopupInfo('Todas os tokens diarios foram utilizados', 'error', true);
+                return;
+            }
+        }
+
         const hasEmptyStrings = hasEmptyStringsInClasses().find(element => element === true);
         if (planType.value === 'Semanal' && hasEmptyStrings) {
             popupContext.handleChangePopupInfo('Preencha os campos para escolher o template', 'error', true);
@@ -387,6 +403,8 @@ const generatePlan = async () => {
                 'class_name': className.value,
                 'user_id': uuid
             });
+
+            await backendApi.patch(`/subscription/${planType.value === 'Semanal' ? 'week' : 'daily'}/${dashboardResponse.subscription_id}`);
         }
 
         isLoadingContext.handleChangeIsLoading(false);

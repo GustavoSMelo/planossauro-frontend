@@ -1,3 +1,31 @@
+<script lang="ts" setup>
+import { inject, onMounted, ref } from 'vue';
+import type { ILoadingContext } from '../../interfaces/context/loading.interface';
+import type { IDashboard } from '../../interfaces/dashboard.interface';
+import backendApi from '../../api/api';
+
+const dashboard = ref<IDashboard>({} as IDashboard);
+const { handleChangeIsLoading } = inject('isLoading') as ILoadingContext;
+
+const handleGetDashboardInformation = async () => {
+    try {
+        handleChangeIsLoading(true);
+        const uuid = sessionStorage.getItem('uuid');
+        const response = (await backendApi.get(`/subscription/dashboard/${uuid}`)).data as IDashboard;
+
+        dashboard.value = { ...response }
+        sessionStorage.setItem('subscriptionId', response.subscription_id);
+        handleChangeIsLoading(false);
+    } catch {
+        handleChangeIsLoading(false);
+    }
+};
+
+onMounted(() => {
+    handleGetDashboardInformation();
+});
+</script>
+
 <template>
     <div class="homeContentContainer">
         <h1>Home Page</h1>
@@ -6,7 +34,7 @@
                 <h1>Seu plano atual </h1>
 
                 <img src="../../assets/cellphone_pink.png" alt="dino from plan" />
-                <h2>Premium</h2>
+                <h2>{{ dashboard.current_plan }}</h2>
                 <button type="button">Gerenciar plano</button>
             </div>
 
@@ -19,8 +47,9 @@
                     <div class="planningDetailsContainer">
                         <h2>Planejamento semanal</h2>
                         <span>
-                            <h4>0/ 10</h4>
-                            <progress value="10" max="10"></progress>
+                            <h4>{{ dashboard.used_weekly_planning }} / {{ dashboard.max_amount_planning_week }}</h4>
+                            <progress :value="dashboard.used_weekly_planning"
+                                :max="dashboard.max_amount_planning_week"></progress>
                         </span>
                     </div>
                     <button type="button">Planejar</button>
@@ -33,8 +62,9 @@
                     <div class="planningDetailsContainer">
                         <h2>Planejamento diario</h2>
                         <span>
-                            <h4>0/ 10</h4>
-                            <progress value="0" max="10"></progress>
+                            <h4>{{ dashboard.used_daily_planning }} / {{ dashboard.max_amount_planning_daily }}</h4>
+                            <progress :value="dashboard.used_daily_planning"
+                                :max="dashboard.max_amount_planning_daily"></progress>
                         </span>
                     </div>
                     <button type="button">Planejar</button>

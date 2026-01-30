@@ -110,6 +110,8 @@ const handleGithubSave = async () => {
             const sanctumResponse = (await backendApi.get(`/auth/github/${at}`)).data as IAccessSanctumToken;
 
             setToken(sanctumResponse.token.plainTextToken);
+            await backendApi.post(`/subscription/assign/free/${responseData.uuid}`);
+
             user.value = { ...responseData };
             user.value.github_is_validated = false;
             showCodeConfirmationScreen.value = true;
@@ -153,6 +155,13 @@ const handleGoogleSave = async () => {
             user.value.google_is_validated = false;
             showCodeConfirmationScreen.value = true;
             console.log(showCodeConfirmationScreen.value);
+            const urlParams = new URLSearchParams(window.location.search);
+            const at = urlParams.get('at');
+
+            const sanctumResponse = (await backendApi.get(`/auth/google/${at}`)).data as IAccessSanctumToken;
+            setToken(sanctumResponse.token.plainTextToken);
+            await backendApi.post(`/subscription/assign/free/${responseData.uuid}`);
+
             sessionStorage.setItem('uuid', responseData.uuid);
             sessionStorage.setItem('user', JSON.stringify(user.value));
             popupContext.handleChangePopupInfo('Cadastro realizado com sucesso', 'success', true);

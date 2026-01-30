@@ -88,10 +88,8 @@ onMounted(async () => {
         sessionStorage.setItem('accessToken', accessToken);
         sessionStorage.setItem('fullName', googleResponse.name);
 
-
-        router.push('/finish/login');
+        router.push(`/finish/login?at=${accessToken}`);
     }
-
 
     sessionStorage.setItem('loginType', 'google');
     sessionStorage.setItem('googleEmail', googleResponse.email);
@@ -99,7 +97,7 @@ onMounted(async () => {
     sessionStorage.setItem('accessToken', accessToken);
     sessionStorage.setItem('fullName', googleResponse.name);
 
-    router.push('/finish/login');
+    router.push(`/finish/login?at=${accessToken}`);
 });
 </script>
 
