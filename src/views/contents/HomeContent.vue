@@ -3,9 +3,17 @@ import { inject, onMounted, ref } from 'vue';
 import type { ILoadingContext } from '../../interfaces/context/loading.interface';
 import type { IDashboard } from '../../interfaces/dashboard.interface';
 import backendApi from '../../api/api';
+import type { IPageContent } from '../../interfaces/pageContents.interface';
 
+const { handleChangeCurrentContent } = defineProps<{
+    handleChangeCurrentContent: (newValue: IPageContent['contents']) => void;
+}>();
 const dashboard = ref<IDashboard>({} as IDashboard);
 const { handleChangeIsLoading } = inject('isLoading') as ILoadingContext;
+
+const handleGetPercentual = (usedTokens: number, maxTokens: number): number => {
+    return Math.round((usedTokens / maxTokens) * 100);
+};
 
 const handleGetDashboardInformation = async () => {
     try {
@@ -33,16 +41,28 @@ onMounted(() => {
             <div class="planInfoContainer">
                 <h1>Seu plano atual </h1>
 
-                <img src="../../assets/cellphone_pink.png" alt="dino from plan" />
+                <img v-if="dashboard.current_plan === 'free'" src="../../assets/profileDino.png" alt="dino from plan" />
+                <img v-else-if="dashboard.current_plan === 'essential'" src="../../assets/dino_party.png"
+                    alt="dino from plan" />
+                <img v-else="dashboard.current_plan === 'essential'" src="../../assets/dino_premium.png"
+                    alt="dino from plan" />
                 <h2>{{ dashboard.current_plan }}</h2>
-                <button type="button">Gerenciar plano</button>
+                <button type="button" @click="handleChangeCurrentContent('plan')">Gerenciar plano</button>
             </div>
 
             <aside class="fullColumnContentContainer">
                 <h2 class="planningInfoTitle">Informacoes do planejamento</h2>
                 <div class="planningInfoContainer firstPlanningInfoContainer">
-                    <div>
+                    <div
+                        v-if="handleGetPercentual(dashboard.used_weekly_planning, dashboard.max_amount_planning_week) < 50">
+                        <img src="../../assets/tablet_green.png" />
+                    </div>
+                    <div
+                        v-else-if="handleGetPercentual(dashboard.used_weekly_planning, dashboard.max_amount_planning_week) >= 50 && handleGetPercentual(dashboard.used_weekly_planning, dashboard.max_amount_planning_week) < 90">
                         <img src="../../assets/cracha_yellow.png" />
+                    </div>
+                    <div v-else>
+                        <img src="../../assets/sad_sleep_blue.png" />
                     </div>
                     <div class="planningDetailsContainer">
                         <h2>Planejamento semanal</h2>
@@ -52,12 +72,20 @@ onMounted(() => {
                                 :max="dashboard.max_amount_planning_week"></progress>
                         </span>
                     </div>
-                    <button type="button">Planejar</button>
+                    <button type="button" @click="handleChangeCurrentContent('planning')">Planejar</button>
                 </div>
 
                 <div class="planningInfoContainer">
-                    <div>
+                    <div
+                        v-if="handleGetPercentual(dashboard.used_daily_planning, dashboard.max_amount_planning_daily) < 50">
+                        <img src="../../assets/tablet_green.png" />
+                    </div>
+                    <div
+                        v-else-if="handleGetPercentual(dashboard.used_daily_planning, dashboard.max_amount_planning_daily) >= 50 && handleGetPercentual(dashboard.used_weekly_planning, dashboard.max_amount_planning_week) < 90">
                         <img src="../../assets/cracha_yellow.png" />
+                    </div>
+                    <div v-else>
+                        <img src="../../assets/sad_sleep_blue.png" />
                     </div>
                     <div class="planningDetailsContainer">
                         <h2>Planejamento diario</h2>
@@ -67,7 +95,7 @@ onMounted(() => {
                                 :max="dashboard.max_amount_planning_daily"></progress>
                         </span>
                     </div>
-                    <button type="button">Planejar</button>
+                    <button type="button" @click="handleChangeCurrentContent('planning')">Planejar</button>
                 </div>
             </aside>
         </section>

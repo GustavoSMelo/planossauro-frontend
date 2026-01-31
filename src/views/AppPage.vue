@@ -63,7 +63,7 @@ onMounted(() => {
         <div class="fullContentContainer">
             <Navbar :handle-change-current-content="handleChangeCurrentContent" :current-content="currentContent" />
 
-            <HomeContent v-if="currentContent === 'home'" />
+            <HomeContent v-if="currentContent === 'home'" :handle-change-current-content="handleChangeCurrentContent" />
             <PlanningContent v-else-if="currentContent === 'planning'" />
             <PlanningListContent v-else-if="currentContent === 'planning_list'"
                 :handle-change-current-content="handleChangeCurrentContent" />

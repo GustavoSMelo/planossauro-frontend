@@ -1,7 +1,21 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import backendApi from '../../api/api';
+import { type IPlan, type ISubscription } from '../../interfaces/subscription.interface';
 
-const hasPayments = ref(true);
+const hasPayments = ref(false);
+const subscriptionInfo = ref<ISubscription>();
+const planInfo = ref<IPlan>();
+
+const handleGetPlanContent = async () => {
+    const uuid = sessionStorage.getItem('uuid');
+    const response = (await backendApi.get(`/subscription/${uuid}`)).data as { subscription: ISubscription, plan: IPlan };
+
+    subscriptionInfo.value = { ...response.subscription };
+    planInfo.value = { ...response.plan };
+};
+
+onMounted(() => { handleGetPlanContent(); });
 </script>
 <template>
     <div class="plansContainer">
@@ -11,15 +25,16 @@ const hasPayments = ref(true);
             <h2>Informacoes do plano</h2>
 
             <ul>
-                <li><b>Plano:</b> Free</li>
-                <li><b>Proximo faturamento:</b> 15 de fevereiro de 2026</li>
-                <li><b>Valor:</b> Gratis</li>
+                <li><b>Plano:</b> {{ planInfo?.plan_name }}</li>
+                <li><b>Proximo faturamento:</b> {{ subscriptionInfo?.next_billing ? subscriptionInfo?.next_billing : 'Proximo faturamento em processamento' }}</li>
+                <li><b>Valor:</b> {{ planInfo?.price === 0 ? 'Gratis' : `R$ ${planInfo?.price}` }}</li>
                 <li><b>Status do plano: </b>
-                    <p class="statusActive"><i class="pi pi-verified"></i> Ativo </p>
+                    <p class="statusActive"><i class="pi pi-verified"></i> {{ subscriptionInfo?.status }} </p>
                 </li>
                 <li>
-                    <b>Cartao: </b> <img src="../../assets/mastercard_logo.svg" alt="bandeira cartao" /> **** **** ****
-                    1020
+                    <b>Cartao: </b>
+                    <span v-if="subscriptionInfo?.last_four_digits">**** **** ****</span>
+                    <span v-else>Nenhum cartao cadastrado</span>
                 </li>
             </ul>
 
@@ -65,7 +80,7 @@ const hasPayments = ref(true);
             </table>
             <section class="paymentNotFound" v-else>
                 <img src="../../assets/DinoConsultaPlanejamentos.png" alt="imagem Dino" />
-                <h3>Nao foi encontrado nenhum pagamento </h3>
+                <h3>Nenhum pagamento foi encontrado </h3>
             </section>
         </div>
     </div>

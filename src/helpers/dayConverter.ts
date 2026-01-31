@@ -1,4 +1,4 @@
-import type { IDays } from "../interfaces/plans.interface";
+import type { IDays } from "../interfaces/planning.interface";
 
 const dayConverter = (day: IDays['days']) => {
     switch (day) {

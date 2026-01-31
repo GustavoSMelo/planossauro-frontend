@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, inject, nextTick, watchEffect } from 'vue';
-import type { IPlanningDay, IDays } from '../../interfaces/plans.interface';
+import type { IPlanningDay, IDays } from '../../interfaces/planning.interface';
 import type { ILoadingContext } from '../../interfaces/context/loading.interface';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
 import type { IClassPlanResponse, IOllamaGemmaResponse } from '../../interfaces/ollama.res';
