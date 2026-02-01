@@ -6,7 +6,8 @@ interface IPageContent {
     'remove_planning' |
     'plan' |
     'profile' |
-    'validation_code';
+    'validation_code' |
+    'edit_plan';
 }
 
 export type { IPageContent };

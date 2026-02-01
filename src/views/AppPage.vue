@@ -18,8 +18,9 @@ import type { IPageContent } from '../interfaces/pageContents.interface';
 import type { IHamburgueMenuToggleContext } from '../interfaces/context/hamburgueMenuToggle.interface';
 import type { ILoginType } from '../interfaces/loginType.interface';
 import type { ILoadingContext } from '../interfaces/context/loading.interface';
+import EditPlanContent from './contents/EditPlanContent.vue';
 
-const currentContent = ref<IPageContent['contents']>('home');
+const currentContent = ref<IPageContent['contents']>('edit_plan');
 const validationLoginType = ref<ILoginType['types']>('github');
 const { hamburgueMenuToggle } = inject('hamburgueMenuToggle') as IHamburgueMenuToggleContext;
 const { handleChangeIsLoading } = inject('isLoading') as ILoadingContext;
@@ -78,6 +79,7 @@ onMounted(() => {
             <ValidationCodeInputBox v-else-if="currentContent === 'validation_code'"
                 :validation-login-type="validationLoginType"
                 :handle-change-current-content="handleChangeCurrentContent" />
+            <EditPlanContent v-else-if="currentContent === 'edit_plan'" />
         </div>
     </main>
 </template>
