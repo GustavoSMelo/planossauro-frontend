@@ -1,0 +1,67 @@
+@charset "UTF-8";
+@use '../colors.scss' as colors;
+
+.paymentContainer {
+    background-image: url('../../assets/backgroundLightTheme.png');
+    width: 100vw;
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .paymentContent {
+        background-color: colors.$white;
+        padding: 30px;
+        box-shadow: 2px 2px 8px colors.$shadowLowPink;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+
+        img {
+            width: 400px;
+        }
+
+        h1 {
+            font-size: 18pt;
+            margin-top: 40px;
+            color: colors.$accentColor;
+            text-align: center;
+        }
+
+        p {
+            margin: 30px;
+            text-align: center;
+        }
+
+        button {
+            background-color: colors.$accentColor;
+            padding: 20px;
+            color: colors.$white;
+            font-weight: bold;
+            font-size: 14pt;
+            border-radius: 5px;
+            width: 300px;
+            cursor: pointer;
+            transition: .5s;
+        }
+
+        button:hover {
+            transition: .5s;
+            transform: scale(1.05);
+        }
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .paymentContainer {
+        .paymentContent {
+            img {
+                width: 300px;
+            }
+        }
+    }
+}

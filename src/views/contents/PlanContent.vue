@@ -2,9 +2,25 @@
 import { onMounted, ref } from 'vue';
 import backendApi from '../../api/api';
 import { type IPlan, type ISubscription } from '../../interfaces/subscription.interface';
+import convertIsoDateToBR from '../../helpers/dateIsoConvertToBR';
+import type { IPageContent } from '../../interfaces/pageContents.interface';
+
+const { handleChangeCurrentContent } = defineProps<{
+    handleChangeCurrentContent: (newValue: IPageContent['contents']) => void
+}>();
 
 const hasPayments = ref(false);
-const subscriptionInfo = ref<ISubscription>();
+const subscriptionInfo = ref<ISubscription>({
+    daily_plans_used: 0,
+    date_verified: '',
+    last_four_digits: 0,
+    next_billing: '',
+    plans_id: '',
+    status: 'Ativo',
+    user_id: '',
+    uuid: '',
+    weekly_plans_used: 0
+});
 const planInfo = ref<IPlan>();
 
 const handleGetPlanContent = async () => {
@@ -12,6 +28,9 @@ const handleGetPlanContent = async () => {
     const response = (await backendApi.get(`/subscription/${uuid}`)).data as { subscription: ISubscription, plan: IPlan };
 
     subscriptionInfo.value = { ...response.subscription };
+
+    console.log(response.subscription);
+
     planInfo.value = { ...response.plan };
 };
 
@@ -26,22 +45,33 @@ onMounted(() => { handleGetPlanContent(); });
 
             <ul>
                 <li><b>Plano:</b> {{ planInfo?.plan_name }}</li>
-                <li><b>Proximo faturamento:</b> {{ subscriptionInfo?.next_billing ? subscriptionInfo?.next_billing : 'Proximo faturamento em processamento' }}</li>
+                <li><b>Proximo faturamento:</b> {{ subscriptionInfo?.next_billing ?
+                    convertIsoDateToBR(subscriptionInfo?.next_billing.toString()) :
+                    'Proximo faturamento em processamento' }}</li>
                 <li><b>Valor:</b> {{ planInfo?.price === 0 ? 'Gratis' : `R$ ${planInfo?.price}` }}</li>
                 <li><b>Status do plano: </b>
                     <p class="statusActive"><i class="pi pi-verified"></i> {{ subscriptionInfo?.status }} </p>
                 </li>
                 <li>
                     <b>Cartao: </b>
-                    <span v-if="subscriptionInfo?.last_four_digits">**** **** ****</span>
+                    <span v-if="subscriptionInfo?.last_four_digits">**** **** **** {{ subscriptionInfo.last_four_digits
+                    }}</span>
                     <span v-else>Nenhum cartao cadastrado</span>
                 </li>
             </ul>
 
             <span class="btnContainers">
-                <button type="button">Alterar cartao</button>
-                <button type="button">Alterar plano</button>
-                <button type="button">Cancelar plano</button>
+                <button type="button" :class="subscriptionInfo
+                    && subscriptionInfo?.last_four_digits === 0 ||
+                    subscriptionInfo?.last_four_digits === null ?
+                    'btnDisable' : 'buttonPressable'">
+                    Alterar cartao
+                </button>
+                <button type="button" @click="handleChangeCurrentContent('edit_plan')">Alterar plano</button>
+                <button type="button" :class="subscriptionInfo
+                    && subscriptionInfo?.last_four_digits === 0 ||
+                    subscriptionInfo?.last_four_digits === null ?
+                    'btnDisable' : 'buttonPressable'">Cancelar plano</button>
             </span>
         </div>
 

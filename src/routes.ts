@@ -9,6 +9,7 @@ import BackendOffline from './views/errors/BackendOffline.vue';
 import NotFound from './views/errors/NotFound.vue';
 import GoogleCallback from './views/callbacks/GoogleCallback.vue';
 import Unauthorized from './views/errors/Unauthorized.vue';
+import PaymentCallback from './views/callbacks/PaymentCallback.vue';
 
 const routes: Array<IRoutes> = [
     { path: '/:catchAll(.*)', component: NotFound },
@@ -18,6 +19,7 @@ const routes: Array<IRoutes> = [
     { path: '/finish/login', component: FinishRegister },
     { path: '/callback/github', component: GithubCallback },
     { path: '/callback/google', component: GoogleCallback },
+    { path: '/callback/payment', component: PaymentCallback },
     { path: '/offline', component: BackendOffline },
     { path: '/unauthorizated', component: Unauthorized }
 ];

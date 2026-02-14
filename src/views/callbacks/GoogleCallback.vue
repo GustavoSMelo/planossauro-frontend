@@ -67,7 +67,7 @@ onMounted(async () => {
 
             setToken(response.token.plainTextToken);
             sessionStorage.setItem('user', JSON.stringify(userData));
-            sessionStorage.setItem('loginType', 'github');
+            sessionStorage.setItem('loginType', 'google');
             sessionStorage.setItem('accessToken', accessToken);
             sessionStorage.setItem('uuid', userData.uuid);
             popupContext.handleChangePopupInfo('Login realizado com sucesso', 'success', true);

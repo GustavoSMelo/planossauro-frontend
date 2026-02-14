@@ -1,6 +1,67 @@
 @charset "UTF-8";
 @use "../colors.scss" as colors;
 
+.popupCancelContainer {
+    background-color: #303030af;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .popupCancelContent {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        width: 70%;
+
+        h2 {
+            margin-bottom: 30px;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        span {
+            margin-top: 30px;
+            display: flex;
+            width: 100%;
+            justify-content: center;
+
+            button {
+                padding: 20px;
+                font-size: 14pt;
+                margin: 5px;
+                width: 50%;
+                border-radius: 5px;
+                font-weight: bold;
+                background-color: colors.$accentColor;
+                color: colors.$white;
+                cursor: pointer;
+                transition: .5s;
+            }
+
+            button:nth-child(2) {
+                background-color: colors.$white;
+                color: colors.$accentColor;
+                border: 2px solid colors.$accentColor;
+            }
+
+            button:hover {
+                transform: scale(1.05);
+                transition: .5s;
+            }
+        }
+    }
+}
+
 .selectEditPlanContainer {
     width: 100%;
     display: flex;
@@ -8,7 +69,7 @@
     align-items: center;
 
     .choosePlanTitle {
-        margin: 30px;
+        margin: 30px 0;
     }
 
     .planInformationPayment {
@@ -62,6 +123,7 @@
             .planContainer,
             .selectedPlanContainer {
                 width: 30%;
+                height: 800px;
                 border: 2px solid colors.$accentColor;
                 border-radius: 5px;
                 margin: 10px;
@@ -219,6 +281,32 @@
     }
 }
 
+@media screen and (max-width: 820px) {
+    .popupCancelContainer {
+        .popupCancelContent {
+            width: 90%;
+        }
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .popupCancelContainer {
+        .popupCancelContent {
+            h2 {
+                text-align: center;
+            }
+
+            span {
+                flex-direction: column;
+
+                button {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
 @media screen and (max-width: 520px) {
     .selectEditPlanContainer {
         .planScrollContainer {
@@ -229,6 +317,7 @@
                 .planContainer,
                 .selectedPlanContainer {
                     width: 260px;
+                    height: 900px;
 
                     small {
                         ul {

@@ -84,6 +84,11 @@
                 transition: .4s;
                 transform: scale(1.05);
             }
+
+            .btnDisable {
+                background-color: colors.$gray;
+                cursor: not-allowed;
+            }
         }
     }
 
