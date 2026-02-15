@@ -1,9 +1,14 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 import backendApi from '../../api/api';
 import type { IUser } from '../../interfaces/api/user.interface';
 import type { ILoginType } from '../../interfaces/loginType.interface';
 import type { IPlan, ISubscription } from '../../interfaces/subscription.interface';
+import type { IPopupContext } from '../../interfaces/context/popup.interface';
+import { useRouter } from 'vue-router';
+import type { IPageContent } from '../../interfaces/pageContents.interface';
+
+const { handleChangeCurrentContent } = defineProps<{ handleChangeCurrentContent(newValue: IPageContent['contents']): void }>();
 
 const subscriptionInfo = ref<ISubscription>({
     weekly_plans_used: 0,
@@ -26,12 +31,13 @@ const planInfo = ref<IPlan>({
 });
 
 const showPopupCancel = ref(false);
+const { handleChangePopupInfo } = inject('popup') as IPopupContext;
 
 const handleOpenStripePage = (): void => {
     window.open('https://stripe.com/en-br', '_blank');
 };
 
-const handleEditYourPlan = async (choosedPlan: 'essential' | 'premium' | 'free') => {
+const handleEditYourPlan = async (choosedPlan: 'essencial' | 'premium' | 'free') => {
     const userStringfied = sessionStorage.getItem('user') ?? null;
     const loginType = sessionStorage.getItem('loginType') as ILoginType['types'] ?? 'google';
 
@@ -42,7 +48,7 @@ const handleEditYourPlan = async (choosedPlan: 'essential' | 'premium' | 'free')
     if (planInfo.value.plan_name.toLowerCase() === choosedPlan.toLowerCase()) return;
 
     if (!subscriptionInfo.value.last_four_digits) {
-        if (choosedPlan === 'essential') {
+        if (choosedPlan === 'essencial') {
             const essentialLink = import.meta.env.VITE_STRIPE_ESSENTIAL_PLAN_URL;
             return window.open(`${essentialLink}${loginType === 'google' ? user.google_email : user.github_email}`);
         }
@@ -59,13 +65,19 @@ const handleEditYourPlan = async (choosedPlan: 'essential' | 'premium' | 'free')
     const changePaymentMethod = await backendApi.put(`/subscription/change/subscription/plan`, {
         "user_id": user.uuid,
         'return_url': 'http://localhost:5173/callback/payment',
-        'price': choosedPlan === 'essential' ? essentialPriceId : premiumPriceId
+        'price': choosedPlan === 'essencial' ? essentialPriceId : premiumPriceId
     });
 
     const updateURL = changePaymentMethod.data.update_url;
     if (updateURL) window.open(updateURL);
 };
 
+const handleCancelSubscription = async () => {
+    const subscriptionId = sessionStorage.getItem('subscriptionId') ?? '';
+    await backendApi.delete(`/subscription/cancel/${subscriptionId}`);
+    handleChangePopupInfo('Plano free assinado, plano anterior cancelado', 'success', true);
+    handleChangeCurrentContent('home');
+};
 
 onMounted(async () => {
     const userUUID = sessionStorage.getItem('uuid') ?? '';
@@ -74,7 +86,9 @@ onMounted(async () => {
 
     const subscriptionDetails = (await backendApi.get(`subscription/${userUUID}`)).data as { plan: IPlan, subscription: ISubscription };
     subscriptionInfo.value = { ...subscriptionDetails.subscription };
-    planInfo.value = { ...subscriptionDetails.plan };
+
+    const plan = (await backendApi.get(`/plans/${subscriptionInfo.value.plans_id}`)).data as IPlan;
+    planInfo.value = { ...plan };
 });
 </script>
 <template>
@@ -84,8 +98,8 @@ onMounted(async () => {
             <p>Trocando para o plano gratuito, voce estara cancelando o seu plano atual, <b>Deseja continuar ?</b></p>
 
             <span class="btnContainer">
-                <button type="button">Voltar</button>
-                <button type="button">Ir para plano free</button>
+                <button type="button" @click="showPopupCancel = false">Voltar</button>
+                <button type="button" @click="handleCancelSubscription">Ir para plano free</button>
             </span>
         </section>
     </div>
@@ -105,8 +119,8 @@ onMounted(async () => {
 
         <div class="planScrollContainer">
             <section class="planListContainer">
-                <div class="planContainer">
-                    <h2>Mais economico</h2>
+                <div :class="['planContainer', planInfo.plan_name === 'essencial' ? 'selectedPlanContainer' : '']">
+                    <h2><span v-if="planInfo.plan_name === 'essencial'">(Atual) </span>Mais economico</h2>
 
                     <span class="planWrapper">
                         <img src="../../assets/dino_party.png" alt="dino happy" />
@@ -129,12 +143,12 @@ onMounted(async () => {
                             <small> /mes</small>
                         </div>
 
-                        <button type="button" @click="handleEditYourPlan('essential')">Escolher</button>
+                        <button type="button" @click="handleEditYourPlan('essencial')">Escolher</button>
                     </span>
                 </div>
 
-                <div class="planContainer">
-                    <h2>Mais completo</h2>
+                <div :class="['planContainer', planInfo.plan_name === 'premium' ? 'selectedPlanContainer' : '']">
+                    <h2><span v-if="planInfo.plan_name === 'premium'">(Atual) </span> Mais completo</h2>
 
                     <span class="planWrapper">
                         <img src="../../assets/dino_premium.png" alt="dino happy" />
@@ -161,8 +175,8 @@ onMounted(async () => {
                     </span>
                 </div>
 
-                <div class="selectedPlanContainer">
-                    <h2>(Atual) Demonstração</h2>
+                <div :class="['planContainer', planInfo.plan_name === 'free' ? 'selectedPlanContainer' : '']">
+                    <h2><span v-if="planInfo.plan_name === 'free'">(Atual) </span> Demonstração</h2>
 
                     <span class="planWrapper">
                         <img src="../../assets/profileDino.png" alt="dino happy" />
@@ -186,7 +200,7 @@ onMounted(async () => {
                             <small> /mes</small>
                         </div>
 
-                        <button type="button">Escolher</button>
+                        <button type="button" @click="handleEditYourPlan('free')">Escolher</button>
                     </span>
                 </div>
             </section>

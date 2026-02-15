@@ -80,7 +80,8 @@ onMounted(() => {
             <ValidationCodeInputBox v-else-if="currentContent === 'validation_code'"
                 :validation-login-type="validationLoginType"
                 :handle-change-current-content="handleChangeCurrentContent" />
-            <EditPlanContent v-else-if="currentContent === 'edit_plan'" />
+            <EditPlanContent v-else-if="currentContent === 'edit_plan'"
+                :handle-change-current-content="handleChangeCurrentContent" />
         </div>
     </main>
 </template>
