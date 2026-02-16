@@ -102,7 +102,7 @@ onMounted(() => {
         <section class="aditionalInformationsContainer">
             <span>
                 <h2>Duvidas sobre o pagamento ?</h2>
-                <button type="button">Confirir pagamentos</button>
+                <button type="button" @click="handleChangeCurrentContent('plan')">Confirir pagamentos</button>
             </span>
             <img src="../../assets/bills_dino.png" />
         </section>

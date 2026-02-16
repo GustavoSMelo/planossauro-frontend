@@ -1,16 +1,17 @@
 <script lang="ts" setup>
 import { inject, onMounted, ref } from 'vue';
 import backendApi from '../../api/api';
-import { type IPlan, type ISubscription } from '../../interfaces/subscription.interface';
 import convertIsoDateToBR from '../../helpers/dateIsoConvertToBR';
+import { type IPlan, type ISubscription } from '../../interfaces/subscription.interface';
 import type { IPageContent } from '../../interfaces/pageContents.interface';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
+import type { IPaymentHistory } from '../../interfaces/paymentHistory.interface';
 
 const { handleChangeCurrentContent } = defineProps<{
     handleChangeCurrentContent: (newValue: IPageContent['contents']) => void
 }>();
 
-const hasPayments = ref(false);
+const allPlansInfo = ref<Array<IPlan>>([]);
 const subscriptionInfo = ref<ISubscription>({
     daily_plans_used: 0,
     date_verified: '',
@@ -24,6 +25,7 @@ const subscriptionInfo = ref<ISubscription>({
 });
 const planInfo = ref<IPlan>();
 const showCancelPlan = ref(false);
+const paymentHistory = ref<IPaymentHistory>({ payments: [] });
 
 const { handleChangePopupInfo } = inject('popup') as IPopupContext;
 
@@ -32,7 +34,21 @@ const handleGetPlanContent = async () => {
     const response = (await backendApi.get(`/subscription/${uuid}`)).data as { subscription: ISubscription, plan: IPlan };
     subscriptionInfo.value = { ...response.subscription };
     const plan = (await backendApi.get(`/plans/${subscriptionInfo.value.plans_id}`)).data as IPlan;
+
+    const allPlans = (await backendApi.get('/plans')).data.plans as Array<IPlan>;
+
+    console.log(allPlans);
+
+    allPlansInfo.value = [...allPlans ];
     planInfo.value = { ...plan };
+};
+
+const handleGetPaymentHistory = async () => {
+    const uuid = await sessionStorage.getItem('uuid');
+    const response = (await backendApi.get(`/payment/history/${uuid}`)).data as IPaymentHistory;
+
+    if (!response.payments.length) return;
+    paymentHistory.value.payments = [...response.payments];
 };
 
 const handleChangeCardNumbers = async () => {
@@ -54,7 +70,15 @@ const handleCancelSubscription = async () => {
     handleChangeCurrentContent('home');
 };
 
-onMounted(() => { handleGetPlanContent(); });
+const handleOpenNFeLink = (index: number) => {
+    const nfeLink = paymentHistory.value.payments[index].NFe;
+    return window.open(nfeLink, '_blank');
+};
+
+onMounted(() => {
+    handleGetPlanContent();
+    handleGetPaymentHistory();
+});
 </script>
 <template>
     <div v-if="showCancelPlan" class="popupCancelContainer">
@@ -79,7 +103,7 @@ onMounted(() => { handleGetPlanContent(); });
                 <li><b>Proximo faturamento:</b> {{ subscriptionInfo?.next_billing ?
                     convertIsoDateToBR(subscriptionInfo?.next_billing.toString()) :
                     'Proximo faturamento em processamento' }}</li>
-                <li><b>Valor:</b> {{ planInfo?.price === 0 ? 'Gratis' : `R$ ${planInfo?.price}` }}</li>
+                <li><b>Valor:</b> {{ planInfo?.price === 0 ? 'Gratis' : `R$ ${planInfo?.price}.00` }}</li>
                 <li><b>Status do plano: </b>
                     <p class="statusActive"><i class="pi pi-verified"></i> {{ subscriptionInfo?.status }} </p>
                 </li>
@@ -109,7 +133,7 @@ onMounted(() => { handleGetPlanContent(); });
         <div class="paymentHistoryListContainer">
             <h2>Historico de pagamentos</h2>
 
-            <table v-if="hasPayments">
+            <table v-if="paymentHistory.payments.length">
                 <thead>
                     <tr>
                         <th>Data</th>
@@ -123,19 +147,21 @@ onMounted(() => { handleGetPlanContent(); });
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td data-cell="Data: ">10/10/2010</td>
-                        <td data-cell="Descricao: ">Pagamento referente ao mes de janeiro</td>
-                        <td data-cell="Plano: ">Plano free</td>
+                    <tr v-for="(paymentH, index) in paymentHistory.payments">
+                        <td data-cell="Data: ">{{ convertIsoDateToBR(paymentH.payment_date) }}</td>
+                        <td data-cell="Descricao: ">{{ paymentH.description }}</td>
+                        <td data-cell="Plano: ">Plano {{ allPlansInfo.find(plan => plan.uuid === paymentH.plan_id)?.plan_name }}</td>
                         <td data-cell="Bandeira: ">
-                            <img src="../../assets/mastercard_logo.svg" alt="bandeira logo" />
+                            <img v-if="paymentH.card_brand === 'mastercard'" src="../../assets/mastercard_logo.svg" alt="bandeira logo" />
+                            <img v-else-if="paymentH.card_brand === 'visa'" src="../../assets/visa.png" alt="bandeira logo" />
+                            <img v-else-if="paymentH.card_brand === 'american express'" src="../../assets/american-express.png" alt="bandeira logo" />
                         </td>
                         <td data-cell="Cartao: " class="cardInfoTable">
-                            <p>**** **** **** 1010</p>
+                            <p>**** **** **** {{ paymentH.last_four_digits }}</p>
                         </td>
-                        <td data-cell="Valor: ">R$10.00</td>
+                        <td data-cell="Valor: ">R${{ paymentH.price }}.00</td>
                         <td data-cell="Status: ">Pago</td>
-                        <td data-cell="Acao: "><button type="button">Baixar</button></td>
+                        <td data-cell="Acao: "><button type="button" @click="handleOpenNFeLink(index)">Baixar</button></td>
                     </tr>
                 </tbody>
             </table>

@@ -1,16 +1,20 @@
 <script lang="ts" setup>
-import { inject } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 import type { IHamburgueMenuToggleContext } from '../../interfaces/context/hamburgueMenuToggle.interface';
 import type { IPageContent } from '../../interfaces/pageContents.interface';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
 import { useRouter } from 'vue-router';
+import backendApi from '../../api/api';
+import type { IPlan, ISubscription } from '../../interfaces/subscription.interface';
 
 const { handleChangeCurrentContent, currentContent } = defineProps<{
     handleChangeCurrentContent: (newValue: IPageContent['contents']) => void,
     currentContent: IPageContent['contents']
 }>();
+const planName = ref('free');
 const router = useRouter();
 const { handleChangePopupInfo } = inject('popup') as IPopupContext;
+const { handleHamburgueMenuToggle } = inject('hamburgueMenuToggle') as IHamburgueMenuToggleContext;
 
 const logout = () => {
     sessionStorage.clear();
@@ -18,7 +22,12 @@ const logout = () => {
     router.push('/');
 };
 
-const { handleHamburgueMenuToggle } = inject('hamburgueMenuToggle') as IHamburgueMenuToggleContext;
+const getPlan = async () => {
+    const uuid = sessionStorage.getItem('uuid');
+    const subscription = (await backendApi.get(`/subscription/${uuid}`)).data.subscription as ISubscription;
+    const selectedPlan = (await backendApi.get(`/plans/${subscription.plans_id}`)).data as IPlan;
+    planName.value = selectedPlan.plan_name;
+};
 
 const handleRemoveMenuHamburguer = () => {
     const hamburgerMenu = window.document.querySelector('.hamburgerMenu');
@@ -34,6 +43,8 @@ const handleChangeMobilePage = (page: IPageContent['contents']) => {
     handleChangeCurrentContent(page);
     handleRemoveMenuHamburguer();
 };
+
+onMounted(() => { getPlan(); });
 </script>
 
 <template>
@@ -44,7 +55,7 @@ const handleChangeMobilePage = (page: IPageContent['contents']) => {
                 <img src="../../assets/DinoLogo.svg" />
                 <h4>Planeja.ai</h4>
             </li>
-            <li class="planInfo">Plano free</li>
+            <li class="planInfo">Plano {{ planName }}</li>
             <hr />
             <li @click="handleChangeMobilePage('planning')"
                 :class="[currentContent === 'planning' ? 'choosed' : '', 'btnNavbar']">Planejar</li>
