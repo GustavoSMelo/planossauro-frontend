@@ -19,6 +19,7 @@ import type { IHamburgueMenuToggleContext } from '../interfaces/context/hamburgu
 import type { ILoginType } from '../interfaces/loginType.interface';
 import type { ILoadingContext } from '../interfaces/context/loading.interface';
 import EditPlanContent from './contents/EditPlanContent.vue';
+import type { IUser } from '../interfaces/api/user.interface';
 
 const currentContent = ref<IPageContent['contents']>('home');
 const validationLoginType = ref<ILoginType['types']>('github');
@@ -38,11 +39,15 @@ const handleGetInformations = async () => {
     try {
         const token = getToken();
         const uuid = sessionStorage.getItem('uuid');
+        const user = sessionStorage.getItem('user') ?? '';
 
-        if (!token && !uuid) {
-            router.push('/unauthorizated');
-            return;
-        }
+        if (!user || !user.length || user === null) return router.push('/unauthorized');
+        if (!token && !uuid) return router.push('/unauthorizated');
+
+
+        const userInfo: IUser = JSON.parse(user);
+
+        if (userInfo.deleted_at) return router.push('/callback/user/delete');
 
         handleChangeIsLoading(true);
         await backendApi.get(`/user/${uuid}`);

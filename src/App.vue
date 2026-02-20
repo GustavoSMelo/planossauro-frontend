@@ -92,5 +92,4 @@ provide('hamburgueMenuToggle', { hamburgueMenuToggle, handleHamburgueMenuToggle 
         :planType="showPreview.planType" />
     <Loading v-if="isLoading" />
     <Popup v-if="popup.show && popup.message.length > 0" />
-    <!-- <Popup /> -->
 </template>

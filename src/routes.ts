@@ -10,6 +10,7 @@ import NotFound from './views/errors/NotFound.vue';
 import GoogleCallback from './views/callbacks/GoogleCallback.vue';
 import Unauthorized from './views/errors/Unauthorized.vue';
 import PaymentCallback from './views/callbacks/PaymentCallback.vue';
+import DeleteCallback from './views/callbacks/DeleteCallback.vue';
 
 const routes: Array<IRoutes> = [
     { path: '/:catchAll(.*)', component: NotFound },
@@ -20,6 +21,7 @@ const routes: Array<IRoutes> = [
     { path: '/callback/github', component: GithubCallback },
     { path: '/callback/google', component: GoogleCallback },
     { path: '/callback/payment', component: PaymentCallback },
+    { path: '/callback/user/delete', component: DeleteCallback },
     { path: '/offline', component: BackendOffline },
     { path: '/unauthorizated', component: Unauthorized }
 ];

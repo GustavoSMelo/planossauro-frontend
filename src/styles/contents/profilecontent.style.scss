@@ -1,6 +1,74 @@
 @charset "UTF-8";
 @use '../colors.scss' as colors;
 
+.deletePopupContainer {
+    background-color: colors.$transparentGray;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    .deletePopupContent {
+        background-color: colors.$white;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        width: 90%;
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        b {
+            color: colors.$accentColor;
+        }
+
+        .buttonsContainer {
+            margin-top: 20px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            button {
+                width: 50%;
+                margin: 10px;
+                font-size: 14pt;
+                font-weight: bold;
+                cursor: pointer;
+                padding: 10px;
+                border-radius: 5px;
+                transition: .4s;
+            }
+
+            button:hover {
+                transition: .4s;
+                transform: scale(1.05);
+            }
+
+            button:nth-child(1) {
+                background-color: colors.$white;
+                color: colors.$accentColor;
+                border: solid 2px colors.$accentColor;
+            }
+
+            button:nth-child(2) {
+                background-color: colors.$darkerRed;
+                color: colors.$white;
+            }
+        }
+    }
+}
+
 .profileContainer {
     display: flex;
     justify-content: space-between;
@@ -284,6 +352,18 @@
 }
 
 @media screen and (max-width: 430px) {
+    .deletePopupContainer {
+        .deletePopupContent {
+            .buttonsContainer {
+                flex-direction: column;
+
+                button {
+                    width: 100%;
+                }
+            }
+        }
+    }
+
     .profileContainer {
         .appSettings {
             details {

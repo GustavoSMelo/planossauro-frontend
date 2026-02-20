@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, ref, watch, watchEffect } from 'vue';
+import { inject, ref } from 'vue';
 import type { IUser } from '../../interfaces/api/user.interface';
 import convertIsoDateToBR from '../../helpers/dateIsoConvertToBR';
 import type { ILoadingContext } from '../../interfaces/context/loading.interface';
@@ -18,6 +18,7 @@ const { handleChangeCurrentContent, handleChangeValidationLoginType } = definePr
 const user = ref<IUser>({} as IUser);
 const duplicateUser = ref<IUser>({} as IUser);
 const editProfile = ref(false);
+const deleteAccountPopup = ref(false);
 const router = useRouter();
 const { handleChangeIsLoading } = inject('isLoading') as ILoadingContext;
 const { handleChangePopupInfo } = inject('popup') as IPopupContext;
@@ -118,10 +119,10 @@ const handleEditProfile = async () => {
 const handleChangeGithubAccount = async () => {
     const user = JSON.parse(sessionStorage.getItem('user') as string) as IUser;
 
-    // if (!user.google_email || !user.google_email.length) {
-    //     handleChangePopupInfo('Vincule uma conta google primeiro', 'warning', true);
-    //     return;
-    // }
+    if (!user.google_email || !user.google_email.length) {
+        handleChangePopupInfo('Vincule uma conta google primeiro', 'warning', true);
+        return;
+    }
 
     const logoutPage = window.open('https://github.com/logout', 'githubLogout', 'width=600,height=700');
 
@@ -136,6 +137,21 @@ const handleChangeGithubAccount = async () => {
 
 const handleConectGithubAccout = async () => {
     window.location.assign(`https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&scope=read:user,user:email,`);
+};
+
+const handleDeleteAccount = async () => {
+    try {
+        const uuid = sessionStorage.getItem('uuid') ?? '';
+        const response = await backendApi.delete(`/user/${uuid}`);
+
+        if (response.status === 200) {
+            return router.push('/callback/user/delete');
+        }
+
+        handleChangePopupInfo('Valide o seu email e tente novamente', 'error', true);
+    } catch (err) {
+        handleChangePopupInfo('Valide o seu email e tente novamente', 'error', true);
+    }
 };
 
 const logout = () => {
@@ -179,6 +195,21 @@ const handleSendValidationEmail = async (loginType: ILoginType['types']) => {
 
 </script>
 <template>
+    <div class="deletePopupContainer" v-if="deleteAccountPopup" @click="deleteAccountPopup = false">
+        <div class="deletePopupContent" @click="event => event.stopPropagation()">
+            <h2>Deseja mesmo deletar sua conta ?</h2>
+            <p>
+                Sua conta ficara suspensa por um periodo de 30 dias, seu plano sera cancelado automaticamente (caso
+                houver um) <br />
+                Dentro desse periodo de 30 dias voce podera recuperar sua conta a qualquer momento, apos isso <b>todos
+                    os dados serao deletados</b>
+            </p>
+            <span class="buttonsContainer">
+                <button type="button" @click="deleteAccountPopup = false">Voltar</button>
+                <button type="button" @click="handleDeleteAccount()">Deletar</button>
+            </span>
+        </div>
+    </div>
     <div class="profileContainer">
         <div class="profileDetails">
             <img src="../../assets/dino_profile_logo.png" alt="Dino user profile logo" />
@@ -247,7 +278,8 @@ const handleSendValidationEmail = async (loginType: ILoginType['types']) => {
                     </button>
                 </p>
                 <p class="createdAtText">Usuario desde: {{ convertIsoDateToBR(user?.created_at as string) }}</p>
-                <button type="button"><i class="pi pi-trash"></i> Excluir conta</button>
+                <button type="button" @click="deleteAccountPopup = true"><i class="pi pi-trash"></i> Excluir
+                    conta</button>
             </div>
         </div>
         <div class="appSettings">

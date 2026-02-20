@@ -1,0 +1,75 @@
+@charset "UTF-8";
+@use '../colors.scss' as colors;
+
+.deleteUserContainer {
+    background-image: url('../../assets/backgroundLightTheme.png');
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    .deleteUserContent {
+        background-color: colors.$white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        width: 80%;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 3px 3px 10px colors.$gray;
+        border-radius: 5px;
+
+        h2 {
+            margin-top: 10px;
+            margin-bottom: 20px;
+            color: colors.$accentColor;
+        }
+
+        img {
+            width: 200px;
+        }
+
+        b {
+            color: colors.$accentColor;
+        }
+
+        button {
+            margin-top: 30px;
+            width: 300px;
+            background-color: colors.$accentColor;
+            padding: 14px;
+            font-size: 14pt;
+            font-weight: bold;
+            color: colors.$white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: .4s;
+        }
+
+        button:hover {
+            transition: .4s;
+            transform: scale(1.05);
+        }
+
+        button.btnLogout {
+            background-color: colors.$white;
+            color: colors.$accentColor;
+            border: solid 2px colors.$accentColor;
+        }
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .deleteUserContainer {
+        .deleteUserContent {
+            button {
+                width: 100%;
+            }
+        }
+    }
+}
