@@ -1,7 +1,7 @@
 @charset "UTF-8";
 @use '../colors.scss' as colors;
 
-.deletePopupContainer {
+.deletePopupContainer, .unlinkAccountContainer {
     background-color: colors.$transparentGray;
     width: 100%;
     height: 100%;
@@ -13,7 +13,7 @@
     justify-content: center;
     flex-direction: column;
 
-    .deletePopupContent {
+    .deletePopupContent, .unlinkAccountContent {
         background-color: colors.$white;
         padding: 20px;
         border-radius: 5px;
@@ -30,6 +30,10 @@
 
         b {
             color: colors.$accentColor;
+        }
+
+        small {
+            margin-top: 20px;
         }
 
         .buttonsContainer {
@@ -156,18 +160,42 @@
                 background-color: colors.$accentColorDarker;
             }
 
-            .btnChangeSocialMediaProfile {
-                background-color: colors.$white;
-                color: colors.$accentColor;
-                border: solid 2px colors.$accentColor;
-                transition: .4s;
+            .containerBtnChangeSocialMedia {
+                display: flex;
+                width: 70%;
+                justify-content: space-between;
+                padding: 0;
+                margin: 0;
+
+
+                .btnChangeSocialMediaProfile {
+                    background-color: colors.$white;
+                    color: colors.$accentColor;
+                    border: solid 2px colors.$accentColor;
+                    transition: .4s;
+                }
+
+                .btnChangeSocialMediaProfile:hover {
+                    background-color: colors.$accentColor;
+                    color: colors.$white;
+                    transition: .4s;
+                }
+
+                button {
+                    margin-left: 0;
+                    width: 80%;
+                }
+
+
+                button:nth-child(2) {
+                    margin-left: 5px;
+                    width: 20%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
             }
 
-            .btnChangeSocialMediaProfile:hover {
-                background-color: colors.$accentColor;
-                color: colors.$white;
-                transition: .4s;
-            }
         }
 
         .btnChangeProfile {
@@ -194,6 +222,7 @@
             background-color: colors.$accentColor;
             color: colors.$white;
         }
+
         .btnChangeProfileAction:hover {
             background-color: colors.$accentColorDarker;
             border: 2px solid colors.$accentColorDarker;
@@ -352,8 +381,8 @@
 }
 
 @media screen and (max-width: 430px) {
-    .deletePopupContainer {
-        .deletePopupContent {
+    .deletePopupContainer,  .unlinkAccountContainer {
+        .deletePopupContent, .unlinkAccountContent {
             .buttonsContainer {
                 flex-direction: column;
 
@@ -365,6 +394,22 @@
     }
 
     .profileContainer {
+        .profileDetails {
+            span {
+                flex-direction: column;
+                width: 100%;
+                align-items: start;
+
+                b {
+                    margin-bottom: 10px;
+                }
+
+                .containerBtnChangeSocialMedia, button, input {
+                    width: 100%;
+                    margin-left: 0;
+                }
+            }
+        }
         .appSettings {
             details {
                 div {

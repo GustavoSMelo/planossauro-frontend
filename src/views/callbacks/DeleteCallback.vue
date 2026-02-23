@@ -41,7 +41,8 @@ onMounted(() => {
     const next30Days = new Date(user.deleted_at!);
     next30Days.setDate(next30Days.getDate() + 30);
 
-    counterDays.value = next30Days.getTime() - currentDate.getTime();
+    const helper = next30Days.getTime() - currentDate.getTime();
+    counterDays.value = Math.floor(helper / (1000 * 60 * 60 * 24))
 });
 </script>
 
@@ -52,7 +53,7 @@ onMounted(() => {
             <h2>Sua conta foi excluida</h2>
             <p>
                 Voce selecionou em excluir a conta, voce esta em periodo de delecao de conta, que ira terminar em
-                <b>{{ Math.floor(counterDays / (1000 * 60 * 60 * 24)) }} dia(s)</b>,
+                <b>{{ counterDays ? counterDays : 30 }} dia(s)</b>,
                 <br /> se deseja voltar a usar nosso sistema, basta clicar no botao abaixo para retornar os
                 planejamentos
             </p>

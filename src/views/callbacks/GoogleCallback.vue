@@ -47,7 +47,10 @@ onMounted(async () => {
         console.log(userData);
         const userHasUuid = Object.keys(userData).find(key => key === 'uuid') ? true : false;
 
+        console.log(userHasUuid);
+
         if (userHasUuid) {
+            console.log(user);
             if (user && user.uuid && (userData.uuid === user.uuid)) {
                 const updatedUser = await backendApi.put(`/user/${user.uuid}`, {
                     ...user,
@@ -72,16 +75,11 @@ onMounted(async () => {
             sessionStorage.setItem('uuid', userData.uuid);
             popupContext.handleChangePopupInfo('Login realizado com sucesso', 'success', true);
 
-            const editProfile = Boolean(sessionStorage.getItem('editProfile'));
-
-            if (user && user.uuid === userData.uuid && editProfile && !userData.google_is_validated) {
-                router.push('/finish/login?jumpToValidationCode=true');
-            } else {
-                router.push('/app');
-            }
+            router.push('/app');
             return;
         }
     } catch (err) {
+        console.error(err);
         sessionStorage.setItem('loginType', 'google');
         sessionStorage.setItem('googleEmail', googleResponse.email);
         sessionStorage.setItem('googleId', googleResponse.sub);

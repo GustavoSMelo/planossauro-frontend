@@ -41,7 +41,7 @@ const handleGetInformations = async () => {
         const uuid = sessionStorage.getItem('uuid');
         const user = sessionStorage.getItem('user') ?? '';
 
-        if (!user || !user.length || user === null) return router.push('/unauthorized');
+        if (!user || !user.length || user === null) return router.push('/unauthorizated');
         if (!token && !uuid) return router.push('/unauthorizated');
 
 

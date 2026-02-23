@@ -20,6 +20,7 @@ interface IUser {
 interface ICreateUser {
     full_name: string;
     google_email: string | null;
+    google_id : string | null;
     github_email: string | null;
     github_id: number | null;
     cellphone_number: string;

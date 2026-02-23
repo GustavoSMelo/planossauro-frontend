@@ -1,4 +1,12 @@
 <script lang="ts" setup>
+import { inject, onMounted } from 'vue';
+import type { ILoadingContext } from '../interfaces/context/loading.interface';
+import backendApi from '../api/api';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const { handleChangeIsLoading } = inject('isLoading') as ILoadingContext;
+
 const clickFooter = () => {
     window.open('https://github.com/GustavoSMelo/planeja.ai-frontend', 'blank');
 };
@@ -19,6 +27,28 @@ const loadGoogleSignInPage = () => {
     window.location.href = `http://accounts.google.com/o/oauth2/v2/auth?${params}`;
 };
 
+
+onMounted(async () => {
+    const token = sessionStorage.getItem('@auth/token') ?? '';
+    const uuid = sessionStorage.getItem('uuid') ?? '';
+
+    if (!token || !uuid) return;
+
+    try {
+        handleChangeIsLoading(true);
+
+        const response = await backendApi.get(`/user/${uuid}`);
+
+        if (response.status === 200) {
+            handleChangeIsLoading(false);
+            router.push('/app');
+        }
+
+        handleChangeIsLoading(false);
+    } catch {
+        handleChangeIsLoading(false);
+    }
+});
 </script>
 
 <template>

@@ -11,6 +11,7 @@ import type { AxiosResponse } from 'axios';
 import type { ILoginType } from '../interfaces/loginType.interface';
 import type { IAccessSanctumToken } from '../interfaces/auth.interface';
 import { setToken } from '../helpers/token';
+import type { ISubscription } from '../interfaces/subscription.interface';
 
 const urlParams = new URLSearchParams(window.location.search);
 const fullName = ref(window.sessionStorage.getItem('fullName') || '');
@@ -110,7 +111,10 @@ const handleGithubSave = async () => {
             const sanctumResponse = (await backendApi.get(`/auth/github/${at}`)).data as IAccessSanctumToken;
 
             setToken(sanctumResponse.token.plainTextToken);
-            await backendApi.post(`/subscription/assign/free/${responseData.uuid}`);
+            const userHasSubscription = (await backendApi.get(`/subscription/${responseData.uuid}`)).data.subscription as ISubscription;
+
+            if (!userHasSubscription || userHasSubscription === null || userHasSubscription.uuid === null || !userHasSubscription.uuid)
+                await backendApi.post(`/subscription/assign/free/${responseData.uuid}`);
 
             user.value = { ...responseData };
             user.value.github_is_validated = false;
@@ -138,17 +142,21 @@ const handleGoogleSave = async () => {
             'full_name': fullName.value,
             'cellphone_number': cellphoneNumber.value,
             'google_email': googleEmail,
-            'google_id': googleId,
+            'google_id': googleId.toString(),
         } as unknown as ICreateUser;
 
         let responseUserCreated: AxiosResponse<any, any, {}>;
 
         if (userFromSession && userFromSession.uuid) {
-            responseUserCreated = await backendApi.put(`/user/${userFromSession.uuid}`, { ...userData, ...userFromSession });
+            userData.google_email = sessionStorage.getItem('googleEmail');
+            userData.google_id = sessionStorage.getItem('googleId') ?? '';
+            responseUserCreated = await backendApi.put(`/user/${userFromSession.uuid}`, { ...userFromSession, ...userData });
+            sessionStorage.setItem('user', JSON.stringify({ ...userFromSession, google_email: sessionStorage.getItem('googleEmail') ?? '' }));
         } else {
             responseUserCreated = await backendApi.post('/user', { ...userData });
         }
-        const responseData: ICreateUserResponse['data'] = responseUserCreated.data.data;
+        const helper = responseUserCreated.data
+        const responseData: ICreateUserResponse['data'] = helper.hasOwnProperty('user') ? helper.user : helper.data;
 
         if (responseData.uuid) {
             user.value = { ...responseData };
@@ -165,12 +173,16 @@ const handleGoogleSave = async () => {
             sessionStorage.setItem('uuid', responseData.uuid);
             sessionStorage.setItem('user', JSON.stringify(user.value));
             popupContext.handleChangePopupInfo('Cadastro realizado com sucesso', 'success', true);
+            loadingContext.handleChangeIsLoading(false);
         }
         loadingContext.handleChangeIsLoading(false);
     } catch (err) {
+        const errHelper = err as AxiosResponse<any, any, {}>;
+        loadingContext.handleChangeIsLoading(false);
+
+        if (errHelper.status === 401) return;
         popupContext.handleChangePopupInfo('Erro ao envio de email', 'error', true);
         console.error(err);
-        loadingContext.handleChangeIsLoading(false);
     }
 };
 
