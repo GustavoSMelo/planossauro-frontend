@@ -8,10 +8,12 @@ import Popup from './components/popup/Popup.vue';
 import PreviewDocs from './components/previewDocs/PreviewDocs.vue';
 import type { ITemplateChoose } from './interfaces/context/templateChoose.interface';
 
-let timeoutId: NodeJS.Timeout;
 
 // refs
+let timeoutId = ref<NodeJS.Timeout>();
+const hamburgueMenuToggle = ref(false);
 const isLoading = ref(false);
+
 const popup = reactive<IPopup>({
     message: '',
     status: 'error',
@@ -31,10 +33,8 @@ const templateChoose = reactive<ITemplateChoose>({
     templateType: 'Semanal'
 });
 
-const hamburgueMenuToggle = ref(false);
-
 watch(popup, () => {
-    timeoutId = setTimeout(() => {
+    timeoutId.value = setTimeout(() => {
         popup.show = false;
     }, 4000);
 });
@@ -45,7 +45,7 @@ const handleChangeIsLoading = (newValue: boolean) => {
 };
 
 const handleChangePopupInfo = (message: string, status: IPopup['status'], show: boolean): void => {
-    clearTimeout(timeoutId);
+    clearTimeout(timeoutId.value);
     popup.show = false;
 
     popup.message = message;
@@ -56,7 +56,7 @@ const handleChangePopupInfo = (message: string, status: IPopup['status'], show: 
 
 const handleChangePopupShow = (): void => {
     popup.show = !popup.show;
-    clearTimeout(timeoutId);
+    clearTimeout(timeoutId.value);
 };
 
 const handleChangeShowPreview = (newValue: IShowPreview): void => {

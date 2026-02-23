@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, inject, nextTick, watchEffect } from 'vue';
+import { ref, inject, nextTick, watchEffect, onMounted } from 'vue';
 import type { IPlanningDay, IDays } from '../../interfaces/planning.interface';
 import type { ILoadingContext } from '../../interfaces/context/loading.interface';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
@@ -403,10 +403,9 @@ const generatePlan = async () => {
                 'class_name': className.value,
                 'user_id': uuid
             });
-
-            await backendApi.patch(`/subscription/${planType.value === 'Semanal' ? 'week' : 'daily'}/${dashboardResponse.subscription_id}`);
         }
 
+        await backendApi.patch(`/subscription/${planType.value === 'Semanal' ? 'week' : 'daily'}/${dashboardResponse.subscription_id}`);
         isLoadingContext.handleChangeIsLoading(false);
         popupContext.handleChangePopupInfo('Documento gerado com sucesso', 'success', true);
         handleChangeTemplateChoose({ ...templateChoose, choosed: false });
@@ -416,6 +415,10 @@ const generatePlan = async () => {
         handleChangeTemplateChoose({ ...templateChoose, choosed: false });
     }
 };
+
+onMounted(() => {
+   handleChangeTemplateChoose({ ...templateChoose, choosed: false });
+});
 
 watchEffect(() => {
     if (templateChoose.choosed) {
