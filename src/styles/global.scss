@@ -53,6 +53,8 @@
     box-sizing: border-box;
     border: 0;
     font-family: 'Roboto', Verdana, Geneva, Tahoma, sans-serif;
+    --dp-primary-color: #e9688c;
+    --dp-primary-disabled-color: #e9688c;
 }
 
 html,
@@ -63,7 +65,7 @@ body {
     background-color: #fee7ef;
 }
 
-input:focus {
+input:focus, textarea:focus {
     outline: none;
 }
 

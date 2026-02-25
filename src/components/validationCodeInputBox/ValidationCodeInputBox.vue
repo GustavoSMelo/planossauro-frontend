@@ -28,7 +28,6 @@ const stopPropagation = (event: Event) => {
 const handleValidateCode = async () => {
     try {
         handleChangeIsLoading(true);
-        console.log(user);
 
         const response = await backendApi.patch(`/user/validate/${user.uuid}`, {
             'loginType': validationLoginType,

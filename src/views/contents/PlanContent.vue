@@ -34,10 +34,7 @@ const handleGetPlanContent = async () => {
     const response = (await backendApi.get(`/subscription/${uuid}`)).data as { subscription: ISubscription, plan: IPlan };
     subscriptionInfo.value = { ...response.subscription };
     const plan = (await backendApi.get(`/plans/${subscriptionInfo.value.plans_id}`)).data as IPlan;
-
     const allPlans = (await backendApi.get('/plans')).data.plans as Array<IPlan>;
-
-    console.log(allPlans);
 
     allPlansInfo.value = [...allPlans ];
     planInfo.value = { ...plan };

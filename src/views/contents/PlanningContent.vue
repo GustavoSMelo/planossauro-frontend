@@ -1,23 +1,24 @@
 <script setup lang="ts">
-import { ref, inject, nextTick, watchEffect, onMounted } from 'vue';
+import { ref, inject, nextTick, watchEffect, onMounted, watch } from 'vue';
 import type { IPlanningDay, IDays } from '../../interfaces/planning.interface';
 import type { ILoadingContext } from '../../interfaces/context/loading.interface';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
 import type { IClassPlanResponse, IOllamaGemmaResponse } from '../../interfaces/ollama.res';
+import type { IShowPreview, IShowPreviewContext } from '../../interfaces/context/showPreview.interface';
+import type { ITemplateChooseContext } from '../../interfaces/context/templateChoose.interface';
+import type { IDashboard } from '../../interfaces/dashboard.interface';
 import { qsn } from '../../assets/qsn.json';
 import { saveAs } from 'file-saver';
-import axios from 'axios';
-import PizZip from 'pizzip';
-import Docxtemplater from "docxtemplater";
 import dayConverter from '../../helpers/dayConverter';
-import type { IShowPreview, IShowPreviewContext } from '../../interfaces/context/showPreview.interface';
 import { debounce } from 'lodash-es';
-import type { ITemplateChooseContext } from '../../interfaces/context/templateChoose.interface';
-import { isWeekend } from '../../helpers/isWeekend';
 import getPrompt from '../../helpers/prompt';
 import backendApi from '../../api/api';
 import monthConverter from '../../helpers/monthConverter';
-import type { IDashboard } from '../../interfaces/dashboard.interface';
+import Docxtemplater from "docxtemplater";
+import PizZip from 'pizzip';
+import axios from 'axios';
+import { VueDatePicker } from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 
 const plans = ref<IPlanningDay>({ day1: [''], day2: [''], day3: [''], day4: [''], day5: [''] });
 const selectedDay = ref<IDays['days']>('day1');
@@ -28,6 +29,7 @@ const className = ref('');
 const planDateStart = ref('');
 const planDateEnd = ref('');
 const showAditionalInformation = ref(false);
+const rangeDates = ref();
 const isLoadingContext = inject('isLoading') as ILoadingContext;
 const popupContext = inject('popup') as IPopupContext;
 const showPreviewContext = inject('showPreview') as IShowPreviewContext;
@@ -145,28 +147,10 @@ const stopPropagation = (event: Event): void => {
 };
 
 const showTemplatePreviewChoose = () => {
-    console.log('teste');
     if (isAditionInformationMissing()) {
         popupContext.handleChangePopupInfo('Preencha todas as informacoes \n e tente novamente', 'warning', true);
         return;
     }
-
-    if (isWeekend(planDateStart.value) || isWeekend(planDateEnd.value)) {
-        popupContext.handleChangePopupInfo('O seu planejamento esta sendo inserido nos finais de semana', 'error', true);
-        return;
-    }
-
-    const dateStart = new Date(planDateStart.value);
-    const dateEnd = new Date(planDateEnd.value);
-    const dateDiffInMilliseconds = new Date(Number(dateEnd) - Number(dateStart));
-
-    const dateDiffInDays = (Number(dateDiffInMilliseconds) / (1000 * 60 * 60 * 24)) + 1;
-
-    if (planType.value === 'Semanal' && dateDiffInDays !== 5) {
-        popupContext.handleChangePopupInfo('A data de inicio ou fim do planejamento, nao confere com uma semana', 'error', true);
-        return;
-    }
-
     showAditionalInformation.value = false;
     const showPreviewContextHelper = { isCustomDocs: 'false', showChooseTemplate: 'true', show: true, planType, customURLDoc: '' } as unknown as IShowPreview;
 
@@ -179,12 +163,12 @@ const generatePlan = async () => {
         const dashboardResponse = (await backendApi.get(`/subscription/dashboard/${uuid}`)).data as IDashboard;
 
         if (planType.value === 'Semanal') {
-            if (dashboardResponse.used_weekly_planning >= dashboardResponse.max_amount_planning_week) {
+            if (Number(dashboardResponse.used_weekly_planning) >= Number(dashboardResponse.max_amount_planning_week)) {
                 popupContext.handleChangePopupInfo('Todos os tokens semanais foram utilizados', 'error', true);
                 return;
             }
         } else {
-            if (dashboardResponse.used_daily_planning >= dashboardResponse.max_amount_planning_daily) {
+            if (Number(dashboardResponse.used_daily_planning) >= Number(dashboardResponse.max_amount_planning_daily)) {
                 popupContext.handleChangePopupInfo('Todas os tokens diarios foram utilizados', 'error', true);
                 return;
             }
@@ -278,13 +262,10 @@ const generatePlan = async () => {
             const blob = new Blob([doc.toBlob()], {
                 type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
             });
-            console.log(blob);
             saveAs(blob, 'planejamento.docx');
 
             const docB64 = doc.toBase64();
             const uuid = sessionStorage.getItem('uuid');
-
-            console.log(uuid);
 
             await backendApi.post('/planning', {
                 'document_b64': docB64,
@@ -387,13 +368,10 @@ const generatePlan = async () => {
             const blob = new Blob([doc.toBlob()], {
                 type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
             });
-            console.log(blob);
             saveAs(blob, 'planejamento.docx');
 
             const docB64 = doc.toBase64();
             const uuid = sessionStorage.getItem('uuid');
-
-            console.log(uuid);
 
             await backendApi.post('/planning', {
                 'document_b64': docB64,
@@ -417,7 +395,7 @@ const generatePlan = async () => {
 };
 
 onMounted(() => {
-   handleChangeTemplateChoose({ ...templateChoose, choosed: false });
+    handleChangeTemplateChoose({ ...templateChoose, choosed: false });
 });
 
 watchEffect(() => {
@@ -426,6 +404,16 @@ watchEffect(() => {
     }
 });
 
+watch(rangeDates, () => {
+    const initialDate = rangeDates.value[0].toString().split('(')[0].trim();
+    const lastDate = rangeDates.value[1].toString().split('(')[0].trim();
+
+    const initialDateHelper = new Date(initialDate);
+    const lastDateHelper = new Date(lastDate);
+
+    planDateStart.value = `${initialDateHelper.getFullYear()}-${initialDateHelper.getMonth() + 1}-${initialDateHelper.getDay()}`;
+    planDateEnd.value = `${lastDateHelper.getFullYear()}-${lastDateHelper.getMonth() + 1}-${lastDateHelper.getDay()}`;;
+});
 </script>
 <template>
     <div class="planningContainer">
@@ -442,11 +430,13 @@ watchEffect(() => {
                 <input type="text" :value="className" placeholder="Classe ou Serie"
                     @change="event => handleChangeClassName(event)" />
 
-                <label>Data do planejamento (inicio): </label>
-                <input type="date" :value="planDateStart" @change="event => handleChangeClassDateStart(event)" />
+                <label>Data do planejamento </label>
 
-                <label>Data do planejamento (fim): </label>
-                <input type="date" :value="planDateEnd" @change="event => handleChangeClassDateEnd(event)" />
+                <input v-if="planType === 'Diario'" type="date" :value="planDateStart"
+                    @change="event => { handleChangeClassDateStart(event); handleChangeClassDateEnd(event) }" />
+                <span v-else class="rangeDatePickerContainer">
+                    <VueDatePicker v-model="rangeDates" :range="{ maxRange: 4, minRange: 4 }" />
+                </span>
 
                 <span class="btnControlsContainer">
                     <button :class="isAditionInformationMissing() ? 'btnChooseTemplateCancel' : 'btnChooseTemplate'"

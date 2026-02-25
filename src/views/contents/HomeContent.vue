@@ -44,8 +44,8 @@ onMounted(() => {
                 <img v-if="dashboard.current_plan === 'free'" src="../../assets/profileDino.png" alt="dino from plan" />
                 <img v-else-if="dashboard.current_plan === 'essential'" src="../../assets/dino_party.png"
                     alt="dino from plan" />
-                <img v-else="dashboard.current_plan === 'essential'" src="../../assets/dino_premium.png"
-                    alt="dino from plan" />
+                <img v-else
+                    src="../../assets/dino_premium.png" alt="dino from plan" />
                 <h2>{{ dashboard.current_plan }}</h2>
                 <button type="button" @click="handleChangeCurrentContent('plan')">Gerenciar plano</button>
             </div>

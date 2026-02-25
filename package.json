@@ -12,10 +12,12 @@
         "lint:fix": "eslint --fix ."
     },
     "dependencies": {
+        "@vuepic/vue-datepicker": "^12.1.0",
         "axios": "^1.11.0",
         "docxtemplater": "^3.66.7",
         "file-saver": "^2.0.5",
         "lodash-es": "^4.17.21",
+        "mailtrap": "^4.4.0",
         "pizzip": "^3.2.0",
         "primeicons": "^7.0.0",
         "vue": "^3.5.18",
@@ -23,10 +25,10 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.34.0",
-        "@types/lodash-es": "^4.17.12",
-        "@types/vue-router": "^2.0.0",
         "@types/file-saver": "^2.0.7",
+        "@types/lodash-es": "^4.17.12",
         "@types/pizzip": "^3.0.5",
+        "@types/vue-router": "^2.0.0",
         "@vitejs/plugin-vue": "^6.0.1",
         "@vue/tsconfig": "^0.7.0",
         "eslint": "^9.34.0",

@@ -34,7 +34,6 @@ const handleChangeCellphoneNumber = (event: Event): void => {
     value = value.replace(/[a-zA-Z!@#$%^&*_+=]/g, '').trim();
 
     if (value[value.length - 1] === '(' || value[value.length - 1] === ')') {
-        console.log(true);
         if (Boolean(value.length !== 0) && Boolean(value.length !== 4)) {
             value = value.slice(0, value.length - 1);
         }
@@ -119,7 +118,6 @@ const handleGithubSave = async () => {
             user.value = { ...responseData };
             user.value.github_is_validated = false;
             showCodeConfirmationScreen.value = true;
-            console.log(showCodeConfirmationScreen.value);
             sessionStorage.setItem('uuid', responseData.uuid);
             sessionStorage.setItem('user', JSON.stringify(user.value));
             popupContext.handleChangePopupInfo('Cadastro realizado com sucesso', 'success', true);
@@ -162,7 +160,6 @@ const handleGoogleSave = async () => {
             user.value = { ...responseData };
             user.value.google_is_validated = false;
             showCodeConfirmationScreen.value = true;
-            console.log(showCodeConfirmationScreen.value);
             const urlParams = new URLSearchParams(window.location.search);
             const at = urlParams.get('at');
 
@@ -232,8 +229,6 @@ const finishValidation = async () => {
         if (!validationCodeInput.value.length) return;
 
         const loginType = sessionStorage.getItem('loginType') as ILoginType['types'];
-        console.log(validationCodeInput.value);
-
         const isValidatedResponse = await backendApi.patch(`/user/validate/${user.value?.uuid}`, {
             loginType,
             'validationCode': validationCodeInput.value

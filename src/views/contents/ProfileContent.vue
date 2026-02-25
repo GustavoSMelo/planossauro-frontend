@@ -183,9 +183,6 @@ const handleSendValidationEmail = async (loginType: ILoginType['types']) => {
         handleChangeIsLoading(true);
 
         const userResponse: IUser = (await backendApi.get(`/user/${user.value.uuid}`)).data;
-
-        console.log(userResponse);
-
         if ((loginType === 'google' && userResponse.google_is_validated) || (loginType === 'google' && !userResponse.google_email?.length)) {
             handleChangeIsLoading(false);
             handleChangePopupInfo('Conecte uma conta google', 'info', true);

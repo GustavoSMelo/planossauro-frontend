@@ -5,6 +5,7 @@ import type { IPlanning } from '../../interfaces/api/planning.interface';
 import type { ILoadingContext } from '../../interfaces/context/loading.interface';
 import type { IPageContent } from '../../interfaces/pageContents.interface';
 import EditPlanning from './EditPlanningContent.vue';
+import convertIsoDateToBR from '../../helpers/dateIsoConvertToBR';
 
 const { handleChangeCurrentContent } = defineProps<{
     handleChangeCurrentContent: (newValue: IPageContent['contents']) => void
@@ -25,8 +26,6 @@ const getDataFromAPI = async () => {
         handleChangeIsLoading(true);
         const uuid = sessionStorage.getItem('uuid');
         const { data: planningsDataList }: { data: Array<IPlanning> } = (await backendApi.get(`/planning/paginate/${uuid}?page=${currentPage.value}`)).data;
-
-        console.log(planningsDataList);
 
         plannings.value = [...plannings.value, ...planningsDataList];
         handleChangeIsLoading(false);
@@ -94,8 +93,6 @@ const searchByFilterParameters = async () => {
             'start_plan': startDatePlanning.value,
             'planning_type': planningType.value,
         })).data as Array<IPlanning>;
-
-        console.log(planningsResponse);
 
         plannings.value = [...planningsResponse];
         handleChangeIsLoading(false);
@@ -173,10 +170,12 @@ onMounted(() => {
                     <td data-cell="Escola: ">{{ planning.school_name }}</td>
                     <td data-cell="Tipo planejamento: ">{{ planning.start_plan === planning.end_plan ? 'Diario' :
                         'Semanal' }}</td>
-                    <td data-cell="Data planejamento: ">{{ planning.start_plan }} {{ planning.start_plan !==
-                        planning.end_plan ? `~ ${planning.end_plan}` : '' }}</td>
+                    <td data-cell="Data planejamento: ">{{ convertIsoDateToBR(planning.start_plan.toString()) }} {{
+                        planning.start_plan !==
+                            planning.end_plan ? `~ ${convertIsoDateToBR(planning.end_plan.toString())}` : '' }}</td>
                     <td data-cell="Editar: " class="btnCellEdit" @click="handleEditPlanningInformations(planning.uuid)">
-                        <i class="pi pi-pencil"></i></td>
+                        <i class="pi pi-pencil"></i>
+                    </td>
                     <td data-cell="Remover: " class="btnCellRemove" @click="handleDeletePlanning(planning.uuid)"><i
                             class="pi pi-trash"></i></td>
                 </tr>

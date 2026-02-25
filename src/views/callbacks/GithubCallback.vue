@@ -45,12 +45,9 @@ watchEffect(async () => {
     }
 
     try {
-        console.log(data);
         if (data.accessToken && data.accessToken.length) {
             let { data: userData }: { data: IUser } = await backendApi.get(`/user/github/${data.data.email}`);
             const userHasUuid = Object.keys(userData).find(key => key === 'uuid') ? true : false;
-
-            console.log(userData);
 
             if (userHasUuid) {
                 if (user && user.uuid && (userData.uuid === user.uuid)) {
@@ -67,7 +64,6 @@ watchEffect(async () => {
                 userData.google_validation_code = null;
                 userData.sms_validation_code = null;
 
-                console.log(userData);
                 const response = (await backendApi.get(`/auth/github/${data.accessToken}`)).data as IAccessSanctumToken;
 
                 setToken(response.token.plainTextToken);

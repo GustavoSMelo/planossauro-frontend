@@ -60,7 +60,7 @@ const handleGetInformations = async () => {
 
 onMounted(() => {
     handleGetInformations();
-})
+});
 </script>
 <template>
     <NavbarMobile v-if="hamburgueMenuToggle === true" :current-content="currentContent"

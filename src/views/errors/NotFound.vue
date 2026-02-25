@@ -15,7 +15,7 @@ import { useRouter } from 'vue-router';
 
             <h2>Pagina nao encontrada</h2>
             <p>
-                Um de nossos dinossauros pegou essa pagina e a escondeu. <br />
+                Um de nossos dinossauros (acho que foi a mambo) pegou essa pagina e a escondeu. <br />
                 ou essa pagina nunca existiu. Clique no botao abaixo para voltar a tela inicial
             </p>
 

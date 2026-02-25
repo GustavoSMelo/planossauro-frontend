@@ -29,28 +29,20 @@ onMounted(async () => {
 
     const hashes = window.location.hash;
     const paramsString = hashes.substring(1);
-
     const searchParams = new URLSearchParams(paramsString);
-    console.log(searchParams);
     const accessToken = searchParams.get('access_token') || '';
-
     const response = await axios.get('https://openidconnect.googleapis.com/v1/userinfo', {
         headers: { Authorization: `Bearer ${accessToken}` }
     });
 
     const googleResponse = response.data as IGoogleResponse;
 
-    console.log(googleResponse);
 
     try {
         let { data: userData }: { data: IUser } = await backendApi.get(`/user/google/${googleResponse.email}`);
-        console.log(userData);
         const userHasUuid = Object.keys(userData).find(key => key === 'uuid') ? true : false;
 
-        console.log(userHasUuid);
-
         if (userHasUuid) {
-            console.log(user);
             if (user && user.uuid && (userData.uuid === user.uuid)) {
                 const updatedUser = await backendApi.put(`/user/${user.uuid}`, {
                     ...user,

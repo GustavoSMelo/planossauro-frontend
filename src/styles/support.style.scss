@@ -1,0 +1,256 @@
+@charset "UTF-8";
+@use './colors.scss' as colors;
+
+
+.supportContainer {
+    background-image: url('../assets/backgroundLightTheme.png');
+    background-repeat: repeat;
+    background-size: contain;
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .supportSuccess {
+        background-color: colors.$white;
+        padding: 20px;
+        border-radius: 7px;
+        box-shadow: 2px 2px 10px colors.$gray;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 60%;
+
+        i {
+            font-size: 26pt;
+            margin-bottom: 5px;
+            color: colors.$darkGreen;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .ticket {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        button {
+            width: 50%;
+            margin: 10px;
+            font-size: 14pt;
+            font-weight: bold;
+            padding: 15px 20px;
+            background-color: colors.$accentColor;
+            color: colors.$white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: .4s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            transition: .4s;
+            box-shadow: 2px 2px 8px colors.$lightGray;
+        }
+
+    }
+
+    .supportContent {
+        background-color: colors.$white;
+        box-shadow: 2px 2px 10px colors.$gray;
+        padding: 15px;
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        width: 60%;
+        transform: scale(.9);
+
+        header {
+            text-align: center;
+            border-bottom: solid 2px colors.$lightGray;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            width: 80%;
+
+            img {
+                width: 100px;
+            }
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 80%;
+
+            label {
+                margin-top: 20px;
+                font-weight: bold;
+
+                b {
+                    color: colors.$red;
+                }
+            }
+
+            input,
+            textarea,
+            select {
+                width: 100%;
+                border: solid 2px colors.$accentColor;
+                padding: 10px;
+                margin-top: 5px;
+                border-radius: 5px;
+                color: colors.$accentColor;
+                font-weight: 500;
+                font-size: 14pt;
+                background-color: colors.$white;
+            }
+
+            .dropzone {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: dotted 2px colors.$accentColor;
+                border-radius: 7px;
+                padding: 20px;
+                cursor: pointer;
+                margin-top: 0;
+                margin-bottom: 20px;
+                color: colors.$accentColor;
+                font-weight: bold;
+                flex-direction: column;
+                margin-top: 5px;
+                text-align: center;
+
+                .pi {
+                    font-size: 16pt;
+                    margin-bottom: 10px;
+                }
+            }
+
+            .listContainer {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+
+                .itemList {
+                    list-style: none;
+                    display: flex;
+
+                    .itemContainer {
+                        display: flex;
+                        flex-direction: column;
+                        margin: 10px;
+                        position: relative;
+                        align-items: center;
+                        border: solid;
+                        padding: 15px;
+                        box-shadow: 4px 4px 12px colors.$lightGray;
+                        border: solid 1px colors.$lightGray;
+                        border-radius: 7px;
+
+                        img {
+                            width: 110px;
+                        }
+
+                        i {
+                            position: absolute;
+                            right: -15px;
+                            top: -15px;
+                            background-color: colors.$red;
+                            padding: 10px;
+                            border-radius: 400px;
+                            cursor: pointer;
+                            transition: .4s;
+                        }
+
+                        i:hover {
+                            transition: .4s;
+                            transform: scale(1.15);
+                        }
+                    }
+
+                }
+            }
+
+            textarea {
+                resize: none;
+            }
+
+            .hidden {
+                display: none;
+            }
+        }
+
+        .buttonsContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            button {
+                width: 50%;
+                margin: 10px;
+                font-size: 14pt;
+                font-weight: bold;
+                padding: 15px 20px;
+                background-color: colors.$accentColor;
+                color: colors.$white;
+                cursor: pointer;
+                border-radius: 5px;
+                transition: .4s;
+            }
+
+            button:hover {
+                transform: scale(1.05);
+                transition: .4s;
+                box-shadow: 2px 2px 8px colors.$lightGray;
+            }
+
+            button:nth-child(1) {
+                border: solid 2px colors.$accentColor;
+                background-color: colors.$white;
+                color: colors.$accentColor;
+            }
+
+            .btnDisabled {
+                background-color: colors.$gray;
+                cursor: not-allowed;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 890px) {
+    .supportContainer {
+        .supportContent {
+            width: 80%;
+        }
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .supportContainer {
+        .supportSuccess {
+            width: 90%;
+            text-align: justify;
+
+            button {
+                width: 90%;
+                margin-top: 20px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 540px) {
+    .supportContainer {
+        .supportContent {
+            width: 95%;
+        }
+    }
+}
