@@ -369,7 +369,7 @@ const handleUnlinkAccount = async () => {
                 <div>
                     <h3><i class="pi pi-headphones"></i> Ajuda / Suporte: </h3>
 
-                    <button>Acessar ajuda</button>
+                    <button @click="router.push('/support')">Acessar ajuda</button>
                 </div>
 
                 <div>
