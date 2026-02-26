@@ -1,0 +1,25 @@
+{
+    "finishRegister": {
+        "registrationSuccess": "Cadastro realizado com sucesso",
+        "emailSendError": "Erro ao envio de email",
+        "unauthorizedLoginType": "Tipo de login nao autorizado",
+        "emailResendSuccess": "Email reenviado com sucesso",
+        "emailResendError": "Erro ao reenviar email",
+        "invalidValidationCode": "Codigo de validacao invalido",
+        "validationSuccess": "Validacao realizada com sucesso",
+        "validationError": "Ocorreu um erro ao\n realizar a validacao\n\n ou codigo invalido",
+        "completeRegistration": "Finalize seu cadastro:",
+        "fullName": "Nome completo:",
+        "fullNamePlaceholder": "Insira seu nome aqui...",
+        "cellphone": "Telefone celular:",
+        "cellphonePlaceholder": "Insira seu telefone aqui...",
+        "advance": "Avancar",
+        "accountValidation": "Validacao da conta:",
+        "insertValidationCode": "Insira o codigo de validacao",
+        "validationCodePlaceholder": "Codigo de validacao...",
+        "spamCheckHint": "Se nao encontrar o codigo, de uma olhada na caixa de spam",
+        "validateLater": "Validar mais tarde",
+        "resendEmail": "Re-enviar email",
+        "finish": "Finalizar"
+    }
+}

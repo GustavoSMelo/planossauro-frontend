@@ -1,0 +1,6 @@
+{
+    "notPublicProfile": "Email do github nao esta publico, torne-o publico e tente novamente",
+    "notAuthorized": "Login nao autorizado pelo usuario",
+    "messageSuccess": "Login realizado com sucesso",
+    "workingOnLogin": "Trabalhando no login do github..."
+}

@@ -1,47 +1,51 @@
 <script lang="ts" setup>
-import { inject, ref } from 'vue';
-import type { IUser } from '../../interfaces/api/user.interface';
-import convertIsoDateToBR from '../../helpers/dateIsoConvertToBR';
-import type { ILoadingContext } from '../../interfaces/context/loading.interface';
-import type { IPopupContext } from '../../interfaces/context/popup.interface';
-import backendApi from '../../api/api';
-import { useRouter } from 'vue-router';
-import type { ILoginType } from '../../interfaces/loginType.interface';
-import type { IPageContent } from '../../interfaces/pageContents.interface';
-import { useI18n } from 'vue-i18n';
+import { inject, ref } from "vue";
+import type { IUser } from "../../interfaces/api/user.interface";
+import convertIsoDateToBR from "../../helpers/dateIsoConvertToBR";
+import type { ILoadingContext } from "../../interfaces/context/loading.interface";
+import type { IPopupContext } from "../../interfaces/context/popup.interface";
+import backendApi from "../../api/api";
+import { useRouter } from "vue-router";
+import type { ILoginType } from "../../interfaces/loginType.interface";
+import type { IPageContent } from "../../interfaces/pageContents.interface";
+import { useI18n } from "vue-i18n";
 
-const { handleChangeCurrentContent, handleChangeValidationLoginType } = defineProps<{
-    handleChangeCurrentContent: (newValue: IPageContent["contents"]) => void
-    handleChangeValidationLoginType: (newValue: ILoginType["types"]) => void
-}
->();
+const { handleChangeCurrentContent, handleChangeValidationLoginType } =
+    defineProps<{
+        handleChangeCurrentContent: (
+            newValue: IPageContent["contents"],
+        ) => void;
+        handleChangeValidationLoginType: (
+            newValue: ILoginType["types"],
+        ) => void;
+    }>();
 
 const user = ref<IUser>({} as IUser);
 const duplicateUser = ref<IUser>({} as IUser);
 const editProfile = ref(false);
 const deleteAccountPopup = ref(false);
 const unlinkAccountPopup = ref(false);
-const unlinkAccountChoose = ref<'' | 'google' | 'github'>('');
+const unlinkAccountChoose = ref<"" | "google" | "github">("");
 const router = useRouter();
-const { handleChangeIsLoading } = inject('isLoading') as ILoadingContext;
-const { handleChangePopupInfo } = inject('popup') as IPopupContext;
-const userFromSession = sessionStorage.getItem('user') as string;
-const { t } = useI18n();
+const { handleChangeIsLoading } = inject("isLoading") as ILoadingContext;
+const { handleChangePopupInfo } = inject("popup") as IPopupContext;
+const userFromSession = sessionStorage.getItem("user") as string;
+const { t, locale } = useI18n();
 
 user.value = { ...JSON.parse(userFromSession) };
 duplicateUser.value = { ...JSON.parse(userFromSession) };
 
 const handleChangeCellphone = (event: Event): void => {
     let { value } = event.target as HTMLInputElement;
-    value = value.replace(/[a-zA-Z!@#$%^&*_+=]/g, '').trim();
+    value = value.replace(/[a-zA-Z!@#$%^&*_+=]/g, "").trim();
 
-    if (value[value.length - 1] === '(' || value[value.length - 1] === ')') {
+    if (value[value.length - 1] === "(" || value[value.length - 1] === ")") {
         if (Boolean(value.length !== 0) && Boolean(value.length !== 4)) {
             value = value.slice(0, value.length - 1);
         }
     }
 
-    if (value[value.length - 1] === '-' && value.length !== 11) {
+    if (value[value.length - 1] === "-" && value.length !== 11) {
         value = value.slice(0, value.length - 1);
     }
 
@@ -49,32 +53,36 @@ const handleChangeCellphone = (event: Event): void => {
         value = value.slice(0, 15);
     }
 
-    if (value.length === 1 && !value.includes('(')) {
+    if (value.length === 1 && !value.includes("(")) {
         value = `(${value}`;
     }
 
-    if (value.length === 5 && !value.includes(' ')) {
+    if (value.length === 5 && !value.includes(" ")) {
         const lastChar = value[value.length - 1];
-        const cellphoneContentArray = value.slice(0, value.length - 1).split('');
-        let cellphoneContentString = '';
+        const cellphoneContentArray = value
+            .slice(0, value.length - 1)
+            .split("");
+        let cellphoneContentString = "";
 
-        cellphoneContentArray.forEach(el => cellphoneContentString += el);
+        cellphoneContentArray.forEach((el) => (cellphoneContentString += el));
         value = `${cellphoneContentString} ${lastChar}`;
     }
 
-    if (value.length === 4 && !value.includes(')') && !value.includes(' ')) {
+    if (value.length === 4 && !value.includes(")") && !value.includes(" ")) {
         const lastChar = value[value.length - 1];
-        const cellphoneContent = value.split('');
+        const cellphoneContent = value.split("");
 
         value = `${cellphoneContent[0]}${cellphoneContent[1]}${cellphoneContent[2]}) ${lastChar}`;
     }
 
-    if (value.length === 11 && !value.includes('-')) {
+    if (value.length === 11 && !value.includes("-")) {
         const lastChar = value[value.length - 1];
-        const cellphoneContentArray = value.slice(0, value.length - 1).split('');
-        let cellphoneContentString = '';
+        const cellphoneContentArray = value
+            .slice(0, value.length - 1)
+            .split("");
+        let cellphoneContentString = "";
 
-        cellphoneContentArray.forEach(el => cellphoneContentString += el);
+        cellphoneContentArray.forEach((el) => (cellphoneContentString += el));
         value = `${cellphoneContentString}-${lastChar}`;
     }
 
@@ -94,12 +102,25 @@ const handleCancelAndResetInfo = () => {
 const handleEditProfile = async () => {
     try {
         if (user.value.full_name.length < 5) {
-            handleChangePopupInfo(t('profile.invalidUsername'), 'warning', true);
+            handleChangePopupInfo(
+                t("profile.invalidUsername"),
+                "warning",
+                true,
+            );
             return;
         }
 
-        if (user.value.cellphone_number.length < 15 || !user.value.cellphone_number.includes('(') || !user.value.cellphone_number.includes(')') || !user.value.cellphone_number.includes('-')) {
-            handleChangePopupInfo(t('profile.invalidCellphone'), 'warning', true);
+        if (
+            user.value.cellphone_number.length < 15 ||
+            !user.value.cellphone_number.includes("(") ||
+            !user.value.cellphone_number.includes(")") ||
+            !user.value.cellphone_number.includes("-")
+        ) {
+            handleChangePopupInfo(
+                t("profile.invalidCellphone"),
+                "warning",
+                true,
+            );
             return;
         }
 
@@ -108,39 +129,46 @@ const handleEditProfile = async () => {
         await backendApi.put(`/user/${user.value.uuid}`, { ...user.value });
 
         duplicateUser.value = { ...user.value };
-        sessionStorage.setItem('user', JSON.stringify(user.value));
-        editProfile.value = false
+        sessionStorage.setItem("user", JSON.stringify(user.value));
+        editProfile.value = false;
 
         handleChangeIsLoading(false);
-        handleChangePopupInfo(t('profile.userEditSuccess'), 'success', true);
-
+        handleChangePopupInfo(t("profile.userEditSuccess"), "success", true);
     } catch (err) {
-        handleChangePopupInfo(t('profile.userEditError'), 'error', true);
+        handleChangePopupInfo(t("profile.userEditError"), "error", true);
         handleChangeIsLoading(false);
     }
 };
 
 const handleChangeGithubAccount = async () => {
-    const user = JSON.parse(sessionStorage.getItem('user') as string) as IUser;
+    const user = JSON.parse(sessionStorage.getItem("user") as string) as IUser;
 
     if (!user.google_email || !user.google_email.length) {
-        handleChangePopupInfo(t('profile.connectGoogle'), 'warning', true);
+        handleChangePopupInfo(t("profile.connectGoogle"), "warning", true);
         return;
     }
 
-    const logoutPage = window.open('https://github.com/logout', 'githubLogout', 'width=600,height=700');
+    const logoutPage = window.open(
+        "https://github.com/logout",
+        "githubLogout",
+        "width=600,height=700",
+    );
 
-    sessionStorage.setItem('editProfile', 'true');
+    sessionStorage.setItem("editProfile", "true");
     const timer = setInterval(() => {
         if (logoutPage?.closed) {
             clearInterval(timer);
-            window.location.assign(`https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&scope=read:user,user:email&allow_signup=true`);
+            window.location.assign(
+                `https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&scope=read:user,user:email&allow_signup=true`,
+            );
         }
     }, 300);
 };
 
 const handleConnectGithubAccout = async () => {
-    window.location.assign(`https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&scope=read:user,user:email,`);
+    window.location.assign(
+        `https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&scope=read:user,user:email,`,
+    );
 };
 
 const handleConnectGoogleAccount = () => {
@@ -148,7 +176,7 @@ const handleConnectGoogleAccount = () => {
         client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
         redirect_uri: `${window.location.origin}/callback/google`,
         response_type: "token",
-        scope: "profile email"
+        scope: "profile email",
     });
 
     window.location.href = `http://accounts.google.com/o/oauth2/v2/auth?${params}`;
@@ -156,229 +184,412 @@ const handleConnectGoogleAccount = () => {
 
 const handleDeleteAccount = async () => {
     try {
-        const uuid = sessionStorage.getItem('uuid') ?? '';
+        const uuid = sessionStorage.getItem("uuid") ?? "";
         const response = await backendApi.delete(`/user/${uuid}`);
 
         if (response.status === 200) {
-            return router.push('/callback/user/delete');
+            return router.push("/callback/user/delete");
         }
 
-        handleChangePopupInfo(t('profile.validateYourEmail'), 'error', true);
+        handleChangePopupInfo(t("profile.validateYourEmail"), "error", true);
     } catch (err) {
-        handleChangePopupInfo(t('profile.validateYourEmail'), 'error', true);
+        handleChangePopupInfo(t("profile.validateYourEmail"), "error", true);
     }
 };
 
 const logout = async () => {
-    const uuid = sessionStorage.getItem('uuid') ?? '';
+    const uuid = sessionStorage.getItem("uuid") ?? "";
     await backendApi.delete(`/logout/${uuid}`);
     sessionStorage.clear();
-    handleChangePopupInfo(t('profile.logoutMessage'), 'info', true);
-    router.push('/');
+    handleChangePopupInfo(t("profile.logoutMessage"), "info", true);
+    router.push("/");
 };
 
-const handleSendValidationEmail = async (loginType: ILoginType['types']) => {
-    if (loginType === 'github' && user.value.github_is_validated) return;
-    if (loginType === 'google' && user.value.google_is_validated) return;
+const handleSendValidationEmail = async (loginType: ILoginType["types"]) => {
+    if (loginType === "github" && user.value.github_is_validated) return;
+    if (loginType === "google" && user.value.google_is_validated) return;
 
     try {
         handleChangeIsLoading(true);
 
-        const userResponse: IUser = (await backendApi.get(`/user/${user.value.uuid}`)).data;
-        if ((loginType === 'google' && userResponse.google_is_validated) || (loginType === 'google' && !userResponse.google_email?.length)) {
+        const userResponse: IUser = (
+            await backendApi.get(`/user/${user.value.uuid}`)
+        ).data;
+        if (
+            (loginType === "google" && userResponse.google_is_validated) ||
+            (loginType === "google" && !userResponse.google_email?.length)
+        ) {
             handleChangeIsLoading(false);
-            handleChangePopupInfo(t('profile.connectGoogle'), 'info', true);
+            handleChangePopupInfo(t("profile.connectGoogle"), "info", true);
             return;
-        };
+        }
 
-        if ((loginType === 'github' && userResponse.github_is_validated) || (loginType === 'github' && !userResponse.github_email?.length)) {
+        if (
+            (loginType === "github" && userResponse.github_is_validated) ||
+            (loginType === "github" && !userResponse.github_email?.length)
+        ) {
             handleChangeIsLoading(false);
-            handleChangePopupInfo(t('profile.connectGithub'), 'info', true);
+            handleChangePopupInfo(t("profile.connectGithub"), "info", true);
             return;
-        };
+        }
 
-        await backendApi.post('/user/resend/validationcode', {
+        await backendApi.post("/user/resend/validationcode", {
             uuid: user.value.uuid,
-            loginType
+            loginType,
         });
 
         handleChangeValidationLoginType(loginType);
-        handleChangePopupInfo(t('profile.codeEmailSended'), 'success', true);
+        handleChangePopupInfo(t("profile.codeEmailSended"), "success", true);
         handleChangeIsLoading(false);
-        handleChangeCurrentContent('validation_code');
+        handleChangeCurrentContent("validation_code");
     } catch {
-        handleChangePopupInfo(t('profile.errorCodeSended'), 'error', true);
+        handleChangePopupInfo(t("profile.errorCodeSended"), "error", true);
         handleChangeIsLoading(false);
     }
-
 };
 
 const handleUnlinkAccount = async () => {
     try {
         handleChangeIsLoading(true);
-        const uuid = sessionStorage.getItem('uuid') ?? '';
-        await backendApi.patch(`/user/unlink/${uuid}`, { unlink: unlinkAccountChoose.value });
+        const uuid = sessionStorage.getItem("uuid") ?? "";
+        await backendApi.patch(`/user/unlink/${uuid}`, {
+            unlink: unlinkAccountChoose.value,
+        });
         handleChangeIsLoading(false);
-        handleChangePopupInfo(t('profile.unlinkedAccountWithSuccess'), 'info', true);
+        handleChangePopupInfo(
+            t("profile.unlinkedAccountWithSuccess"),
+            "info",
+            true,
+        );
         sessionStorage.clear();
-        router.push('/');
+        router.push("/");
     } catch (err) {
         console.error(err);
         handleChangeIsLoading(false);
-        handleChangePopupInfo(t('profile.errorToUnlinkAccount'), 'error', true);
+        handleChangePopupInfo(t("profile.errorToUnlinkAccount"), "error", true);
     }
 };
-
 </script>
 <template>
-    <div class="unlinkAccountContainer" v-if="unlinkAccountPopup" @click="unlinkAccountPopup = false">
-        <div class="unlinkAccountContent" @click="event => event.stopPropagation()">
-            <h2>{{ t('profile.unlinkTitle') }} {{ unlinkAccountChoose }} ?</h2>
+    <div
+        class="unlinkAccountContainer"
+        v-if="unlinkAccountPopup"
+        @click="unlinkAccountPopup = false"
+    >
+        <div
+            class="unlinkAccountContent"
+            @click="(event) => event.stopPropagation()"
+        >
+            <h2>{{ t("profile.unlinkTitle") }} {{ unlinkAccountChoose }} ?</h2>
 
-            <p>{{ t('profile.unlinkSubDescription1') }}</p>
-            <small>{{ t('profile.unlinkSubDescription2') }}</small>
+            <p>{{ t("profile.unlinkSubDescription1") }}</p>
+            <small>{{ t("profile.unlinkSubDescription2") }}</small>
 
             <span class="buttonsContainer">
-                <button type="button" @click="unlinkAccountPopup = false">{{ t('profile.back') }}</button>
-                <button type="button" @click="handleUnlinkAccount()">{{ t('profile.deleteAccountTitle') }}</button>
+                <button type="button" @click="unlinkAccountPopup = false">
+                    {{ t("profile.back") }}
+                </button>
+                <button type="button" @click="handleUnlinkAccount()">
+                    {{ t("profile.deleteAccountTitle") }}
+                </button>
             </span>
         </div>
     </div>
-    <div class="deletePopupContainer" v-if="deleteAccountPopup" @click="deleteAccountPopup = false">
-        <div class="deletePopupContent" @click="event => event.stopPropagation()">
-            <h2>{{ t('profile.deleteAccountTitle') }}</h2>
+    <div
+        class="deletePopupContainer"
+        v-if="deleteAccountPopup"
+        @click="deleteAccountPopup = false"
+    >
+        <div
+            class="deletePopupContent"
+            @click="(event) => event.stopPropagation()"
+        >
+            <h2>{{ t("profile.deleteAccountTitle") }}</h2>
             <p>
-                {{ t('profile.deleteAccountDescription') }}
+                {{ t("profile.deleteAccountDescription") }}
             </p>
             <span class="buttonsContainer">
-                <button type="button" @click="deleteAccountPopup = false">{{ t('profile.back') }}</button>
-                <button type="button" @click="handleDeleteAccount()">{{ t('profile.delete') }}</button>
+                <button type="button" @click="deleteAccountPopup = false">
+                    {{ t("profile.back") }}
+                </button>
+                <button type="button" @click="handleDeleteAccount()">
+                    {{ t("profile.delete") }}
+                </button>
             </span>
         </div>
     </div>
     <div class="profileContainer">
         <div class="profileDetails">
-            <img src="../../assets/dino_profile_logo.png" alt="Dino user profile logo" />
+            <img
+                src="../../assets/dino_profile_logo.png"
+                alt="Dino user profile logo"
+            />
             <h3 v-if="!editProfile">{{ user?.full_name }}</h3>
-            <input v-if="editProfile" type="text" :value="user.full_name" @input="handleChangeFullName"
-                :placeholder="`${t('profile.namePlaceholder')}`" class="fullNameInput" />
+            <input
+                v-if="editProfile"
+                type="text"
+                :value="user.full_name"
+                @input="handleChangeFullName"
+                :placeholder="`${t('profile.namePlaceholder')}`"
+                class="fullNameInput"
+            />
 
             <span>
                 <b><i class="pi pi-github"></i> Github:</b>
-                <input v-if="user?.github_email?.length && !editProfile" :disabled="true" type="text"
-                    :value="user.github_email" :placeholder="`${t('profile.email')}`" />
-                <div class="containerBtnChangeSocialMedia" v-else-if="user?.github_email?.length && editProfile">
-                    <button @click="handleChangeGithubAccount" class="btnChangeSocialMediaProfile" type="button">
-                        {{ t('profile.changeProfileGithub') }}
+                <input
+                    v-if="user?.github_email?.length && !editProfile"
+                    :disabled="true"
+                    type="text"
+                    :value="user.github_email"
+                    :placeholder="`${t('profile.email')}`"
+                />
+                <div
+                    class="containerBtnChangeSocialMedia"
+                    v-else-if="user?.github_email?.length && editProfile"
+                >
+                    <button
+                        @click="handleChangeGithubAccount"
+                        class="btnChangeSocialMediaProfile"
+                        type="button"
+                    >
+                        {{ t("profile.changeProfileGithub") }}
                     </button>
-                    <button type="button" @click="unlinkAccountChoose = 'github'; unlinkAccountPopup = true"><i
-                            class="pi pi-lock-open"></i></button>
-                </div>
-
-                <button v-else type="button" @click="handleConnectGithubAccout">{{ t('profile.connect') }}</button>
-            </span>
-            <span>
-                <b><i class="pi pi-google"></i> Google:</b>
-                <input v-if="user?.google_email?.length && !editProfile" :disabled="true" type="text"
-                    :value="user.google_email" :placeholder="`${t('profile.emailPlaceholder')}`"
-                    :class="editProfile ? 'ableToEdit' : ''" />
-
-                <div class="containerBtnChangeSocialMedia" v-else-if="user?.google_email?.length && editProfile">
-                    <button @click="handleConnectGoogleAccount" class="btnChangeSocialMediaProfile" type="button">
-                        {{ t('profile.changeProfileGmail') }}
-                    </button>
-                    <button type="button" @click="unlinkAccountChoose = 'google'; unlinkAccountPopup = true">
+                    <button
+                        type="button"
+                        @click="
+                            unlinkAccountChoose = 'github';
+                            unlinkAccountPopup = true;
+                        "
+                    >
                         <i class="pi pi-lock-open"></i>
                     </button>
                 </div>
 
-                <button v-else type="button" @click="handleConnectGoogleAccount">{{ t('profile.connect') }}</button>
+                <button v-else type="button" @click="handleConnectGithubAccout">
+                    {{ t("profile.connect") }}
+                </button>
             </span>
             <span>
-                <b><i class="pi pi-phone"></i> {{ t('profile.cellphone') }}:</b>
-                <input :disabled="editProfile ? false : true" type="text" v-model="user.cellphone_number"
-                    :placeholder="`${t('profile.cellphonePlaceholder')}`" :class="editProfile ? 'ableToEdit' : ''"
-                    @input="handleChangeCellphone" />
-            </span>
-            <button v-if="!editProfile" class="btnChangeProfile" type="button" @click="editProfile = true">{{
-                t('profile.enableEdit') }}</button>
+                <b><i class="pi pi-google"></i> Google:</b>
+                <input
+                    v-if="user?.google_email?.length && !editProfile"
+                    :disabled="true"
+                    type="text"
+                    :value="user.google_email"
+                    :placeholder="`${t('profile.emailPlaceholder')}`"
+                    :class="editProfile ? 'ableToEdit' : ''"
+                />
 
-            <button v-if="editProfile" class="btnChangeProfile btnChangeProfileAction" type="button"
-                @click="handleEditProfile">
-                {{ t('profile.editProfile') }}
+                <div
+                    class="containerBtnChangeSocialMedia"
+                    v-else-if="user?.google_email?.length && editProfile"
+                >
+                    <button
+                        @click="handleConnectGoogleAccount"
+                        class="btnChangeSocialMediaProfile"
+                        type="button"
+                    >
+                        {{ t("profile.changeProfileGmail") }}
+                    </button>
+                    <button
+                        type="button"
+                        @click="
+                            unlinkAccountChoose = 'google';
+                            unlinkAccountPopup = true;
+                        "
+                    >
+                        <i class="pi pi-lock-open"></i>
+                    </button>
+                </div>
+
+                <button
+                    v-else
+                    type="button"
+                    @click="handleConnectGoogleAccount"
+                >
+                    {{ t("profile.connect") }}
+                </button>
+            </span>
+            <span>
+                <b><i class="pi pi-phone"></i> {{ t("profile.cellphone") }}:</b>
+                <input
+                    :disabled="editProfile ? false : true"
+                    type="text"
+                    v-model="user.cellphone_number"
+                    :placeholder="`${t('profile.cellphonePlaceholder')}`"
+                    :class="editProfile ? 'ableToEdit' : ''"
+                    @input="handleChangeCellphone"
+                />
+            </span>
+            <button
+                v-if="!editProfile"
+                class="btnChangeProfile"
+                type="button"
+                @click="editProfile = true"
+            >
+                {{ t("profile.enableEdit") }}
             </button>
-            <button v-if="editProfile" class="btnChangeProfile btnCancel" type="button"
-                @click="handleCancelAndResetInfo">{{ t('profile.cancel') }}</button>
+
+            <button
+                v-if="editProfile"
+                class="btnChangeProfile btnChangeProfileAction"
+                type="button"
+                @click="handleEditProfile"
+            >
+                {{ t("profile.editProfile") }}
+            </button>
+            <button
+                v-if="editProfile"
+                class="btnChangeProfile btnCancel"
+                type="button"
+                @click="handleCancelAndResetInfo"
+            >
+                {{ t("profile.cancel") }}
+            </button>
             <div class="profileAdditionalDetails">
                 <p>
-                    <b><i class="pi pi-google"></i> Google {{ t('profile.validated') }}:</b>
-                    <button @click="handleSendValidationEmail('google')" type="button"
-                        :class="user?.google_is_validated == true ? 'checked' : 'unchecked'">
-                        <i :class="['pi', user.google_is_validated == true ? 'pi-verified' : 'pi-unlock']"></i>{{
-                            user?.google_is_validated == true ? `${t('profile.validated')}` : `${t('profile.validate')}` }}
+                    <b
+                        ><i class="pi pi-google"></i> Google
+                        {{ t("profile.validated") }}:</b
+                    >
+                    <button
+                        @click="handleSendValidationEmail('google')"
+                        type="button"
+                        :class="
+                            user?.google_is_validated == true
+                                ? 'checked'
+                                : 'unchecked'
+                        "
+                    >
+                        <i
+                            :class="[
+                                'pi',
+                                user.google_is_validated == true
+                                    ? 'pi-verified'
+                                    : 'pi-unlock',
+                            ]"
+                        ></i
+                        >{{
+                            user?.google_is_validated == true
+                                ? `${t("profile.validated")}`
+                                : `${t("profile.validate")}`
+                        }}
                     </button>
                 </p>
                 <p>
-                    <b><i class="pi pi-github"></i> Github {{ t('profile.validated') }}:</b>
-                    <button @click="handleSendValidationEmail('github')" type="button"
-                        :class="user?.github_is_validated == true ? 'checked' : 'unchecked'">
-                        <i :class="['pi', user.github_is_validated == true ? 'pi-verified' : 'pi-unlock']"></i>{{
-                            user?.github_is_validated == true ? `${t('profile.validated')}` : `${t('profile.validate')}` }}
+                    <b
+                        ><i class="pi pi-github"></i> Github
+                        {{ t("profile.validated") }}:</b
+                    >
+                    <button
+                        @click="handleSendValidationEmail('github')"
+                        type="button"
+                        :class="
+                            user?.github_is_validated == true
+                                ? 'checked'
+                                : 'unchecked'
+                        "
+                    >
+                        <i
+                            :class="[
+                                'pi',
+                                user.github_is_validated == true
+                                    ? 'pi-verified'
+                                    : 'pi-unlock',
+                            ]"
+                        ></i
+                        >{{
+                            user?.github_is_validated == true
+                                ? `${t("profile.validated")}`
+                                : `${t("profile.validate")}`
+                        }}
                     </button>
                 </p>
                 <p>
-                    <b><i class="pi pi-phone"></i> SMS {{ t('profile.validated') }}: </b>
+                    <b
+                        ><i class="pi pi-phone"></i> SMS
+                        {{ t("profile.validated") }}:
+                    </b>
                     <button type="button" class="unchecked">
-                        <i :class="['pi', user.sms_is_validated == true ? 'pi-verified' : 'pi-unlock']"></i>
-                        {{ t('profile.validate') }}
+                        <i
+                            :class="[
+                                'pi',
+                                user.sms_is_validated == true
+                                    ? 'pi-verified'
+                                    : 'pi-unlock',
+                            ]"
+                        ></i>
+                        {{ t("profile.validate") }}
                     </button>
                 </p>
-                <p class="createdAtText">{{ t('profile.userSince') }}: {{ convertIsoDateToBR(user?.created_at as string) }}</p>
-                <button type="button" @click="deleteAccountPopup = true"><i class="pi pi-trash"></i>
-                    {{ t('profile.deleteAccount') }}
+                <p class="createdAtText">
+                    {{ t("profile.userSince") }}:
+                    {{ convertIsoDateToBR(user?.created_at as string) }}
+                </p>
+                <button type="button" @click="deleteAccountPopup = true">
+                    <i class="pi pi-trash"></i>
+                    {{ t("profile.deleteAccount") }}
                 </button>
             </div>
         </div>
         <div class="appSettings">
             <details open>
-                <summary>{{ t('profile.appSettings') }}</summary>
+                <summary>{{ t("profile.appSettings") }}</summary>
                 <div>
-                    <h3><i class="pi pi-language"></i> {{ t('profile.language') }}: </h3>
+                    <h3>
+                        <i class="pi pi-language"></i>
+                        {{ t("profile.language") }}:
+                    </h3>
 
-                    <select>
-                        <option>🇧🇷 Portugues (Brasil)</option>
-                        <option>🇺🇸 English (USA)</option>
+                    <select v-model="locale">
+                        <option value="pt-BR">🇧🇷 Portugues (Brasil)</option>
+                        <option value="en-US">🇺🇸 English (USA)</option>
                     </select>
                 </div>
 
                 <div>
-                    <h3><i class="pi pi-palette"></i> {{ t('profile.theme') }}: </h3>
+                    <h3>
+                        <i class="pi pi-palette"></i> {{ t("profile.theme") }}:
+                    </h3>
 
                     <select>
-                        <option>☀️ {{ t('profile.lightTheme') }}</option>
-                        <option>🌑 {{ t('profile.darkTheme') }}</option>
+                        <option>☀️ {{ t("profile.lightTheme") }}</option>
+                        <option>🌑 {{ t("profile.darkTheme") }}</option>
                     </select>
                 </div>
 
                 <div>
-                    <h3><i class="pi pi-book"></i> {{ t('profile.documentation') }} </h3>
+                    <h3>
+                        <i class="pi pi-book"></i>
+                        {{ t("profile.documentation") }}
+                    </h3>
 
-                    <button type="button">{{ t('profile.viewDocs') }}</button>
+                    <button type="button">{{ t("profile.viewDocs") }}</button>
                 </div>
 
                 <div>
-                    <h3><i class="pi pi-headphones"></i> {{ t('profile.help') }}: </h3>
+                    <h3>
+                        <i class="pi pi-headphones"></i>
+                        {{ t("profile.help") }}:
+                    </h3>
 
-                    <button @click="router.push('/support')">{{ t('profile.viewHelp') }}</button>
+                    <button @click="router.push('/support')">
+                        {{ t("profile.viewHelp") }}
+                    </button>
                 </div>
 
                 <div>
-                    <h3><i class="pi pi-sign-out"></i> {{ t('profile.logout') }}: </h3>
+                    <h3>
+                        <i class="pi pi-sign-out"></i>
+                        {{ t("profile.logout") }}:
+                    </h3>
 
-                    <button type="button" @click="logout">{{ t('profile.disconnect') }}</button>
+                    <button type="button" @click="logout">
+                        {{ t("profile.disconnect") }}
+                    </button>
                 </div>
                 <div>
-                    <h3>{{ t('profile.appVersion') }}: </h3>
+                    <h3>{{ t("profile.appVersion") }}:</h3>
 
                     <p>Version 0.0.0</p>
                 </div>
@@ -387,4 +598,8 @@ const handleUnlinkAccount = async () => {
     </div>
 </template>
 
-<style lang="scss" scoped src="../../styles/contents/profilecontent.style.scss" />
+<style
+    lang="scss"
+    scoped
+    src="../../styles/contents/profilecontent.style.scss"
+/>

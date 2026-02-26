@@ -1,0 +1,25 @@
+{
+    "finishRegister": {
+        "registrationSuccess": "Registration completed successfully",
+        "emailSendError": "Error sending email",
+        "unauthorizedLoginType": "Unauthorized login type",
+        "emailResendSuccess": "Email resent successfully",
+        "emailResendError": "Error resending email",
+        "invalidValidationCode": "Invalid validation code",
+        "validationSuccess": "Validation completed successfully",
+        "validationError": "An error occurred during validation\n\n or invalid code",
+        "completeRegistration": "Complete your registration:",
+        "fullName": "Full name:",
+        "fullNamePlaceholder": "Enter your name here...",
+        "cellphone": "Cellphone number:",
+        "cellphonePlaceholder": "Enter your phone number here...",
+        "advance": "Continue",
+        "accountValidation": "Account validation:",
+        "insertValidationCode": "Enter validation code",
+        "validationCodePlaceholder": "Validation code...",
+        "spamCheckHint": "If you can't find the code, check your spam folder",
+        "validateLater": "Validate later",
+        "resendEmail": "Resend email",
+        "finish": "Finish"
+    }
+}

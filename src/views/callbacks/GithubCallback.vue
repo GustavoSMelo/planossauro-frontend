@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { inject, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { setToken } from '../../helpers/token';
 import backendApi from '../../api/api';
 import isApiHealth from '../../api/healthCheck';
@@ -8,6 +9,8 @@ import type { IGithubCallbackResponse } from '../../interfaces/githubCallback.in
 import type { IUser } from '../../interfaces/api/user.interface';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
 import type { IAccessSanctumToken } from '../../interfaces/auth.interface';
+
+const { t } = useI18n();
 
 watchEffect(async () => {
     const popupContext: IPopupContext = inject('popup') as IPopupContext;
@@ -32,14 +35,14 @@ watchEffect(async () => {
     }
 
     if (error) {
-        popupContext.handleChangePopupInfo('Login nao autorizado pelo usuario', 'error', true);
+        popupContext.handleChangePopupInfo(t('githubcallback.notAuthorized'), 'error', true);
         router.push('/');
         return;
     }
 
     const { data }: { data: IGithubCallbackResponse } = await backendApi.get(`/token/github/${codeParam}`);
     if (data.data.email === null) {
-        popupContext.handleChangePopupInfo('Email do github nao esta publico, torne-o publico e tente novamente', 'info', true);
+        popupContext.handleChangePopupInfo('', 'info', true);
         router.push('/login');
         return;
     }
@@ -71,7 +74,7 @@ watchEffect(async () => {
                 sessionStorage.setItem('loginType', 'github');
                 sessionStorage.setItem('accessToken', data.accessToken);
                 sessionStorage.setItem('uuid', userData.uuid);
-                popupContext.handleChangePopupInfo('Login realizado com sucesso', 'success', true);
+                popupContext.handleChangePopupInfo(t('githubcallback.messageSuccess'), 'success', true);
 
                 const editProfile = Boolean(sessionStorage.getItem('editProfile'));
 
@@ -107,7 +110,7 @@ watchEffect(async () => {
 
 <template>
     <div class="githubCallbackContainer">
-        <h2>Working on github login...</h2>
+        <h2>{{ t('githubcallback.workingOnLogin') }}</h2>
         <i class="pi pi-github"></i>
     </div>
 </template>

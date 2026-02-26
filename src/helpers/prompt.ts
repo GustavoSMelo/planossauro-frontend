@@ -1,4 +1,4 @@
-const getPrompt = (qsn: string, activity: string): string => {
+export const getPrompt = (qsn: string, activity: string): string => {
     const prompt = `
                     -- ${JSON.stringify(qsn)}
                     -- atividades: ${activity}
@@ -26,4 +26,30 @@ const getPrompt = (qsn: string, activity: string): string => {
     return prompt;
 };
 
-export default getPrompt;
+export const getPromptEN = (qsn: string, activity: string): string => {
+    const prompt = `
+                    -- ${JSON.stringify(qsn)}
+                    -- activities: ${activity}
+                    -- based on the json and the activities I sent you, generate a response only in json format with the following information:
+                    context: generate the lesson context with all the activities in a continuous way, describe how the activity will assist in the learner's education
+                    axis: identify which is the best axis based on the provided json
+                    knowledge: identify which is the best knowledge that fits into this lesson based on the axis
+                    knowledge2: identify another best knowledge that fits into this lesson based on the axis
+                    learning: identify which is the best learning that fits into this lesson based on the knowledge
+                    learning2: identify which is the best learning that fits into this lesson based on the knowledge2
+                    evaluative_focus: ask a mental note question for the educator that fits within the context of this lesson
+                    materials: identify the materials that were used in this lesson
+
+                    the response must be exactly like this, do not generate more or less text: {
+                        contextualizacao: answer,
+                        eixo: answer
+                        saber01: answer,
+                        saber02: answer,
+                        aprendizagem01: answer,
+                        aprendizagem02: answer,
+                        foco_avaliativo: answer,
+                        materiais: answer
+                    }
+                    `;
+    return prompt;
+};

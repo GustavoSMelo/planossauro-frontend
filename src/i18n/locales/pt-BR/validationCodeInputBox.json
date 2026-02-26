@@ -1,0 +1,11 @@
+{
+    "validationCodeInputBox": {
+        "validationSuccess": "Validado com sucesso",
+        "invalidCode": "Codigo invalido",
+        "confirmEmail": "Confirme seu email",
+        "sentCodeEmail": "Enviamos um codigo no email cadastro no {provider}",
+        "insertCodePlaceholder": "Insira o codigo aqui...",
+        "cancel": "Cancelar",
+        "validate": "Validar"
+    }
+}

@@ -1,11 +1,14 @@
 <script lang="ts" setup>
 import { inject, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import type { ILoginType } from '../../interfaces/loginType.interface';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
 import type { ILoadingContext } from '../../interfaces/context/loading.interface';
 import backendApi from '../../api/api';
 import type { IUser } from '../../interfaces/api/user.interface';
 import type { IPageContent } from '../../interfaces/pageContents.interface';
+
+const { t } = useI18n();
 
 const { validationLoginType, handleChangeCurrentContent } = defineProps<{
     validationLoginType: ILoginType['types'],
@@ -43,17 +46,17 @@ const handleValidateCode = async () => {
 
             sessionStorage.setItem('user', JSON.stringify(sanitizedUser));
 
-            handleChangePopupInfo('Validado com sucesso', 'success', true);
+            handleChangePopupInfo(t('validationCodeInputBox.validationSuccess'), 'success', true);
             handleChangeIsLoading(false);
             handleChangeCurrentContent('profile');
             return;
         }
 
-        handleChangePopupInfo('Codigo invalido', 'error', true);
+        handleChangePopupInfo(t('validationCodeInputBox.invalidCode'), 'error', true);
         handleChangeIsLoading(false);
     } catch (err) {
         console.error(err);
-        handleChangePopupInfo('Codigo invalido', 'error', true);
+        handleChangePopupInfo(t('validationCodeInputBox.invalidCode'), 'error', true);
         handleChangeIsLoading(false);
     }
 };
@@ -62,15 +65,15 @@ const handleValidateCode = async () => {
 
 <template>
     <div class="validationCodeContainer" @click="stopPropagation">
-        <h2>Confirme seu email</h2>
+        <h2>{{ t('validationCodeInputBox.confirmEmail') }}</h2>
 
-        <small>Enviamos um codigo no email cadastro no {{ validationLoginType === 'google' ? 'Gmail' : 'Github' }}</small>
-        <input inputmode="numeric" type="text" placeholder="Insira o codigo aqui... " v-model="validationCodeInput"
+        <small>{{ t('validationCodeInputBox.sentCodeEmail', { provider: validationLoginType === 'google' ? 'Gmail' : 'Github' }) }}</small>
+        <input inputmode="numeric" type="text" :placeholder="t('validationCodeInputBox.insertCodePlaceholder')" v-model="validationCodeInput"
             @input="handleChangeValidationCodeInputText" />
 
         <span>
-            <button type="button" @click="handleChangeCurrentContent('profile')">Cancelar</button>
-            <button type="button" @click="handleValidateCode">Validar</button>
+            <button type="button" @click="handleChangeCurrentContent('profile')">{{ t('validationCodeInputBox.cancel') }}</button>
+            <button type="button" @click="handleValidateCode">{{ t('validationCodeInputBox.validate') }}</button>
         </span>
     </div>
 </template>
