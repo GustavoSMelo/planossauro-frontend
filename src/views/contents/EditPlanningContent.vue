@@ -5,6 +5,7 @@ import type { IPlanning } from '../../interfaces/api/planning.interface';
 import type { IPageContent } from '../../interfaces/pageContents.interface';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
 import type { ILoadingContext } from '../../interfaces/context/loading.interface';
+import { useI18n } from 'vue-i18n';
 
 const { handleChangeCurrentContent } = defineProps<{
     handleChangeCurrentContent: (newValue: IPageContent['contents']) => void,
@@ -18,6 +19,7 @@ const end_date = ref('');
 const planning = ref<IPlanning>();
 const { handleChangePopupInfo } = inject('popup') as IPopupContext;
 const { handleChangeIsLoading } = inject('isLoading') as ILoadingContext;
+const { t } = useI18n();
 const uuid = sessionStorage.getItem('planning_selectedUUID');
 
 const handleChangeSchoolName = (event: Event) => {
@@ -62,7 +64,7 @@ const handleUpdatePlanning = async () => {
             await backendApi.patch(`/planning/unarchive/${uuid}`);
         }
 
-        handleChangePopupInfo('Planejamento atualizado com sucesso', 'success', true);
+        handleChangePopupInfo(t('editPlanning.updateSuccessMessage'), 'success', true);
         handleChangeIsLoading(false);
         handleChangeCurrentContent('planning_list');
     } catch (err) {
@@ -77,7 +79,7 @@ const getDataFromAPI = async () => {
         const planningResponse = (await backendApi.get(`/planning/show/${uuid}`)).data as IPlanning;
 
         if (!planningResponse || !planningResponse === null) {
-            handleChangePopupInfo('Nenhum planejamento foi selecionado', 'error', true);
+            handleChangePopupInfo(t('editPlanning.noPlanningMessage'), 'error', true);
             handleChangeCurrentContent('home');
         }
 
@@ -105,41 +107,41 @@ onMounted(() => {
     <div class="editPlanningContainer">
         <form class="editPlanningForm">
             <div class="titleForm">
-                <h1>Editar planejamento: </h1>
+                <h1>{{ t('editPlanning.title') }}: </h1>
                 <p>
                     {{ planning?.start_plan === planning?.end_plan ? 'Diario' : 'Semanal' }} | {{ planning?.start_plan
                     }} ~ {{ planning?.end_plan }}
                 </p>
             </div>
 
-            <label>Nome da escola: </label>
+            <label>{{ t('editPlanning.schoolName') }} </label>
             <input @change="handleChangeSchoolName" :value="schoolName" placeholder="Insira o nome da escola..."
                 type="text" />
 
-            <label>Serie/Turma/Sala: </label>
+            <label>{{ t('editPlanning.class') }}: </label>
             <input @change="handleChangeClassName" :value="className" placeholder="Insira o da serie/turma/escola..."
                 type="text" />
 
-            <label>Arquivar: </label>
+            <label>{{ t('editPlanning.archive') }}: </label>
             <select @change="handleChangeArchived" :value="archived">
-                <option value="true">Sim, arquivar</option>
-                <option value="false">Nao, desarquivar</option>
+                <option value="true">{{ t('editPlanning.archiveYesOption') }}</option>
+                <option value="false">{{ t('editPlanning.archiveNoOption') }}</option>
             </select>
 
             <div class="dateContainer">
                 <span>
-                    <label>Data de inicio: </label>
+                    <label>{{ t('editPlanning.initialDate') }}: </label>
                     <input @change="handleChangeStartPlan" :value="start_date" type="date" />
                 </span>
                 <span>
-                    <label>Data de fim: </label>
+                    <label>{{ t('editPlanning.endDate') }}: </label>
                     <input @change="handleChangeEndPlan" :value="end_date" type="date" />
                 </span>
             </div>
 
             <span class="btnContainer">
-                <button type="button" @click="handleChangeCurrentContent('planning_list')">Cancelar</button>
-                <button type="button" @click="handleUpdatePlanning">Salvar</button>
+                <button type="button" @click="handleChangeCurrentContent('planning_list')">{{ t('editPlanning.cancel') }}</button>
+                <button type="button" @click="handleUpdatePlanning">{{ t('editPlanning.save') }}</button>
             </span>
         </form>
     </div>

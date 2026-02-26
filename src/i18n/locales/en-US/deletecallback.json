@@ -1,0 +1,8 @@
+{
+    "title": "Your account was deleted",
+    "descriptionSub1": "You have selected to delete your account. You are currently in a deletion grace period, which will end in",
+    "days": "day(s)",
+    "descriptionSub2": "If you would like to use our system again, simply click the button below to restore your account and your planning data.",
+    "restoreAccount": "Restore account",
+    "logout": "Logout"
+}

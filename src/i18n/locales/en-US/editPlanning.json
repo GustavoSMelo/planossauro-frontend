@@ -1,0 +1,18 @@
+{
+    "title": "Edit planning: ",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "schoolName": "School name",
+    "class": "Class / Group",
+    "archive": "Archive",
+    "archiveYesOption": "Yes, archive",
+    "archiveNoOption": "No, unarchive",
+    "initialDate": "Start date",
+    "endDate": "End date",
+    "cancel": "Cancel",
+    "save": "Save",
+    "updateSuccessMessage": "Planning updated with success",
+    "noPlanningMessage": "Any planning was selected",
+    "schoolPlaceholder": "Insert school name here...",
+    "classPlaceholder": "Insert class name here..."
+}

@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-
 import { inject } from 'vue';
+import { useRouter } from 'vue-router';
 import type { IPageContent } from '../../interfaces/pageContents.interface';
 import type { IHamburgueMenuToggleContext } from '../../interfaces/context/hamburgueMenuToggle.interface';
-import { useRouter } from 'vue-router';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
+
 const { handleChangeCurrentContent, currentContent } = defineProps<{
     handleChangeCurrentContent: (newValue: IPageContent['contents']) => void,
     currentContent: IPageContent['contents']
@@ -30,17 +30,21 @@ const logout = () => {
         <ul class="navbarControls">
             <li @click="handleChangeCurrentContent('planning')"
                 :class="[currentContent == 'planning' ? 'choosed' : 'btnNavbar']">
-                Planejar
+                {{ $t('navbar.design') }}
             </li>
             <li @click="handleChangeCurrentContent('planning_list')"
                 :class="[currentContent == 'planning_list' ? 'choosed' : 'btnNavbar']">
-                Planejamentos
+                {{ $t('navbar.plannings') }}
             </li>
             <li @click="handleChangeCurrentContent('plan')"
-                :class="[currentContent == 'plan' ? 'choosed' : 'btnNavbar']">Planos</li>
+                :class="[currentContent == 'plan' ? 'choosed' : 'btnNavbar']">
+                {{ $t('navbar.plans') }}
+            </li>
             <li @click="handleChangeCurrentContent('profile')"
-                :class="[currentContent == 'profile' ? 'choosed' : 'btnNavbar']">Perfil</li>
-            <li :class="['btnNavbar']" @click="logout">Sair</li>
+                :class="[currentContent == 'profile' ? 'choosed' : 'btnNavbar']">
+                {{ $t('navbar.profile') }}
+            </li>
+            <li :class="['btnNavbar']" @click="logout">{{ $t('navbar.logout') }}</li>
             <li class="mobileIcon"><i class="pi pi-bars"
                     @click="hamburgerMenuContext.handleHamburgueMenuToggle(true)"></i></li>
         </ul>

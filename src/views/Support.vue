@@ -6,6 +6,7 @@ import type { ILoadingContext } from '../interfaces/context/loading.interface';
 import type { IPopupContext } from '../interfaces/context/popup.interface';
 import { getToken } from '../helpers/token';
 import type { IUser } from '../interfaces/api/user.interface';
+import { useI18n } from 'vue-i18n';
 
 const title = ref('');
 const category = ref('');
@@ -16,6 +17,7 @@ const success = ref(false);
 const { handleChangeIsLoading } = inject('isLoading') as ILoadingContext;
 const { handleChangePopupInfo } = inject('popup') as IPopupContext;
 const router = useRouter();
+const { t } = useI18n();
 
 const handleChangeTitle = (event: Event): void => {
     const target = event.target as HTMLInputElement;
@@ -106,7 +108,7 @@ const handleSendSupport = async () => {
         handleChangeIsLoading(false);
     } catch {
         handleChangeIsLoading(false);
-        handleChangePopupInfo('Nao foi possivel contactar o suporte, tente novamente mais tarde', 'error', true);
+        handleChangePopupInfo(t('support.contactSupportError'), 'error', true);
     }
 
 };
@@ -143,51 +145,49 @@ onMounted(() => {
     <div class="supportContainer">
         <div v-if="success" class="supportSuccess">
             <i class="pi pi-check-circle"></i>
-            <h2>Sucesso</h2>
+            <h2>{{ t('support.success') }}</h2>
 
             <b class="ticket">
-                Seu Ticket: <br />
+                {{ t('support.ticket') }} <br />
                 {{ ticketId }}
             </b>
 
             <p>
                 <br />
-                Recebemos seu email de suporte, <br />
-                temos um prazo de <b>24 Horas uteis</b> para a resposta, <br />
-                iremos responder via email
+                {{ t('support.supportSuccessDescription') }}
             </p>
-            <button type="button" @click="router.push('/app')">Voltar ao app</button>
+            <button type="button" @click="router.push('/app')">{{ t('support.returnToApp') }}</button>
         </div>
 
         <div v-else class="supportContent">
             <header>
                 <img src="../assets/DinoSupport.png" alt="dino support" />
-                <h3>Oi, eu sou o Bob, seja bem-vindo ao suporte<br /> Como posso ajudar ?</h3>
+                <h3>{{ t('support.messageDinoBob') }}</h3>
             </header>
             <form>
-                <label><b>*</b> Titulo: </label>
-                <input :value="title" type="text" placeholder="Insira seu titulo aqui"
+                <label><b>*</b>{{ t('support.title') }}</label>
+                <input :value="title" type="text" :placeholder="`${t('support.titlePlaceholder') }`"
                     @change="event => handleChangeTitle(event)">
 
-                <label><b>*</b> Categoria: </label>
+                <label><b>*</b> {{ t('support.category') }}: </label>
                 <select :value="category" @change="event => handleChangeCategory(event)">
-                    <option value="" v-if="!category">Selecione a categoria</option>
-                    <option value="pagamento">Pagamentos</option>
-                    <option value="planos">Planos</option>
-                    <option value="planejamento">Planejamentos</option>
-                    <option value="Sistema">Sistema</option>
-                    <option value="Outros">Outros</option>
+                    <option value="" v-if="!category">{{ t('support.chooseCategory') }}</option>
+                    <option value="pagamento">{{ t('support.payments') }}</option>
+                    <option value="planos">{{ t('support.plans') }}</option>
+                    <option value="planejamento">{{ t('support.planning') }}</option>
+                    <option value="Sistema">{{ t('support.system') }}</option>
+                    <option value="Outros">{{ t('support.others') }}</option>
                 </select>
 
-                <label><b>*</b> Descrição: </label>
+                <label><b>*</b> {{ t('support.description') }}</label>
                 <textarea :value="description" @change="event => handleChangeDescription(event)"
-                    placeholder="Insira a descricao do problema"></textarea>
+                    :placeholder="`${t('support.descriptionPlaceholder') }`"></textarea>
 
-                <label>Arquivos: </label>
+                <label>{{ t('support.files') }}: </label>
                 <label for="uploadFiles" class="dropzone" @dragover.prevent
                     @drop.prevent="event => handleDropzone(event)">
                     <i class="pi pi-upload"></i>
-                    Clique, ou arraste seus arquivos aqui
+                    {{ t('support.filesDropdown') }}
                 </label>
                 <input class="uploadFiles hidden" id="uploadFiles" type="file"
                     @change="event => handleUploadClick(event)" accept=".png,.jpg,.pdf,.jpeg,.webp" multiple />
@@ -208,9 +208,9 @@ onMounted(() => {
                 </div>
 
                 <span class="buttonsContainer">
-                    <button type="button" @click="router.push('/')">Cancelar</button>
+                    <button type="button" @click="router.push('/')">{{ t('support.cancel') }}</button>
                     <button type="button" :class="hasEmptyFields() ? 'btnDisabled' : ''" @click="handleSendSupport()">
-                        Enviar
+                        {{ t('support.send') }}
                     </button>
                 </span>
             </form>

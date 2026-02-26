@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { ref, inject, nextTick, watchEffect, onMounted, watch } from 'vue';
+import { VueDatePicker } from '@vuepic/vue-datepicker';
+import { useI18n } from 'vue-i18n';
+import Docxtemplater from "docxtemplater";
+import PizZip from 'pizzip';
+import axios from 'axios';
 import type { IPlanningDay, IDays } from '../../interfaces/planning.interface';
 import type { ILoadingContext } from '../../interfaces/context/loading.interface';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
@@ -9,17 +14,14 @@ import type { ITemplateChooseContext } from '../../interfaces/context/templateCh
 import type { IDashboard } from '../../interfaces/dashboard.interface';
 import { qsn } from '../../assets/qsn.json';
 import { saveAs } from 'file-saver';
-import dayConverter from '../../helpers/dayConverter';
 import { debounce } from 'lodash-es';
+import dayConverter from '../../helpers/dayConverter';
 import getPrompt from '../../helpers/prompt';
 import backendApi from '../../api/api';
 import monthConverter from '../../helpers/monthConverter';
-import Docxtemplater from "docxtemplater";
-import PizZip from 'pizzip';
-import axios from 'axios';
-import { VueDatePicker } from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 
+const { t } = useI18n();
 const plans = ref<IPlanningDay>({ day1: [''], day2: [''], day3: [''], day4: [''], day5: [''] });
 const selectedDay = ref<IDays['days']>('day1');
 const planType = ref<IShowPreview['planType']>('Semanal');
@@ -148,7 +150,7 @@ const stopPropagation = (event: Event): void => {
 
 const showTemplatePreviewChoose = () => {
     if (isAditionInformationMissing()) {
-        popupContext.handleChangePopupInfo('Preencha todas as informacoes \n e tente novamente', 'warning', true);
+        popupContext.handleChangePopupInfo(`${t('design.fillAllFields')}`, 'warning', true);
         return;
     }
     showAditionalInformation.value = false;
@@ -164,19 +166,19 @@ const generatePlan = async () => {
 
         if (planType.value === 'Semanal') {
             if (Number(dashboardResponse.used_weekly_planning) >= Number(dashboardResponse.max_amount_planning_week)) {
-                popupContext.handleChangePopupInfo('Todos os tokens semanais foram utilizados', 'error', true);
+                popupContext.handleChangePopupInfo(`${t('design.missingWeeklyToken')}`, 'error', true);
                 return;
             }
         } else {
             if (Number(dashboardResponse.used_daily_planning) >= Number(dashboardResponse.max_amount_planning_daily)) {
-                popupContext.handleChangePopupInfo('Todas os tokens diarios foram utilizados', 'error', true);
+                popupContext.handleChangePopupInfo(`${t('design.missingWeeklyToken')}`, 'error', true);
                 return;
             }
         }
 
         const hasEmptyStrings = hasEmptyStringsInClasses().find(element => element === true);
         if (planType.value === 'Semanal' && hasEmptyStrings) {
-            popupContext.handleChangePopupInfo('Preencha os campos para escolher o template', 'error', true);
+            popupContext.handleChangePopupInfo(`${t('design.fillAllFields')}`, 'error', true);
             return;
         }
 
@@ -190,7 +192,7 @@ const generatePlan = async () => {
             });
 
             if (hasEmptyFields) {
-                popupContext.handleChangePopupInfo('Preencha todos os campos e tente novamente', 'warning', true);
+                popupContext.handleChangePopupInfo(`${t('design.fillAllFields')}`, 'warning', true);
 
                 return;
             }
@@ -207,7 +209,7 @@ const generatePlan = async () => {
             }
 
             if (hasEmptyFields) {
-                popupContext.handleChangePopupInfo('Preencha todos os campos e tente novamente', 'warning', true);
+                popupContext.handleChangePopupInfo(`${t('design.fillAllFields')}`, 'warning', true);
 
                 return;
             }
@@ -385,11 +387,11 @@ const generatePlan = async () => {
 
         await backendApi.patch(`/subscription/${planType.value === 'Semanal' ? 'week' : 'daily'}/${dashboardResponse.subscription_id}`);
         isLoadingContext.handleChangeIsLoading(false);
-        popupContext.handleChangePopupInfo('Documento gerado com sucesso', 'success', true);
+        popupContext.handleChangePopupInfo(`${t('design.successMessage')}`, 'success', true);
         handleChangeTemplateChoose({ ...templateChoose, choosed: false });
     } catch (err) {
         isLoadingContext.handleChangeIsLoading(false);
-        popupContext.handleChangePopupInfo('Erro ao gerar documento', 'error', true);
+        popupContext.handleChangePopupInfo(`${t('design.errorMessage')}`, 'error', true);
         handleChangeTemplateChoose({ ...templateChoose, choosed: false });
     }
 };
@@ -420,17 +422,17 @@ watch(rangeDates, () => {
         <section class="aditionalInformationsContainer" v-if="showAditionalInformation"
             @click="() => showAditionalInformation = false">
             <form class="aditionalInformationsForm" @click="event => stopPropagation(event)">
-                <h2>Informacoes adicionais: </h2>
+                <h2>{{ t('design.aditionalInformations') }}</h2>
 
-                <label>Nome da escola: </label>
+                <label>{{ t('design.schoolName') }}</label>
                 <input type="text" :value="schoolName" placeholder="Nome da escola..."
                     @change="event => handleChangeSchoolName(event)" />
 
-                <label>Classe/Serie: </label>
+                <label>{{ t('design.className') }}</label>
                 <input type="text" :value="className" placeholder="Classe ou Serie"
                     @change="event => handleChangeClassName(event)" />
 
-                <label>Data do planejamento </label>
+                <label>{{ t('design.datePlanning') }}</label>
 
                 <input v-if="planType === 'Diario'" type="date" :value="planDateStart"
                     @change="event => { handleChangeClassDateStart(event); handleChangeClassDateEnd(event) }" />
@@ -441,11 +443,11 @@ watch(rangeDates, () => {
                 <span class="btnControlsContainer">
                     <button :class="isAditionInformationMissing() ? 'btnChooseTemplateCancel' : 'btnChooseTemplate'"
                         type="button" @click="() => showTemplatePreviewChoose()">
-                        Escolher Template
+                        {{ t('design.chooseTemplate') }}
                     </button>
                     <button @click="() => showAditionalInformation = false" class="btnChooseTemplateCancel"
                         type="button">
-                        Cancelar
+                        {{ t('design.cancel') }}
                     </button>
                 </span>
             </form>
@@ -454,10 +456,10 @@ watch(rangeDates, () => {
         <div class="planningSelect">
             <img src="../../assets/dinoPlanejador.png" alt="Dino planejador" />
             <span>
-                <h1>Gere seu planejamento: </h1>
+                <h1>{{ t('design.generatePlanning') }}</h1>
                 <select class="planSelect" :value="planType" @change="event => handleChangePlanType(event)">
-                    <option value="Diario">Diario</option>
-                    <option value="Semanal">Semanal</option>
+                    <option value="Diario">{{ t('design.daily') }}</option>
+                    <option value="Semanal">{{ t('design.weekly') }}</option>
                 </select>
             </span>
         </div>
@@ -467,9 +469,9 @@ watch(rangeDates, () => {
         <form v-if="planType === 'Diario'" class="dailyPlan">
             <div class="dailyPlanContentContainer">
                 <section v-for="(plano, index) in plans.day1">
-                    <label>📚 Aula/Atividade {{ index + 1 }}</label>
+                    <label>📚 {{ t('design.classActivity') }} {{ index + 1 }}</label>
                     <span class="row">
-                        <input type="text" :value="plano" placeholder="Descreva sua aula/atividade sem usar virgulas"
+                        <input type="text" :value="plano" :placeholder="`${t('design.inputPlaceholder')}`"
                             @change="event => handleChangePlanText('day1', index, (event.target as HTMLInputElement).value)" />
                         <button v-if="index > 0" type="button" class="btnTrash"
                             @click="handleRemoveClassAtvFromPlan('day1', index)">
@@ -480,12 +482,12 @@ watch(rangeDates, () => {
             </div>
             <div class="btnContainer">
                 <button class="btnAddClassAtv" type="button" @click="handleAddNewClassInPlanning('day1')">
-                    <i class="pi pi-plus-circle"></i> Adicionar aula
+                    <i class="pi pi-plus-circle"></i> {{ t('design.addActivity') }}
                 </button>
 
                 <button :class="hasEmptyStringsInDiary() ? 'btnDiaryGenerateCancel' : 'btnDiaryGenerate'" type="button"
                     @click="() => showAditionalInformation = hasEmptyStringsInDiary() ? false : true">
-                    Avancar
+                    {{t('design.forward')}}
                 </button>
             </div>
         </form>
@@ -497,31 +499,31 @@ watch(rangeDates, () => {
                     :class="['btnWeekDays', selectedDay === 'day1' ? 'selected' : '']">
                     <i
                         :class="['pi', hasEmptyStringsInClasses()[0] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
-                    Segunda
+                    {{t('design.monday')}}
                 </li>
                 <li @click="() => handleChangeSelectedDay('day2')"
                     :class="['btnWeekDays', selectedDay === 'day2' ? 'selected' : '']">
                     <i
                         :class="['pi', hasEmptyStringsInClasses()[1] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
-                    Terca
+                    {{t('design.tuesday')}}
                 </li>
                 <li @click="() => handleChangeSelectedDay('day3')"
                     :class="['btnWeekDays', selectedDay === 'day3' ? 'selected' : '']">
                     <i
                         :class="['pi', hasEmptyStringsInClasses()[2] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
-                    Quarta
+                    {{t('design.wednesday')}}
                 </li>
                 <li @click="() => handleChangeSelectedDay('day4')"
                     :class="['btnWeekDays', selectedDay === 'day4' ? 'selected' : '']">
                     <i
                         :class="['pi', hasEmptyStringsInClasses()[3] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
-                    Quinta
+                    {{t('design.thursday')}}
                 </li>
                 <li @click="() => handleChangeSelectedDay('day5')"
                     :class="['btnWeekDays', selectedDay === 'day5' ? 'selected' : '']">
                     <i
                         :class="['pi', hasEmptyStringsInClasses()[4] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
-                    Sexta
+                    {{t('design.friday')}}
                 </li>
             </ul>
 
@@ -538,31 +540,31 @@ watch(rangeDates, () => {
                         @click="() => handleChangeSelectedDay('day1')">
                         <i
                             :class="['pi', hasEmptyStringsInClasses()[0] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
-                        Segunda
+                        {{ t('design.monday') }}
                     </li>
                     <li :class="['mobileDayItemList', selectedDay === 'day2' ? 'mobileDaySelected' : '']"
                         @click="() => handleChangeSelectedDay('day2')">
                         <i
                             :class="['pi', hasEmptyStringsInClasses()[1] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
-                        Terca
+                        {{ t('design.tuesday') }}
                     </li>
                     <li :class="['mobileDayItemList', selectedDay === 'day3' ? 'mobileDaySelected' : '']"
                         @click="() => handleChangeSelectedDay('day3')">
                         <i
                             :class="['pi', hasEmptyStringsInClasses()[2] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
-                        Quarta
+                        {{ t('design.wednesday') }}
                     </li>
                     <li :class="['mobileDayItemList', selectedDay === 'day4' ? 'mobileDaySelected' : '']"
                         @click="() => handleChangeSelectedDay('day4')">
                         <i
                             :class="['pi', hasEmptyStringsInClasses()[3] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
-                        Quinta
+                        {{ t('design.thursday') }}
                     </li>
                     <li :class="['mobileDayItemList', selectedDay === 'day5' ? 'mobileDaySelected' : '']"
                         @click="() => handleChangeSelectedDay('day5')">
                         <i
                             :class="['pi', hasEmptyStringsInClasses()[4] ? 'pi-clock iconUncheck' : 'pi-verified iconCheck']"></i>
-                        Sexta
+                        {{ t('design.friday') }}
                     </li>
                 </ul>
                 <span v-else></span>
@@ -573,8 +575,8 @@ watch(rangeDates, () => {
                 <div class="classContent">
                     <div v-for="value, index in plans[selectedDay]" class="classWrapper">
                         <span class="classDescription">
-                            <h2>📚 Aula/Atividade {{ index + 1 }}: </h2>
-                            <input type="text" placeholder="Insira a descricao da atividade... " :value="value"
+                            <h2>📚 {{ t('design.classActivity') }} {{ index + 1 }}: </h2>
+                            <input type="text" :placeholder="`${t('design.inputPlaceholder')}`" :value="value"
                                 @change="(event) => handleChangePlanText(selectedDay, index, (event.target! as HTMLInputElement).value)" />
                         </span>
                         <button @click="() => handleRemoveClassAtvFromPlan(selectedDay, index)"
@@ -584,17 +586,19 @@ watch(rangeDates, () => {
                 </div>
 
                 <span class="btnControlsContainer">
-                    <button @click="() => handleGoBack()"><i class="pi pi-arrow-left"></i> Voltar</button>
+                    <button @click="() => handleGoBack()"><i class="pi pi-arrow-left"></i> {{ t('design.back')
+                        }}</button>
                     <button @click="() => handleAddNewClassInPlanning(selectedDay)"><i class="pi pi-plus-circle"></i>
-                        Adicionar atividade</button>
-                    <button @click="() => handleGoFoward()">Avancar <i class="pi pi-arrow-right"></i></button>
+                        {{ t('design.addActivity') }}</button>
+                    <button @click="() => handleGoFoward()">{{ t('design.forward') }} <i
+                            class="pi pi-arrow-right"></i></button>
                 </span>
             </div>
         </div>
         <button
             :class="hasEmptyStringsInClasses().find(element => element === true) ? 'btnGeneratePlanCancel' : 'btnGeneratePlan'"
             v-if="planType === 'Semanal'" type="button"
-            @click="() => showAditionalInformation = hasEmptyStringsInClasses().find(element => element === true) ? false : true">Avancar</button>
+            @click="() => showAditionalInformation = hasEmptyStringsInClasses().find(element => element === true) ? false : true">{{ t('design.forward') }}</button>
     </div>
 </template>
 

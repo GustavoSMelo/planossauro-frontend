@@ -1,0 +1,23 @@
+{
+    "contactSupportError": "Nao foi possivel contactar o suporte, tente novamente mais tarde",
+    "success": "Sucesso",
+    "ticket": "Seu ticket: ",
+    "supportSuccessDescription": "Recebemos seu email de suporte,\n temos um prazo de 24 Horas uteis para a resposta, \n iremos responder via email",
+    "returnToApp": "Voltar ao app",
+    "messageDinoBob": "Oi, eu sou o Bob, seja bem-vindo ao suporte\n Como posso ajudar ?",
+    "title": "Titulo: ",
+    "titlePlaceholder": "Insira seu titulo aqui",
+    "category": "Categoria",
+    "chooseCategory": "Escolha a categoria",
+    "payments": "Pagamentos",
+    "plans": "Planos",
+    "planning": "Planejamentos",
+    "system": "Sistema",
+    "others": "Outros",
+    "description": "Descrição: ",
+    "descriptionPlaceholder": "Insira a descricao do problema",
+    "files": "Arquivos",
+    "filesDropdown": "Clique, ou arraste seus arquivos aqui",
+    "cancel": "Cancelar",
+    "send": "Enviar"
+}

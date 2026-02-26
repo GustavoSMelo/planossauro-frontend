@@ -1,0 +1,10 @@
+{
+    "title": "Sua conta foi excluida",
+    "descriptionSub1": "Voce selecionou em excluir a conta, voce esta em periodo de delecao de conta, que ira terminar em",
+    "days": "dia(s)",
+    "descriptionSub2": "se deseja voltar a usar nosso sistema, basta clicar no botao abaixo para retornar os planejamentos",
+    "restoreAccount": "Restaurar conta",
+    "logout": "Deslogar",
+    "restoreAccountMessage": "Conta restaurada com sucesso",
+    "restoreAccountError": "Nao foi possivel restaurar a conta, tente novamente mais tarde"
+}

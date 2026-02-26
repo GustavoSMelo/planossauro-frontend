@@ -1,0 +1,23 @@
+{
+    "contactSupportError": "Could not contact support, please try again later",
+    "success": "Success",
+    "ticket": "Your ticket: ",
+    "supportSuccessDescription": "We have received your support email.\n Our response time is within 24 business hours.\n We will reply via email.",
+    "returnToApp": "Back to app",
+    "messageDinoBob": "Hi, I'm Bob! Welcome to support.\n How can I help you?",
+    "title": "Title: ",
+    "titlePlaceholder": "Enter your title here",
+    "category": "Category",
+    "chooseCategory": "Choose a category",
+    "payments": "Payments",
+    "plans": "Plans",
+    "planning": "Planning",
+    "system": "System",
+    "others": "Others",
+    "description": "Description: ",
+    "descriptionPlaceholder": "Enter a description of the problem",
+    "files": "Files",
+    "filesDropdown": "Click or drag your files here",
+    "cancel": "Cancel",
+    "send": "Send"
+}

@@ -58,14 +58,24 @@ onMounted(() => { getPlan(); });
             <li class="planInfo">Plano {{ planName }}</li>
             <hr />
             <li @click="handleChangeMobilePage('planning')"
-                :class="[currentContent === 'planning' ? 'choosed' : '', 'btnNavbar']">Planejar</li>
+                :class="[currentContent === 'planning' ? 'choosed' : '', 'btnNavbar']">
+                {{ $t('navbar.design') }}
+            </li>
             <li @click="handleChangeMobilePage('planning_list')"
-                :class="[currentContent === 'planning_list' ? 'choosed' : '', 'btnNavbar']">Planejamentos</li>
+                :class="[currentContent === 'planning_list' ? 'choosed' : '', 'btnNavbar']">
+                {{ $t('navbar.plannings') }}
+            </li>
             <li @click="handleChangeMobilePage('plan')"
-                :class="[currentContent === 'plan' ? 'choosed' : '', 'btnNavbar']">Planos</li>
+                :class="[currentContent === 'plan' ? 'choosed' : '', 'btnNavbar']">
+                {{ $t('navbar.plans') }}
+            </li>
             <li @click="handleChangeMobilePage('profile')"
-                :class="[currentContent === 'profile' ? 'choosed' : '', 'btnNavbar']">Perfil</li>
-            <li :class="['btnNavbar']" @click="logout">Sair</li>
+                :class="[currentContent === 'profile' ? 'choosed' : '', 'btnNavbar']">
+                {{ $t('navbar.profile') }}
+            </li>
+            <li :class="['btnNavbar']" @click="logout">
+                {{ $t('navbar.logout') }}
+            </li>
         </ul>
     </div>
 </template>

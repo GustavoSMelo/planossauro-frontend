@@ -5,6 +5,7 @@ import type { ILoadingContext } from '../../interfaces/context/loading.interface
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
 import type { IPageContent } from '../../interfaces/pageContents.interface';
 import backendApi from '../../api/api';
+import { useI18n } from 'vue-i18n';
 
 const { handleChangeCurrentContent } = defineProps<{
     handleChangeCurrentContent: (content: IPageContent['contents']) => void
@@ -12,6 +13,7 @@ const { handleChangeCurrentContent } = defineProps<{
 const planning = ref<IPlanning>();
 const { handleChangeIsLoading } = inject('isLoading') as ILoadingContext;
 const { handleChangePopupInfo } = inject('popup') as IPopupContext;
+const { t } = useI18n();
 const uuid = sessionStorage.getItem('planning_selectedUUID');
 
 const goBackToPlanningsList = () => {
@@ -23,11 +25,11 @@ const handleDeletePlanning = async () => {
         handleChangeIsLoading(true);
 
         await backendApi.delete(`/planning/${uuid}`);
-        handleChangePopupInfo('Planejamento excluido com sucesso', 'success', true);
+        handleChangePopupInfo(t('removePlanning.planningRemovedMessage'), 'success', true);
         handleChangeIsLoading(false);
         handleChangeCurrentContent('planning_list');
     } catch (err) {
-        handleChangePopupInfo('Erro ao deletar planejamento', 'error', true);
+        handleChangePopupInfo(t('removePlanning.planningRemovedMessageError'), 'error', true);
         handleChangeIsLoading(false);
     }
 };
@@ -38,7 +40,7 @@ const getDataFromAPI = async () => {
         const planningResponse = (await backendApi.get(`/planning/show/${uuid}`)).data as IPlanning;
 
         if (!planningResponse || !planningResponse === null) {
-            handleChangePopupInfo('Nenhum planejamento foi selecionado', 'error', true);
+            handleChangePopupInfo(t('removePlanning.planningNotFounded'), 'error', true);
             handleChangeCurrentContent('home');
         }
 
@@ -57,15 +59,17 @@ onMounted(() => {
 
 <template>
     <div class="deletePlanningContainer">
-        <h1>Continuar com a exclusao ?</h1>
-        <p>{{ planning?.start_plan === planning?.end_plan ? 'Diario' : 'Semanal' }} | {{ planning?.start_plan }} ~ {{
-            planning?.end_plan }}</p>
-        <p>Turma: {{ planning?.class_name }} | Escola: {{ planning?.school_name }}</p>
-        <small><i class="pi pi-exclamation-circle"></i>Os dados excluidos nao poderao ser recuperados!</small>
+        <h1>{{ t('removePlanning.planningNotFounded') }}</h1>
+        <p>{{ planning?.start_plan === planning?.end_plan ? t('removePlanning.daily') : t('removePlanning.weekly') }} |
+            {{ planning?.start_plan }} ~ {{
+                planning?.end_plan }}</p>
+        <p>{{ t('removePlanning.class') }}: {{ planning?.class_name }} | {{ t('removePlanning.school') }}: {{
+            planning?.school_name }}</p>
+        <small><i class="pi pi-exclamation-circle"></i>{{ t('removePlanning.description') }}</small>
 
         <span class="btnContainer">
-            <button type="button" @click="goBackToPlanningsList">Cancelar</button>
-            <button type="button" @click="handleDeletePlanning">Deletar</button>
+            <button type="button" @click="goBackToPlanningsList">{{ t('removePlanning.cancel') }}</button>
+            <button type="button" @click="handleDeletePlanning">{{ t('removePlanning.delete') }}</button>
         </span>
     </div>
 </template>

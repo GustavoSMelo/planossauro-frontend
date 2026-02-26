@@ -1,0 +1,20 @@
+{
+    "initialDate": "Initial date planning",
+    "class": "Class",
+    "school": "School",
+    "archived": "Archived",
+    "planningType": "Planning type",
+    "search": "Search",
+    "edit": "Edit",
+    "remove": "Remove",
+    "loadMore": "Load more planning",
+    "notFoundedPlanning": "Any planning was founded",
+    "createPlanning": "Create planning",
+    "reload": "Reload",
+    "yes": "Yes",
+    "no": "No",
+    "both": "Both",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "date": "Date"
+}

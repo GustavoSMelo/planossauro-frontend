@@ -6,6 +6,7 @@ import { type IPlan, type ISubscription } from '../../interfaces/subscription.in
 import type { IPageContent } from '../../interfaces/pageContents.interface';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
 import type { IPaymentHistory } from '../../interfaces/paymentHistory.interface';
+import { useI18n } from 'vue-i18n';
 
 const { handleChangeCurrentContent } = defineProps<{
     handleChangeCurrentContent: (newValue: IPageContent['contents']) => void
@@ -26,7 +27,7 @@ const subscriptionInfo = ref<ISubscription>({
 const planInfo = ref<IPlan>();
 const showCancelPlan = ref(false);
 const paymentHistory = ref<IPaymentHistory>({ payments: [] });
-
+const { t } = useI18n();
 const { handleChangePopupInfo } = inject('popup') as IPopupContext;
 
 const handleGetPlanContent = async () => {
@@ -36,7 +37,7 @@ const handleGetPlanContent = async () => {
     const plan = (await backendApi.get(`/plans/${subscriptionInfo.value.plans_id}`)).data as IPlan;
     const allPlans = (await backendApi.get('/plans')).data.plans as Array<IPlan>;
 
-    allPlansInfo.value = [...allPlans ];
+    allPlansInfo.value = [...allPlans];
     planInfo.value = { ...plan };
 };
 
@@ -78,10 +79,10 @@ onMounted(() => {
 });
 </script>
 <template>
-    <div v-if="showCancelPlan" class="popupCancelContainer">
-        <section class="popupCancelContent">
-            <h2>Deseja trocar para o plano free ?</h2>
-            <p>Trocando para o plano gratuito, voce estara cancelando o seu plano atual, <b>Deseja continuar ?</b></p>
+    <div v-if="showCancelPlan" class="popupCancelContainer" @click="showCancelPlan = false">
+        <section class="popupCancelContent" @click="event => event.stopPropagation()">
+            <h2>{{ $t('plans.changeToFree') }}</h2>
+            <p>{{ $t('plans.changeToFreeDescription') }}</p>
 
             <span class="btnContainer">
                 <button type="button" @click="showCancelPlan = false">Voltar</button>
@@ -90,25 +91,29 @@ onMounted(() => {
         </section>
     </div>
     <div class="plansContainer">
-        <h2 class="plansTitle">Gerenciar assinatura</h2>
+        <h2 class="plansTitle">{{ $t('plans.manageSubscription') }}</h2>
 
         <div class="currentPlanContainer">
-            <h2>Informacoes do plano</h2>
+            <h2>{{ $t('plans.planInformations') }}</h2>
 
             <ul>
-                <li><b>Plano:</b> {{ planInfo?.plan_name }}</li>
-                <li><b>Proximo faturamento:</b> {{ subscriptionInfo?.next_billing ?
+                <li><b>{{ $t('plans.plan') }}:</b> {{ planInfo?.plan_name }}</li>
+                <li><b>{{ $t('plans.nextBilling') }}:</b> {{ subscriptionInfo?.next_billing ?
                     convertIsoDateToBR(subscriptionInfo?.next_billing.toString()) :
-                    'Proximo faturamento em processamento' }}</li>
-                <li><b>Valor:</b> {{ planInfo?.price === 0 ? 'Gratis' : `R$ ${planInfo?.price}.00` }}</li>
-                <li><b>Status do plano: </b>
+                    t('plans.nextBillingProcessing') }}</li>
+                <li> <b>{{ $t('plans.value') }}:</b> {{ planInfo?.price === 0 ? t('plans.free') : `R$
+                    ${planInfo?.price}.00`
+                    }}
+                </li>
+                <li><b>{{ $t('plans.planStatus') }}: </b>
                     <p class="statusActive"><i class="pi pi-verified"></i> {{ subscriptionInfo?.status }} </p>
                 </li>
                 <li>
-                    <b>Cartao: </b>
-                    <span v-if="subscriptionInfo?.last_four_digits">**** **** **** {{ subscriptionInfo.last_four_digits
-                        }}</span>
-                    <span v-else>Nenhum cartao cadastrado</span>
+                    <b>{{ $t('plans.card') }}: </b>
+                    <span v-if="subscriptionInfo?.last_four_digits">**** **** **** {{
+                        subscriptionInfo.last_four_digits
+                    }}</span>
+                    <span v-else>{{ $t('plans.noCardFounded') }}</span>
                 </li>
             </ul>
 
@@ -117,54 +122,60 @@ onMounted(() => {
                     && subscriptionInfo?.last_four_digits === 0 ||
                     subscriptionInfo?.last_four_digits === null ?
                     'btnDisable' : 'buttonPressable'">
-                    Alterar cartao
+                    {{ $t('plans.changeCard') }}
                 </button>
-                <button type="button" @click="handleChangeCurrentContent('edit_plan')">Alterar plano</button>
+                <button type="button" @click="handleChangeCurrentContent('edit_plan')">{{ $t('plans.changePlan')
+                    }}</button>
                 <button type="button" @click="showCancelPlan = true" :class="subscriptionInfo
                     && subscriptionInfo?.last_four_digits === 0 ||
                     subscriptionInfo?.last_four_digits === null ?
-                    'btnDisable' : 'buttonPressable'">Cancelar plano</button>
+                    'btnDisable' : 'buttonPressable'">{{ $t('plans.cancelPlan') }}</button>
             </span>
         </div>
 
         <div class="paymentHistoryListContainer">
-            <h2>Historico de pagamentos</h2>
+            <h2>{{ $t('plans.paymentHistory') }}</h2>
 
             <table v-if="paymentHistory.payments.length">
                 <thead>
                     <tr>
-                        <th>Data</th>
-                        <th>Descricao</th>
-                        <th>Plano</th>
-                        <th>Bandeira</th>
-                        <th>Cartao</th>
-                        <th>Valor</th>
-                        <th>Status</th>
-                        <th>Acao</th>
+                        <th>{{ $t('plans.date') }}</th>
+                        <th>{{ $t('plans.description') }}</th>
+                        <th>{{ $t('plans.plan') }}</th>
+                        <th>{{ $t('plans.flag') }}</th>
+                        <th>{{ $t('plans.card') }}</th>
+                        <th>{{ $t('plans.value') }}</th>
+                        <th>{{ $t('plans.status') }}</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(paymentH, index) in paymentHistory.payments">
-                        <td data-cell="Data: ">{{ convertIsoDateToBR(paymentH.payment_date) }}</td>
-                        <td data-cell="Descricao: ">{{ paymentH.description }}</td>
-                        <td data-cell="Plano: ">Plano {{ allPlansInfo.find(plan => plan.uuid === paymentH.plan_id)?.plan_name }}</td>
-                        <td data-cell="Bandeira: ">
-                            <img v-if="paymentH.card_brand === 'mastercard'" src="../../assets/mastercard_logo.svg" alt="bandeira logo" />
-                            <img v-else-if="paymentH.card_brand === 'visa'" src="../../assets/visa.png" alt="bandeira logo" />
-                            <img v-else-if="paymentH.card_brand === 'american express'" src="../../assets/american-express.png" alt="bandeira logo" />
+                        <td :data-cell="`${t('plans.date')}:`">{{ convertIsoDateToBR(paymentH.payment_date) }}</td>
+                        <td :data-cell="`${t('plans.description')}:`">{{ paymentH.description }}</td>
+                        <td :data-cell="`${t('plans.plan')}:`">Plano {{allPlansInfo.find(plan => plan.uuid ===
+                            paymentH.plan_id)?.plan_name}}</td>
+                        <td :data-cell="`${t('plans.flag')}:`">
+                            <img v-if="paymentH.card_brand === 'mastercard'" src="../../assets/mastercard_logo.svg"
+                                alt="bandeira logo" />
+                            <img v-else-if="paymentH.card_brand === 'visa'" src="../../assets/visa.png"
+                                alt="bandeira logo" />
+                            <img v-else-if="paymentH.card_brand === 'american express'"
+                                src="../../assets/american-express.png" alt="bandeira logo" />
                         </td>
-                        <td data-cell="Cartao: " class="cardInfoTable">
+                        <td :data-cell="`${t('plans.card')}:`" class="cardInfoTable">
                             <p>**** **** **** {{ paymentH.last_four_digits }}</p>
                         </td>
-                        <td data-cell="Valor: ">R${{ paymentH.price }}.00</td>
-                        <td data-cell="Status: ">Pago</td>
-                        <td data-cell="Acao: "><button type="button" @click="handleOpenNFeLink(index)">Baixar</button></td>
+                        <td :data-cell="`${t('plans.value')}:`">R${{ paymentH.price }}.00</td>
+                        <td :data-cell="`${t('plans.status')}:`">Pago</td>
+                        <td><button type="button" @click="handleOpenNFeLink(index)">Download</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
             <section class="paymentNotFound" v-else>
                 <img src="../../assets/DinoConsultaPlanejamentos.png" alt="imagem Dino" />
-                <h3>Nenhum pagamento foi encontrado </h3>
+                <h3>{{ $t('plans.noPaymentFounded') }}</h3>
             </section>
         </div>
     </div>

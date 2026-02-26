@@ -33,10 +33,6 @@ const planInfo = ref<IPlan>({
 const showPopupCancel = ref(false);
 const { handleChangePopupInfo } = inject('popup') as IPopupContext;
 
-const handleOpenStripePage = (): void => {
-    window.open('https://stripe.com/en-br', '_blank');
-};
-
 const handleEditYourPlan = async (choosedPlan: 'essencial' | 'premium' | 'free') => {
     const userStringfied = sessionStorage.getItem('user') ?? null;
     const loginType = sessionStorage.getItem('loginType') as ILoginType['types'] ?? 'google';
@@ -104,103 +100,97 @@ onMounted(async () => {
         </section>
     </div>
     <div class="selectEditPlanContainer">
-        <h2 class="choosePlanTitle">Escolha o plano: </h2>
+        <h2 class="choosePlanTitle">{{ $t('choosePlans.choosePlan') }}</h2>
 
         <span class="planInformationPayment">
             <span>
                 <i class="pi pi-info-circle"></i>
-                <h3><i>Informamos:</i> </h3>
+                <h3><i>{{ $t('choosePlans.weInformYou') }}</i> </h3>
             </span>
-            <p>Ao selecionar o plano, ira ser redirecionado ao <i @click="handleOpenStripePage()">STRIPE</i>, e apos o
-                pagamento, voltara ao
-                sistema do Planeja.AI com seu plano atualizado. Nao coletamos nenhum dado sensivel
-            </p>
+            <p>{{ $t('choosePlans.informationDetails') }}</p>
         </span>
 
         <div class="planScrollContainer">
             <section class="planListContainer">
                 <div :class="['planContainer', planInfo.plan_name === 'essencial' ? 'selectedPlanContainer' : '']">
-                    <h2><span v-if="planInfo.plan_name === 'essencial'">(Atual) </span>Mais economico</h2>
+                    <h2><span v-if="planInfo.plan_name === 'essencial'">({{ $t('choosePlans.current') }}) </span>{{
+                        $t('choosePlans.moreEconomical') }}</h2>
 
                     <span class="planWrapper">
                         <img src="../../assets/dino_party.png" alt="dino happy" />
 
-                        <h3>Plano Essential</h3>
+                        <h3>{{ $t('choosePlans.essentialPlan') }}</h3>
                         <small>
-                            <p>Este plano é essencial para educadores que estão trabalhando em uma escola e dão aulas
-                                para uma turma.<br />
-                                Você terá acesso a:</p>
+                            <p>{{ $t('choosePlans.essentialPlanDescription') }}</p>
                             <ul>
-                                <li><i class="pi pi-check-circle"></i>10 planejamentos diarios</li>
-                                <li><i class="pi pi-check-circle"></i>10 planejamentos semanais</li>
-                                <li><i class="pi pi-check-circle"></i>10 horas de trabalho economizadas</li>
+                                <li><i class="pi pi-check-circle"></i>{{ $t('choosePlans.essentialDailyTokens') }}</li>
+                                <li><i class="pi pi-check-circle"></i>{{ $t('choosePlans.essentialWeeklyTokens') }}</li>
+                                <li><i class="pi pi-check-circle"></i>{{ $t('choosePlans.essentialHours') }}</li>
                             </ul>
                         </small>
 
                         <div class="priceContainer">
                             <small>R$</small>
-                            <h1>20.00</h1>
-                            <small> /mes</small>
+                            <h1>20.0</h1>
+                            <small> /{{ $t('choosePlans.month') }}</small>
                         </div>
 
-                        <button type="button" @click="handleEditYourPlan('essencial')">Escolher</button>
+                        <button type="button" @click="handleEditYourPlan('essencial')">{{ $t('choosePlans.choose')
+                            }}</button>
                     </span>
                 </div>
 
                 <div :class="['planContainer', planInfo.plan_name === 'premium' ? 'selectedPlanContainer' : '']">
-                    <h2><span v-if="planInfo.plan_name === 'premium'">(Atual) </span> Mais completo</h2>
+                    <h2><span v-if="planInfo.plan_name === 'premium'">({{ $t('choosePlans.current') }}) </span> {{ $t('choosePlans.moreCompleted') }}</h2>
 
                     <span class="planWrapper">
                         <img src="../../assets/dino_premium.png" alt="dino happy" />
 
-                        <h3>Plano Premium</h3>
+                        <h3>{{ $t('choosePlans.premiumPlan') }}</h3>
                         <small>
-                            <p>Este plano é ideal para educadores que dão aulas para multiplas escolas, turmas e gostam
-                                de poupar seu tempo<br />
-                                Você terá acesso a:</p>
+                            <p>{{ $t('choosePlans.premiumPlanDescription') }}</p>
                             <ul>
-                                <li><i class="pi pi-check-circle"></i>90 planejamentos diarios</li>
-                                <li><i class="pi pi-check-circle"></i>90 planejamentos semanais</li>
-                                <li><i class="pi pi-check-circle"></i>90 horas de trabalho economizadas</li>
+                                <li><i class="pi pi-check-circle"></i>{{ $t('choosePlans.premiumDailyTokens') }}</li>
+                                <li><i class="pi pi-check-circle"></i>{{ $t('choosePlans.premiumWeeklyTokens') }}</li>
+                                <li><i class="pi pi-check-circle"></i>{{ $t('choosePlans.premiumHours') }}</li>
                             </ul>
                         </small>
 
                         <div class="priceContainer">
                             <small>R$</small>
-                            <h1>55.00</h1>
-                            <small> /mes</small>
+                            <h1>55.0</h1>
+                            <small> /{{ $t('choosePlans.month') }}</small>
                         </div>
 
-                        <button type="button" @click="handleEditYourPlan('premium')">Escolher</button>
+                        <button type="button" @click="handleEditYourPlan('premium')">{{ $t('choosePlans.choose') }}</button>
                     </span>
                 </div>
 
                 <div :class="['planContainer', planInfo.plan_name === 'free' ? 'selectedPlanContainer' : '']">
-                    <h2><span v-if="planInfo.plan_name === 'free'">(Atual) </span> Demonstração</h2>
+                    <h2><span v-if="planInfo.plan_name === 'free'">({{ $t('choosePlans.current') }}) </span> {{ $t('choosePlans.demo') }}</h2>
 
                     <span class="planWrapper">
                         <img src="../../assets/profileDino.png" alt="dino happy" />
 
-                        <h3>Plano Free</h3>
+                        <h3>{{ $t('choosePlans.freePlan') }}</h3>
                         <small>
-                            <p>Plano com foco em apresentar a nossa plataforma e demonstrar o tempo poupado que
-                                tera<br />
-                                Você terá acesso a:
+                            <p>
+                                {{$t('choosePlans.freePlanDescription')}}
                             </p>
                             <ul>
-                                <li><i class="pi pi-check-circle"></i>03 planejamentos diarios</li>
-                                <li><i class="pi pi-check-circle"></i>03 planejamentos semanais</li>
-                                <li><i class="pi pi-check-circle"></i>03 horas de trabalho economizadas</li>
+                                <li><i class="pi pi-check-circle"></i>{{ $t('choosePlans.freeDailyTokens') }}</li>
+                                <li><i class="pi pi-check-circle"></i>{{ $t('choosePlans.freeWeeklyTokens') }}</li>
+                                <li><i class="pi pi-check-circle"></i>{{ $t('choosePlans.freeHours') }}</li>
                             </ul>
                         </small>
 
                         <div class="priceContainer">
                             <small>R$</small>
-                            <h1>Gratis</h1>
-                            <small> /mes</small>
+                            <h1>{{ $t('choosePlans.free') }}</h1>
+                            <small> /{{ $t('choosePlans.month') }}</small>
                         </div>
 
-                        <button type="button" @click="handleEditYourPlan('free')">Escolher</button>
+                        <button type="button" @click="handleEditYourPlan('free')">{{ $t('choosePlans.choose') }}</button>
                     </span>
                 </div>
             </section>

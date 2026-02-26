@@ -54,19 +54,19 @@ onMounted(async () => {
 <template>
     <div class="loginContainer">
         <div class="loginWrapper">
-            <h2>Conecte suas contas para continuar: </h2>
+            <h2>{{ $t('login.title') }}</h2>
 
             <button type="button" class="btnSocialMediaLogin btnGoogle firstButton" @click="loadGoogleSignInPage">
-                <i class="pi pi-google"></i>Continuar com o Google
+                <i class="pi pi-google"></i>{{ $t('login.btnGoogle') }}
             </button>
 
             <small>ou</small>
 
             <button type="button" class="btnSocialMediaLogin btnGithub" @click="loginGithubPage()">
-                <i class="pi pi-github"></i>Continuar com o Github
+                <i class="pi pi-github"></i>{{ $t('login.btnGithub') }}
             </button>
         </div>
-        <footer @click="clickFooter()">Desenvolvido por Gustavo S. Melo</footer>
+        <footer @click="clickFooter()">{{ $t('login.developedBy') }}</footer>
     </div>
 </template>
 

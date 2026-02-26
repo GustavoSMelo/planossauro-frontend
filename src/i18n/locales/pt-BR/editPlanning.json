@@ -1,0 +1,18 @@
+{
+    "title": "Editar planejamento: ",
+    "daily": "Diario",
+    "weekly": "Semanal",
+    "schoolName": "Nome da escola",
+    "class": "Classe / Turma",
+    "archive": "Arquivar",
+    "archiveYesOption": "Sim, arquivar",
+    "archiveNoOption": "No, desarquivar",
+    "initialDate": "Data de inicio",
+    "endDate": "Data de fim",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "updateSuccessMessage": "Planejamento atualizado com sucesso",
+    "noPlanningMessage": "Nenhum planejamento foi selecionado",
+    "schoolPlaceholder": "Insira o nome da escola aqui...",
+    "classPlaceholder": "Insira o nome da turma aqui..."
+}

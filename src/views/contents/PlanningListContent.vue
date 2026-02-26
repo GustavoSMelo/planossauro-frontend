@@ -4,8 +4,8 @@ import backendApi from '../../api/api';
 import type { IPlanning } from '../../interfaces/api/planning.interface';
 import type { ILoadingContext } from '../../interfaces/context/loading.interface';
 import type { IPageContent } from '../../interfaces/pageContents.interface';
-import EditPlanning from './EditPlanningContent.vue';
 import convertIsoDateToBR from '../../helpers/dateIsoConvertToBR';
+import { useI18n } from 'vue-i18n';
 
 const { handleChangeCurrentContent } = defineProps<{
     handleChangeCurrentContent: (newValue: IPageContent['contents']) => void
@@ -18,7 +18,7 @@ const className = ref('');
 const schoolName = ref('');
 const archived = ref(false);
 const planningType = ref<'Semanal' | 'Diario' | ''>('');
-
+const { t } = useI18n();
 const { handleChangeIsLoading } = inject('isLoading') as ILoadingContext;
 
 const getDataFromAPI = async () => {
@@ -120,78 +120,82 @@ onMounted(() => {
 <template>
     <form class="searchFormContainer">
         <span>
-            <label>Data de inicio do planj.: </label>
+            <label>{{ $t('planning.initialDate') }}</label>
             <input :value="startDatePlanning" type="date" @change="event => handleChangeDatePlanning(event)" />
         </span>
         <span>
-            <label>Classe/serie: </label>
+            <label>{{ $t('planning.class') }}</label>
             <input :value="className" @change="handleChangeClassName" type="text" placeholder="Insira a classe/serie" />
         </span>
         <span>
-            <label>Escola: </label>
+            <label>{{ $t('planning.school') }}</label>
             <input :value="schoolName" @change="handleChangeSchoolName" type="text" placeholder="Insira a escola" />
         </span>
         <span>
-            <label>Arquivado: </label>
+            <label>{{ $t('planning.archived') }}</label>
             <select @change="handleChangeArchivedFile" :value="archived">
-                <option value="false">Nao</option>
-                <option value="true">Sim</option>
+                <option value="false">{{ $t('planning.no') }}</option>
+                <option value="true">{{ $t('planning.yes') }}</option>
             </select>
         </span>
         <span>
-            <label>Tipo do planejamento: </label>
+            <label>{{ $t('planning.planningType') }}</label>
             <select @change="handleChangePlanningType" :value="planningType">
-                <option value="">Ambos</option>
-                <option value="Semanal">Semanal</option>
-                <option value="Diario">Diario</option>
+                <option value="">{{ $t('planning.both') }}</option>
+                <option value="Semanal">{{ $t('planning.weekly') }}</option>
+                <option value="Diario">{{ $t('planning.daily') }}</option>
             </select>
         </span>
 
-        <button type="button" @click="searchByFilterParameters">Buscar</button>
+        <button type="button" @click="searchByFilterParameters">{{ $t('planning.daily') }}</button>
     </form>
     <section class="listingContainer">
         <table v-if="plannings.length">
             <thead>
                 <tr>
                     <th>Download</th>
-                    <th>Serie/classe</th>
-                    <th>Escola</th>
-                    <th>Tipo do plan.</th>
-                    <th>Data</th>
-                    <th>Editar</th>
-                    <th>Remover</th>
+                    <th>{{ $t('planning.class') }}</th>
+                    <th>{{ $t('planning.school') }}</th>
+                    <th>{{ $t('planning.planningType') }}</th>
+                    <th>{{ $t('planning.date') }}</th>
+                    <th>{{ $t('planning.edit') }}</th>
+                    <th>{{ $t('planning.remove') }}</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="planning, index in plannings">
                     <td data-cell="Download: " class="btnCellDownload" @click="() => downloadDocument(index)"><i
                             class="pi pi-download"></i></td>
-                    <td data-cell="Serie: ">{{ planning.class_name }}</td>
-                    <td data-cell="Escola: ">{{ planning.school_name }}</td>
-                    <td data-cell="Tipo planejamento: ">{{ planning.start_plan === planning.end_plan ? 'Diario' :
-                        'Semanal' }}</td>
-                    <td data-cell="Data planejamento: ">{{ convertIsoDateToBR(planning.start_plan.toString()) }} {{
-                        planning.start_plan !==
-                            planning.end_plan ? `~ ${convertIsoDateToBR(planning.end_plan.toString())}` : '' }}</td>
-                    <td data-cell="Editar: " class="btnCellEdit" @click="handleEditPlanningInformations(planning.uuid)">
+                    <td :data-cell="`${t('plannig.class')}:`">{{ planning.class_name }}</td>
+                    <td :data-cell="`${t('planning.school')}:`">{{ planning.school_name }}</td>
+                    <td :data-cell="`${t('planning.planningType')}:`">{{ planning.start_plan === planning.end_plan ?
+                        t('planning.daily') :
+                        t('planning.weekly') }}</td>
+                    <td :data-cell="`${t('planning.date')}:`">{{ convertIsoDateToBR(planning.start_plan.toString()) }}
+                        {{
+                            planning.start_plan !==
+                                planning.end_plan ? `~ ${convertIsoDateToBR(planning.end_plan.toString())}` : '' }}</td>
+                    <td :data-cell="`${t('planning.edit')}:`" class="btnCellEdit"
+                        @click="handleEditPlanningInformations(planning.uuid)">
                         <i class="pi pi-pencil"></i>
                     </td>
-                    <td data-cell="Remover: " class="btnCellRemove" @click="handleDeletePlanning(planning.uuid)"><i
-                            class="pi pi-trash"></i></td>
+                    <td :data-cell="`${t('planning.remove')}:`" class="btnCellRemove"
+                        @click="handleDeletePlanning(planning.uuid)"><i class="pi pi-trash"></i></td>
                 </tr>
             </tbody>
             <tfoot>
                 <tr @click="loadDataFromPagination">
-                    <td colspan="6">Carregar mais planejamentos</td>
+                    <td colspan="6">{{ $t('planning.loadMore') }}</td>
                 </tr>
             </tfoot>
         </table>
         <div class="notFoundContainer" v-else>
             <img src="../../assets/sad_sleep_blue.png" alt="Dinossauro triste" />
-            <h1>Nenhum planejamento foi encontrado</h1>
+            <h1>{{ $t('planning.notFoundedPlanning') }}</h1>
             <button type="button" class="btnGotoPlan" @click="handleChangeCurrentContent('planning')"><i
-                    class="pi pi-plus-circle"></i>Criar planejamento</button>
-            <button type="button" @click="getDataFromAPI"><i class="pi pi-refresh"></i>Recarregar</button>
+                    class="pi pi-plus-circle"></i>{{ $t('planning.createPlanning') }}</button>
+            <button type="button" @click="getDataFromAPI"><i class="pi pi-refresh"></i>{{ $t('planning.reload')
+            }}</button>
         </div>
     </section>
 </template>

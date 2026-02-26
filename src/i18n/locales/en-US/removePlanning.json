@@ -1,0 +1,13 @@
+{
+    "planningRemovedMessage": "Planning deleted successfully",
+    "planningRemovedMessageError": "Error deleting planning",
+    "planningNotFounded": "No planning was found",
+    "title": "Continue with deletion ?",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "school": "School",
+    "class": "Class",
+    "description": "Deleted data cannot be recovered!",
+    "cancel": "Cancel",
+    "delete": "Delete"
+}

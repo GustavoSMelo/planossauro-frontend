@@ -4,10 +4,12 @@ import { useRouter } from 'vue-router';
 import type { IPopupContext } from '../../interfaces/context/popup.interface';
 import type { IUser } from '../../interfaces/api/user.interface';
 import backendApi from '../../api/api';
+import { useI18n } from 'vue-i18n';
 
 const counterDays = ref(0);
 const router = useRouter();
 const { handleChangePopupInfo } = inject('popup') as IPopupContext;
+const { t } = useI18n();
 
 const handleLogout = () => {
     sessionStorage.clear();
@@ -24,12 +26,12 @@ const handleRestoreAccount = async () => {
             const user = JSON.parse(sessionStorage.getItem('user') ?? '') as IUser;
             user.deleted_at = null;
             sessionStorage.setItem('user', JSON.stringify(user));
-            handleChangePopupInfo('Conta restaurada com sucesso', 'success', true);
+            handleChangePopupInfo(t('deletecallback.restoreAccountMessage'), 'success', true);
             return router.push('/app');
         }
-        handleChangePopupInfo('Nao foi possivel restaurar a conta, tente novamente mais tarde', 'error', true);
+        handleChangePopupInfo(t('deletecallback.restoreAccountError'), 'error', true);
     } catch {
-        handleChangePopupInfo('Nao foi possivel restaurar a conta, tente novamente mais tarde', 'error', true);
+        handleChangePopupInfo(t('deletecallback.restoreAccountError'), 'error', true);
     }
 
 };
@@ -50,16 +52,15 @@ onMounted(() => {
     <div class="deleteUserContainer">
         <div class="deleteUserContent">
             <img src="../../assets/dino_chorandinho.png" alt="dino chorandinho" />
-            <h2>Sua conta foi excluida</h2>
+            <h2>{{ $t('deleteCallback.title') }}</h2>
             <p>
-                Voce selecionou em excluir a conta, voce esta em periodo de delecao de conta, que ira terminar em
-                <b>{{ counterDays ? counterDays : 30 }} dia(s)</b>,
-                <br /> se deseja voltar a usar nosso sistema, basta clicar no botao abaixo para retornar os
-                planejamentos
+                {{ $t('deleteCallback.descriptionSub1') }}
+                <b>{{ counterDays ? counterDays : 30 }} {{ $t('deleteCallback.days') }}</b>,
+                <br />{{ $t('deleteCallback.descriptionSub2') }}
             </p>
 
-            <button type="button" @click="handleRestoreAccount()">Restaurar conta</button>
-            <button type="button" class="btnLogout" @click="handleLogout()">Deslogar</button>
+            <button type="button" @click="handleRestoreAccount()">{{ $t('deleteCallback.restoreAccount') }}</button>
+            <button type="button" class="btnLogout" @click="handleLogout()">{{ $t('deleteCallback.logout') }}</button>
         </div>
     </div>
 </template>

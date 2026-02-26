@@ -7,15 +7,13 @@ const router = useRouter();
     <div class="paymentContainer">
         <div class="paymentContent">
             <img alt="Dino payment" src="../../assets/dino_premium.png" />
-            <h1>Seu pagamento foi aceito com sucesso</h1>
+            <h1>{{ $t('paymentcallback.title') }}</h1>
 
             <p>
-                Seu pagamento esta em processamento, em alguns instantes seu plano vai ser alterado :D
-                <br /> Caso nao altere, saia do sistema e entre novamente. <br />
-                Se precisar de ajuda, entre em suporte com nosso time :D
+                {{ $t('paymentcallback.description') }}
             </p>
 
-            <button type="button" @click="router.push('/app')">Ir para a pagina inicial</button>
+            <button type="button" @click="router.push('/app')">{{ $t('paymentcallback.cta') }}</button>
         </div>
     </div>
 </template>

@@ -1,0 +1,20 @@
+{
+    "initialDate": "Data de inicio do planj:",
+    "class": "Classe/Serie",
+    "school": "Escola",
+    "archived": "Arquivado",
+    "planningType": "Tipo do planejamento",
+    "search": "Buscar",
+    "edit": "Editar",
+    "remove": "Remover",
+    "loadMore": "Carregar mais planejamentos",
+    "notFoundedPlanning": "Nenhum planejamento foi encontrado",
+    "createPlanning": "Criar planejamento",
+    "reload": "Recarregar",
+    "yes": "Sim",
+    "no": "Não",
+    "both": "Ambos",
+    "daily": "Diario",
+    "weekly": "Semanal",
+    "date": "Data"
+}

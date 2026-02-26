@@ -1,0 +1,13 @@
+{
+    "planningRemovedMessage": "Planejamento excluido com sucesso",
+    "planningRemovedMessageError": "Erro ao deletar planejamento",
+    "planningNotFounded": "Nenhum planejamento foi selecionado",
+    "title": "Continuar com a exclusão ?",
+    "daily": "Diario",
+    "weekly": "Semanal",
+    "school": "Escola",
+    "class": "Turma",
+    "description": "Os dados excluidos nao poderao ser recuperados!",
+    "cancel": "Cancelar",
+    "delete": "Deletar"
+}

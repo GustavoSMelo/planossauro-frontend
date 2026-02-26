@@ -8,6 +8,7 @@ import backendApi from '../../api/api';
 import { useRouter } from 'vue-router';
 import type { ILoginType } from '../../interfaces/loginType.interface';
 import type { IPageContent } from '../../interfaces/pageContents.interface';
+import { useI18n } from 'vue-i18n';
 
 const { handleChangeCurrentContent, handleChangeValidationLoginType } = defineProps<{
     handleChangeCurrentContent: (newValue: IPageContent["contents"]) => void
@@ -25,6 +26,7 @@ const router = useRouter();
 const { handleChangeIsLoading } = inject('isLoading') as ILoadingContext;
 const { handleChangePopupInfo } = inject('popup') as IPopupContext;
 const userFromSession = sessionStorage.getItem('user') as string;
+const { t } = useI18n();
 
 user.value = { ...JSON.parse(userFromSession) };
 duplicateUser.value = { ...JSON.parse(userFromSession) };
@@ -92,12 +94,12 @@ const handleCancelAndResetInfo = () => {
 const handleEditProfile = async () => {
     try {
         if (user.value.full_name.length < 5) {
-            handleChangePopupInfo('Nome de usuario invalido', 'warning', true);
+            handleChangePopupInfo(t('profile.invalidUsername'), 'warning', true);
             return;
         }
 
         if (user.value.cellphone_number.length < 15 || !user.value.cellphone_number.includes('(') || !user.value.cellphone_number.includes(')') || !user.value.cellphone_number.includes('-')) {
-            handleChangePopupInfo('Numero de celular invalido', 'warning', true);
+            handleChangePopupInfo(t('profile.invalidCellphone'), 'warning', true);
             return;
         }
 
@@ -110,10 +112,10 @@ const handleEditProfile = async () => {
         editProfile.value = false
 
         handleChangeIsLoading(false);
-        handleChangePopupInfo('Usuario editado com sucesso', 'success', true);
+        handleChangePopupInfo(t('profile.userEditSuccess'), 'success', true);
 
     } catch (err) {
-        handleChangePopupInfo('Erro ao editar usuario', 'error', true);
+        handleChangePopupInfo(t('profile.userEditError'), 'error', true);
         handleChangeIsLoading(false);
     }
 };
@@ -122,7 +124,7 @@ const handleChangeGithubAccount = async () => {
     const user = JSON.parse(sessionStorage.getItem('user') as string) as IUser;
 
     if (!user.google_email || !user.google_email.length) {
-        handleChangePopupInfo('Vincule uma conta google primeiro', 'warning', true);
+        handleChangePopupInfo(t('profile.connectGoogle'), 'warning', true);
         return;
     }
 
@@ -161,9 +163,9 @@ const handleDeleteAccount = async () => {
             return router.push('/callback/user/delete');
         }
 
-        handleChangePopupInfo('Valide o seu email e tente novamente', 'error', true);
+        handleChangePopupInfo(t('profile.validateYourEmail'), 'error', true);
     } catch (err) {
-        handleChangePopupInfo('Valide o seu email e tente novamente', 'error', true);
+        handleChangePopupInfo(t('profile.validateYourEmail'), 'error', true);
     }
 };
 
@@ -171,7 +173,7 @@ const logout = async () => {
     const uuid = sessionStorage.getItem('uuid') ?? '';
     await backendApi.delete(`/logout/${uuid}`);
     sessionStorage.clear();
-    handleChangePopupInfo('Deslogado', 'info', true);
+    handleChangePopupInfo(t('profile.logoutMessage'), 'info', true);
     router.push('/');
 };
 
@@ -185,13 +187,13 @@ const handleSendValidationEmail = async (loginType: ILoginType['types']) => {
         const userResponse: IUser = (await backendApi.get(`/user/${user.value.uuid}`)).data;
         if ((loginType === 'google' && userResponse.google_is_validated) || (loginType === 'google' && !userResponse.google_email?.length)) {
             handleChangeIsLoading(false);
-            handleChangePopupInfo('Conecte uma conta google', 'info', true);
+            handleChangePopupInfo(t('profile.connectGoogle'), 'info', true);
             return;
         };
 
         if ((loginType === 'github' && userResponse.github_is_validated) || (loginType === 'github' && !userResponse.github_email?.length)) {
             handleChangeIsLoading(false);
-            handleChangePopupInfo('Conecte uma conta github', 'info', true);
+            handleChangePopupInfo(t('profile.connectGithub'), 'info', true);
             return;
         };
 
@@ -201,11 +203,11 @@ const handleSendValidationEmail = async (loginType: ILoginType['types']) => {
         });
 
         handleChangeValidationLoginType(loginType);
-        handleChangePopupInfo('Codigo enviado para seu email', 'success', true);
+        handleChangePopupInfo(t('profile.codeEmailSended'), 'success', true);
         handleChangeIsLoading(false);
         handleChangeCurrentContent('validation_code');
     } catch {
-        handleChangePopupInfo('Nao foi possivel enviar o email, servico indisponivel', 'error', true);
+        handleChangePopupInfo(t('profile.errorCodeSended'), 'error', true);
         handleChangeIsLoading(false);
     }
 
@@ -217,13 +219,13 @@ const handleUnlinkAccount = async () => {
         const uuid = sessionStorage.getItem('uuid') ?? '';
         await backendApi.patch(`/user/unlink/${uuid}`, { unlink: unlinkAccountChoose.value });
         handleChangeIsLoading(false);
-        handleChangePopupInfo('Conta disvinculada, realize o login novamente', 'info', true);
+        handleChangePopupInfo(t('profile.unlinkedAccountWithSuccess'), 'info', true);
         sessionStorage.clear();
         router.push('/');
     } catch (err) {
         console.error(err);
         handleChangeIsLoading(false);
-        handleChangePopupInfo('Nao foi possivel desvincular conta', 'error', true);
+        handleChangePopupInfo(t('profile.errorToUnlinkAccount'), 'error', true);
     }
 };
 
@@ -231,29 +233,26 @@ const handleUnlinkAccount = async () => {
 <template>
     <div class="unlinkAccountContainer" v-if="unlinkAccountPopup" @click="unlinkAccountPopup = false">
         <div class="unlinkAccountContent" @click="event => event.stopPropagation()">
-            <h2>Deseja desvincular sua conta do {{ unlinkAccountChoose }} ?</h2>
+            <h2>{{ t('profile.unlinkTitle') }} {{ unlinkAccountChoose }} ?</h2>
 
-            <p>Voce precisa pelo menos ter duas contas de redes sociais para desvincular 1 conta</p>
-            <small>Exemplo: eh necessario ter a conta do google e github vinculadas para desvincular uma delas</small>
+            <p>{{ t('profile.unlinkSubDescription1') }}</p>
+            <small>{{ t('profile.unlinkSubDescription2') }}</small>
 
             <span class="buttonsContainer">
-                <button type="button" @click="unlinkAccountPopup = false">Voltar</button>
-                <button type="button" @click="handleUnlinkAccount()">Desvincular</button>
+                <button type="button" @click="unlinkAccountPopup = false">{{ t('profile.back') }}</button>
+                <button type="button" @click="handleUnlinkAccount()">{{ t('profile.deleteAccountTitle') }}</button>
             </span>
         </div>
     </div>
     <div class="deletePopupContainer" v-if="deleteAccountPopup" @click="deleteAccountPopup = false">
         <div class="deletePopupContent" @click="event => event.stopPropagation()">
-            <h2>Deseja mesmo deletar sua conta ?</h2>
+            <h2>{{ t('profile.deleteAccountTitle') }}</h2>
             <p>
-                Sua conta ficara suspensa por um periodo de 30 dias, seu plano sera cancelado automaticamente (caso
-                houver um) <br />
-                Dentro desse periodo de 30 dias voce podera recuperar sua conta a qualquer momento, apos isso <b>todos
-                    os dados serao deletados</b>
+                {{ t('profile.deleteAccountDescription') }}
             </p>
             <span class="buttonsContainer">
-                <button type="button" @click="deleteAccountPopup = false">Voltar</button>
-                <button type="button" @click="handleDeleteAccount()">Deletar</button>
+                <button type="button" @click="deleteAccountPopup = false">{{ t('profile.back') }}</button>
+                <button type="button" @click="handleDeleteAccount()">{{ t('profile.delete') }}</button>
             </span>
         </div>
     </div>
@@ -262,88 +261,89 @@ const handleUnlinkAccount = async () => {
             <img src="../../assets/dino_profile_logo.png" alt="Dino user profile logo" />
             <h3 v-if="!editProfile">{{ user?.full_name }}</h3>
             <input v-if="editProfile" type="text" :value="user.full_name" @input="handleChangeFullName"
-                placeholder="Insira seu nome..." class="fullNameInput" />
+                :placeholder="`${t('profile.namePlaceholder')}`" class="fullNameInput" />
 
             <span>
                 <b><i class="pi pi-github"></i> Github:</b>
                 <input v-if="user?.github_email?.length && !editProfile" :disabled="true" type="text"
-                    :value="user.github_email" placeholder="Seu email aqui..." />
+                    :value="user.github_email" :placeholder="`${t('profile.email')}`" />
                 <div class="containerBtnChangeSocialMedia" v-else-if="user?.github_email?.length && editProfile">
                     <button @click="handleChangeGithubAccount" class="btnChangeSocialMediaProfile" type="button">
-                        Mudar perfil Github
+                        {{ t('profile.changeProfileGithub') }}
                     </button>
                     <button type="button" @click="unlinkAccountChoose = 'github'; unlinkAccountPopup = true"><i
                             class="pi pi-lock-open"></i></button>
                 </div>
 
-                <button v-else type="button" @click="handleConnectGithubAccout">Conectar</button>
+                <button v-else type="button" @click="handleConnectGithubAccout">{{ t('profile.connect') }}</button>
             </span>
             <span>
                 <b><i class="pi pi-google"></i> Google:</b>
                 <input v-if="user?.google_email?.length && !editProfile" :disabled="true" type="text"
-                    :value="user.google_email" placeholder="Seu email aqui..."
+                    :value="user.google_email" :placeholder="`${t('profile.emailPlaceholder')}`"
                     :class="editProfile ? 'ableToEdit' : ''" />
 
                 <div class="containerBtnChangeSocialMedia" v-else-if="user?.google_email?.length && editProfile">
                     <button @click="handleConnectGoogleAccount" class="btnChangeSocialMediaProfile" type="button">
-                        Mudar perfil Gmail
+                        {{ t('profile.changeProfileGmail') }}
                     </button>
                     <button type="button" @click="unlinkAccountChoose = 'google'; unlinkAccountPopup = true">
                         <i class="pi pi-lock-open"></i>
                     </button>
                 </div>
 
-                <button v-else type="button" @click="handleConnectGoogleAccount">Conectar</button>
+                <button v-else type="button" @click="handleConnectGoogleAccount">{{ t('profile.connect') }}</button>
             </span>
             <span>
-                <b><i class="pi pi-phone"></i> Celular:</b>
+                <b><i class="pi pi-phone"></i> {{ t('profile.cellphone') }}:</b>
                 <input :disabled="editProfile ? false : true" type="text" v-model="user.cellphone_number"
-                    placeholder="Seu celular aqui..." :class="editProfile ? 'ableToEdit' : ''"
+                    :placeholder="`${t('profile.cellphonePlaceholder')}`" :class="editProfile ? 'ableToEdit' : ''"
                     @input="handleChangeCellphone" />
             </span>
-            <button v-if="!editProfile" class="btnChangeProfile" type="button" @click="editProfile = true">Habilitar
-                edicao</button>
+            <button v-if="!editProfile" class="btnChangeProfile" type="button" @click="editProfile = true">{{
+                t('profile.enableEdit') }}</button>
 
             <button v-if="editProfile" class="btnChangeProfile btnChangeProfileAction" type="button"
                 @click="handleEditProfile">
-                Editar perfil
+                {{ t('profile.editProfile') }}
             </button>
             <button v-if="editProfile" class="btnChangeProfile btnCancel" type="button"
-                @click="handleCancelAndResetInfo">Cancelar</button>
+                @click="handleCancelAndResetInfo">{{ t('profile.cancel') }}</button>
             <div class="profileAdditionalDetails">
                 <p>
-                    <b><i class="pi pi-google"></i> Google validado:</b>
+                    <b><i class="pi pi-google"></i> Google {{ t('profile.validated') }}:</b>
                     <button @click="handleSendValidationEmail('google')" type="button"
                         :class="user?.google_is_validated == true ? 'checked' : 'unchecked'">
                         <i :class="['pi', user.google_is_validated == true ? 'pi-verified' : 'pi-unlock']"></i>{{
-                            user?.google_is_validated == true? 'Validado' : 'Validar' }}
+                            user?.google_is_validated == true ? `${t('profile.validated')}` : `${t('profile.validate')}` }}
                     </button>
                 </p>
                 <p>
-                    <b><i class="pi pi-github"></i> Github validado:</b>
+                    <b><i class="pi pi-github"></i> Github {{ t('profile.validated') }}:</b>
                     <button @click="handleSendValidationEmail('github')" type="button"
                         :class="user?.github_is_validated == true ? 'checked' : 'unchecked'">
                         <i :class="['pi', user.github_is_validated == true ? 'pi-verified' : 'pi-unlock']"></i>{{
-                            user?.github_is_validated == true ? 'Validado' : 'Validar' }}
+                            user?.github_is_validated == true ? `${t('profile.validated')}` : `${t('profile.validate')}` }}
                     </button>
                 </p>
                 <p>
-                    <b><i class="pi pi-phone"></i> SMS validado: </b>
+                    <b><i class="pi pi-phone"></i> SMS {{ t('profile.validated') }}: </b>
                     <button type="button" class="unchecked">
                         <i :class="['pi', user.sms_is_validated == true ? 'pi-verified' : 'pi-unlock']"></i>
-                        Validar
+                        {{ t('profile.validate') }}
                     </button>
                 </p>
-                <p class="createdAtText">Usuario desde: {{ convertIsoDateToBR(user?.created_at as string) }}</p>
-                <button type="button" @click="deleteAccountPopup = true"><i class="pi pi-trash"></i> Excluir
-                    conta</button>
+                <p class="createdAtText">{{ t('profile.userSince') }}: {{ convertIsoDateToBR(user?.created_at as string) }}</p>
+                <button type="button" @click="deleteAccountPopup = true"><i class="pi pi-trash"></i>
+                    {{ t('profile.deleteAccount') }}
+                </button>
             </div>
         </div>
         <div class="appSettings">
             <details open>
-                <summary>Configuracoes do app</summary>
+                <summary>{{ t('profile.appSettings') }}</summary>
                 <div>
-                    <h3><i class="pi pi-language"></i> Linguagem: </h3>
+                    <h3><i class="pi pi-language"></i> {{ t('profile.language') }}: </h3>
 
                     <select>
                         <option>🇧🇷 Portugues (Brasil)</option>
@@ -352,33 +352,33 @@ const handleUnlinkAccount = async () => {
                 </div>
 
                 <div>
-                    <h3><i class="pi pi-palette"></i> Tema: </h3>
+                    <h3><i class="pi pi-palette"></i> {{ t('profile.theme') }}: </h3>
 
                     <select>
-                        <option>☀️ Tema claro</option>
-                        <option>🌑 Tema escuro</option>
+                        <option>☀️ {{ t('profile.lightTheme') }}</option>
+                        <option>🌑 {{ t('profile.darkTheme') }}</option>
                     </select>
                 </div>
 
                 <div>
-                    <h3><i class="pi pi-book"></i> Documentacao: </h3>
+                    <h3><i class="pi pi-book"></i> {{ t('profile.documentation') }} </h3>
 
-                    <button type="button">Acessar docs</button>
+                    <button type="button">{{ t('profile.viewDocs') }}</button>
                 </div>
 
                 <div>
-                    <h3><i class="pi pi-headphones"></i> Ajuda / Suporte: </h3>
+                    <h3><i class="pi pi-headphones"></i> {{ t('profile.help') }}: </h3>
 
-                    <button @click="router.push('/support')">Acessar ajuda</button>
+                    <button @click="router.push('/support')">{{ t('profile.viewHelp') }}</button>
                 </div>
 
                 <div>
-                    <h3><i class="pi pi-sign-out"></i> Sair: </h3>
+                    <h3><i class="pi pi-sign-out"></i> {{ t('profile.logout') }}: </h3>
 
-                    <button type="button" @click="logout">Deslogar / Sair</button>
+                    <button type="button" @click="logout">{{ t('profile.disconnect') }}</button>
                 </div>
                 <div>
-                    <h3>Versao do app: </h3>
+                    <h3>{{ t('profile.appVersion') }}: </h3>
 
                     <p>Version 0.0.0</p>
                 </div>
