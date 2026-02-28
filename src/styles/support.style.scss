@@ -1,9 +1,7 @@
 @charset "UTF-8";
-@use './colors.scss' as colors;
-
 
 .supportContainer {
-    background-image: url('../assets/backgroundLightTheme.png');
+    background-image: var(--dp-background-url);
     background-repeat: repeat;
     background-size: contain;
     width: 100vw;
@@ -13,10 +11,10 @@
     justify-content: center;
 
     .supportSuccess {
-        background-color: colors.$white;
+        background-color: var(--dp-lightfall);
         padding: 20px;
         border-radius: 7px;
-        box-shadow: 2px 2px 10px colors.$gray;
+        box-shadow: 2px 2px 10px var(--dp-gray);
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -26,7 +24,7 @@
         i {
             font-size: 26pt;
             margin-bottom: 5px;
-            color: colors.$darkGreen;
+            color: var(--dp-dark-green);
         }
 
         h2 {
@@ -44,24 +42,23 @@
             font-size: 14pt;
             font-weight: bold;
             padding: 15px 20px;
-            background-color: colors.$accentColor;
-            color: colors.$white;
+            background-color: var(--dp-accent-color);
+            color: var(--dp-lightfall);
             cursor: pointer;
             border-radius: 5px;
-            transition: .4s;
+            transition: 0.4s;
         }
 
         button:hover {
             transform: scale(1.05);
-            transition: .4s;
-            box-shadow: 2px 2px 8px colors.$lightGray;
+            transition: 0.4s;
+            box-shadow: 2px 2px 8px var(--dp-light-gray);
         }
-
     }
 
     .supportContent {
-        background-color: colors.$white;
-        box-shadow: 2px 2px 10px colors.$gray;
+        background-color: var(--dp-lightfall);
+        box-shadow: 2px 2px 10px var(--dp-gray);
         padding: 15px;
         border-radius: 7px;
         display: flex;
@@ -69,11 +66,11 @@
         justify-content: center;
         flex-direction: column;
         width: 60%;
-        transform: scale(.9);
+        transform: scale(0.9);
 
         header {
             text-align: center;
-            border-bottom: solid 2px colors.$lightGray;
+            border-bottom: solid 2px var(--dp-light-gray);
             padding-bottom: 10px;
             margin-bottom: 10px;
             width: 80%;
@@ -93,7 +90,7 @@
                 font-weight: bold;
 
                 b {
-                    color: colors.$red;
+                    color: var(--dp-red);
                 }
             }
 
@@ -101,27 +98,27 @@
             textarea,
             select {
                 width: 100%;
-                border: solid 2px colors.$accentColor;
+                border: solid 2px var(--dp-accent-color);
                 padding: 10px;
                 margin-top: 5px;
                 border-radius: 5px;
-                color: colors.$accentColor;
+                color: var(--dp-accent-color);
                 font-weight: 500;
                 font-size: 14pt;
-                background-color: colors.$white;
+                background-color: var(--dp-lightfall);
             }
 
             .dropzone {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                border: dotted 2px colors.$accentColor;
+                border: dotted 2px var(--dp-accent-color);
                 border-radius: 7px;
                 padding: 20px;
                 cursor: pointer;
                 margin-top: 0;
                 margin-bottom: 20px;
-                color: colors.$accentColor;
+                color: var(--dp-accent-color);
                 font-weight: bold;
                 flex-direction: column;
                 margin-top: 5px;
@@ -150,8 +147,8 @@
                         align-items: center;
                         border: solid;
                         padding: 15px;
-                        box-shadow: 4px 4px 12px colors.$lightGray;
-                        border: solid 1px colors.$lightGray;
+                        box-shadow: 4px 4px 12px var(--dp-light-gray);
+                        border: solid 1px var(--dp-light-gray);
                         border-radius: 7px;
 
                         img {
@@ -162,19 +159,18 @@
                             position: absolute;
                             right: -15px;
                             top: -15px;
-                            background-color: colors.$red;
+                            background-color: var(--dp-red);
                             padding: 10px;
                             border-radius: 400px;
                             cursor: pointer;
-                            transition: .4s;
+                            transition: 0.4s;
                         }
 
                         i:hover {
-                            transition: .4s;
+                            transition: 0.4s;
                             transform: scale(1.15);
                         }
                     }
-
                 }
             }
 
@@ -198,29 +194,34 @@
                 font-size: 14pt;
                 font-weight: bold;
                 padding: 15px 20px;
-                background-color: colors.$accentColor;
-                color: colors.$white;
+                background-color: var(--dp-accent-color);
+                color: var(--dp-lightfall);
                 cursor: pointer;
                 border-radius: 5px;
-                transition: .4s;
+                transition: 0.4s;
             }
 
             button:hover {
                 transform: scale(1.05);
-                transition: .4s;
-                box-shadow: 2px 2px 8px colors.$lightGray;
+                transition: 0.4s;
+                box-shadow: 2px 2px 8px var(--dp-light-gray);
             }
 
             button:nth-child(1) {
-                border: solid 2px colors.$accentColor;
-                background-color: colors.$white;
-                color: colors.$accentColor;
+                border: solid 2px var(--dp-accent-color);
+                background-color: var(--dp-lightfall);
+                color: var(--dp-accent-color);
             }
 
             .btnDisabled {
-                background-color: colors.$gray;
+                background-color: var(--dp-gray);
                 cursor: not-allowed;
             }
+        }
+
+        p {
+            color: var(--dp-text-color);
+            font-weight: 500;
         }
     }
 }

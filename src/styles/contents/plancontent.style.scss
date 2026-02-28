@@ -1,8 +1,7 @@
 @charset "UTF-8";
-@use '../colors.scss' as colors;
 
 .popupCancelContainer {
-    background-color: #303030af;
+    background-color: var(--dp-transparent-gray);
     width: 100%;
     height: 100%;
     position: absolute;
@@ -13,7 +12,7 @@
     z-index: 3;
 
     .popupCancelContent {
-        background-color: #fff;
+        background-color: var(--dp-full-white);
         padding: 30px;
         border-radius: 7px;
         display: flex;
@@ -28,6 +27,8 @@
 
         p {
             text-align: center;
+            color: var(--dp-text-color);
+            font-weight: 500;
         }
 
         span {
@@ -43,21 +44,21 @@
                 width: 50%;
                 border-radius: 5px;
                 font-weight: bold;
-                background-color: colors.$accentColor;
-                color: colors.$white;
+                background-color: var(--dp-accent-color);
+                color: var(--dp-lightfall);
                 cursor: pointer;
-                transition: .5s;
+                transition: 0.5s;
             }
 
             button:nth-child(2) {
-                background-color: colors.$white;
-                color: colors.$accentColor;
-                border: 2px solid colors.$accentColor;
+                background-color: var(--dp-lightfall);
+                color: var(--dp-accent-color);
+                border: 2px solid var(--dp-accent-color);
             }
 
             button:hover {
                 transform: scale(1.05);
-                transition: .5s;
+                transition: 0.5s;
             }
         }
     }
@@ -72,20 +73,21 @@
 
     .plansTitle {
         margin: 40px 0;
+        color: var(--dp-text-color);
     }
 
     .currentPlanContainer {
         display: flex;
-        border: solid 1px colors.$lightGray;
+        border: solid 3px var(--dp-light-gray);
         border-radius: 5px;
         flex-direction: column;
         width: 80%;
-        box-shadow: 4px 4px 12px colors.$lightGray;
+        box-shadow: 4px 4px 12px var(--dp-light-gray);
         margin-bottom: 20px;
 
         h2 {
-            background-color: colors.$accentColor;
-            color: colors.$white;
+            background-color: var(--dp-accent-color);
+            color: var(--dp-lightfall);
             text-align: center;
             margin-bottom: 10px;
             font-size: 14pt;
@@ -104,18 +106,24 @@
                 display: flex;
                 align-items: center;
                 margin-top: 5px;
+                color: var(--dp-text-color);
+                font-weight: 500;
+
+                p {
+                    color: var(--dp-full-black);
+                }
 
                 b {
                     margin-right: 5px;
-                    color: colors.$accentColor;
+                    color: var(--dp-accent-color);
                 }
 
                 .statusActive {
-                    background-color: colors.$green;
+                    background-color: var(--dp-green);
                     padding: 5px 15px;
                     border-radius: 15px;
                     font-weight: bold;
-                    border: solid 1px colors.$black;
+                    border: solid 1px var(--dp-black);
                 }
 
                 img {
@@ -131,41 +139,45 @@
             padding: 10px;
 
             button {
-                background-color: colors.$accentColor;
-                color: colors.$white;
+                background-color: var(--dp-accent-color);
+                color: var(--dp-lightfall);
                 font-weight: bold;
                 padding: 10px;
                 font-size: 12pt;
                 margin-right: 10px;
                 border-radius: 5px;
                 cursor: pointer;
-                transition: .4s;
+                transition: 0.4s;
             }
 
             button:hover {
-                transition: .4s;
+                transition: 0.4s;
                 transform: scale(1.05);
             }
 
             .btnDisable {
-                background-color: colors.$gray;
+                background-color: var(--dp-gray);
                 cursor: not-allowed;
             }
         }
     }
 
+    .currentPlanContainer[data-theme="dark"] {
+        box-shadow: 0 0 0;
+    }
+
     .paymentHistoryListContainer {
         display: flex;
-        border: solid 1px colors.$lightGray;
+        border: solid 3px var(--dp-light-gray);
         border-radius: 5px;
         flex-direction: column;
         width: 80%;
-        box-shadow: 4px 4px 12px colors.$lightGray;
+        box-shadow: 4px 4px 12px var(--dp-light-gray);
         margin-bottom: 20px;
 
         h2 {
-            background-color: colors.$accentColor;
-            color: colors.$white;
+            background-color: var(--dp-accent-color);
+            color: var(--dp-lightfall);
             text-align: center;
             margin-bottom: 10px;
             font-size: 14pt;
@@ -181,8 +193,8 @@
             thead {
                 tr {
                     th {
-                        border-bottom: 2px solid #000;
-                        color: colors.$accentColor;
+                        border-bottom: 3px solid var(--dp-text-color);
+                        color: var(--dp-accent-color);
                     }
                 }
             }
@@ -190,9 +202,11 @@
             tbody {
                 tr {
                     td {
-                        border-bottom: 2px solid colors.$lightGray;
+                        border-bottom: 2px solid var(--dp-light-gray);
                         text-align: center;
                         padding: 10px;
+                        color: var(--dp-text-color);
+                        font-weight: 500;
 
                         img {
                             width: 24px;
@@ -200,22 +214,26 @@
 
                         button {
                             cursor: pointer;
-                            background-color: colors.$blueInfo;
-                            color: colors.$white;
+                            background-color: var(--dp-blue-info);
+                            color: var(--dp-full-white);
                             padding: 5px 10px;
                             font-weight: bold;
                             border-radius: 3px;
-                            transition: .4s;
+                            transition: 0.4s;
                         }
 
                         button:hover {
-                            transition: .4s;
-                            background-color: colors.$blueNight;
+                            transition: 0.4s;
+                            background-color: var(--dp-blue-night);
                         }
                     }
                 }
             }
         }
+    }
+
+    .paymentHistoryListContainer[data-theme="dark"] {
+        box-shadow: 0 0 0;
     }
 
     .paymentNotFound {
@@ -253,12 +271,12 @@
 
                 tbody {
                     tr {
-                        border-bottom: solid 2px colors.$black;
+                        border-bottom: solid 2px var(--dp-black);
 
                         td:before {
                             content: attr(data-cell);
                             font-weight: bold;
-                            color: colors.$accentColor;
+                            color: var(--dp-accent-color);
                             margin-right: 10px;
                         }
 
@@ -298,7 +316,6 @@
         }
     }
 }
-
 
 @media screen and (max-width: 430px) {
     .plansContainer {

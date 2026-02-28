@@ -1,5 +1,4 @@
 @charset "UTF-8";
-@use '../colors.scss' as colors;
 
 .deletePlanningContainer {
     display: flex;
@@ -9,13 +8,13 @@
 
     h1 {
         font-size: 21pt;
-        color: colors.$textColor;
+        color: var(--dp-text-color);
         margin-top: 30px;
         text-align: center;
     }
 
     p {
-        color: colors.$textColor;
+        color: var(--dp-text-color);
         font-weight: 500;
         text-align: center;
     }
@@ -23,6 +22,7 @@
     small {
         margin-top: 15px;
         font-weight: bold;
+        color: var(--dp-text-color);
 
         i {
             margin-right: 5px;
@@ -31,7 +31,7 @@
 
     span {
         display: flex;
-        border-top: solid 1px colors.$lightGray;
+        border-top: solid 1px var(--dp-light-gray);
         width: 100%;
         margin-top: 20px;
         margin-bottom: 20px;
@@ -39,36 +39,37 @@
         justify-content: center;
         padding-top: 20px;
 
+        button {
+            width: 240px;
+            padding: 10px;
+            font-size: 16pt;
+            margin: 10px;
+            border: solid 2px var(--dp-accent-color);
+            border-radius: 5px;
+            background-color: var(--dp-lightfall);
+            color: var(--dp-accent-color);
+            font-weight: bold;
+            transition: 0.4s;
+            cursor: pointer;
+        }
 
-            button {
-                width: 240px;
-                padding: 10px;
-                font-size: 16pt;
-                margin: 10px;
-                border: solid 2px colors.$accentColor;
-                border-radius: 5px;
-                background-color: colors.$white;
-                color: colors.$accentColor;
-                font-weight: bold;
-                transition: .4s;
-                cursor: pointer;
-            }
+        button:nth-child(2) {
+            background-color: var(--dp-darker-red);
+            color: var(--dp-full-white);
+            border: var(--dp-dark-gray);
+        }
 
-            button:nth-child(2) {
-                background-color: colors.$darkerRed;
-                color: colors.$white;
-                border: colors.$darkGray;
-            }
-
-            button:hover {
-                transition: .4s;
-                transform: scale(1.04);
-            }
+        button:hover {
+            transition: 0.4s;
+            transform: scale(1.04);
+        }
     }
 }
 
 @media screen and (max-width: 680px) {
     .deletePlanningContainer {
-        span {flex-direction: column;}
+        span {
+            flex-direction: column;
+        }
     }
 }

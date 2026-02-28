@@ -1,20 +1,14 @@
 @charset "UTF-8";
-@use './colors.scss' as colors;
 
 @keyframes appersLoginWrapper {
     0% {
         transform: translateY(-4000px);
         opacity: 0;
     }
-
-    ;
-
     100% {
         opacity: 1;
         transform: translateY(0px);
     }
-
-    ;
 }
 
 .finishRegisterContainer {
@@ -25,18 +19,18 @@
     height: 100vh;
 
     .formContainer {
-        background-color: colors.$white;
-        box-shadow: 2px 2px 6px colors.$shadowLowPink;
+        background-color: var(--dp-lightfall);
+        box-shadow: 2px 2px 6px var(--dp-shadow-low-pink);
         padding: 20px;
         border-radius: 5px;
         display: flex;
         flex-direction: column;
         width: 60%;
-        animation: appersLoginWrapper .8s forwards;
+        animation: appersLoginWrapper 0.8s forwards;
 
         h2 {
             margin-bottom: 20px;
-            border-bottom: 1px colors.$lightGray solid;
+            border-bottom: 1px var(--dp-light-gray) solid;
             padding-bottom: 10px;
             font-size: 20pt;
         }
@@ -48,18 +42,18 @@
         }
 
         input {
-            box-shadow: 2px 2px 6px colors.$lightGray;
+            box-shadow: 2px 2px 6px var(--dp-light-gray);
             padding: 15px;
-            border: solid 1px colors.$lightGray;
+            border: solid 1px var(--dp-light-gray);
             border-radius: 5px;
             margin-top: 4px;
-            transition: .3s;
+            transition: 0.3s;
         }
 
         input:focus {
-            transition: .3s;
-            border: solid 1px colors.$accentColor;
-            color: colors.$accentColor;
+            transition: 0.3s;
+            border: solid 1px var(--dp-accent-color);
+            color: var(--dp-accent-color);
             font-weight: bold;
         }
 
@@ -69,30 +63,35 @@
             font-size: 15pt;
             font-weight: bold;
             border-radius: 5px;
-            color: colors.$darkGray;
+            color: var(--dp-dark-gray);
             cursor: not-allowed;
-            transition: .4s;
+            transition: 0.4s;
         }
 
         button.btnProceedRegister {
-            background-color: colors.$accentColor;
-            color: colors.$white;
-            border: solid 3px colors.$accentColor;
+            background-color: var(--dp-accent-color);
+            color: var(--dp-lightfall);
+            border: solid 3px var(--dp-accent-color);
             cursor: pointer;
         }
 
         button.btnProceedRegister:hover {
-            background-color: colors.$accentColorDark;
-            border-color: colors.$accentColorDark;
-            transition: .4s;
+            background-color: var(--dp-accent-color-dark);
+            border-color: var(--dp-accent-color-dark);
+            transition: 0.4s;
+        }
+
+        p {
+            color: var(--dp-text-color);
+            font-weight: 500;
         }
     }
 
     .validationContainer {
-        background-color: colors.$white;
+        background-color: var(--dp-lightfall);
         padding: 20px;
         border-radius: 5px;
-        box-shadow: 2px 2px 6px colors.$shadowLowPink;
+        box-shadow: 2px 2px 6px var(--dp-shadow-low-pink);
         display: flex;
         flex-direction: column;
         width: 70%;
@@ -100,7 +99,7 @@
         h2 {
             padding-bottom: 5px;
             margin-bottom: 5px;
-            border-bottom: 1px solid colors.$lightGray;
+            border-bottom: 1px solid var(--dp-light-gray);
         }
 
         .validationForm {
@@ -113,18 +112,18 @@
             }
 
             input {
-                box-shadow: 2px 2px 6px colors.$lightGray;
+                box-shadow: 2px 2px 6px var(--dp-light-gray);
                 padding: 15px;
-                border: solid 1px colors.$lightGray;
+                border: solid 1px var(--dp-light-gray);
                 border-radius: 5px;
                 margin-top: 4px;
-                transition: .3s;
+                transition: 0.3s;
             }
 
             input:focus {
-                transition: .3s;
-                border: solid 1px colors.$accentColor;
-                color: colors.$accentColor;
+                transition: 0.3s;
+                border: solid 1px var(--dp-accent-color);
+                color: var(--dp-accent-color);
                 font-weight: bold;
             }
         }
@@ -137,18 +136,18 @@
             button {
                 font-weight: 500;
                 padding: 10px 20px;
-                box-shadow: 2px 2px 6px colors.$lightGray;
+                box-shadow: 2px 2px 6px var(--dp-light-gray);
                 border-radius: 5px;
-                background-color: colors.$white;
-                border: solid 1px colors.$lightGray;
+                background-color: var(--dp-lightfall);
+                border: solid 1px var(--dp-light-gray);
                 cursor: pointer;
-                color: colors.$accentColor;
-                transition: .5s;
+                color: var(--dp-accent-color);
+                transition: 0.5s;
             }
 
             button:hover {
-                box-shadow: 6px 6px 12px colors.$lightGray;
-                transition: .5s;
+                box-shadow: 6px 6px 12px var(--dp-light-gray);
+                transition: 0.5s;
                 transform: scale(1.05);
             }
 
@@ -158,25 +157,25 @@
                 }
 
                 button:nth-child(2) {
-                    background-color: colors.$gray;
-                    color: colors.$black;
+                    background-color: var(--dp-gray);
+                    color: var(--dp-black);
                     cursor: not-allowed;
-                    transition: .4s;
+                    transition: 0.4s;
                 }
 
                 button:nth-child(2):hover {
-                    background-color: colors.$darkGray;
-                    color: colors.$white;
-                    transition: .4s;
+                    background-color: var(--dp-dark-gray);
+                    color: var(--dp-lightfall);
+                    transition: 0.4s;
                 }
 
                 button.btnFinish {
-                    background-color: colors.$accentColor;
-                    color: colors.$white;
+                    background-color: var(--dp-accent-color);
+                    color: var(--dp-lightfall);
                 }
 
                 button.btnFinish:hover {
-                    background-color: colors.$accentColorDarker;
+                    background-color: var(--dp-accent-color-darker);
                     cursor: pointer;
                 }
             }

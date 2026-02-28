@@ -1,5 +1,4 @@
 @charset "UTF-8";
-@use '../../styles/colors.scss' as colors;
 
 @keyframes popupAppears {
     0% {
@@ -35,7 +34,7 @@
         position: fixed;
         bottom: 0;
         border-radius: 5px;
-        box-shadow: 1px 1px 4px colors.$black;
+        box-shadow: 1px 1px 4px var(--dp-full-black);
         z-index: 15;
         animation: popupAppears 4s forwards;
 
@@ -57,22 +56,27 @@
     }
 
     .error {
-        background-color: colors.$darkerRed;
-        color: colors.$white;
+        background-color: var(--dp-darker-red);
+        color: var(--dp-full-white);
     }
 
     .info {
-        background-color: colors.$blueInfo;
-        color: colors.$white;
+        background-color: var(--dp-blue-info);
+        color: var(--dp-full-white);
     }
 
     .warning {
-        background-color: colors.$orangeAfternoon;
-        color: colors.$black;
+        background-color: var(--dp-orange-afternoon);
+        color: var(--dp-full-black);
     }
 
     .success {
-        background-color: colors.$successGreen;
+        background-color: var(--dp-success-green);
+        color: var(--dp-full-black);
     }
 
+    p {
+        color: var(--dp-text-color);
+        font-weight: 500;
+    }
 }

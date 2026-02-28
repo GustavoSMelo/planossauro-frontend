@@ -1,5 +1,4 @@
 @charset "UTF-8";
-@use '../colors.scss' as colors;
 
 @keyframes weekDaysMobileAnimation {
     0% {
@@ -9,7 +8,7 @@
 
     99% {
         display: none;
-        opacity: .4;
+        opacity: 0.4;
     }
 
     100% {
@@ -26,7 +25,7 @@
 
     99% {
         display: none;
-        opacity: .4;
+        opacity: 0.4;
     }
 
     100% {
@@ -43,10 +42,10 @@ label {
 }
 
 input {
-    background-color: colors.$white;
-    border: 1px solid colors.$accentColor;
+    background-color: var(--dp-lightfall);
+    border: 1px solid var(--dp-accent-color);
     padding: 10px 30px 10px 8px;
-    color: colors.$accentColor;
+    color: var(--dp-accent-color);
     font-weight: 600;
     border-radius: 5px;
     font-size: 14pt;
@@ -54,10 +53,10 @@ input {
 }
 
 .btnTrash {
-    background-color: colors.$white;
-    color: colors.$accentColor;
+    background-color: var(--dp-lightfall);
+    color: var(--dp-accent-color);
     cursor: pointer;
-    border: solid 1px colors.$accentColor;
+    border: solid 1px var(--dp-accent-color);
     padding: 10px;
     font-size: 14pt;
     display: flex;
@@ -65,14 +64,14 @@ input {
     justify-content: center;
     border-radius: 5px;
     margin-left: 5px;
-    transition: .4s;
+    transition: 0.4s;
 }
 
 .btnTrash:hover {
-    background-color: colors.$red;
-    transition: .4s;
-    color: colors.$black;
-    border-color: colors.$red;
+    background-color: var(--dp-red);
+    transition: 0.4s;
+    color: var(--dp-black);
+    border-color: var(--dp-red);
 }
 
 .planningContainer {
@@ -88,24 +87,26 @@ input {
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: colors.$transparentGray;
+        background-color: var(--dp-transparent-gray);
         z-index: 2;
         align-items: center;
         justify-content: center;
 
         .aditionalInformationsForm {
             width: 60%;
-            background-color: colors.$white;
+            background-color: var(--dp-lightfall);
             border-radius: 5px;
-            box-shadow: 1px 1px 6px colors.$darkGray;
+            box-shadow: 1px 1px 6px var(--dp-dark-gray);
             padding: 30px;
 
             h2 {
                 margin-bottom: 10px;
+                color: var(--dp-text-color);
             }
 
             label {
                 font-weight: normal;
+                color: var(--dp-text-color);
             }
 
             input {
@@ -115,14 +116,14 @@ input {
 
             span.rangeDatePickerContainer {
                 .dp__main {
-                    border: solid 1px colors.$accentColor;
+                    border: solid 1px var(--dp-accent-color);
                     border-radius: 5px;
                     margin-bottom: 20px;
-                    color: colors.$accentColor;
+                    color: var(--dp-accent-color);
                 }
 
                 .dp__range_between {
-                    background-color: colors.$accentColor;
+                    background-color: var(--dp-accent-color);
                 }
             }
 
@@ -131,14 +132,14 @@ input {
                 padding: 12px 40px;
                 border-radius: 5px;
                 font-weight: bold;
-                border: solid 1px colors.$black;
+                border: solid 1px var(--dp-black);
                 cursor: pointer;
                 margin-right: 5px;
-                transition: .4s;
+                transition: 0.4s;
             }
 
             button.btnChooseTemplateCancel {
-                background-color: colors.$gray;
+                background-color: var(--dp-gray);
                 cursor: not-allowed;
             }
 
@@ -147,20 +148,25 @@ input {
             }
 
             button.btnChooseTemplateCancel:hover {
-                background-color: colors.$darkGray;
-                transition: .4s;
-                color: #fff;
+                background-color: var(--dp-dark-gray);
+                transition: 0.4s;
+                color: var(--dp-full-white);
             }
 
             button.btnChooseTemplate {
-                background-color: colors.$accentColor;
-                color: colors.$white;
+                background-color: var(--dp-accent-color);
+                color: var(--dp-lightfall);
             }
 
             button.btnChooseTemplate:hover {
-                background-color: colors.$accentColorDarker;
-                transition: .4s;
-                border: solid 1px colors.$accentColorDarker;
+                background-color: var(--dp-accent-color-dark);
+                transition: 0.4s;
+                border: solid 1px var(--dp-accent-color-dark);
+            }
+
+            p {
+                color: var(--dp-text-color);
+                font-weight: 500;
             }
         }
     }
@@ -170,7 +176,7 @@ input {
         align-items: center;
         justify-content: center;
         padding-bottom: 10px;
-        border-bottom: colors.$lightGray solid 1px;
+        border-bottom: var(--dp-light-gray) solid 1px;
 
         img {
             width: 160px;
@@ -180,20 +186,24 @@ input {
         span {
             margin-left: 30px;
 
+            h1 {
+                color: var(--dp-text-color);
+            }
+
             .planSelect {
-                background-color: colors.$white;
-                color: colors.$accentColor;
-                border: solid 1px colors.$accentColor;
+                background-color: var(--dp-lightfall);
+                color: var(--dp-accent-color);
+                border: solid 1px var(--dp-accent-color);
                 padding: 10px 30px 10px 8px;
                 border-radius: 5px;
                 font-size: 14pt;
                 text-align: left;
                 width: 240px;
                 margin-top: 10px;
+                font-weight: 500;
             }
         }
     }
-
 
     .dailyPlanContentContainer {
         overflow: scroll;
@@ -208,11 +218,11 @@ input {
 
             label {
                 font-weight: bold;
-                color: colors.$gray;
+                color: var(--dp-gray);
                 padding-top: 7px;
             }
 
-            span>input {
+            span > input {
                 width: 100%;
             }
         }
@@ -223,7 +233,7 @@ input {
         position: relative;
     }
 
-    form.dailyPlan>.btnContainer {
+    form.dailyPlan > .btnContainer {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
@@ -244,10 +254,10 @@ input {
         }
 
         button:nth-child(1) {
-            background-color: colors.$white;
-            color: colors.$accentColor;
-            border: solid 2px colors.$accentColor;
-            transition: .4s;
+            background-color: var(--dp-lightfall);
+            color: var(--dp-accent-color);
+            border: solid 2px var(--dp-accent-color);
+            transition: 0.4s;
             font-weight: 500;
 
             i {
@@ -256,9 +266,9 @@ input {
         }
 
         button:nth-child(1):hover {
-            background-color: colors.$accentColor;
-            color: colors.$white;
-            transition: .4s;
+            background-color: var(--dp-accent-color);
+            color: var(--dp-lightfall);
+            transition: 0.4s;
         }
 
         button:nth-child(2) {
@@ -266,28 +276,28 @@ input {
         }
 
         .btnDiaryGenerateCancel {
-            background-color: colors.$gray;
-            color: colors.$black;
-            transition: .4s;
-            border: colors.$gray;
+            background-color: var(--dp-gray);
+            color: var(--dp-black);
+            transition: 0.4s;
+            border: var(--dp-gray);
             cursor: not-allowed;
         }
 
         .btnDiaryGenerateCancel:hover {
-            background-color: colors.$darkGray;
-            transition: .4s;
-            color: colors.$black;
+            background-color: var(--dp-dark-gray);
+            transition: 0.4s;
+            color: var(--dp-black);
         }
 
         .btnDiaryGenerate {
-            color: colors.$white;
-            background-color: colors.$accentColor;
-            transition: .4s;
+            color: var(--dp-lightfall);
+            background-color: var(--dp-accent-color);
+            transition: 0.4s;
         }
 
         .btnDiaryGenerate:hover {
-            background-color: colors.$accentColorDarker;
-            transition: .4s;
+            background-color: var(--dp-accent-color-darker);
+            transition: 0.4s;
         }
     }
 
@@ -295,7 +305,7 @@ input {
         display: flex;
         flex-direction: row;
         margin-top: 20px;
-        border: solid 2px colors.$accentColor;
+        border: solid 2px var(--dp-accent-color);
         border-radius: 10px;
         height: 400px;
         margin-left: 20px;
@@ -309,26 +319,27 @@ input {
             width: 30%;
             display: flex;
             flex-direction: column;
-            border-right: solid 2px colors.$accentColor;
+            border-right: solid 2px var(--dp-accent-color);
 
             li.btnWeekDays {
                 height: 25%;
-                background-color: colors.$white;
-                color: colors.$accentColor;
-                border-bottom: solid 1px colors.$accentColor;
+                background-color: var(--dp-lightfall);
+                color: var(--dp-accent-color);
+                border-bottom: solid 1px var(--dp-accent-color);
                 padding: 20px;
                 margin-right: 0;
                 font-size: 14pt;
                 display: flex;
                 align-items: center;
+                font-weight: 500;
 
                 i.iconUncheck {
-                    color: colors.$gray;
+                    color: var(--dp-gray);
                     margin-right: 7px;
                 }
 
                 i.iconCheck {
-                    color: colors.$darkGreen;
+                    color: var(--dp-dark-green);
                     font-weight: bold;
                     margin-right: 7px;
                 }
@@ -340,19 +351,18 @@ input {
             }
 
             li.selected {
-                background-color: colors.$accentColor;
-                color: colors.$white;
+                background-color: var(--dp-accent-color);
+                color: var(--dp-text-color);
                 font-weight: bold;
             }
         }
-
 
         .classContentContainer {
             padding: 10px;
             display: flex;
             width: 100%;
             flex-direction: column;
-            box-shadow: 4px 4px 12px colors.$lightGray;
+            box-shadow: 4px 4px 12px var(--dp-light-gray);
 
             .classContent {
                 height: 85%;
@@ -374,22 +384,26 @@ input {
                         height: fit-content;
 
                         h2 {
-                            color: colors.$gray;
+                            color: var(--dp-gray);
+                        }
+
+                        h2[data-theme="dark"] {
+                            color: var(--dp-full-white);
                         }
 
                         input {
                             width: 97%;
-                            border: solid 1px colors.$gray;
-                            color: colors.$accentColor;
+                            border: solid 1px var(--dp-gray);
+                            color: var(--dp-accent-color);
                             margin-top: 5px;
                         }
 
                         input::placeholder {
-                            color: colors.$gray;
+                            color: var(--dp-gray);
                         }
 
                         input:focus {
-                            border: solid 2px colors.$accentColor;
+                            border: solid 2px var(--dp-accent-color);
                         }
                     }
 
@@ -398,30 +412,29 @@ input {
                         height: fit-content;
                         font-size: 21pt;
                         margin-bottom: 20px;
-                        color: colors.$accentColor;
+                        color: var(--dp-accent-color);
                         padding: 10px 10px 0 10px;
-                        background-color: colors.$white;
+                        background-color: var(--dp-lightfall);
                         cursor: pointer;
-                        transition: .2s;
+                        transition: 0.2s;
                     }
 
                     .btnRemoveClass:hover {
-                        transition: .2s;
-                        color: colors.$darkerRed;
+                        transition: 0.2s;
+                        color: var(--dp-darker-red);
                     }
 
                     .btnRemoveClassCancel {
-                        color: colors.$gray;
+                        color: var(--dp-gray);
                         cursor: not-allowed;
                     }
                 }
-
             }
 
             .btnControlsContainer {
                 width: 100%;
                 padding-top: 10px;
-                border-top: 1px solid colors.$gray;
+                border-top: 1px solid var(--dp-gray);
                 position: relative;
                 bottom: 0;
                 display: flex;
@@ -432,29 +445,33 @@ input {
                     cursor: pointer;
                     padding: 10px 50px;
                     margin: 0 10px;
-                    background-color: colors.$white;
-                    color: colors.$accentColor;
-                    border: solid 2px colors.$accentColor;
+                    background-color: var(--dp-lightfall);
+                    color: var(--dp-accent-color);
+                    border: solid 2px var(--dp-accent-color);
                     font-weight: bold;
                     border-radius: 5px;
                 }
 
                 button:last-child {
-                    background-color: colors.$accentColor;
-                    color: colors.$white;
+                    background-color: var(--dp-accent-color);
+                    color: var(--dp-lightfall);
                 }
             }
+        }
+
+        .classContentContainer[data-theme="dark"] {
+            box-shadow: 0 0 0;
         }
     }
 
     .btnGeneratePlan,
     .btnGeneratePlanCancel {
-        background-color: colors.$accentColor;
+        background-color: var(--dp-accent-color);
         border: none;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: colors.$white;
+        color: var(--dp-lightfall);
         font-size: 16pt;
         font-weight: bold;
         margin-top: 30px;
@@ -463,18 +480,18 @@ input {
         border-radius: 5px;
         width: 320px;
         margin: 30px auto;
-        transition: .4s;
+        transition: 0.4s;
     }
 
     .btnGeneratePlan:hover {
-        background-color: colors.$accentColor;
-        color: colors.$white;
-        transition: .4s;
+        background-color: var(--dp-accent-color);
+        color: var(--dp-lightfall);
+        transition: 0.4s;
     }
 
     .btnGeneratePlanCancel {
-        background-color: colors.$lightGray;
-        color: colors.$gray;
+        background-color: var(--dp-light-gray);
+        color: var(--dp-gray);
         cursor: not-allowed;
     }
 }
@@ -496,19 +513,19 @@ input {
                 .selectedDay {
                     display: flex;
                     justify-content: space-between;
-                    border-bottom: 2px solid colors.$accentColor;
+                    border-bottom: 2px solid var(--dp-accent-color);
+                    color: var(--dp-text-color);
 
                     .selectedWeekDayMobile {
                         padding: 14px;
 
-
                         i.iconUncheck {
-                            color: colors.$gray;
+                            color: var(--dp-gray);
                             margin-right: 5px;
                         }
 
                         i.iconCheck {
-                            color: colors.$darkGreen;
+                            color: var(--dp-dark-green);
                             font-weight: bold;
                             margin-right: 5px;
                         }
@@ -520,6 +537,10 @@ input {
                         background-color: transparent;
                         cursor: pointer;
                         text-align: right;
+
+                        i {
+                            color: var(--dp-full-white);
+                        }
                     }
                 }
 
@@ -533,9 +554,10 @@ input {
                         cursor: pointer;
                         border-radius: 0;
                         margin-right: 0;
-                        border-bottom: 1px solid colors.$gray;
+                        border-bottom: 1px solid var(--dp-gray);
                         padding: 10px 20px;
                         animation: 0.4s weekDaysMobileAnimation forwards;
+                        color: var(--dp-text-color);
                     }
 
                     li.mobileDayItemList:nth-child(1) {
@@ -559,12 +581,12 @@ input {
                     }
 
                     li.mobileDaySelected {
-                        background-color: colors.$accentColor;
-                        color: colors.$white;
+                        background-color: var(--dp-accent-color);
+                        color: var(--dp-full-white);
                     }
 
                     .iconCheck {
-                        color: colors.$darkGreen;
+                        color: var(--dp-dark-green);
                     }
                 }
             }
@@ -591,7 +613,7 @@ input {
 
 @media screen and (max-width: 640px) {
     .planningContainer {
-        form.dailyPlan>.btnContainer {
+        form.dailyPlan > .btnContainer {
             margin-top: 30px;
             button {
                 width: 91%;
@@ -609,7 +631,7 @@ input {
         margin: 0;
         width: 95%;
 
-        .aditionalInformationsContainer >.aditionalInformationsForm {
+        .aditionalInformationsContainer > .aditionalInformationsForm {
             width: 100%;
             transform: scale(0.9);
 
@@ -656,7 +678,7 @@ input {
                 }
 
                 span.classContainer {
-                    span>input {
+                    span > input {
                         width: 90%;
                     }
                 }

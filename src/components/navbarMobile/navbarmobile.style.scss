@@ -1,5 +1,4 @@
 @charset "UTF-8";
-@use '../../styles/colors.scss' as colors;
 
 @keyframes menuHamburgerSpawn {
     0% {
@@ -31,7 +30,7 @@
     width: 100%;
     height: 100%;
     justify-content: space-between;
-    background-color: colors.$transparentGray;
+    background-color: var(--dp-transparent-gray);
     overflow: hidden;
     border-radius: 5px;
 
@@ -40,32 +39,32 @@
     }
 
     .hamburgerMenu {
-        background-color: colors.$white;
+        background-color: var(--dp-lightfall);
         width: 70%;
         padding: 20px;
         list-style: none;
         animation: menuHamburgerSpawn 0.5s normal;
-        border-left: solid 3px colors.$accentColor;
+        border-left: solid 3px var(--dp-accent-color);
 
         li:nth-child(1) {
             display: flex;
             align-items: center;
             flex-direction: column;
-            border-bottom: 2px solid colors.$lowPinkBG;
+            border-bottom: 2px solid var(--dp-low-pink-bg);
             padding-bottom: 20px;
 
             h4 {
                 font-size: 20pt;
-                color: colors.$accentColor;
+                color: var(--dp-accent-color);
             }
         }
 
         .planInfo {
-            background-color: colors.$accentColor;
+            background-color: var(--dp-accent-color);
             padding: 15px 15px;
             font-size: 14pt;
             font-weight: 500;
-            color: colors.$white;
+            color: var(--dp-lightfall);
             border-radius: 5px;
             cursor: pointer;
             text-align: center;
@@ -74,7 +73,7 @@
 
         hr {
             margin-top: 10px;
-            border: solid 1px colors.$lowPinkBG;
+            border: solid 1px var(--dp-low-pink-bg);
         }
 
         .btnNavbar {
@@ -83,7 +82,7 @@
             font-size: 18pt;
             display: flex;
             align-items: center;
-            color: colors.$textColor;
+            color: var(--dp-text-color);
             font-weight: 500;
 
             .pi {
@@ -93,7 +92,7 @@
 
         .choosed {
             font-weight: bold;
-            color: colors.$accentColor;
+            color: var(--dp-accent-color);
         }
     }
 

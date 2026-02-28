@@ -1,5 +1,4 @@
 @charset "UTF-8";
-@use "./colors.scss" as colors;
 
 @keyframes bg-animation {
     0% {
@@ -54,22 +53,21 @@
     min-height: 100vh;
     padding: 20px;
     align-items: center;
-    background-color: #fee7ef;
-    background-image: url('../assets/backgroundLightTheme.png');
+    background-color: var(--dp-low-pink-bg);
+    background-image: var(--dp-background-url);
     background-size: 70%;
     background-repeat: repeat;
-        animation: bg-animation 30s linear infinite;
+    animation: bg-animation 30s linear infinite;
 
     .wrapper {
-        box-shadow: 1px 5px 10px #fdc9db;
+        box-shadow: 1px 5px 10px var(--dp-shadow-low-pink);
         padding: 20px 50px;
         border-radius: 10px;
         width: 70%;
         display: flex;
         flex-direction: column;
         align-items: center;
-        background-color: #fff;
-        // border: 1px solid #fcabc7;
+        background-color: var(--dp-lightfall);
         position: relative;
 
         .navbar {
@@ -102,16 +100,16 @@
                     border-radius: 400px;
                     padding: 5px 8px;
                     // border: solid 2px #fdc9db;
-                    color: #D70A53;
+                    color: var(--dp-text-color);
                     cursor: pointer;
-                    transition: .4s;
-                    box-shadow: 1px 1px 2px #fee7ef;
+                    transition: 0.4s;
+                    box-shadow: 1px 1px 2px var(--dp-low-pink-bg);
                 }
 
                 i:hover {
                     border: none;
-                    box-shadow: 3px 6px 8px #fdc9db;
-                    transition: .4s;
+                    box-shadow: 3px 6px 8px var(--dp-shadow-low-pink);
+                    transition: 0.4s;
                 }
             }
         }
@@ -139,11 +137,13 @@
                     figcaption {
                         font-size: 52pt;
                         font-weight: bolder;
+                        color: var(--dp-accent-color);
                     }
                 }
 
                 h2 {
                     font-size: 30pt;
+                    color: var(--dp-text-color);
                 }
 
                 p {
@@ -151,26 +151,26 @@
                     text-align: justify;
                     margin-top: 15px;
                     margin-bottom: 15px;
-                    color: #101010;
+                    color: var(--dp-text-color);
                 }
 
                 button.btnLogin {
                     cursor: pointer;
-                    background-color: colors.$accentColor;
+                    background-color: var(--dp-accent-color);
                     border-radius: 5px;
                     padding: 20px 0px;
                     cursor: pointer;
-                    color: #fff;
+                    color: var(--dp-lightfall);
                     margin-top: 10px;
                     margin-bottom: 10px;
                     font-size: 15pt;
                     font-weight: bold;
                     text-transform: uppercase;
-                    transition: .4s;
+                    transition: 0.4s;
                 }
 
                 button.btnLogin:hover {
-                    transition: .4s;
+                    transition: 0.4s;
                     transform: scale(1.1);
                 }
 
@@ -178,21 +178,20 @@
                     border: none;
                     font-size: 16pt;
                     background-color: transparent;
-                    color: colors.$accentColor;
+                    color: var(--dp-accent-color);
                     font-weight: bold;
                     padding: 15px 0px;
                     cursor: pointer;
-                    transition: .4s;
+                    transition: 0.4s;
                 }
 
                 button.btnExamples:hover {
-                    color: colors.$accentColorDark;
+                    color: var(--dp-accent-color-dark);
                     transform: scale(1.1);
                 }
             }
 
             figure {
-
                 img {
                     width: 360px;
                     animation: kids-dancing 6s forwards infinite;
@@ -205,11 +204,13 @@
         margin-top: 40px;
 
         a {
-            color: #000;
+            color: var(--dp-text-color);
             text-decoration: none;
         }
     }
 }
+
+// reponsivity
 
 @media screen and (max-width: 1600px) {
     .containerLP {
@@ -324,4 +325,3 @@
         }
     }
 }
-

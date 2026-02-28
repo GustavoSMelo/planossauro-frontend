@@ -1,15 +1,14 @@
 @charset "UTF-8";
-@use "../colors.scss" as colors;
 
 .homeContentContainer {
     width: 100%;
     padding: 20px;
-    color: colors.$textColor;
+    color: var(--dp-text-color);
 
     h1 {
         text-align: center;
         font-size: 18pt;
-        color: colors.$textColor;
+        color: var(--dp-text-color);
         padding-bottom: 10px;
     }
 
@@ -21,11 +20,11 @@
     .planInfoContainer {
         display: flex;
         flex-direction: column;
-        box-shadow: 3px 3px 8px colors.$lightGray;
-        border: solid 2px colors.$lightGray;
+        box-shadow: 3px 3px 8px var(--dp-light-gray);
+        border: solid 2px var(--dp-light-gray);
         border-radius: 5px;
         padding: 10px;
-        transition: .4s;
+        transition: 0.4s;
         align-items: center;
         width: 35%;
 
@@ -41,32 +40,36 @@
             margin-top: 10px;
             padding-top: 10px;
             padding-bottom: 5px;
-            border-top: solid 1px colors.$lightGray;
+            border-top: solid 1px var(--dp-light-gray);
             font-size: 18pt;
             text-align: center;
             width: 100%;
         }
 
         button {
-            background-color: colors.$accentColor;
-            color: colors.$white;
+            background-color: var(--dp-accent-color);
+            color: var(--dp-lightfall);
             font-weight: 500;
             padding: 7px;
             font-size: 18pt;
             cursor: pointer;
             border-radius: 3px;
-            transition: .4s;
+            transition: 0.4s;
             width: 100%;
         }
 
         button:hover {
-            transition: .4s;
-            background-color: colors.$accentColorDark;
+            transition: 0.4s;
+            background-color: var(--dp-accent-color-dark);
         }
     }
 
+    .planInfoContainer[data-theme="dark"] {
+        box-shadow: 0 0 0;
+    }
+
     .planInfoContainer:hover {
-        transition: .4s;
+        transition: 0.4s;
         transform: scale(1.02);
     }
 
@@ -87,13 +90,13 @@
     }
 
     .planningInfoContainer {
-        box-shadow: 3px 3px 8px colors.$lightGray;
-        border: solid 2px colors.$lightGray;
+        box-shadow: 3px 3px 8px var(--dp-light-gray);
+        border: solid 2px var(--dp-light-gray);
         margin: 0px 15px;
         height: fit-content;
         padding: 20px;
         border-radius: 5px;
-        transition: .4s;
+        transition: 0.4s;
         display: flex;
         width: 100%;
         justify-content: space-between;
@@ -105,28 +108,28 @@
             margin-right: 20px;
         }
 
-        .planningDetailsContainer>span {
+        .planningDetailsContainer > span {
             width: 100%;
 
             progress {
                 width: 100%;
-                color: colors.$accentColor;
-                border: solid 1px colors.$accentColor;
+                color: var(--dp-accent-color);
+                border: solid 1px var(--dp-accent-color);
                 border-radius: 3px;
             }
 
             progress::-moz-progress-bar {
-                background: colors.$accentColor;
+                background: var(--dp-accent-color);
             }
 
             progress::-webkit-progress-value {
-                background: colors.$accentColor;
+                background: var(--dp-accent-color);
             }
         }
 
         button {
-            background-color: colors.$accentColor;
-            color: colors.$white;
+            background-color: var(--dp-accent-color);
+            color: var(--dp-lightfall);
             font-weight: bold;
             padding: 20px;
             border-radius: 3px;
@@ -136,8 +139,8 @@
         }
 
         button:hover {
-            transition: .4s;
-            background-color: colors.$accentColorDark;
+            transition: 0.4s;
+            background-color: var(--dp-accent-color-dark);
         }
     }
 
@@ -145,33 +148,36 @@
         margin-bottom: 20px;
     }
 
-    .planningInfoContainer:hover {
-        transform: scale(1.02);
-        transition: .4s;
+    .planningInfoContainer[data-theme="dark"] {
+        box-shadow: 0 0 0;
     }
 
+    .planningInfoContainer:hover {
+        transform: scale(1.02);
+        transition: 0.4s;
+    }
 
     .aditionalInformationsContainer {
         display: flex;
         width: 100%;
-        border: solid 1px colors.$lightGray;
-        box-shadow: 4px 4px 8px colors.$lightGray;
+        border: solid 1px var(--dp-light-gray);
+        box-shadow: 4px 4px 8px var(--dp-light-gray);
         align-items: center;
         justify-content: space-around;
         margin-top: 20px;
         border-radius: 5px;
         padding: 10px;
-        transition: .4s;
+        transition: 0.4s;
 
         button {
-            background-color: colors.$accentColor;
+            background-color: var(--dp-accent-color);
             padding: 12px;
             font-weight: bold;
-            color: colors.$white;
+            color: var(--dp-lightfall);
             cursor: pointer;
             margin-top: 10px;
             border-radius: 3px;
-            transition: .4s;
+            transition: 0.4s;
         }
 
         img {
@@ -179,14 +185,23 @@
         }
     }
 
+    .aditionalInformationsContainer[data-theme="dark"] {
+        box-shadow: 0 0 0;
+    }
+
     .aditionalInformationsContainer:hover {
         transform: scale(1.02);
-        transition: .4s;
+        transition: 0.4s;
 
         button:hover {
-            background-color: colors.$accentColorDark;
-            transition: .4s;
+            background-color: var(--dp-accent-color-dark);
+            transition: 0.4s;
         }
+    }
+
+    p {
+        color: var(--dp-text-color);
+        font-weight: 500;
     }
 }
 

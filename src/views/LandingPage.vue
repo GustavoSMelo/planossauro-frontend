@@ -1,13 +1,20 @@
 <script setup lang="ts">
-import 'primeicons/primeicons.css';
-import { useRouter } from 'vue-router';
+import { useDark, useToggle } from "@vueuse/core";
+import "primeicons/primeicons.css";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
+const isDark = useDark({
+    attribute: "data-theme",
+    valueDark: "dark",
+    valueLight: "light",
+});
+useLight;
+const toggleDark = useToggle(isDark);
 
 const goToLoginPage = () => {
-    router.push({ path: '/login' });
+    router.push({ path: "/login" });
 };
-
 </script>
 
 <template>
@@ -16,8 +23,9 @@ const goToLoginPage = () => {
             <nav class="navbar">
                 <span></span>
 
-                <button>
-                    <i class="pi pi-sun iconThemeSwitcher" />
+                <button type="button" @click="toggleDark()">
+                    <i v-if="isDark" class="pi pi-sun iconThemeSwitcher" />
+                    <i v-else class="pi pi-moon iconThemeSwitcher"></i>
                 </button>
             </nav>
 
@@ -25,19 +33,27 @@ const goToLoginPage = () => {
                 <div>
                     <figure>
                         <img src="../assets/DinoLogo.svg" alt="Dino Logo" />
-                        <figcaption> Planeja.ai</figcaption>
+                        <figcaption>Planeja.ai</figcaption>
                     </figure>
                     <h2>Seu planejador pessoal</h2>
                     <p>
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ut nobis rem, perspiciatis nesciunt
-                        nulla
-                        mollitia quam fugit veniam et veritatis asperiores libero corrupti magnam. Molestias tenetur
-                        saepe
-                        laborum porro eveniet!
+                        Lorem ipsum dolor sit, amet consectetur adipisicing
+                        elit. Ut nobis rem, perspiciatis nesciunt nulla mollitia
+                        quam fugit veniam et veritatis asperiores libero
+                        corrupti magnam. Molestias tenetur saepe laborum porro
+                        eveniet!
                     </p>
 
-                    <button class="btnLogin" type="button" @click="goToLoginPage">Login</button>
-                    <button class="btnExamples" type="button">Ver examples</button>
+                    <button
+                        class="btnLogin"
+                        type="button"
+                        @click="goToLoginPage"
+                    >
+                        Login
+                    </button>
+                    <button class="btnExamples" type="button">
+                        Ver examples
+                    </button>
                 </div>
 
                 <figure>
@@ -46,7 +62,10 @@ const goToLoginPage = () => {
             </main>
         </div>
         <h4>
-            <a href="https://github.com/GustavoSMelo/planeja.ai-frontend" target="_blank">
+            <a
+                href="https://github.com/GustavoSMelo/planeja.ai-frontend"
+                target="_blank"
+            >
                 Desenvolvido por Gustavo Santos Melo
             </a>
         </h4>

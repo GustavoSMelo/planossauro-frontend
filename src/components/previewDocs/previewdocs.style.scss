@@ -1,12 +1,11 @@
 @charset "UTF-8";
-@use "../../styles/colors.scss" as colors;
 
 .showPreviewContainer {
     position: fixed;
     width: 100vw;
     min-height: 100vh;
     z-index: 2;
-    background-color: colors.$transparentGray;
+    background-color: var(--dp-transparent-gray);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -30,20 +29,25 @@
             cursor: pointer;
             font-size: 16pt;
             border-radius: 10px;
-            box-shadow: 2px 2px 8px colors.$darkGray;
+            box-shadow: 2px 2px 8px var(--dp-dark-gray);
         }
     }
 
     .btnChooseTemplate {
         padding: 20px 60px;
-        background-color: colors.$accentColor;
-        color: colors.$white;
+        background-color: var(--dp-accent-color);
+        color: var(--dp-lightfall);
         font-weight: bold;
-        border: solid 2px colors.$white;
+        border: solid 2px var(--dp-lightfall);
         border-radius: 5px;
         cursor: pointer;
         margin-top: 20px;
         font-size: 16pt;
+    }
+
+    p {
+        color: var(--dp-text-color);
+        font-weight: 500;
     }
 }
 

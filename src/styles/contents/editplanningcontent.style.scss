@@ -1,5 +1,4 @@
 @charset "UTF-8";
-@use '../../styles/colors.scss' as colors;
 
 .editPlanningContainer {
     width: 100%;
@@ -16,8 +15,8 @@
         width: 100%;
 
         .titleForm {
-            color: colors.$textColor;
-            border-bottom: solid 1px colors.$lightGray;
+            color: var(--dp-text-color);
+            border-bottom: solid 1px var(--dp-light-gray);
             margin-bottom: 20px;
             padding-bottom: 20px;
             text-align: center;
@@ -25,11 +24,12 @@
             h1 {
                 padding: 10px;
                 text-align: center;
-                color: colors.$textColor;
+                color: var(--dp-text-color);
             }
 
             p {
                 font-weight: bold;
+                color: var(--dp-text-color);
             }
         }
 
@@ -44,18 +44,20 @@
         label {
             font-size: 14pt;
             margin-bottom: 5px;
+            color: var(--dp-text-color);
+            font-weight: 500;
         }
 
         input,
         select {
-            border: solid 2px colors.$accentColor;
+            border: solid 2px var(--dp-accent-color);
             padding: 10px;
             font-size: 14pt;
             font-weight: 500;
-            color: colors.$accentColor;
+            color: var(--dp-accent-color);
             border-radius: 5px;
             margin-bottom: 20px;
-            background-color: #fff;
+            background-color: var(--dp-full-white);
         }
 
         .dateContainer {
@@ -96,22 +98,22 @@
                 padding: 10px;
                 font-size: 16pt;
                 margin: 10px;
-                border: solid 2px colors.$accentColor;
+                border: solid 2px var(--dp-accent-color);
                 border-radius: 5px;
-                background-color: colors.$white;
-                color: colors.$accentColor;
+                background-color: var(--dp-lightfall);
+                color: var(--dp-accent-color);
                 font-weight: bold;
-                transition: .4s;
+                transition: 0.4s;
                 cursor: pointer;
             }
 
             button:nth-child(2) {
-                background-color: colors.$accentColor;
-                color: colors.$white;
+                background-color: var(--dp-accent-color);
+                color: var(--dp-lightfall);
             }
 
             button:hover {
-                transition: .4s;
+                transition: 0.4s;
                 transform: scale(1.04);
             }
         }
@@ -128,7 +130,9 @@
                     width: 80%;
                 }
 
-                span:first-child { margin-right: 0; }
+                span:first-child {
+                    margin-right: 0;
+                }
             }
         }
     }

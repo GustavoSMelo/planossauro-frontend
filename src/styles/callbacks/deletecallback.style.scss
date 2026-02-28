@@ -1,19 +1,20 @@
 @charset "UTF-8";
-@use '../colors.scss' as colors;
 
 .deleteUserContainer {
-    background-image: url('../../assets/backgroundLightTheme.png');
+    background-image: var(--dp-background-url);
     width: 100vw;
-    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     background-repeat: no-repeat;
     background-size: contain;
+    min-height: 100vh;
+    background-size: cover;
+    background-repeat: repeat;
 
     .deleteUserContent {
-        background-color: colors.$white;
+        background-color: var(--dp-lightfall);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -21,13 +22,18 @@
         width: 80%;
         padding: 20px;
         text-align: center;
-        box-shadow: 3px 3px 10px colors.$gray;
+        box-shadow: 3px 3px 10px var(--dp-gray);
         border-radius: 5px;
+
+        p {
+            color: var(--dp-text-color);
+            font-weight: 500;
+        }
 
         h2 {
             margin-top: 10px;
             margin-bottom: 20px;
-            color: colors.$accentColor;
+            color: var(--dp-accent-color);
         }
 
         img {
@@ -35,31 +41,31 @@
         }
 
         b {
-            color: colors.$accentColor;
+            color: var(--dp-accent-color);
         }
 
         button {
             margin-top: 30px;
             width: 300px;
-            background-color: colors.$accentColor;
+            background-color: var(--dp-accent-color);
             padding: 14px;
             font-size: 14pt;
             font-weight: bold;
-            color: colors.$white;
+            color: var(--dp-lightfall);
             border-radius: 5px;
             cursor: pointer;
-            transition: .4s;
+            transition: 0.4s;
         }
 
         button:hover {
-            transition: .4s;
+            transition: 0.4s;
             transform: scale(1.05);
         }
 
         button.btnLogout {
-            background-color: colors.$white;
-            color: colors.$accentColor;
-            border: solid 2px colors.$accentColor;
+            background-color: var(--dp-lightfall);
+            color: var(--dp-accent-color);
+            border: solid 2px var(--dp-accent-color);
         }
     }
 }

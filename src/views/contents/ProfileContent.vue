@@ -9,6 +9,7 @@ import { useRouter } from "vue-router";
 import type { ILoginType } from "../../interfaces/loginType.interface";
 import type { IPageContent } from "../../interfaces/pageContents.interface";
 import { useI18n } from "vue-i18n";
+import { useDark, useToggle } from "@vueuse/core";
 
 const { handleChangeCurrentContent, handleChangeValidationLoginType } =
     defineProps<{
@@ -20,6 +21,8 @@ const { handleChangeCurrentContent, handleChangeValidationLoginType } =
         ) => void;
     }>();
 
+const isDark = useDark();
+const toggle = useToggle(isDark);
 const user = ref<IUser>({} as IUser);
 const duplicateUser = ref<IUser>({} as IUser);
 const editProfile = ref(false);
@@ -206,23 +209,34 @@ const logout = async () => {
 };
 
 const handleSendValidationEmail = async (loginType: ILoginType["types"]) => {
-    if (loginType === "github" && user.value.github_is_validated) return;
-    if (loginType === "google" && user.value.google_is_validated) return;
+    console.log(loginType);
+    console.log(user);
+    if (loginType === "github" && user.value.github_is_validated === "true")
+        return;
+    if (loginType === "google" && user.value.google_is_validated === "true")
+        return;
 
     try {
         handleChangeIsLoading(true);
 
+        console.log("a");
         const userResponse: IUser = (
             await backendApi.get(`/user/${user.value.uuid}`)
         ).data;
+
+        console.log(userResponse);
+
         if (
-            (loginType === "google" && userResponse.google_is_validated) ||
+            (loginType === "google" &&
+                userResponse.google_is_validated == true) ||
             (loginType === "google" && !userResponse.google_email?.length)
         ) {
             handleChangeIsLoading(false);
             handleChangePopupInfo(t("profile.connectGoogle"), "info", true);
             return;
         }
+
+        console.log(userResponse);
 
         if (
             (loginType === "github" && userResponse.github_is_validated) ||
@@ -319,7 +333,7 @@ const handleUnlinkAccount = async () => {
         </div>
     </div>
     <div class="profileContainer">
-        <div class="profileDetails">
+        <div class="profileDetails" :data-theme="isDark ? 'dark' : 'light'">
             <img
                 src="../../assets/dino_profile_logo.png"
                 alt="Dino user profile logo"
@@ -331,6 +345,7 @@ const handleUnlinkAccount = async () => {
                 :value="user.full_name"
                 @input="handleChangeFullName"
                 :placeholder="`${t('profile.namePlaceholder')}`"
+                :data-theme="isDark ? 'dark' : 'light'"
                 class="fullNameInput"
             />
 
@@ -342,6 +357,7 @@ const handleUnlinkAccount = async () => {
                     type="text"
                     :value="user.github_email"
                     :placeholder="`${t('profile.email')}`"
+                    :data-theme="isDark ? 'dark' : 'light'"
                 />
                 <div
                     class="containerBtnChangeSocialMedia"
@@ -378,6 +394,7 @@ const handleUnlinkAccount = async () => {
                     :value="user.google_email"
                     :placeholder="`${t('profile.emailPlaceholder')}`"
                     :class="editProfile ? 'ableToEdit' : ''"
+                    :data-theme="isDark ? 'dark' : 'light'"
                 />
 
                 <div
@@ -419,6 +436,7 @@ const handleUnlinkAccount = async () => {
                     :placeholder="`${t('profile.cellphonePlaceholder')}`"
                     :class="editProfile ? 'ableToEdit' : ''"
                     @input="handleChangeCellphone"
+                    :data-theme="isDark ? 'dark' : 'light'"
                 />
             </span>
             <button
@@ -552,9 +570,21 @@ const handleUnlinkAccount = async () => {
                         <i class="pi pi-palette"></i> {{ t("profile.theme") }}:
                     </h3>
 
-                    <select>
-                        <option>☀️ {{ t("profile.lightTheme") }}</option>
-                        <option>🌑 {{ t("profile.darkTheme") }}</option>
+                    <select
+                        @change="
+                            (event) => {
+                                event.target.value == 'true'
+                                    ? toggle(true)
+                                    : toggle(false);
+                            }
+                        "
+                    >
+                        <option value="false">
+                            ☀️ {{ t("profile.lightTheme") }}
+                        </option>
+                        <option value="true">
+                            🌑 {{ t("profile.darkTheme") }}
+                        </option>
                     </select>
                 </div>
 

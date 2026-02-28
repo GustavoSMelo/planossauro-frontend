@@ -2,49 +2,112 @@
 
 @font-face {
     font-family: Roboto;
-    src: url('../assets/fonts/Roboto/Roboto.ttf');
+    src: url("../assets/fonts/Roboto/Roboto.ttf");
 }
 
 @font-face {
     font-family: Roboto;
-    src: url('../assets/fonts/Roboto/Roboto-Regular.ttf');
+    src: url("../assets/fonts/Roboto/Roboto-Regular.ttf");
     font-weight: 500;
 }
 
 @font-face {
     font-family: Roboto;
-    src: url('../assets/fonts/Roboto/Roboto-Regular.ttf');
+    src: url("../assets/fonts/Roboto/Roboto-Regular.ttf");
     font-weight: normal;
 }
 
 @font-face {
     font-family: Roboto;
-    src: url('../assets/fonts/Roboto/Roboto-Black.ttf');
+    src: url("../assets/fonts/Roboto/Roboto-Black.ttf");
     font-weight: bolder;
 }
 
 @font-face {
     font-family: Roboto;
-    src: url('../assets/fonts/Roboto/Roboto-Bold.ttf');
+    src: url("../assets/fonts/Roboto/Roboto-Bold.ttf");
     font-weight: bold;
 }
 
 @font-face {
     font-family: Roboto;
-    src: url('../assets/fonts/Roboto/Roboto-semiThin.ttf');
+    src: url("../assets/fonts/Roboto/Roboto-semiThin.ttf");
     font-weight: 300;
 }
 
 @font-face {
     font-family: Roboto;
-    src: url('../assets/fonts/Roboto/Roboto-Thin.ttf');
+    src: url("../assets/fonts/Roboto/Roboto-Thin.ttf");
     font-weight: lighter;
 }
 
 @font-face {
     font-family: Roboto;
-    src: url('../assets/fonts/Roboto/Roboto_SemiCondensed-Medium.ttf');
+    src: url("../assets/fonts/Roboto/Roboto_SemiCondensed-Medium.ttf");
     font-weight: 600;
+}
+
+:root {
+    --dp-accent-color: #e9688c;
+    --dp-accent-color-dark: #f64181;
+    --dp-accent-color-darker: #a3083e;
+    --dp-accent-color-lighter: #ffdaed;
+    --dp-low-pink-bg: #fee7ef;
+    --dp-shadow-low-pink: #fdc9db;
+    --dp-lightfall: #fff;
+    --dp-black: #303030;
+    --dp-yellow-day: #f9e795;
+    --dp-blue-night: #93aec5;
+    --dp-blue-info: #4052d6;
+    --dp-blue-info-light: #c4caf2;
+    --dp-sleep-blue: #b6e2eb;
+    --dp-orange-afternoon: #ff964f;
+    --dp-red: #ff6961;
+    --dp-darker-red: #950606;
+    --dp-black-darker-red: #610404;
+    --dp-light-gray: #dfdfdf;
+    --dp-gray: #afafaf;
+    --dp-dark-gray: #3f3f3f;
+    --dp-transparent-gray: #00000076;
+    --dp-success-green: #adebb3;
+    --dp-green: #90e35d;
+    --dp-dark-green: #4f7d33;
+    --dp-text-color: #3e2a30;
+    --dp-full-black: #000;
+    --dp-full-white: #fff;
+    --dp-background-url: url("../assets/backgroundLightTheme.png");
+}
+
+:root[data-theme="dark"] {
+    --dp-accent-color: #e9688c;
+    --dp-accent-color-dark: #f64181;
+    --dp-accent-color-darker: #a3083e;
+    --dp-accent-color-lighter: #ffdaed;
+    --dp-low-pink-bg: #fee7ef;
+    --dp-shadow-low-pink: #00000000;
+    --dp-lightfall: #353535;
+    --dp-black: #fff;
+    --dp-yellow-day: #f9e795;
+    --dp-blue-night: #93aec5;
+    --dp-blue-info: #4052d6;
+    --dp-blue-info-light: #c4caf2;
+    --dp-sleep-blue: #b6e2eb;
+    --dp-orange-afternoon: #ff964f;
+    --dp-red: #ff6961;
+    --dp-darker-red: #950606;
+    --dp-black-darker-red: #610404;
+    --dp-light-gray: #fdc9db;
+    --dp-gray: #afafaf;
+    --dp-dark-gray: #3f3f3f;
+    --dp-transparent-gray: #00000076;
+    --dp-success-green: #adebb3;
+    --dp-green: #90e35d;
+    --dp-dark-green: #4f7d33;
+    --dp-text-color: #fff;
+    --dp-full-black: #000;
+    --dp-full-white: #fff;
+    --dp-aux-black: #202020;
+    --dp-background-url: url("../assets/backgroundDarkTheme.png");
 }
 
 * {
@@ -52,7 +115,7 @@
     margin: 0;
     box-sizing: border-box;
     border: 0;
-    font-family: 'Roboto', Verdana, Geneva, Tahoma, sans-serif;
+    font-family: "Roboto", Verdana, Geneva, Tahoma, sans-serif;
     --dp-primary-color: #e9688c;
     --dp-primary-disabled-color: #e9688c;
 }
@@ -62,10 +125,11 @@ body {
     max-width: 1920px;
     min-width: 320px;
     margin: auto;
-    background-color: #fee7ef;
+    background-color: var(--dp-lightfall);
 }
 
-input:focus, textarea:focus {
+input:focus,
+textarea:focus {
     outline: none;
 }
 

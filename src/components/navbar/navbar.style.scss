@@ -1,18 +1,17 @@
 @charset "UTF-8";
-@use '../../styles/colors.scss' as colors;
-
 
 .navbarContainer {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: colors.$white;
+    background-color: var(--dp-lightfall);
     flex-direction: row;
     position: sticky;
     top: 0;
-    border-bottom: 1px solid colors.$lightGray;
-    border-radius: 5px;
+    border-bottom: 1px solid var(--dp-text-color);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     padding: 15px 20px;
     z-index: 5;
 
@@ -29,7 +28,7 @@
         figcaption {
             font-size: 16pt;
             font-weight: bold;
-            color: colors.$accentColor;
+            color: var(--dp-accent-color);
         }
     }
 
@@ -46,24 +45,29 @@
 
         .btnNavbar {
             font-weight: 500;
-            color: colors.$textColor;
+            color: var(--dp-text-color);
             cursor: pointer;
-            transition: .4s;
+            transition: 0.4s;
         }
 
         .btnNavbar:hover {
-            color: colors.$accentColor;
-            transition: .4s;
+            color: var(--dp-accent-color);
+            transition: 0.4s;
         }
 
         .choosed {
-            color: colors.$accentColor;
+            color: var(--dp-accent-color);
             font-weight: bold;
         }
 
         .mobileIcon {
             display: none;
         }
+    }
+
+    p {
+        color: var(--dp-text-color);
+        font-weight: 500;
     }
 }
 
@@ -88,7 +92,7 @@
                 display: flex;
                 font-size: 24pt;
                 cursor: pointer;
-                color: colors.$accentColor;
+                color: var(--dp-accent-color);
             }
         }
     }

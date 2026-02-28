@@ -1,8 +1,7 @@
 @charset "UTF-8";
-@use '../colors.scss' as colors;
 
 .backendOfflineErrorContainer {
-    background-image: url('../../assets/backgroundLightTheme.png');
+    background-image: var(--dp-background-url);
     width: 100%;
     min-height: 100vh;
     background-size: contain;
@@ -12,14 +11,14 @@
     justify-content: center;
 
     .backendOfflineError {
-        background-color: colors.$white;
+        background-color: var(--dp-lightfall);
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         padding: 30px;
         border-radius: 10px;
-        box-shadow: 4px 4px 10px colors.$shadowLowPink;
+        box-shadow: 4px 4px 10px var(--dp-shadow-low-pink);
 
         img {
             width: 200px;
@@ -29,24 +28,29 @@
             font-size: 20pt;
             margin-top: 40px;
             margin-bottom: 10px;
-            color: colors.$accentColor;
+            color: var(--dp-accent-color);
         }
 
         button {
             margin-top: 20px;
             width: 100%;
-            background-color: colors.$accentColor;
-            color: colors.$white;
+            background-color: var(--dp-accent-color);
+            color: var(--dp-full-white);
             font-weight: bold;
             padding: 12px;
             border-radius: 5px;
             cursor: pointer;
-            transition: .4s;
+            transition: 0.4s;
         }
 
         button:hover {
-            transition: .4s;
+            transition: 0.4s;
             transform: scale(1.02);
+        }
+
+        p {
+            color: var(--dp-text-color);
+            font-weight: 500;
         }
     }
 }

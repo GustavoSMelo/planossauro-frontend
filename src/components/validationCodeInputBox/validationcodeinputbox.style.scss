@@ -1,8 +1,7 @@
 @charset "UTF-8";
-@use '../../styles/colors.scss' as colors;
 
 .validationCodeContainer {
-    background-color: colors.$white;
+    background-color: var(--dp-lightfall);
     padding: 20px;
     border-radius: 5px;
     display: flex;
@@ -15,7 +14,7 @@
     }
 
     input {
-        border: solid colors.$accentColor 2px;
+        border: solid var(--dp-accent-color) 2px;
         border-radius: 5px;
         padding: 7px;
         font-size: 14pt;
@@ -29,7 +28,7 @@
         width: 100%;
         flex-direction: row;
         justify-content: space-between;
-        border-top: solid 1px colors.$lightGray;
+        border-top: solid 1px var(--dp-light-gray);
 
         button {
             width: 48%;
@@ -38,24 +37,29 @@
             font-weight: 500;
             border-radius: 5px;
             cursor: pointer;
-            transition: .4s;
+            transition: 0.4s;
         }
 
         button:hover {
             transform: scale(1.02);
-            transition: .4s;
+            transition: 0.4s;
         }
 
         button:nth-child(1) {
-            background-color: white;
-            color: colors.$accentColor;
-            border: solid 2px colors.$accentColor;
+            background-color: var(--dp-full-white);
+            color: var(--dp-accent-color);
+            border: solid 2px var(--dp-accent-color);
         }
 
         button:nth-child(2) {
-            background-color: colors.$accentColor;
-            color: colors.$white;
+            background-color: var(--dp-accent-color);
+            color: var(--dp-lightfall);
         }
+    }
+
+    p {
+        color: var(--dp-text-color);
+        font-weight: 500;
     }
 }
 

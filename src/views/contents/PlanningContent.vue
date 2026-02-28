@@ -27,7 +27,13 @@ import { getPrompt, getPromptEN } from "../../helpers/prompt";
 import backendApi from "../../api/api";
 import monthConverter from "../../helpers/monthConverter";
 import "@vuepic/vue-datepicker/dist/main.css";
+import { useDark } from "@vueuse/core";
 
+const isDark = useDark({
+    attribute: "data-theme",
+    valueLight: "light",
+    valueDark: "dark",
+});
 const { t, locale } = useI18n();
 const plans = ref<IPlanningDay>({
     day1: [""],
@@ -920,14 +926,17 @@ watch(rangeDates, () => {
                 <span v-else></span>
             </div>
 
-            <div class="classContentContainer">
+            <div
+                class="classContentContainer"
+                :data-theme="isDark ? 'dark' : 'light'"
+            >
                 <div class="classContent">
                     <div
                         v-for="(value, index) in plans[selectedDay]"
                         class="classWrapper"
                     >
                         <span class="classDescription">
-                            <h2>
+                            <h2 :data-theme="isDark ? 'dark' : 'light'">
                                 📚 {{ t("design.classActivity") }}
                                 {{ index + 1 }}:
                             </h2>

@@ -1,13 +1,19 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router';
-import { provide, reactive, ref, watch } from 'vue';
-import Loading from './components/loading/Loading.vue';
-import type { IPopup } from './interfaces/popup.interface';
-import type { IShowPreview } from './interfaces/context/showPreview.interface';
-import Popup from './components/popup/Popup.vue';
-import PreviewDocs from './components/previewDocs/PreviewDocs.vue';
-import type { ITemplateChoose } from './interfaces/context/templateChoose.interface';
+import { RouterView } from "vue-router";
+import { provide, reactive, ref, watch } from "vue";
+import Loading from "./components/loading/Loading.vue";
+import type { IPopup } from "./interfaces/popup.interface";
+import type { IShowPreview } from "./interfaces/context/showPreview.interface";
+import Popup from "./components/popup/Popup.vue";
+import PreviewDocs from "./components/previewDocs/PreviewDocs.vue";
+import type { ITemplateChoose } from "./interfaces/context/templateChoose.interface";
+import { useDark } from "@vueuse/core";
 
+const isDark = useDark({
+    attribute: "data-theme",
+    valueDark: "dark",
+    valueLight: "light",
+});
 
 // refs
 let timeoutId = ref<NodeJS.Timeout>();
@@ -15,22 +21,22 @@ const hamburgueMenuToggle = ref(false);
 const isLoading = ref(false);
 
 const popup = reactive<IPopup>({
-    message: '',
-    status: 'error',
+    message: "",
+    status: "error",
     show: false,
-    id: ''
+    id: "",
 });
 const showPreview = reactive<IShowPreview>({
     show: false,
-    customURLDoc: '',
-    isCustomDocs: 'false',
-    showChooseTemplate: 'true',
-    planType: 'Semanal',
+    customURLDoc: "",
+    isCustomDocs: "false",
+    showChooseTemplate: "true",
+    planType: "Semanal",
 });
 const templateChoose = reactive<ITemplateChoose>({
     choosed: false,
     templateStyle: 1,
-    templateType: 'Semanal'
+    templateType: "Semanal",
 });
 
 watch(popup, () => {
@@ -44,7 +50,11 @@ const handleChangeIsLoading = (newValue: boolean) => {
     isLoading.value = newValue;
 };
 
-const handleChangePopupInfo = (message: string, status: IPopup['status'], show: boolean): void => {
+const handleChangePopupInfo = (
+    message: string,
+    status: IPopup["status"],
+    show: boolean,
+): void => {
     clearTimeout(timeoutId.value);
     popup.show = false;
 
@@ -67,7 +77,9 @@ const handleChangeShowPreview = (newValue: IShowPreview): void => {
     showPreview.planType = newValue.planType;
 };
 
-const handleChangeTemplateChoose = (newTemplateChoose: ITemplateChoose): void => {
+const handleChangeTemplateChoose = (
+    newTemplateChoose: ITemplateChoose,
+): void => {
     templateChoose.choosed = newTemplateChoose.choosed;
     templateChoose.templateStyle = newTemplateChoose.templateStyle;
     templateChoose.templateType = newTemplateChoose.templateType;
@@ -78,18 +90,27 @@ const handleHamburgueMenuToggle = (toggle: boolean) => {
 };
 
 // defining context
-provide('isLoading', { isLoading, handleChangeIsLoading });
-provide('popup', { popup, handleChangePopupInfo, handleChangePopupShow });
-provide('showPreview', { showPreview, handleChangeShowPreview });
-provide('templateChoose', { templateChoose, handleChangeTemplateChoose });
-provide('hamburgueMenuToggle', { hamburgueMenuToggle, handleHamburgueMenuToggle });
+provide("isLoading", { isLoading, handleChangeIsLoading });
+provide("popup", { popup, handleChangePopupInfo, handleChangePopupShow });
+provide("showPreview", { showPreview, handleChangeShowPreview });
+provide("templateChoose", { templateChoose, handleChangeTemplateChoose });
+provide("hamburgueMenuToggle", {
+    hamburgueMenuToggle,
+    handleHamburgueMenuToggle,
+});
 </script>
 
 <template>
-    <RouterView />
-    <PreviewDocs v-if="showPreview.show" :customURLDoc="showPreview.customURLDoc"
-        :isCustomDocs="showPreview.isCustomDocs" :showChooseTemplate="showPreview.showChooseTemplate"
-        :planType="showPreview.planType" />
-    <Loading v-if="isLoading" />
-    <Popup v-if="popup.show && popup.message.length > 0" />
+    <div :data-theme="isDark ? 'dark' : 'light'">
+        <RouterView />
+        <PreviewDocs
+            v-if="showPreview.show"
+            :customURLDoc="showPreview.customURLDoc"
+            :isCustomDocs="showPreview.isCustomDocs"
+            :showChooseTemplate="showPreview.showChooseTemplate"
+            :planType="showPreview.planType"
+        />
+        <Loading v-if="isLoading" />
+        <Popup v-if="popup.show && popup.message.length > 0" />
+    </div>
 </template>

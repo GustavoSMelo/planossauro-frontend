@@ -1,30 +1,30 @@
 <script lang="ts" setup>
-import { inject, onMounted, ref } from 'vue';
-import backendApi from '../../api/api';
-import type { IPlanning } from '../../interfaces/api/planning.interface';
-import type { IPageContent } from '../../interfaces/pageContents.interface';
-import type { IPopupContext } from '../../interfaces/context/popup.interface';
-import type { ILoadingContext } from '../../interfaces/context/loading.interface';
-import { useI18n } from 'vue-i18n';
+import { inject, onMounted, ref } from "vue";
+import backendApi from "../../api/api";
+import type { IPlanning } from "../../interfaces/api/planning.interface";
+import type { IPageContent } from "../../interfaces/pageContents.interface";
+import type { IPopupContext } from "../../interfaces/context/popup.interface";
+import type { ILoadingContext } from "../../interfaces/context/loading.interface";
+import { useI18n } from "vue-i18n";
 
 const { handleChangeCurrentContent } = defineProps<{
-    handleChangeCurrentContent: (newValue: IPageContent['contents']) => void,
+    handleChangeCurrentContent: (newValue: IPageContent["contents"]) => void;
 }>();
 
 const archived = ref<boolean>(false);
-const className = ref<string>('');
-const schoolName = ref<string>('');
-const start_date = ref('');
-const end_date = ref('');
+const className = ref<string>("");
+const schoolName = ref<string>("");
+const start_date = ref("");
+const end_date = ref("");
 const planning = ref<IPlanning>();
-const { handleChangePopupInfo } = inject('popup') as IPopupContext;
-const { handleChangeIsLoading } = inject('isLoading') as ILoadingContext;
+const { handleChangePopupInfo } = inject("popup") as IPopupContext;
+const { handleChangeIsLoading } = inject("isLoading") as ILoadingContext;
 const { t } = useI18n();
-const uuid = sessionStorage.getItem('planning_selectedUUID');
+const uuid = sessionStorage.getItem("planning_selectedUUID");
 
 const handleChangeSchoolName = (event: Event) => {
     const target = event.target as HTMLInputElement;
-    schoolName.value = target.value
+    schoolName.value = target.value;
 };
 
 const handleChangeClassName = (event: Event) => {
@@ -34,7 +34,7 @@ const handleChangeClassName = (event: Event) => {
 
 const handleChangeArchived = (event: Event) => {
     const target = event.target as HTMLInputElement;
-    archived.value = target.value === 'true' ? true : false;
+    archived.value = target.value === "true" ? true : false;
 };
 
 const handleChangeStartPlan = (event: Event) => {
@@ -55,7 +55,7 @@ const handleUpdatePlanning = async () => {
             class_name: className.value,
             school_name: schoolName.value,
             start_plan: start_date.value,
-            end_plan: end_date.value
+            end_plan: end_date.value,
         });
 
         if (archived.value) {
@@ -64,9 +64,13 @@ const handleUpdatePlanning = async () => {
             await backendApi.patch(`/planning/unarchive/${uuid}`);
         }
 
-        handleChangePopupInfo(t('editPlanning.updateSuccessMessage'), 'success', true);
+        handleChangePopupInfo(
+            t("editPlanning.updateSuccessMessage"),
+            "success",
+            true,
+        );
         handleChangeIsLoading(false);
-        handleChangeCurrentContent('planning_list');
+        handleChangeCurrentContent("planning_list");
     } catch (err) {
         handleChangeIsLoading(false);
         console.error(err);
@@ -76,11 +80,17 @@ const handleUpdatePlanning = async () => {
 const getDataFromAPI = async () => {
     try {
         handleChangeIsLoading(true);
-        const planningResponse = (await backendApi.get(`/planning/show/${uuid}`)).data as IPlanning;
+        const planningResponse = (
+            await backendApi.get(`/planning/show/${uuid}`)
+        ).data as IPlanning;
 
         if (!planningResponse || !planningResponse === null) {
-            handleChangePopupInfo(t('editPlanning.noPlanningMessage'), 'error', true);
-            handleChangeCurrentContent('home');
+            handleChangePopupInfo(
+                t("editPlanning.noPlanningMessage"),
+                "error",
+                true,
+            );
+            handleChangeCurrentContent("home");
         }
 
         planning.value = planningResponse;
@@ -94,57 +104,90 @@ const getDataFromAPI = async () => {
         handleChangeIsLoading(false);
         console.error(err);
     }
-
-}
+};
 
 onMounted(() => {
     getDataFromAPI();
 });
-
 </script>
 
 <template>
     <div class="editPlanningContainer">
         <form class="editPlanningForm">
             <div class="titleForm">
-                <h1>{{ t('editPlanning.title') }}: </h1>
+                <h1>{{ t("editPlanning.title") }}</h1>
                 <p>
-                    {{ planning?.start_plan === planning?.end_plan ? 'Diario' : 'Semanal' }} | {{ planning?.start_plan
-                    }} ~ {{ planning?.end_plan }}
+                    {{
+                        planning?.start_plan === planning?.end_plan
+                            ? "Diario"
+                            : "Semanal"
+                    }}
+                    | {{ planning?.start_plan }} ~ {{ planning?.end_plan }}
                 </p>
             </div>
 
-            <label>{{ t('editPlanning.schoolName') }} </label>
-            <input @change="handleChangeSchoolName" :value="schoolName" placeholder="Insira o nome da escola..."
-                type="text" />
+            <label>{{ t("editPlanning.schoolName") }} </label>
+            <input
+                @change="handleChangeSchoolName"
+                :value="schoolName"
+                placeholder="Insira o nome da escola..."
+                type="text"
+            />
 
-            <label>{{ t('editPlanning.class') }}: </label>
-            <input @change="handleChangeClassName" :value="className" placeholder="Insira o da serie/turma/escola..."
-                type="text" />
+            <label>{{ t("editPlanning.class") }}: </label>
+            <input
+                @change="handleChangeClassName"
+                :value="className"
+                placeholder="Insira o da serie/turma/escola..."
+                type="text"
+            />
 
-            <label>{{ t('editPlanning.archive') }}: </label>
+            <label>{{ t("editPlanning.archive") }}: </label>
             <select @change="handleChangeArchived" :value="archived">
-                <option value="true">{{ t('editPlanning.archiveYesOption') }}</option>
-                <option value="false">{{ t('editPlanning.archiveNoOption') }}</option>
+                <option value="true">
+                    {{ t("editPlanning.archiveYesOption") }}
+                </option>
+                <option value="false">
+                    {{ t("editPlanning.archiveNoOption") }}
+                </option>
             </select>
 
             <div class="dateContainer">
                 <span>
-                    <label>{{ t('editPlanning.initialDate') }}: </label>
-                    <input @change="handleChangeStartPlan" :value="start_date" type="date" />
+                    <label>{{ t("editPlanning.initialDate") }}: </label>
+                    <input
+                        @change="handleChangeStartPlan"
+                        :value="start_date"
+                        type="date"
+                    />
                 </span>
                 <span>
-                    <label>{{ t('editPlanning.endDate') }}: </label>
-                    <input @change="handleChangeEndPlan" :value="end_date" type="date" />
+                    <label>{{ t("editPlanning.endDate") }}: </label>
+                    <input
+                        @change="handleChangeEndPlan"
+                        :value="end_date"
+                        type="date"
+                    />
                 </span>
             </div>
 
             <span class="btnContainer">
-                <button type="button" @click="handleChangeCurrentContent('planning_list')">{{ t('editPlanning.cancel') }}</button>
-                <button type="button" @click="handleUpdatePlanning">{{ t('editPlanning.save') }}</button>
+                <button
+                    type="button"
+                    @click="handleChangeCurrentContent('planning_list')"
+                >
+                    {{ t("editPlanning.cancel") }}
+                </button>
+                <button type="button" @click="handleUpdatePlanning">
+                    {{ t("editPlanning.save") }}
+                </button>
             </span>
         </form>
     </div>
 </template>
 
-<style lang="scss" scoped src="../../styles/contents/editplanningcontent.style.scss" />
+<style
+    lang="scss"
+    scoped
+    src="../../styles/contents/editplanningcontent.style.scss"
+/>
