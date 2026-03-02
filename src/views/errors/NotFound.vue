@@ -1,11 +1,13 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
-    const router = useRouter();
+const { t } = useI18n();
+const router = useRouter();
 
-    const handleReturnInitialScreen = () => {
-        router.push('/');
-    };
+const handleReturnInitialScreen = () => {
+    router.push('/');
+};
 
 </script>
 <template>
@@ -13,13 +15,12 @@ import { useRouter } from 'vue-router';
         <div class="notFoundContent">
             <img src="../../assets/dino_not_found.png" alt="dinossaur hidden" />
 
-            <h2>Pagina nao encontrada</h2>
+            <h2>{{ t('notFound.title') }}</h2>
             <p>
-                Um de nossos dinossauros (acho que foi a mambo) pegou essa pagina e a escondeu. <br />
-                ou essa pagina nunca existiu. Clique no botao abaixo para voltar a tela inicial
+                {{ t('notFound.description') }}
             </p>
 
-            <button type="button" @click="handleReturnInitialScreen">Voltar para a tela inicial</button>
+            <button type="button" @click="handleReturnInitialScreen">{{ t('notFound.button') }}</button>
         </div>
     </div>
 </template>

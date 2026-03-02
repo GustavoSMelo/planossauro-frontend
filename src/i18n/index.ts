@@ -52,6 +52,15 @@ import validationCodeInputBoxENUS from "./locales/en-US/validationCodeInputBox.j
 import previewDocsPTBR from "./locales/pt-BR/previewdocs.json";
 import previewDocsENUS from "./locales/en-US/previewdocs.json";
 
+import backendOfflinePTBR from "./locales/pt-BR/backendOffline.json";
+import backendOfflineENUS from "./locales/en-US/backendOffline.json";
+
+import notFoundPTBR from "./locales/pt-BR/notFound.json";
+import notFoundENUS from "./locales/en-US/notFound.json";
+
+import unauthorizedPTBR from "./locales/pt-BR/unauthorized.json";
+import unauthorizedENUS from "./locales/en-US/unauthorized.json";
+
 const i18n = createI18n({
     locale: "pt-BR",
     fallbackLocale: "en-US",
@@ -75,6 +84,9 @@ const i18n = createI18n({
             finishRegister: finishRegisterPTBR,
             validationCodeInputBox: validationCodeInputBoxPTBR,
             previewDocs: previewDocsPTBR,
+            backendOffline: backendOfflinePTBR,
+            notFound: notFoundPTBR,
+            unauthorized: unauthorizedPTBR,
         },
         "en-US": {
             login: loginENUS,
@@ -95,6 +107,9 @@ const i18n = createI18n({
             finishRegister: finishRegisterENUS,
             validationCodeInputBox: validationCodeInputBoxENUS,
             previewDocs: previewDocsENUS,
+            backendOffline: backendOfflineENUS,
+            notFound: notFoundENUS,
+            unauthorized: unauthorizedENUS,
         },
     },
 });

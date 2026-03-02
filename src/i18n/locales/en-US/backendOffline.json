@@ -1,0 +1,8 @@
+{
+    "title": "We are offline",
+    "description1": "One of our dinosaurs broke the system",
+    "description2": "Don't worry, the specialist dino is fixing everything",
+    "description3": "Click the button to report the instability",
+    "button": "Report instability",
+    "successMessage": "Report sent successfully"
+}

@@ -1,11 +1,9 @@
 {
-    "validationCodeInputBox": {
-        "validationSuccess": "Validated successfully",
-        "invalidCode": "Invalid code",
-        "confirmEmail": "Confirm your email",
-        "sentCodeEmail": "We sent a code to the email registered on {provider}",
-        "insertCodePlaceholder": "Insert the code here...",
-        "cancel": "Cancel",
-        "validate": "Validate"
-    }
+    "validationSuccess": "Validated successfully",
+    "invalidCode": "Invalid code",
+    "confirmEmail": "Confirm your email",
+    "sentCodeEmail": "We sent a code to the email registered on {provider}",
+    "insertCodePlaceholder": "Insert the code here...",
+    "cancel": "Cancel",
+    "validate": "Validate"
 }

@@ -37,6 +37,7 @@
         box-shadow: 1px 1px 4px var(--dp-full-black);
         z-index: 15;
         animation: popupAppears 4s forwards;
+        color: var(--dp-full-black);
 
         .popupLogo,
         .popupClose {
@@ -73,10 +74,5 @@
     .success {
         background-color: var(--dp-success-green);
         color: var(--dp-full-black);
-    }
-
-    p {
-        color: var(--dp-text-color);
-        font-weight: 500;
     }
 }

@@ -9,7 +9,7 @@ const isDark = useDark({
     valueDark: "dark",
     valueLight: "light",
 });
-useLight;
+
 const toggleDark = useToggle(isDark);
 
 const goToLoginPage = () => {

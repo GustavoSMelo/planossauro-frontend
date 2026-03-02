@@ -137,7 +137,7 @@ const handleEditProfile = async () => {
 
         handleChangeIsLoading(false);
         handleChangePopupInfo(t("profile.userEditSuccess"), "success", true);
-    } catch (err) {
+    } catch {
         handleChangePopupInfo(t("profile.userEditError"), "error", true);
         handleChangeIsLoading(false);
     }
@@ -211,9 +211,9 @@ const logout = async () => {
 const handleSendValidationEmail = async (loginType: ILoginType["types"]) => {
     console.log(loginType);
     console.log(user);
-    if (loginType === "github" && user.value.github_is_validated === "true")
+    if (loginType === "github" && user.value.github_is_validated == "true")
         return;
-    if (loginType === "google" && user.value.google_is_validated === "true")
+    if (loginType === "google" && user.value.google_is_validated == "true")
         return;
 
     try {
@@ -238,10 +238,7 @@ const handleSendValidationEmail = async (loginType: ILoginType["types"]) => {
 
         console.log(userResponse);
 
-        if (
-            (loginType === "github" && userResponse.github_is_validated) ||
-            (loginType === "github" && !userResponse.github_email?.length)
-        ) {
+        if (loginType === "github" && !userResponse.github_email?.length) {
             handleChangeIsLoading(false);
             handleChangePopupInfo(t("profile.connectGithub"), "info", true);
             return;
@@ -457,6 +454,7 @@ const handleUnlinkAccount = async () => {
                 {{ t("profile.editProfile") }}
             </button>
             <button
+                :data-theme="isDark ? 'dark' : 'light'"
                 v-if="editProfile"
                 class="btnChangeProfile btnCancel"
                 type="button"
@@ -571,6 +569,7 @@ const handleUnlinkAccount = async () => {
                     </h3>
 
                     <select
+                        v-model="isDark"
                         @change="
                             (event) => {
                                 event.target.value == 'true'

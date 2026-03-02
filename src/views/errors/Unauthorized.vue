@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const router = useRouter();
 
 const handleReturnInitialScreen = () => {
@@ -13,13 +15,12 @@ const handleReturnInitialScreen = () => {
         <div class="unauthorizedContent">
             <img src="../../assets/dino_policeman.png" alt="dinossaur Police man" />
 
-            <h2>Não autorizado</h2>
+            <h2>{{ t('unauthorized.title') }}</h2>
             <p>
-                Nosso dinossauro (Larry) barrou você pois não possui permissão <br />
-                Realize o login no sistema e tente novamente
+                {{ t('unauthorized.description') }}
             </p>
 
-            <button type="button" @click="handleReturnInitialScreen">Voltar para a tela inicial</button>
+            <button type="button" @click="handleReturnInitialScreen">{{ t('unauthorized.button') }}</button>
         </div>
     </div>
 </template>

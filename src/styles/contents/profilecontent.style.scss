@@ -100,7 +100,8 @@
 
         img {
             border: solid 1px var(--dp-light-gray);
-            width: 200px;
+            width: 200px !important;
+            border-radius: 5px;
         }
 
         h3 {
@@ -122,6 +123,7 @@
             border-radius: 5px;
             color: var(--dp-accent-color);
             font-weight: bold;
+            background-color: transparent;
         }
 
         h4 {
@@ -173,7 +175,7 @@
             }
 
             button:hover {
-                background-color: var(--dp-accent-color-darker);
+                background-color: var(--dp-accent-color-dark);
             }
 
             .containerBtnChangeSocialMedia {
@@ -237,13 +239,13 @@
         }
 
         .btnChangeProfileAction:hover {
-            background-color: var(--dp-accent-color-darker);
-            border: 2px solid var(--dp-accent-color-darker);
+            background-color: var(--dp-accent-color-dark);
+            border: 2px solid var(--dp-accent-color-dark);
         }
 
         .btnCancel {
             background-color: var(--dp-light-gray);
-            color: var(--dp-black);
+            color: var(--dp-full-black);
         }
 
         .btnCancel {
@@ -255,6 +257,12 @@
         .btnCancel:hover {
             background-color: var(--dp-dark-gray);
             color: var(--dp-lightfall);
+        }
+
+        .btnCancel[data-theme="dark"]:hover {
+            border: solid 1px var(--dp-full-white);
+            color: var(--dp-full-white);
+            background-color: transparent;
         }
 
         .profileAdditionalDetails {
@@ -289,10 +297,9 @@
                     padding: 10px;
                     margin: 5px;
                     font-weight: bold;
-                    border-radius: 2px;
-                    color: var(--dp-black);
+                    border-radius: 5px;
+                    color: var(--dp-full-black);
                     width: 130px;
-                    border: solid 1px var(--dp-black);
 
                     i {
                         margin-right: 10px;
