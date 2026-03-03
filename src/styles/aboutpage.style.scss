@@ -44,6 +44,7 @@
     justify-content: center;
     padding: 20px;
     position: relative;
+    overflow: visible;
 
     .asideHelper {
         background-color: var(--dp-lightfall);
@@ -53,7 +54,8 @@
         border-radius: 5px;
         box-shadow: 4px 4px 12px var(--dp-light-gray);
         height: fit-content;
-        /* position: fixed; */
+        position: sticky;
+        top: 20px;
 
         ul {
             list-style: none;
@@ -64,6 +66,8 @@
                 margin-top: 10px;
                 cursor: pointer;
                 color: var(--dp-text-color);
+                border-bottom: 2px solid transparent;
+                transition: border-color 0.3s ease;
 
                 span {
                     color: var(--dp-accent-color);
@@ -72,7 +76,11 @@
 
             li:hover {
                 color: var(--dp-accent-color);
-                border-bottom: 2px solid var(--dp-light-gray);
+            }
+
+            li.active {
+                border-bottom: 2px solid var(--dp-accent-color);
+                color: var(--dp-accent-color);
             }
         }
     }
@@ -127,6 +135,7 @@
                 color: var(--dp-text-color);
                 font-weight: 400;
                 margin-left: 20px;
+                font-size: 16pt;
 
                 b {
                     color: var(--dp-accent-color);
@@ -220,12 +229,18 @@ footer {
 
         .asideHelper {
             width: 100%;
+            position: relative;
             margin-bottom: 20px;
             text-align: left;
         }
 
         .aboutContent {
             width: 100%;
+            margin-top: 20px;
+
+            p {
+                font-size: 12pt;
+            }
 
             section {
                 video.dinoDemoPlan,

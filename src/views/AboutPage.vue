@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useDark, useToggle } from "@vueuse/core";
-import { onMounted } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 
 const isDark = useDark({
     attribute: "data-theme",
@@ -10,11 +10,58 @@ const isDark = useDark({
 
 const toggle = useToggle(isDark);
 
+const activeSection = ref("intro");
+
+const sections = ["intro", "demo", "howWorks", "tour", "plans", "support"];
+
+const scrollToSection = (id: string) => {
+    activeSection.value = id;
+    const element = document.getElementById(id);
+    if (element) {
+        const navHeight = 80;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - navHeight;
+
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+        });
+    }
+};
+
+const handleScroll = () => {
+    const navHeight = 80;
+    const scrollPosition = window.scrollY;
+    let current = "";
+
+    for (const id of sections) {
+        const element = document.getElementById(id);
+        if (element) {
+            const rect = element.getBoundingClientRect();
+            const sectionTop = rect.top + scrollPosition;
+            if (sectionTop - navHeight <= scrollPosition + 50) {
+                current = id;
+            }
+        }
+    }
+
+    if (current) {
+        activeSection.value = current;
+    }
+};
+
 onMounted(() => {
     const demoVideo = window.document.querySelector(
         ".dinoDemoPlan",
     ) as HTMLVideoElement;
     if (demoVideo) demoVideo.defaultPlaybackRate = 2;
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+});
+
+onUnmounted(() => {
+    window.removeEventListener("scroll", handleScroll);
 });
 </script>
 <template>
@@ -32,12 +79,42 @@ onMounted(() => {
     <main class="aboutContainer">
         <aside class="asideHelper" :data-theme="isDark ? 'dark' : 'light'">
             <ul>
-                <li><span>#</span> Introducao</li>
-                <li><span>#</span> Demonstracao</li>
-                <li><span>#</span> Como funciona ?</li>
-                <li><span>#</span> Tour pelo sistema</li>
-                <li><span>#</span> Planos e assinatura</li>
-                <li><span>#</span> Suporte</li>
+                <li
+                    :class="{ active: activeSection === 'intro' }"
+                    @click="scrollToSection('intro')"
+                >
+                    <span>#</span> Introducao
+                </li>
+                <li
+                    :class="{ active: activeSection === 'demo' }"
+                    @click="scrollToSection('demo')"
+                >
+                    <span>#</span> Demonstracao
+                </li>
+                <li
+                    :class="{ active: activeSection === 'howWorks' }"
+                    @click="scrollToSection('howWorks')"
+                >
+                    <span>#</span> Como funciona ?
+                </li>
+                <li
+                    :class="{ active: activeSection === 'tour' }"
+                    @click="scrollToSection('tour')"
+                >
+                    <span>#</span> Tour pelo sistema
+                </li>
+                <li
+                    :class="{ active: activeSection === 'plans' }"
+                    @click="scrollToSection('plans')"
+                >
+                    <span>#</span> Planos e assinatura
+                </li>
+                <li
+                    :class="{ active: activeSection === 'support' }"
+                    @click="scrollToSection('support')"
+                >
+                    <span>#</span> Suporte
+                </li>
             </ul>
         </aside>
         <div class="aboutContent" :data-theme="isDark ? 'dark' : 'light'">
@@ -165,8 +242,13 @@ onMounted(() => {
             <section id="support">
                 <h3># Suporte</h3>
                 <p>
-                    O Suporte do app pode ser acessado dentro da pagina de perfil do app, voce enviara um email e teremos um prazo de 24 horas (uteis) para responde-lo(a) <br />
+                    O Suporte do app pode ser acessado dentro da pagina de perfil do app, voce enviara um email e teremos um prazo de 24 horas (uteis) para responde-lo(a), caso esteja com dificuldades em realizar o login, ou tenha outros problemas, basta enviar email para o seguinte endereco: <b>planeja.ai.app@gmail.com</b> <br />
                 </p>
+
+                <hr />
+
+                <p>Chegou ate aqui e ainda nao deu uma chance pro nosso sistema D:  da uma chance ai vai, por favor, deu mo trampo fazer esse sistema <br />
+                    Inclusive, voce pode utilizar a caixa de suporte para fazer alguma critica construtiva ou pontuar em algo que podemos melhorar/evoluir</p>
             </section>
         </div>
     </main>
