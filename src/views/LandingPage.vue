@@ -15,6 +15,10 @@ const toggleDark = useToggle(isDark);
 const goToLoginPage = () => {
     router.push({ path: "/login" });
 };
+
+const goToAboutPage = () => {
+    router.push({ path: "/about" });
+};
 </script>
 
 <template>
@@ -51,8 +55,12 @@ const goToLoginPage = () => {
                     >
                         Login
                     </button>
-                    <button class="btnExamples" type="button">
-                        Ver examples
+                    <button
+                        class="btnExamples"
+                        type="button"
+                        @click="goToAboutPage"
+                    >
+                        Sobre o projeto
                     </button>
                 </div>
 
