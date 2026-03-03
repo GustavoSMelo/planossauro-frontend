@@ -213,7 +213,7 @@ input {
         section {
             display: flex;
             flex-direction: column;
-            margin-left: 20px;
+            margin-left: 15px;
             margin-right: 20px;
 
             label {
@@ -296,7 +296,7 @@ input {
         }
 
         .btnDiaryGenerate:hover {
-            background-color: var(--dp-accent-color-darker);
+            background-color: var(--dp-accent-color-dark);
             transition: 0.4s;
         }
     }

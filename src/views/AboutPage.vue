@@ -208,18 +208,32 @@ onUnmounted(() => {
                     Nosso sistema eh bem simples, ele possui login/cadastro
                     atraves de redes sociais como Google (gmail) e Github. Isso
                     foi planejado para voce nao precisar criar conta em mais um
-                    sistema que voce nao ira lembrar a senha,                     Alem disso, o sistema eh enxuto possuindo apenas algumas
-                    paginas:
+                    sistema que voce nao ira lembrar a senha, Alem disso, o
+                    sistema eh enxuto possuindo apenas algumas paginas:
                 </p>
-                <p>
-                    <ul class="pageList">
-                        <li><b>Home page:</b> Pagina para voce ver a quantidade de planejamentos voce consegue gerar </li>
-                        <li><b>Planejar:</b> Pagina onde voce conseguira realizar os planejamentos</li>
-                        <li><b>Planejamentos:</b> Pagina para voce visualizar/baixar os planejamentos gerados</li>
-                        <li><b>Planos:</b> Pagina focado em gerenciar o seu plano e ver o historico de pagamentos</li>
-                        <li><b>Perfil:</b> Aqui eh alto explicativo, pagina para visualizar/gerencia seu perfil e configuracoes do aplicativo</li>
-                    </ul>
-                </p>
+                <ul class="pageList">
+                    <li>
+                        <b>Home page:</b> Pagina para voce ver a quantidade de
+                        planejamentos voce consegue gerar
+                    </li>
+                    <li>
+                        <b>Planejar:</b> Pagina onde voce conseguira realizar os
+                        planejamentos
+                    </li>
+                    <li>
+                        <b>Planejamentos:</b> Pagina para voce visualizar/baixar
+                        os planejamentos gerados
+                    </li>
+                    <li>
+                        <b>Planos:</b> Pagina focado em gerenciar o seu plano e
+                        ver o historico de pagamentos
+                    </li>
+                    <li>
+                        <b>Perfil:</b> Aqui eh alto explicativo, pagina para
+                        visualizar/gerencia seu perfil e configuracoes do
+                        aplicativo
+                    </li>
+                </ul>
             </section>
 
             <section id="plans">
@@ -229,29 +243,55 @@ onUnmounted(() => {
                 <h3># Sobre planos e assinatura</h3>
                 <h4>## Planos</h4>
                 <p class="aboutPlans">
-                    Falando sobre os planos, atualmente temos 3 planos, o gratuito,
-                    focado em demonstrar nossa plataforma
-                    <b>Voce nao precisa de cartao de credito para testar nosso app</b>,
-                    temos o plano essential, onde voce podera realizar 10 planos diarios e semanais;
-                    e por ultimo o plano premium, onde tera 90 planejamentos diarios e semanais
+                    Falando sobre os planos, atualmente temos 3 planos, o
+                    gratuito, focado em demonstrar nossa plataforma
+                    <b
+                        >Voce nao precisa de cartao de credito para testar nosso
+                        app</b
+                    >, temos o plano essential, onde voce podera realizar 10
+                    planos diarios e semanais; e por ultimo o plano premium,
+                    onde tera 90 planejamentos diarios e semanais
                 </p>
 
                 <h4>## Assinatura</h4>
-                <p class="aboutPlans">Sobre assinatura, o preco do plano essential eh 20 Reais (atualmente) e 55 Reais o premium (atualmente), para realizar o pagamento, estamos usando o <b>STRIPE</b>, um sistema usado globalmente, no qual nos nao seguramos seus dados sensiveis, apenas dados publicos do cartao de credito, e o pagamento fica por parte do stripe, caso tenha alguma duvida, na pagina do perfil consegue entrar em contato com nosso suporte</p>
+                <p class="aboutPlans">
+                    Sobre assinatura, o preco do plano essential eh 20 Reais
+                    (atualmente) e 55 Reais o premium (atualmente), para
+                    realizar o pagamento, estamos usando o <b>STRIPE</b>, um
+                    sistema usado globalmente, no qual nos nao seguramos seus
+                    dados sensiveis, apenas dados publicos do cartao de credito,
+                    e o pagamento fica por parte do stripe, caso tenha alguma
+                    duvida, na pagina do perfil consegue entrar em contato com
+                    nosso suporte
+                </p>
             </section>
             <section id="support">
                 <h3># Suporte</h3>
                 <p>
-                    O Suporte do app pode ser acessado dentro da pagina de perfil do app, voce enviara um email e teremos um prazo de 24 horas (uteis) para responde-lo(a), caso esteja com dificuldades em realizar o login, ou tenha outros problemas, basta enviar email para o seguinte endereco: <b>planeja.ai.app@gmail.com</b> <br />
+                    O Suporte do app pode ser acessado dentro da pagina de
+                    perfil do app, voce enviara um email e teremos um prazo de
+                    24 horas (uteis) para responde-lo(a), caso esteja com
+                    dificuldades em realizar o login, ou tenha outros problemas,
+                    basta enviar email para o seguinte endereco:
+                    <b>planeja.ai.app@gmail.com</b> <br />
                 </p>
 
                 <hr />
 
-                <p>Chegou ate aqui e ainda nao deu uma chance pro nosso sistema D:  da uma chance ai vai, por favor, deu mo trampo fazer esse sistema <br />
-                    Inclusive, voce pode utilizar a caixa de suporte para fazer alguma critica construtiva ou pontuar em algo que podemos melhorar/evoluir</p>
+                <p>
+                    Chegou ate aqui e ainda nao deu uma chance pro nosso sistema
+                    D: da uma chance ai vai, por favor, deu mo trampo fazer esse
+                    sistema <br />
+                    Inclusive, voce pode utilizar a caixa de suporte para fazer
+                    alguma critica construtiva ou pontuar em algo que podemos
+                    melhorar/evoluir
+                </p>
             </section>
         </div>
     </main>
-    <footer>App desenvolvido com muito amor, carinho e paciencia ❤️, por Gustavo S. Melo</footer>
+    <footer>
+        App desenvolvido com muito amor, carinho e paciencia ❤️, por Gustavo S.
+        Melo
+    </footer>
 </template>
 <style lang="scss" src="../styles/aboutpage.style.scss" scoped />

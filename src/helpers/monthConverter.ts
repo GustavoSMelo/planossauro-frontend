@@ -1,29 +1,33 @@
+import i18n from "../i18n";
+
 const monthConverter = (monthInNumber: number | string): string => {
+    const { t } = i18n.global;
+
     switch (monthInNumber.toString()) {
-        case "1":
-            return 'Janeiro';
-        case "2":
-            return 'Fevereiro';
-        case "3":
-            return 'Março';
-        case "4":
-            return 'Abril';
-        case "5":
-            return "Maio";
-        case "6":
-            return "Junho";
-        case "7":
-            return "Julho";
-        case "8":
-            return "Agosto";
-        case "9":
-            return "Setembro";
+        case "01":
+            return t("months.january");
+        case "02":
+            return t("months.february");
+        case "03":
+            return t("months.march");
+        case "04":
+            return t("months.april");
+        case "05":
+            return t("months.may");
+        case "06":
+            return t("months.june");
+        case "07":
+            return t("months.july");
+        case "08":
+            return t("months.august");
+        case "09":
+            return t("months.september");
         case "10":
-            return "Outubro";
+            return t("months.october");
         case "11":
-            return "Novembro";
+            return t("months.november");
         case "12":
-            return "Dezembro";
+            return t("months.dezember");
         default:
             return monthInNumber.toString();
     }

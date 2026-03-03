@@ -71,6 +71,7 @@
 
     .choosePlanTitle {
         margin: 30px 0;
+        color: var(--dp-text-color);
     }
 
     .planInformationPayment {
@@ -130,7 +131,7 @@
                 margin: 10px;
                 display: flex;
                 flex-direction: column;
-                background-color: var(--dp-full-white);
+                background-color: var(--dp-white);
                 box-shadow: 3px 3px 10px var(--dp-gray);
 
                 h2 {
@@ -167,6 +168,7 @@
 
                         p {
                             margin-bottom: 20px;
+                            color: var(--dp-text-color);
                         }
 
                         ul {
@@ -181,6 +183,7 @@
 
                                 text-align: left;
                                 list-style-type: none;
+                                color: var(--dp-text-color);
                             }
                         }
                     }
@@ -196,6 +199,7 @@
 
                         small {
                             font-size: 16pt;
+                            color: var(--dp-text-color);
                         }
 
                         h1 {
@@ -223,6 +227,10 @@
                         transform: scale(1.05);
                     }
                 }
+            }
+
+            .planContainer[data-theme="dark"] {
+                box-shadow: 0 0 0;
             }
 
             .selectedPlanContainer {
@@ -313,6 +321,9 @@
 
 @media screen and (max-width: 520px) {
     .selectEditPlanContainer {
+        .planInformationPayment {
+            width: 90%;
+        }
         .planScrollContainer {
             .planListContainer {
                 margin-left: 10px;

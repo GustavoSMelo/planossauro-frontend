@@ -73,6 +73,8 @@ const handleChooseTemplate = (event: Event) => {
         templateStyle: planVersion,
         templateType: planType,
     } as unknown as ITemplateChoose;
+
+    handleChangeTemplateChoose({ ...newTemplateChoose, choosed: false });
     handleChangeTemplateChoose({ ...newTemplateChoose });
 
     return;

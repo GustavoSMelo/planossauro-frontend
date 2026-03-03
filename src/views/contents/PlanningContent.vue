@@ -28,6 +28,7 @@ import backendApi from "../../api/api";
 import monthConverter from "../../helpers/monthConverter";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { useDark } from "@vueuse/core";
+import type { IUser } from "../../interfaces/api/user.interface";
 
 const isDark = useDark({
     attribute: "data-theme",
@@ -299,6 +300,8 @@ const generatePlan = async () => {
 
         await isLoadingContext.handleChangeIsLoading(true);
 
+        const user = JSON.parse(sessionStorage.getItem("user") ?? "") as IUser;
+
         if (planType.value === "Diario") {
             let activities = [];
             activities.push({
@@ -328,7 +331,6 @@ const generatePlan = async () => {
                 linebreaks: true,
             });
 
-            console.log(response.data);
             const responseData = JSON.parse(
                 (response.data as IOllamaGemmaResponse).response
                     .replaceAll(/\\/g, "")
@@ -336,6 +338,10 @@ const generatePlan = async () => {
                     .replaceAll("`", "")
                     .replaceAll("json", ""),
             ) as IClassPlanResponse;
+
+            console.log(user);
+            console.log(planDateEnd.value);
+            console.log(monthConverter(planDateEnd.value.split("-")[1]));
 
             const data = {
                 // header
@@ -345,6 +351,7 @@ const generatePlan = async () => {
                 diaEnd: planDateEnd.value.split("-")[2],
                 mes: monthConverter(planDateEnd.value.split("-")[1]),
                 ano: planDateEnd.value.split("-")[0],
+                profName: user.full_name,
 
                 // day 1
                 eixo1: responseData.eixo,
@@ -442,6 +449,7 @@ const generatePlan = async () => {
                 diaEnd: planDateEnd.value.split("-")[2],
                 mes: monthConverter(planDateEnd.value.split("-")[1]),
                 ano: planDateEnd.value.split("-")[0],
+                profName: user.full_name,
 
                 // day 1
                 eixo1: responseDay1.eixo,

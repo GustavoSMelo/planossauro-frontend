@@ -1,4 +1,5 @@
 import { createI18n } from "vue-i18n";
+
 import loginPTBR from "./locales/pt-BR/login.json";
 import loginENUS from "./locales/en-US/login.json";
 
@@ -13,6 +14,7 @@ import designENUS from "./locales/en-US/design.json";
 
 import planningPTBR from "./locales/pt-BR/plannings.json";
 import planningENUS from "./locales/en-US/plannings.json";
+
 import plansPTBR from "./locales/pt-BR/plans.json";
 import plansENUS from "./locales/en-US/plans.json";
 
@@ -61,6 +63,9 @@ import notFoundENUS from "./locales/en-US/notFound.json";
 import unauthorizedPTBR from "./locales/pt-BR/unauthorized.json";
 import unauthorizedENUS from "./locales/en-US/unauthorized.json";
 
+import monthsPTBR from "./locales/pt-BR/months.json";
+import monthsENUS from "./locales/en-US/months.json";
+
 const i18n = createI18n({
     locale: "pt-BR",
     fallbackLocale: "en-US",
@@ -87,6 +92,7 @@ const i18n = createI18n({
             backendOffline: backendOfflinePTBR,
             notFound: notFoundPTBR,
             unauthorized: unauthorizedPTBR,
+            months: monthsPTBR,
         },
         "en-US": {
             login: loginENUS,
@@ -110,6 +116,7 @@ const i18n = createI18n({
             backendOffline: backendOfflineENUS,
             notFound: notFoundENUS,
             unauthorized: unauthorizedENUS,
+            months: monthsENUS,
         },
     },
 });
