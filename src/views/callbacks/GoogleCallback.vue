@@ -70,8 +70,7 @@ onMounted(async () => {
             router.push('/app');
             return;
         }
-    } catch (err) {
-        console.error(err);
+    } catch {
         sessionStorage.setItem('loginType', 'google');
         sessionStorage.setItem('googleEmail', googleResponse.email);
         sessionStorage.setItem('googleId', googleResponse.sub);

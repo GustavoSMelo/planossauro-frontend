@@ -16,7 +16,7 @@ const isDark = useDark({
 });
 
 // refs
-let timeoutId = ref<NodeJS.Timeout>();
+let timeoutId = ref<ReturnType<typeof setTimeout> | undefined>(undefined);
 const hamburgueMenuToggle = ref(false);
 const isLoading = ref(false);
 

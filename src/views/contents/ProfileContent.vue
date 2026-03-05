@@ -195,7 +195,7 @@ const handleDeleteAccount = async () => {
         }
 
         handleChangePopupInfo(t("profile.validateYourEmail"), "error", true);
-    } catch (err) {
+    } catch {
         handleChangePopupInfo(t("profile.validateYourEmail"), "error", true);
     }
 };
@@ -209,22 +209,23 @@ const logout = async () => {
 };
 
 const handleSendValidationEmail = async (loginType: ILoginType["types"]) => {
-    console.log(loginType);
-    console.log(user);
-    if (loginType === "github" && user.value.github_is_validated == "true")
+    if (
+        loginType === "github" &&
+        user.value.github_is_validated.toString() === "true"
+    )
         return;
-    if (loginType === "google" && user.value.google_is_validated == "true")
+    if (
+        loginType === "google" &&
+        user.value.google_is_validated.toString() == "true"
+    )
         return;
 
     try {
         handleChangeIsLoading(true);
 
-        console.log("a");
         const userResponse: IUser = (
             await backendApi.get(`/user/${user.value.uuid}`)
         ).data;
-
-        console.log(userResponse);
 
         if (
             (loginType === "google" &&
@@ -235,8 +236,6 @@ const handleSendValidationEmail = async (loginType: ILoginType["types"]) => {
             handleChangePopupInfo(t("profile.connectGoogle"), "info", true);
             return;
         }
-
-        console.log(userResponse);
 
         if (loginType === "github" && !userResponse.github_email?.length) {
             handleChangeIsLoading(false);
@@ -274,8 +273,7 @@ const handleUnlinkAccount = async () => {
         );
         sessionStorage.clear();
         router.push("/");
-    } catch (err) {
-        console.error(err);
+    } catch {
         handleChangeIsLoading(false);
         handleChangePopupInfo(t("profile.errorToUnlinkAccount"), "error", true);
     }
@@ -465,35 +463,6 @@ const handleUnlinkAccount = async () => {
             <div class="profileAdditionalDetails">
                 <p>
                     <b
-                        ><i class="pi pi-google"></i> Google
-                        {{ t("profile.validated") }}:</b
-                    >
-                    <button
-                        @click="handleSendValidationEmail('google')"
-                        type="button"
-                        :class="
-                            user?.google_is_validated == true
-                                ? 'checked'
-                                : 'unchecked'
-                        "
-                    >
-                        <i
-                            :class="[
-                                'pi',
-                                user.google_is_validated == true
-                                    ? 'pi-verified'
-                                    : 'pi-unlock',
-                            ]"
-                        ></i
-                        >{{
-                            user?.google_is_validated == true
-                                ? `${t("profile.validated")}`
-                                : `${t("profile.validate")}`
-                        }}
-                    </button>
-                </p>
-                <p>
-                    <b
                         ><i class="pi pi-github"></i> Github
                         {{ t("profile.validated") }}:</b
                     >
@@ -516,6 +485,35 @@ const handleUnlinkAccount = async () => {
                         ></i
                         >{{
                             user?.github_is_validated == true
+                                ? `${t("profile.validated")}`
+                                : `${t("profile.validate")}`
+                        }}
+                    </button>
+                </p>
+                <p>
+                    <b
+                        ><i class="pi pi-google"></i> Google
+                        {{ t("profile.validated") }}:</b
+                    >
+                    <button
+                        @click="handleSendValidationEmail('google')"
+                        type="button"
+                        :class="
+                            user?.google_is_validated == true
+                                ? 'checked'
+                                : 'unchecked'
+                        "
+                    >
+                        <i
+                            :class="[
+                                'pi',
+                                user.google_is_validated == true
+                                    ? 'pi-verified'
+                                    : 'pi-unlock',
+                            ]"
+                        ></i
+                        >{{
+                            user?.google_is_validated == true
                                 ? `${t("profile.validated")}`
                                 : `${t("profile.validate")}`
                         }}
@@ -572,7 +570,8 @@ const handleUnlinkAccount = async () => {
                         v-model="isDark"
                         @change="
                             (event) => {
-                                event.target.value == 'true'
+                                const target = event.target as HTMLInputElement;
+                                target.value == 'true'
                                     ? toggle(true)
                                     : toggle(false);
                             }

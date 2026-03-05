@@ -11,7 +11,7 @@ import GoogleCallback from "./views/callbacks/GoogleCallback.vue";
 import Unauthorized from "./views/errors/Unauthorized.vue";
 import PaymentCallback from "./views/callbacks/PaymentCallback.vue";
 import DeleteCallback from "./views/callbacks/DeleteCallback.vue";
-import Support from "./views/Support.vue";
+import SupportPage from "./views/SupportPage.vue";
 import AboutPage from "./views/AboutPage.vue";
 
 const routes: Array<IRoutes> = [
@@ -26,7 +26,7 @@ const routes: Array<IRoutes> = [
     { path: "/callback/user/delete", component: DeleteCallback },
     { path: "/offline", component: BackendOffline },
     { path: "/unauthorizated", component: Unauthorized },
-    { path: "/support", component: Support },
+    { path: "/support", component: SupportPage },
     { path: "/about", component: AboutPage },
 ];
 

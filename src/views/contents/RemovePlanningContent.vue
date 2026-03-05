@@ -28,7 +28,7 @@ const handleDeletePlanning = async () => {
         handleChangePopupInfo(t('removePlanning.planningRemovedMessage'), 'success', true);
         handleChangeIsLoading(false);
         handleChangeCurrentContent('planning_list');
-    } catch (err) {
+    } catch {
         handleChangePopupInfo(t('removePlanning.planningRemovedMessageError'), 'error', true);
         handleChangeIsLoading(false);
     }
@@ -39,16 +39,15 @@ const getDataFromAPI = async () => {
         handleChangeIsLoading(true);
         const planningResponse = (await backendApi.get(`/planning/show/${uuid}`)).data as IPlanning;
 
-        if (!planningResponse || !planningResponse === null) {
+        if (!planningResponse || planningResponse === null) {
             handleChangePopupInfo(t('removePlanning.planningNotFounded'), 'error', true);
             handleChangeCurrentContent('home');
         }
 
         planning.value = planningResponse;
         handleChangeIsLoading(false);
-    } catch (err) {
+    } catch {
         handleChangeIsLoading(false);
-        console.error(err);
     }
 }
 

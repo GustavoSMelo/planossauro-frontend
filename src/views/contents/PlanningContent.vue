@@ -298,7 +298,7 @@ const generatePlan = async () => {
             }
         }
 
-        await isLoadingContext.handleChangeIsLoading(true);
+        isLoadingContext.handleChangeIsLoading(true);
 
         const user = JSON.parse(sessionStorage.getItem("user") ?? "") as IUser;
 
@@ -338,10 +338,6 @@ const generatePlan = async () => {
                     .replaceAll("`", "")
                     .replaceAll("json", ""),
             ) as IClassPlanResponse;
-
-            console.log(user);
-            console.log(planDateEnd.value);
-            console.log(monthConverter(planDateEnd.value.split("-")[1]));
 
             const data = {
                 // header
@@ -386,7 +382,7 @@ const generatePlan = async () => {
             let activities = [];
             for (let i = 1; i < 6; i++) {
                 const dayValue = `day${i}` as IDays["days"];
-                const temp = {} as any;
+                const temp = {} as Record<string, string[]>;
                 temp[dayValue] = plans.value[dayValue].map(
                     (classAtv) => classAtv,
                 );
@@ -539,8 +535,7 @@ const generatePlan = async () => {
             true,
         );
         handleChangeTemplateChoose({ ...templateChoose, choosed: false });
-    } catch (err) {
-        console.error(err);
+    } catch {
         isLoadingContext.handleChangeIsLoading(false);
         popupContext.handleChangePopupInfo(
             `${t("design.errorMessage")}`,
@@ -556,9 +551,7 @@ onMounted(() => {
 });
 
 watchEffect(() => {
-    if (templateChoose.choosed) {
-        generatePlan();
-    }
+    if (templateChoose.choosed) generatePlan();
 });
 
 watch(rangeDates, () => {
@@ -663,7 +656,7 @@ watch(rangeDates, () => {
 
         <form v-if="planType === 'Diario'" class="dailyPlan">
             <div class="dailyPlanContentContainer">
-                <section v-for="(plano, index) in plans.day1">
+                <section v-for="(plano, index) in plans.day1" :key="index">
                     <label
                         >📚 {{ t("design.classActivity") }}
                         {{ index + 1 }}</label
@@ -941,6 +934,7 @@ watch(rangeDates, () => {
                 <div class="classContent">
                     <div
                         v-for="(value, index) in plans[selectedDay]"
+                        :key="index"
                         class="classWrapper"
                     >
                         <span class="classDescription">

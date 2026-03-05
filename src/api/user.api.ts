@@ -5,7 +5,8 @@ const createUser = (data: ICreateUser) => {
     try {
         return backendApi.post('/user', data);
     } catch (error) {
-        console.error(error);
+        // eslint-disable-next-line no-console
+        console.error('Error creating user:', error);
     }
 };
 

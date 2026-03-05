@@ -94,7 +94,7 @@ watchEffect(async () => {
 
             router.push(`/finish/login?at=${data.accessToken}`);
         }
-    } catch (err) {
+    } catch {
         sessionStorage.setItem('loginType', 'github');
         sessionStorage.setItem('githubEmail', data.data.email);
         sessionStorage.setItem('githubId', Number(data.data.id).toString());

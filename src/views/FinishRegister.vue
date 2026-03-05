@@ -8,6 +8,7 @@ import { useI18n } from "vue-i18n";
 import type { IPopupContext } from "../interfaces/context/popup.interface";
 import type { ILoadingContext } from "../interfaces/context/loading.interface";
 import type {
+    ICreatedUserResponseAPIOptions,
     ICreateUser,
     ICreateUserResponse,
     IUser,
@@ -17,8 +18,15 @@ import type { ILoginType } from "../interfaces/loginType.interface";
 import type { IAccessSanctumToken } from "../interfaces/auth.interface";
 import { setToken } from "../helpers/token";
 import type { ISubscription } from "../interfaces/subscription.interface";
+import { useDark } from "@vueuse/core";
 
+const isDark = useDark({
+    attribute: "data-theme",
+    valueLight: "light",
+    valueDark: "dark",
+});
 const { t } = useI18n();
+
 const urlParams = new URLSearchParams(window.location.search);
 const fullName = ref(window.sessionStorage.getItem("fullName") || "");
 const popupContext = inject("popup") as IPopupContext;
@@ -111,7 +119,7 @@ const handleGithubSave = async () => {
             github_id: githubId,
         } as unknown as ICreateUser;
 
-        let responseUserCreated: AxiosResponse<any, any, {}>;
+        let responseUserCreated: AxiosResponse<ICreatedUserResponseAPIOptions>;
 
         if (userFromSession && userFromSession.uuid) {
             responseUserCreated = await backendApi.put(
@@ -123,11 +131,13 @@ const handleGithubSave = async () => {
                 ...userData,
             });
         }
-        const responseData: ICreateUserResponse["data"] = userFromSession?.uuid
-            ? responseUserCreated.data.user
-            : responseUserCreated.data.data;
+        const responseData = (
+            userFromSession?.uuid
+                ? responseUserCreated.data.user
+                : responseUserCreated.data.data
+        ) as ICreateUserResponse["data"] | null;
 
-        if (responseData.uuid) {
+        if (responseData && responseData.uuid) {
             const urlParams = new URLSearchParams(window.location.search);
             const at = urlParams.get("at");
             const sanctumResponse = (await backendApi.get(`/auth/github/${at}`))
@@ -160,13 +170,12 @@ const handleGithubSave = async () => {
             );
         }
         loadingContext.handleChangeIsLoading(false);
-    } catch (err) {
+    } catch {
         popupContext.handleChangePopupInfo(
             t("finishRegister.emailSendError"),
             "error",
             true,
         );
-        console.error(err);
         loadingContext.handleChangeIsLoading(false);
     }
 };
@@ -184,7 +193,7 @@ const handleGoogleSave = async () => {
             google_id: googleId.toString(),
         } as unknown as ICreateUser;
 
-        let responseUserCreated: AxiosResponse<any, any, {}>;
+        let responseUserCreated: AxiosResponse<ICreatedUserResponseAPIOptions>;
 
         if (userFromSession && userFromSession.uuid) {
             userData.google_email = sessionStorage.getItem("googleEmail");
@@ -206,13 +215,13 @@ const handleGoogleSave = async () => {
             });
         }
         const helper = responseUserCreated.data;
-        const responseData: ICreateUserResponse["data"] = helper.hasOwnProperty(
-            "user",
-        )
-            ? helper.user
-            : helper.data;
+        const responseData = (
+            Object.prototype.hasOwnProperty.call(helper, "user")
+                ? helper.user
+                : helper.data
+        ) as ICreateUserResponse["data"] | null;
 
-        if (responseData.uuid) {
+        if (responseData && responseData.uuid) {
             user.value = { ...responseData };
             user.value.google_is_validated = false;
             showCodeConfirmationScreen.value = true;
@@ -237,16 +246,15 @@ const handleGoogleSave = async () => {
         }
         loadingContext.handleChangeIsLoading(false);
     } catch (err) {
-        const errHelper = err as AxiosResponse<any, any, {}>;
+        const errHelper = err as { response?: { status: number } };
         loadingContext.handleChangeIsLoading(false);
 
-        if (errHelper.status === 401) return;
+        if (errHelper.response?.status === 401) return;
         popupContext.handleChangePopupInfo(
             t("finishRegister.emailSendError"),
             "error",
             true,
         );
-        console.error(err);
     }
 };
 
@@ -292,8 +300,7 @@ const resendEmail = async () => {
             "success",
             true,
         );
-    } catch (err) {
-        console.error(err);
+    } catch {
         loadingContext.handleChangeIsLoading(false);
         popupContext.handleChangePopupInfo(
             t("finishRegister.emailResendError"),
@@ -340,8 +347,7 @@ const finishValidation = async () => {
 
         sessionStorage.setItem("user", JSON.stringify(user.value));
         router.push("/app");
-    } catch (err) {
-        console.error(err);
+    } catch {
         loadingContext.handleChangeIsLoading(false);
         popupContext.handleChangePopupInfo(
             t("finishRegister.validationError"),
@@ -363,6 +369,7 @@ const finishValidation = async () => {
             <label>{{ t("finishRegister.fullName") }}</label>
             <input
                 type="text"
+                :data-theme="isDark ? 'dark' : 'light'"
                 :placeholder="t('finishRegister.fullNamePlaceholder')"
                 v-model="fullName"
                 @change="(event) => handleChangeFullName(event)"
@@ -371,6 +378,7 @@ const finishValidation = async () => {
             <label>{{ t("finishRegister.cellphone") }}</label>
             <input
                 type="text"
+                :data-theme="isDark ? 'dark' : 'light'"
                 :placeholder="t('finishRegister.cellphonePlaceholder')"
                 v-model="cellphoneNumber"
                 @input="handleChangeCellphoneNumber"
@@ -391,6 +399,7 @@ const finishValidation = async () => {
                 <label>{{ t("finishRegister.insertValidationCode") }}</label>
                 <input
                     type="text"
+                    :data-theme="isDark ? 'dark' : 'light'"
                     :placeholder="t('finishRegister.validationCodePlaceholder')"
                     @input="handleChangeValidationCodeInput"
                     v-model="validationCodeInput"
@@ -399,14 +408,23 @@ const finishValidation = async () => {
             </form>
 
             <div class="buttonsContainer">
-                <button type="button" @click="() => router.push('/app')">
+                <button
+                    :data-theme="isDark ? 'dark' : 'light'"
+                    type="button"
+                    @click="() => router.push('/app')"
+                >
                     {{ t("finishRegister.validateLater") }}
                 </button>
                 <span>
-                    <button type="button" @click="resendEmail">
+                    <button
+                        type="button"
+                        @click="resendEmail"
+                        :data-theme="isDark ? 'dark' : 'light'"
+                    >
                         {{ t("finishRegister.resendEmail") }}
                     </button>
                     <button
+                        :data-theme="isDark ? 'dark' : 'light'"
                         @click="finishValidation"
                         :class="
                             validationCodeInput.length === 5 ? 'btnFinish' : ''

@@ -21,7 +21,7 @@ const user = JSON.parse(sessionStorage.getItem('user') as string) as IUser;
 
 const handleChangeValidationCodeInputText = (event: Event) => {
     const target = event.target as HTMLInputElement;
-    validationCodeInput.value = target.value.replace('/\D+/g', '');
+    validationCodeInput.value = target.value.replace(/\D+/g, '');
 };
 
 const stopPropagation = (event: Event) => {
@@ -54,8 +54,7 @@ const handleValidateCode = async () => {
 
         handleChangePopupInfo(t('validationCodeInputBox.invalidCode'), 'error', true);
         handleChangeIsLoading(false);
-    } catch (err) {
-        console.error(err);
+    } catch {
         handleChangePopupInfo(t('validationCodeInputBox.invalidCode'), 'error', true);
         handleChangeIsLoading(false);
     }

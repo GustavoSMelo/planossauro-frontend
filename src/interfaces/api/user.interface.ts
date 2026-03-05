@@ -1,7 +1,7 @@
 interface IUser {
     full_name: string;
     google_email: string | null;
-    google_id: number| null;
+    google_id: number | null;
     google_validation_code: number | null;
     google_is_validated: boolean;
     github_email: string | null;
@@ -20,7 +20,7 @@ interface IUser {
 interface ICreateUser {
     full_name: string;
     google_email: string | null;
-    google_id : string | null;
+    google_id: string | null;
     github_email: string | null;
     github_id: number | null;
     cellphone_number: string;
@@ -33,4 +33,14 @@ interface ICreateUserResponse {
     data: IUser;
 }
 
-export type { IUser, ICreateUser, ICreateUserResponse };
+interface ICreatedUserResponseAPIOptions {
+    data: ICreateUserResponse | null;
+    user: ICreateUserResponse | null;
+}
+
+export type {
+    IUser,
+    ICreateUser,
+    ICreateUserResponse,
+    ICreatedUserResponseAPIOptions,
+};

@@ -229,7 +229,7 @@ onMounted(() => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(paymentH, index) in paymentHistory.payments">
+                    <tr v-for="(paymentH, index) in paymentHistory.payments" :key="paymentH.payment_date">
                         <td :data-cell="`${t('plans.date')}:`">
                             {{ convertIsoDateToBR(paymentH.payment_date) }}
                         </td>

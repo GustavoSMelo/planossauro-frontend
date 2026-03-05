@@ -40,7 +40,7 @@ const getDataFromAPI = async () => {
 
         plannings.value = [...plannings.value, ...planningsDataList];
         handleChangeIsLoading(false);
-    } catch (err) {
+    } catch {
         handleChangeIsLoading(false);
     }
 };
@@ -112,8 +112,7 @@ const searchByFilterParameters = async () => {
 
         plannings.value = [...planningsResponse];
         handleChangeIsLoading(false);
-    } catch (err) {
-        console.error(err);
+    } catch {
         handleChangeIsLoading(false);
     }
 };
@@ -195,7 +194,7 @@ onMounted(() => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(planning, index) in plannings">
+                <tr v-for="(planning, index) in plannings" :key="planning.uuid">
                     <td
                         data-cell="Download: "
                         class="btnCellDownload"
@@ -203,7 +202,7 @@ onMounted(() => {
                     >
                         <i class="pi pi-download"></i>
                     </td>
-                    <td :data-cell="`${t('plannig.class')}:`">
+                    <td :data-cell="`${t('planning.class')}:`">
                         {{ planning.class_name }}
                     </td>
                     <td :data-cell="`${t('planning.school')}:`">

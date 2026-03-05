@@ -176,6 +176,7 @@
 
             button:hover {
                 background-color: var(--dp-accent-color-dark);
+                transform: scale(1.05);
             }
 
             .containerBtnChangeSocialMedia {
@@ -201,6 +202,7 @@
                 button {
                     margin-left: 0;
                     width: 80%;
+                    transition: 0.4s;
                 }
 
                 button:nth-child(2) {
@@ -209,6 +211,11 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    transition: 0.4s;
+                }
+
+                button:hover {
+                    transform: scale(1.05);
                 }
             }
         }
@@ -282,6 +289,11 @@
                 margin-top: 4px;
                 border-radius: 5px;
                 font-weight: 600;
+                transition: 0.4s;
+            }
+
+            button:hover {
+                transform: scale(1.05);
             }
 
             p {
@@ -300,10 +312,15 @@
                     border-radius: 5px;
                     color: var(--dp-full-black);
                     width: 130px;
+                    transition: 0.4s;
 
                     i {
                         margin-right: 10px;
                     }
+                }
+
+                button:hover {
+                    transform: scale(1.05);
                 }
 
                 button.checked {
@@ -385,6 +402,7 @@
                 font-weight: bold;
                 transition: 0.4s;
                 width: 140px;
+                transition: 0.4s;
             }
 
             button:hover {

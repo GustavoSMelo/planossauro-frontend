@@ -26,7 +26,7 @@ const isApiHealth = async () => {
             sessionStorage.setItem('backendOfflineError', 'Github API is offline');
             return false
         };
-    } catch (err) {
+    } catch {
         sessionStorage.setItem('backendOfflineError', 'API is not running');
         return false;
     }

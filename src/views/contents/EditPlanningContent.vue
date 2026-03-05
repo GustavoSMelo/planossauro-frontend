@@ -71,9 +71,8 @@ const handleUpdatePlanning = async () => {
         );
         handleChangeIsLoading(false);
         handleChangeCurrentContent("planning_list");
-    } catch (err) {
+    } catch {
         handleChangeIsLoading(false);
-        console.error(err);
     }
 };
 
@@ -84,7 +83,7 @@ const getDataFromAPI = async () => {
             await backendApi.get(`/planning/show/${uuid}`)
         ).data as IPlanning;
 
-        if (!planningResponse || !planningResponse === null) {
+        if (!planningResponse || planningResponse === null) {
             handleChangePopupInfo(
                 t("editPlanning.noPlanningMessage"),
                 "error",
@@ -100,9 +99,8 @@ const getDataFromAPI = async () => {
         start_date.value = planningResponse.start_plan.toString();
         end_date.value = planningResponse.end_plan.toString();
         handleChangeIsLoading(false);
-    } catch (err) {
+    } catch {
         handleChangeIsLoading(false);
-        console.error(err);
     }
 };
 

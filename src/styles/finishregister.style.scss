@@ -17,6 +17,9 @@
     justify-content: center;
     width: 100vw;
     height: 100vh;
+    background-image: var(--dp-background-url);
+    background-repeat: repeat;
+    background-size: contain;
 
     .formContainer {
         background-color: var(--dp-lightfall);
@@ -33,12 +36,14 @@
             border-bottom: 1px var(--dp-light-gray) solid;
             padding-bottom: 10px;
             font-size: 20pt;
+            color: var(--dp-text-color);
         }
 
         label {
             font-weight: 500;
             font-size: 16pt;
             margin-top: 20px;
+            color: var(--dp-text-color);
         }
 
         input {
@@ -48,6 +53,13 @@
             border-radius: 5px;
             margin-top: 4px;
             transition: 0.3s;
+            background-color: var(--dp-lightfall);
+            color: var(--dp-accent-color);
+            font-weight: 500;
+        }
+
+        input[data-theme="dark"] {
+            box-shadow: 0 0 0;
         }
 
         input:focus {
@@ -55,10 +67,11 @@
             border: solid 1px var(--dp-accent-color);
             color: var(--dp-accent-color);
             font-weight: bold;
+            background-color: var(--dp-lightfall);
         }
 
         button {
-            margin-top: 20px;
+            margin-top: 40px;
             padding: 10px;
             font-size: 15pt;
             font-weight: bold;
@@ -100,6 +113,7 @@
             padding-bottom: 5px;
             margin-bottom: 5px;
             border-bottom: 1px solid var(--dp-light-gray);
+            color: var(--dp-text-color);
         }
 
         .validationForm {
@@ -109,6 +123,7 @@
             label {
                 font-weight: 500;
                 margin-top: 20px;
+                color: var(--dp-text-color);
             }
 
             input {
@@ -118,6 +133,13 @@
                 border-radius: 5px;
                 margin-top: 4px;
                 transition: 0.3s;
+                font-weight: 500;
+                background-color: var(--dp-lightfall);
+                color: var(--dp-accent-color);
+            }
+
+            input[data-theme="dark"] {
+                box-shadow: 0 0 0;
             }
 
             input:focus {
@@ -125,6 +147,11 @@
                 border: solid 1px var(--dp-accent-color);
                 color: var(--dp-accent-color);
                 font-weight: bold;
+            }
+
+            small {
+                color: var(--dp-text-color);
+                margin-top: 10px;
             }
         }
 
@@ -151,21 +178,24 @@
                 transform: scale(1.05);
             }
 
+            button[data-theme="dark"] {
+                box-shadow: 0 0 0;
+            }
+
             span {
                 button:nth-child(1) {
                     margin-right: 10px;
                 }
 
                 button:nth-child(2) {
-                    background-color: var(--dp-gray);
-                    color: var(--dp-black);
+                    background-color: var(--dp-light-gray);
+                    color: var(--dp-full-black);
                     cursor: not-allowed;
                     transition: 0.4s;
                 }
 
                 button:nth-child(2):hover {
-                    background-color: var(--dp-dark-gray);
-                    color: var(--dp-lightfall);
+                    background-color: var(--dp-gray);
                     transition: 0.4s;
                 }
 
@@ -175,7 +205,7 @@
                 }
 
                 button.btnFinish:hover {
-                    background-color: var(--dp-accent-color-darker);
+                    background-color: var(--dp-accent-color-dark);
                     cursor: pointer;
                 }
             }
