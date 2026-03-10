@@ -13,6 +13,7 @@ import PaymentCallback from "./views/callbacks/PaymentCallback.vue";
 import DeleteCallback from "./views/callbacks/DeleteCallback.vue";
 import SupportPage from "./views/SupportPage.vue";
 import AboutPage from "./views/AboutPage.vue";
+import LearnPage from "./views/LearnPage.vue";
 
 const routes: Array<IRoutes> = [
     { path: "/:catchAll(.*)", component: NotFound },
@@ -28,6 +29,7 @@ const routes: Array<IRoutes> = [
     { path: "/unauthorizated", component: Unauthorized },
     { path: "/support", component: SupportPage },
     { path: "/about", component: AboutPage },
+    { path: "/learn", component: LearnPage },
 ];
 
 const router = createRouter({

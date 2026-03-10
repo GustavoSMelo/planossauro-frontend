@@ -1,0 +1,50 @@
+@charset "UTF-8";
+
+.galleryPhotoContainer {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--dp-transparent-gray);
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    img {
+        width: 70%;
+        border: solid 2px var(--dp-full-black);
+        border-radius: 5px;
+    }
+
+    .galleryControls {
+        margin-top: 20px;
+        display: flex;
+        button {
+            margin: 30px;
+            font-size: 20pt;
+            padding: 20px;
+            border-radius: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.4s;
+            color: var(--dp-accent-color);
+        }
+
+        button:hover {
+            transition: 0.4s;
+            transform: scale(1.05);
+        }
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .galleryPhotoContainer {
+        img {
+            width: 95%;
+        }
+    }
+}

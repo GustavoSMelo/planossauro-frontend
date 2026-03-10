@@ -177,7 +177,7 @@ onMounted(() => {
         </span>
 
         <button type="button" @click="searchByFilterParameters">
-            {{ $t("planning.daily") }}
+            {{ $t("planning.search") }}
         </button>
     </form>
     <section class="listingContainer">
