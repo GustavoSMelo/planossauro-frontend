@@ -19,7 +19,6 @@ const handlePreviousPhoto = () => {
 
 onMounted(() => {
     currentPhoto.value = selectedPhoto;
-    console.log(currentPhoto);
 });
 </script>
 <template>
