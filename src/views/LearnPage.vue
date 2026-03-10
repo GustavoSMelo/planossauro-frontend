@@ -49,7 +49,7 @@ const handleShowPhoto = (show: boolean) => (showPhoto.value = show);
     <main class="mainContent">
         <GalleryPhoto
             v-if="showPhoto"
-            :selected-photo="1"
+            :selected-photo="selectedPhoto"
             :handle-show-photo="handleShowPhoto"
         />
         <div class="mainWrapper">
@@ -389,7 +389,77 @@ const handleShowPhoto = (show: boolean) => (showPhoto.value = show);
                     </span>
                 </figure>
             </section>
+
+            <section class="faqContainer">
+                <h2
+                    class="categoryTitle"
+                    :data-theme="isDark ? 'dark' : 'light'"
+                >
+                    Perguntas frequentes
+                </h2>
+
+                <div class="faqContainer">
+                    <details :data-theme="isDark ? 'dark' : 'light'" open>
+                        <summary>Posso usar o sistema gratuitamente ?</summary>
+                        <p>
+                            Sim, temos um plano gratuito para demonstrar como
+                            nosso app funciona, e voce pode utiliza-lo pra
+                            sempre, pois todos os tokens sao atualizado
+                            mensalmente
+                        </p>
+                    </details>
+
+                    <details :data-theme="isDark ? 'dark' : 'light'" open>
+                        <summary>Como funciona esses "tokens" ?</summary>
+                        <p>
+                            Basicamente voce tem limite de planejamentos, esse
+                            limite sao chamados de "tokens", quando voce cria um
+                            planejamento, voce gasta 1 token, quando chegar no
+                            limite de token voce precisa atualizar ou esperar 1
+                            mes para ter os tokens de volta
+                        </p>
+                    </details>
+
+                    <details :data-theme="isDark ? 'dark' : 'light'" open>
+                        <summary>
+                            Quais metodos de pagamento sao aceitos ?
+                        </summary>
+                        <p>
+                            Por enquanto apenas cartao de credito (visa e
+                            mastercard) e Google Pay, no futuro iremos
+                            implementar o Apple pay tambem.
+                        </p>
+                    </details>
+
+                    <details :data-theme="isDark ? 'dark' : 'light'" open>
+                        <summary>O pagamento eh seguro ?</summary>
+                        <p>
+                            Sim, nos utilizamos o STRIPE, um sistema de
+                            pagamentos utilizado globalmente por diversas
+                            empresas gigantescas, como Ford, Uber, Amazon e etc.
+                            <br />
+                            Por isso quando for fazer um pagamento, uma nova
+                            pagina de pagamentos sera aberta, Nos nao guardamos
+                            NENHUMA informacao sigilosa que pode comprometer
+                            seus dados
+                        </p>
+                    </details>
+
+                    <details :data-theme="isDark ? 'dark' : 'light'" open>
+                        <summary>O que acontece ao cancelar um plano ?</summary>
+                        <p>
+                            Seu plano volta a demonstracao gratuita e voce eh
+                            reembolsado
+                        </p>
+                    </details>
+                </div>
+            </section>
         </div>
     </main>
+    <footer>
+        <h2>
+            Obrigado por chegar ate aqui, app feito com ❤️ by Gustavo S. Melo
+        </h2>
+    </footer>
 </template>
 <style lang="scss" src="../styles/learn.style.scss" scoped />

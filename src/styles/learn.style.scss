@@ -89,15 +89,16 @@
         margin: auto;
 
         .title {
+            width: 100%;
             padding-top: 120px;
             text-align: center;
             color: var(--dp-text-color);
         }
 
         .title > span {
+            width: 100%;
             background-color: var(--dp-lightfall);
             padding: 20px;
-            width: fit-content;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -329,6 +330,7 @@
                 display: flex;
                 flex-direction: row;
                 flex-wrap: wrap;
+                justify-content: center;
 
                 span {
                     position: relative;
@@ -371,7 +373,46 @@
                 }
             }
         }
+
+        .faqContainer {
+            width: 100%;
+            margin-top: 50px;
+
+            details {
+                background-color: var(--dp-lightfall);
+                border: solid 2px var(--dp-light-gray);
+                box-shadow: 3px 3px 8px var(--dp-light-gray);
+                margin-bottom: 20px;
+                border-radius: 5px;
+
+                summary {
+                    color: var(--dp-text-color);
+                    font-size: 20pt;
+                    font-weight: bold;
+                    border-bottom: solid 2px var(--dp-gray);
+                    padding: 20px;
+                }
+
+                p {
+                    padding: 30px;
+                    font-size: 16pt;
+                    color: var(--dp-text-color);
+                    font-weight: 500;
+                }
+            }
+
+            details[data-theme="dark"] {
+                box-shadow: 0 0 0;
+            }
+        }
     }
+}
+
+footer {
+    background-color: var(--dp-accent-color);
+    padding: 30px;
+    text-align: center;
+    color: var(--dp-full-white);
 }
 
 @media screen and (max-width: 1024px) {
@@ -402,6 +443,7 @@
                 -ms-overflow-style: none;
                 overflow: scroll;
                 scrollbar-width: none;
+                width: 100%;
 
                 section {
                     flex-wrap: nowrap;
@@ -411,7 +453,7 @@
                     width: fit-content;
 
                     figure {
-                        width: 300px;
+                        width: 280px;
                     }
                 }
             }
@@ -458,6 +500,22 @@
 @media screen and (max-width: 600px) {
     .mainContent {
         .mainWrapper {
+        }
+    }
+}
+
+@media screen and (max-width: 560px) {
+    .mainContent {
+        .mainWrapper {
+            .photosContainer {
+                .photosContent {
+                    span {
+                        img {
+                            width: 100%;
+                        }
+                    }
+                }
+            }
         }
     }
 }
