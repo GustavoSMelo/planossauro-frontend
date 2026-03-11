@@ -45,7 +45,7 @@ const showPopupCancel = ref(false);
 const { handleChangePopupInfo } = inject("popup") as IPopupContext;
 
 const handleEditYourPlan = async (
-    choosedPlan: "essencial" | "premium" | "free",
+    choosedPlan: "essential" | "premium" | "free",
 ) => {
     const userStringfied = sessionStorage.getItem("user") ?? null;
     const loginType =
@@ -60,7 +60,7 @@ const handleEditYourPlan = async (
         return;
 
     if (!subscriptionInfo.value.last_four_digits) {
-        if (choosedPlan === "essencial") {
+        if (choosedPlan === "essential") {
             const essentialLink = import.meta.env
                 .VITE_STRIPE_ESSENTIAL_PLAN_URL;
             return window.open(
@@ -85,7 +85,7 @@ const handleEditYourPlan = async (
             user_id: user.uuid,
             return_url: "http://localhost:5173/callback/payment",
             price:
-                choosedPlan === "essencial" ? essentialPriceId : premiumPriceId,
+                choosedPlan === "essential" ? essentialPriceId : premiumPriceId,
         },
     );
 
@@ -157,14 +157,14 @@ onMounted(async () => {
                 <div
                     :class="[
                         'planContainer',
-                        planInfo.plan_name === 'essencial'
+                        planInfo.plan_name === 'essential'
                             ? 'selectedPlanContainer'
                             : '',
                     ]"
                     :data-theme="isDark ? 'dark' : 'light'"
                 >
                     <h2>
-                        <span v-if="planInfo.plan_name === 'essencial'"
+                        <span v-if="planInfo.plan_name === 'essential'"
                             >({{ $t("choosePlans.current") }}) </span
                         >{{ $t("choosePlans.moreEconomical") }}
                     </h2>
@@ -208,7 +208,10 @@ onMounted(async () => {
 
                         <button
                             type="button"
-                            @click="handleEditYourPlan('essencial')"
+                            @click="
+                                planInfo.plan_name !== 'essential' &&
+                                handleEditYourPlan('essential')
+                            "
                         >
                             {{ $t("choosePlans.choose") }}
                         </button>
@@ -266,7 +269,10 @@ onMounted(async () => {
 
                         <button
                             type="button"
-                            @click="handleEditYourPlan('premium')"
+                            @click="
+                                planInfo.plan_name !== 'premium' &&
+                                handleEditYourPlan('premium')
+                            "
                         >
                             {{ $t("choosePlans.choose") }}
                         </button>

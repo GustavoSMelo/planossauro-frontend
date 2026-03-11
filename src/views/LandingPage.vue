@@ -17,7 +17,7 @@ const goToLoginPage = () => {
 };
 
 const goToAboutPage = () => {
-    router.push({ path: "/about" });
+    router.push({ path: "/learn" });
 };
 </script>
 

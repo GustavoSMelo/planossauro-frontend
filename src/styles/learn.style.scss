@@ -59,7 +59,7 @@
 }
 
 .categoryTitle {
-    font-size: 32pt;
+    font-size: 24pt;
     margin-bottom: 40px;
     color: var(--dp-text-color);
     width: fit-content;
@@ -430,6 +430,19 @@ footer {
                     p {
                         margin-right: 0;
                     }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1240px) {
+    .mainContent {
+        .mainWrapper {
+            .featuresContainer {
+                section {
+                    align-items: center;
+                    justify-content: center;
                 }
             }
         }
