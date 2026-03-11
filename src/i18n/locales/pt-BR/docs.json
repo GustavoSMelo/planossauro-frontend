@@ -1,0 +1,55 @@
+{
+    "title": "Planossauro",
+    "intro": {
+        "title": "Introdução",
+        "description": "Esta documentação visa responder algumas dúvidas de usabilidade do sistema e ser um onboarding de todo o aplicativo."
+    },
+    "createPlanning": {
+        "title": "Como criar um planejamento?",
+        "description": "Primeiramente você precisa criar uma conta no app. Para isso, basta clicar em Login e conectar sua conta do Google ou Github. Após isso, entre na página Home, vá para aba de \"Planejar\" ou \"Design\". Nessa aba, você poderá escolher duas opções: semanal ou diário. Escolhendo qualquer uma das opções, preencha o formulário e clique em avançar, preencha os detalhes da escola e clique em finalizar e escolha seu template. Aguarde o planejamento ficar pronto que ele será baixado automaticamente."
+    },
+    "planningList": {
+        "title": "Como verificar os planejamentos já criados?",
+        "description": "Dentro do sistema, clique em \"Planejamentos\". Nessa oportunidade, aparecerá uma tabela listando todos os planejamentos já criados por você. Você pode escolher baixar o planejamento, editar informações básicas ou até mesmo excluí-lo. Caso precise, poderá utilizar os campos de busca para ter uma listagem mais assertiva."
+    },
+    "plans": {
+        "title": "Sobre planos e assinatura",
+        "upgrade": {
+            "title": "Como fazer um upgrade?",
+            "description": "Ao realizar o login no app, é possível verificar nas suas abas que possuímos a aba de \"plano\". Clicando nessa aba, você poderá ver as informações do plano e do histórico de pagamentos. Para fazer o upgrade, clique no botão \"Alterar plano\", escolha o plano que mais se encaixa com seu perfil e clique em \"Escolher\". Será aberta uma nova página para você fazer o pagamento. Após isso, volte ao sistema e atualize a página. Caso não funcione, saia e entre no sistema novamente. Caso não funcione, espere alguns minutos. Se nada disso funcionar, você poderá entrar em contato conosco que resolveremos seu problema."
+        },
+        "downgrade": {
+            "title": "Como fazer um downgrade?",
+            "description": "Para fazer o downgrade é o mesmo processo, porém você precisará escolher um plano diferente do seu atual. Após fazer isso, confirme a escolha do plano e ele será atualizado automaticamente."
+        },
+        "cancel": {
+            "title": "Como cancelar um plano?",
+            "description": "Cancelar um plano é bem simples. Você simplesmente vai até a aba de planos e clica no botão de cancelar e depois no botão de confirmar. Fazendo isso você volta para o plano gratuito."
+        },
+        "changeCard": {
+            "title": "Como alterar o cartão?",
+            "description": "Na página de planos, clique no botão de alterar cartão. Nesse momento será aberta uma tela para atualizar seus dados de pagamentos. Após isso, volte ao sistema e seu cartão será atualizado."
+        },
+        "downloadReceipt": {
+            "title": "Como baixar o comprovante de pagamento?",
+            "description": "No histórico de pagamentos, clique no botão \"download\". Você receberá um .pdf com todas as informações necessárias sobre a comprovação de seu pagamento."
+        }
+    },
+    "support": {
+        "title": "Ajuda / Suporte",
+        "description": "Para acessar a ajuda/suporte você pode ir na aba de perfil e clicar no botão \"Acessar ajuda\", na categoria Ajuda/Suporte."
+    },
+    "accountDelete": {
+        "title": "Exclusão de conta",
+        "description": "Para realizar a exclusão de uma conta, primeiro você deve validá-la. Para isso, clique no botão de validar que se encontra na aba de perfil. Ao clicar nesse botão, você receberá um email na sua caixa de entrada e dentro do nosso app será redirecionado para uma página para colocar o código de validação. Ao colocar esse código, agora você poderá clicar no botão de excluir conta. Após isso, sua conta estará suspensa por 30 dias, podendo reativá-la a qualquer momento durante esse tempo. Passado esse período, sua conta será excluída permanentemente."
+    },
+    "nav": {
+        "intro": "Introdução",
+        "createPlanning": "Criar planejamento",
+        "planningList": "Listar planejamentos",
+        "plans": "Planos e assinatura",
+        "support": "Suporte",
+        "accountDelete": "Excluir conta"
+    },
+    "footer": "App desenvolvido com muito amor, carinho e paciência ❤️, por Gustavo S. Melo"
+}

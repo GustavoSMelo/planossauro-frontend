@@ -69,6 +69,9 @@ import monthsENUS from "./locales/en-US/months.json";
 import learnPTBR from "./locales/pt-BR/learn.json";
 import learnENUS from "./locales/en-US/learn.json";
 
+import docsPTBR from "./locales/pt-BR/docs.json";
+import docsENUS from "./locales/en-US/docs.json";
+
 const i18n = createI18n({
     locale: "pt-BR",
     fallbackLocale: "en-US",
@@ -97,6 +100,7 @@ const i18n = createI18n({
             unauthorized: unauthorizedPTBR,
             months: monthsPTBR,
             learn: learnPTBR,
+            docs: docsPTBR,
         },
         "en-US": {
             login: loginENUS,
@@ -122,6 +126,7 @@ const i18n = createI18n({
             unauthorized: unauthorizedENUS,
             months: monthsENUS,
             learn: learnENUS,
+            docs: docsENUS,
         },
     },
 });

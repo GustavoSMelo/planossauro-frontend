@@ -23,7 +23,7 @@ const handleShowPhoto = (show: boolean) => (showPhoto.value = show);
     <nav class="navContainer">
         <figure @click="router.push('/')">
             <img src="../assets/DinoLogo.svg" alt="Dinossaur" />
-            <figcaption>Planeja.ai</figcaption>
+            <figcaption>Planossauro</figcaption>
         </figure>
 
         <span>

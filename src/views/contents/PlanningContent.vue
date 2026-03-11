@@ -4,7 +4,7 @@ import { VueDatePicker } from "@vuepic/vue-datepicker";
 import { useI18n } from "vue-i18n";
 import Docxtemplater from "docxtemplater";
 import PizZip from "pizzip";
-import axios from "axios";
+import axios, { type AxiosResponse } from "axios";
 import type { IPlanningDay, IDays } from "../../interfaces/planning.interface";
 import type { ILoadingContext } from "../../interfaces/context/loading.interface";
 import type { IPopupContext } from "../../interfaces/context/popup.interface";
@@ -310,14 +310,25 @@ const generatePlan = async () => {
             const qsnstring = JSON.stringify(qsnPTBR);
             const activity = JSON.stringify(activities);
 
-            const response = await axios.post(import.meta.env.VITE_API_URL, {
-                model: import.meta.env.VITE_LLM_MODEL,
-                prompt:
-                    locale.value === "pt-BR"
-                        ? getPrompt(qsnstring, activity)
-                        : getPromptEN(qsnstring, activity),
-                stream: false,
-            });
+            let response: AxiosResponse | null = null;
+
+            if (import.meta.env.VITE_APP_MODE === "local") {
+                response = await axios.post(import.meta.env.VITE_API_URL, {
+                    model: import.meta.env.VITE_LLM_MODEL,
+                    prompt:
+                        locale.value === "pt-BR"
+                            ? getPrompt(qsnstring, activity)
+                            : getPromptEN(qsnstring, activity),
+                    stream: false,
+                });
+            } else {
+                response = await backendApi.post("/planning/create", {
+                    prompt:
+                        locale.value === "pt-BR"
+                            ? getPrompt(qsnstring, activity)
+                            : getPromptEN(qsnstring, activity),
+                });
+            }
 
             const planejamentoQSNFetch = await fetch(
                 `../../../public/planejamento${templateChoose.templateType}${templateChoose.templateStyle}.docx`,
@@ -331,13 +342,36 @@ const generatePlan = async () => {
                 linebreaks: true,
             });
 
-            const responseData = JSON.parse(
-                (response.data as IOllamaGemmaResponse).response
-                    .replaceAll(/\\/g, "")
-                    .replaceAll("\n", "")
-                    .replaceAll("`", "")
-                    .replaceAll("json", ""),
-            ) as IClassPlanResponse;
+            let responseData: IClassPlanResponse = {
+                contextualizacao: "",
+                aprendizagem01: "",
+                aprendizagem02: "",
+                saber01: "",
+                saber02: "",
+                eixo: "",
+                foco_avaliativo: "",
+                materiais: "",
+            };
+
+            if (response && import.meta.env.VITE_APP_MODE === "prod") {
+                responseData = JSON.parse(
+                    response.data.message
+                        .replaceAll(/\\/g, "")
+                        .replaceAll("\n", "")
+                        .replaceAll("`", "")
+                        .replaceAll("json", "")
+                        .replaceAll("\n", ""),
+                ) as IClassPlanResponse;
+            } else if (response) {
+                responseData = JSON.parse(
+                    (response!.data as IOllamaGemmaResponse).response
+                        .replaceAll(/\\/g, "")
+                        .replaceAll("\n", "")
+                        .replaceAll("`", "")
+                        .replaceAll("json", "")
+                        .replaceAll("\n", ""),
+                ) as IClassPlanResponse;
+            }
 
             const data = {
                 // header
@@ -403,24 +437,46 @@ const generatePlan = async () => {
                     const qsnstring = JSON.stringify(qsn);
                     const activity = JSON.stringify(item);
 
-                    const response = await axios.post(
-                        import.meta.env.VITE_API_URL,
-                        {
-                            model: import.meta.env.VITE_LLM_MODEL,
+                    let response: AxiosResponse | null = null;
+
+                    if (import.meta.env.VITE_APP_MODE === "local") {
+                        response = await axios.post(
+                            import.meta.env.VITE_API_URL,
+                            {
+                                model: import.meta.env.VITE_LLM_MODEL,
+                                prompt:
+                                    locale.value === "pt-BR"
+                                        ? getPrompt(qsnstring, activity)
+                                        : getPromptEN(qsnstring, activity),
+                                stream: false,
+                            },
+                        );
+                    } else {
+                        response = await backendApi.post("/planning/create", {
                             prompt:
                                 locale.value === "pt-BR"
                                     ? getPrompt(qsnstring, activity)
                                     : getPromptEN(qsnstring, activity),
-                            stream: false,
-                        },
-                    );
+                        });
+                    }
+
+                    if (response && import.meta.env.VITE_APP_MODE === "local") {
+                        return JSON.parse(
+                            (response.data as IOllamaGemmaResponse).response
+                                .replaceAll(/\\/g, "")
+                                .replaceAll("\n", "")
+                                .replaceAll("`", "")
+                                .replaceAll("json", ""),
+                        ) as IClassPlanResponse;
+                    }
 
                     return JSON.parse(
-                        (response.data as IOllamaGemmaResponse).response
+                        response!.data.message
                             .replaceAll(/\\/g, "")
                             .replaceAll("\n", "")
                             .replaceAll("`", "")
-                            .replaceAll("json", ""),
+                            .replaceAll("json", "")
+                            .replaceAll("\n", ""),
                     ) as IClassPlanResponse;
                 }),
             );
@@ -535,7 +591,8 @@ const generatePlan = async () => {
             true,
         );
         handleChangeTemplateChoose({ ...templateChoose, choosed: false });
-    } catch {
+    } catch (err) {
+        console.error(err);
         isLoadingContext.handleChangeIsLoading(false);
         popupContext.handleChangePopupInfo(
             `${t("design.errorMessage")}`,

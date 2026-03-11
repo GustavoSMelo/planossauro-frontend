@@ -37,7 +37,7 @@ const goToAboutPage = () => {
                 <div>
                     <figure>
                         <img src="../assets/DinoLogo.svg" alt="Dino Logo" />
-                        <figcaption>Planeja.ai</figcaption>
+                        <figcaption>Planossauro</figcaption>
                     </figure>
                     <h2>Seu planejador pessoal</h2>
                     <p>
@@ -71,7 +71,7 @@ const goToAboutPage = () => {
         </div>
         <h4>
             <a
-                href="https://github.com/GustavoSMelo/planeja.ai-frontend"
+                href="https://github.com/GustavoSMelo/planossauro-frontend"
                 target="_blank"
             >
                 Desenvolvido por Gustavo Santos Melo

@@ -1,0 +1,55 @@
+{
+    "title": "planossauro",
+    "intro": {
+        "title": "Introduction",
+        "description": "This documentation aims to answer some system usability questions and serve as an onboarding for the entire application."
+    },
+    "createPlanning": {
+        "title": "How to create a planning?",
+        "description": "First, you need to create an account in the app. To do this, simply click on Login and connect your Google or Github account. After that, go to the Home page, then to the \"Plan\" or \"Design\" tab. In this tab, you can choose two options: weekly or daily. Choosing either option, fill out the form and click next, fill in the school details and click finish, then choose your template. Wait for the planning to be ready and it will be downloaded automatically."
+    },
+    "planningList": {
+        "title": "How to view previously created plannings?",
+        "description": "Within the system, click on \"Plannings\". A table will appear listing all plannings already created by you. You can choose to download the planning, edit basic information, or even delete it. If needed, you can use the search fields to get a more targeted listing."
+    },
+    "plans": {
+        "title": "About plans and subscription",
+        "upgrade": {
+            "title": "How to upgrade?",
+            "description": "When logging into the app, you can check in your tabs that we have the \"plan\" tab. Clicking on this tab, you can see the plan information and payment history. To upgrade, click the \"Change plan\" button, choose the plan that best fits your profile and click \"Choose\". A new page will open for you to make the payment. After that, return to the system and refresh the page. If it doesn't work, log out and log back into the system. If it still doesn't work, wait a few minutes. If none of this works, you can contact us and we will resolve your problem."
+        },
+        "downgrade": {
+            "title": "How to downgrade?",
+            "description": "To downgrade is the same process, however you will need to choose a different plan from your current one. After doing this, confirm the plan choice and it will be updated automatically."
+        },
+        "cancel": {
+            "title": "How to cancel a plan?",
+            "description": "Cancelling a plan is quite simple. You simply go to the plans tab, click the cancel button and then the confirm button. By doing this, you will return to the free plan."
+        },
+        "changeCard": {
+            "title": "How to change the card?",
+            "description": "On the plans page, click the change card button. At this moment, a screen will open to update your payment information. After that, return to the system and your card will be updated."
+        },
+        "downloadReceipt": {
+            "title": "How to download the payment receipt?",
+            "description": "In the payment history, click the \"download\" button. You will receive a .pdf with all the necessary information about your payment confirmation."
+        }
+    },
+    "support": {
+        "title": "Help / Support",
+        "description": "To access help/support, you can go to the profile tab and click the \"Access help\" button, in the Help/Support category."
+    },
+    "accountDelete": {
+        "title": "Account deletion",
+        "description": "To delete an account, you must first validate it. To do this, click the validate button found in the profile tab. When you click this button, you will receive an email in your inbox and within our app you will be redirected to a page to enter the validation code. After entering this code, you can now click the delete account button. After that, your account will be suspended for 30 days, and you can reactivate it at any time during this period. After this period, your account will be permanently deleted."
+    },
+    "nav": {
+        "intro": "Introduction",
+        "createPlanning": "Create planning",
+        "planningList": "List plannings",
+        "plans": "Plans and subscription",
+        "support": "Support",
+        "accountDelete": "Delete account"
+    },
+    "footer": "App developed with lots of love, care and patience ❤️, by Gustavo S. Melo"
+}

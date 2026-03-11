@@ -1,36 +1,39 @@
 <script lang="ts" setup>
-import { inject, onMounted } from 'vue';
-import type { ILoadingContext } from '../interfaces/context/loading.interface';
-import backendApi from '../api/api';
-import { useRouter } from 'vue-router';
+import { inject, onMounted } from "vue";
+import type { ILoadingContext } from "../interfaces/context/loading.interface";
+import backendApi from "../api/api";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
-const { handleChangeIsLoading } = inject('isLoading') as ILoadingContext;
+const { handleChangeIsLoading } = inject("isLoading") as ILoadingContext;
 
 const clickFooter = () => {
-    window.open('https://github.com/GustavoSMelo/planeja.ai-frontend', 'blank');
+    window.open(
+        "https://github.com/GustavoSMelo/planossauro-frontend",
+        "blank",
+    );
 };
 
 const loginGithubPage = () => {
-    window.location.assign(`https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&scope=read:user,user:email,`);
+    window.location.assign(
+        `https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&scope=read:user,user:email,`,
+    );
 };
 
 const loadGoogleSignInPage = () => {
-
     const params = new URLSearchParams({
         client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
         redirect_uri: `${window.location.origin}/callback/google`,
         response_type: "token",
-        scope: "profile email"
+        scope: "profile email",
     });
 
     window.location.href = `http://accounts.google.com/o/oauth2/v2/auth?${params}`;
 };
 
-
 onMounted(async () => {
-    const token = sessionStorage.getItem('@auth/token') ?? '';
-    const uuid = sessionStorage.getItem('uuid') ?? '';
+    const token = sessionStorage.getItem("@auth/token") ?? "";
+    const uuid = sessionStorage.getItem("uuid") ?? "";
 
     if (!token || !uuid) return;
 
@@ -41,7 +44,7 @@ onMounted(async () => {
 
         if (response.status === 200) {
             handleChangeIsLoading(false);
-            router.push('/app');
+            router.push("/app");
         }
 
         handleChangeIsLoading(false);
@@ -54,19 +57,27 @@ onMounted(async () => {
 <template>
     <div class="loginContainer">
         <div class="loginWrapper">
-            <h2>{{ $t('login.title') }}</h2>
+            <h2>{{ $t("login.title") }}</h2>
 
-            <button type="button" class="btnSocialMediaLogin btnGoogle firstButton" @click="loadGoogleSignInPage">
-                <i class="pi pi-google"></i>{{ $t('login.btnGoogle') }}
+            <button
+                type="button"
+                class="btnSocialMediaLogin btnGoogle firstButton"
+                @click="loadGoogleSignInPage"
+            >
+                <i class="pi pi-google"></i>{{ $t("login.btnGoogle") }}
             </button>
 
             <small>ou</small>
 
-            <button type="button" class="btnSocialMediaLogin btnGithub" @click="loginGithubPage()">
-                <i class="pi pi-github"></i>{{ $t('login.btnGithub') }}
+            <button
+                type="button"
+                class="btnSocialMediaLogin btnGithub"
+                @click="loginGithubPage()"
+            >
+                <i class="pi pi-github"></i>{{ $t("login.btnGithub") }}
             </button>
         </div>
-        <footer @click="clickFooter()">{{ $t('login.developedBy') }}</footer>
+        <footer @click="clickFooter()">{{ $t("login.developedBy") }}</footer>
     </div>
 </template>
 

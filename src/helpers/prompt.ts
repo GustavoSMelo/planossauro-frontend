@@ -42,13 +42,13 @@ export const getPromptEN = (qsn: string, activity: string): string => {
 
                     the response must be exactly like this, do not generate more or less text: {
                         contextualizacao: answer,
-                        eixo: answer
-                        saber01: answer,
-                        saber02: answer,
-                        aprendizagem01: answer,
-                        aprendizagem02: answer,
-                        foco_avaliativo: answer,
-                        materiais: answer
+                        eixo: answer (string)
+                        saber01: answer (string),
+                        saber02: answer (string),
+                        aprendizagem01: answer (string),
+                        aprendizagem02: answer (string),
+                        foco_avaliativo: answer (string),
+                        materiais: answer (string)
                     }
                     `;
     return prompt;

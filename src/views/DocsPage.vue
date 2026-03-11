@@ -1,14 +1,17 @@
 <script lang="ts" setup>
 import { useDark, useToggle } from "@vueuse/core";
 import { onMounted, onUnmounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
+const { t } = useI18n();
 const isDark = useDark({
     attribute: "data-theme",
     valueDark: "dark",
     valueLight: "light",
 });
-
 const toggle = useToggle(isDark);
+const router = useRouter();
 
 const activeSection = ref("intro");
 
@@ -73,9 +76,9 @@ onUnmounted(() => {
 </script>
 <template>
     <nav class="navbarContainer">
-        <span>
-            <img src="../assets/DinoLogo.svg" alt="planeja.ai logo" />
-            <h3>Planeja.ai</h3>
+        <span @click="router.push('/')">
+            <img src="../assets/DinoLogo.svg" alt="Planossauro logo" />
+            <h3>Planossauro</h3>
         </span>
 
         <button type="button" @click="toggle()">
@@ -90,52 +93,50 @@ onUnmounted(() => {
                     :class="{ active: activeSection === 'intro' }"
                     @click="scrollToSection('intro')"
                 >
-                    <span>#</span> Introducao
+                    <span>#</span> {{ t("docs.nav.intro") }}
                 </li>
                 <li
                     :class="{ active: activeSection === 'createPlanning' }"
                     @click="scrollToSection('createPlanning')"
                 >
-                    <span>#</span> Criar planejamento
+                    <span>#</span> {{ t("docs.nav.createPlanning") }}
                 </li>
                 <li
                     :class="{ active: activeSection === 'planningList' }"
                     @click="scrollToSection('planningList')"
                 >
-                    <span>#</span> Listar planejamentos
+                    <span>#</span> {{ t("docs.nav.planningList") }}
                 </li>
                 <li
                     :class="{ active: activeSection === 'plans' }"
                     @click="scrollToSection('plans')"
                 >
-                    <span>#</span> Planos e assinatura
+                    <span>#</span> {{ t("docs.nav.plans") }}
                 </li>
                 <li
                     :class="{ active: activeSection === 'support' }"
                     @click="scrollToSection('support')"
                 >
-                    <span>#</span> Suporte
+                    <span>#</span> {{ t("docs.nav.support") }}
                 </li>
                 <li
                     :class="{ active: activeSection === 'accountDelete' }"
                     @click="scrollToSection('accountDelete')"
                 >
-                    <span>#</span> Deletar conta
+                    <span>#</span> {{ t("docs.nav.accountDelete") }}
                 </li>
             </ul>
         </aside>
         <div class="aboutContent" :data-theme="isDark ? 'dark' : 'light'">
             <span class="softwareTitle">
-                <img src="../assets/DinoLogo.svg" alt="planeja.ai logo" />
-                <h2>Planeja.ai</h2>
+                <img src="../assets/DinoLogo.svg" alt="Planossauro logo" />
+                <h2>{{ t("docs.title") }}</h2>
             </span>
 
             <section id="intro">
-                <h3># Introdução</h3>
+                <h3># {{ t("docs.intro.title") }}</h3>
                 <p>
-                    Essa documentacao visa responder algumas duvidas de
-                    usabilidade de sistema e ser um onboarding de todo o
-                    aplicativo
+                    {{ t("docs.intro.description") }}
                 </p>
 
                 <figure class="dinoCookieContainer">
@@ -143,18 +144,10 @@ onUnmounted(() => {
                 </figure>
             </section>
             <section id="createPlanning">
-                <h3># Como criar um planejamento ?</h3>
+                <h3># {{ t("docs.createPlanning.title") }}</h3>
 
                 <p>
-                    Primeiramente voce precisa criar uma conta no app, para
-                    isso, basta clickar em Login e conectar sua conta do Google
-                    ou Github, apos isso, entre na pagina Home, va para aba de
-                    "Planejar" ou "Design", nessa aba, voce podera escolher duas
-                    opcoes, semanal ou diario. Escolhendo qualquer uma das
-                    opcoes, preencha o formulario e click em avancar, preencha
-                    os detalhes da escola e click em finalizar e escolha seu
-                    template, espere o planejamento ficar pronto que ele sera
-                    baixado automaticamente
+                    {{ t("docs.createPlanning.description") }}
                 </p>
                 <video class="dinoDemoPlan" controls speed="2">
                     <source src="../assets/demo_plan.mp4" type="video/mp4" />
@@ -165,14 +158,9 @@ onUnmounted(() => {
                 <figure class="dinoTabletWorks">
                     <img src="../assets/tablet_green.png" alt="planejamento" />
                 </figure>
-                <h3># Como verificar os planejamentos ja criados ?</h3>
+                <h3># {{ t("docs.planningList.title") }}</h3>
                 <p>
-                    Dentro do sistema, clique em "Planejamentos", nisso ira
-                    aparecer uma tabela listando todos os planejamentos ja
-                    criado por voce, voce pode escolher baixar o planejamento,
-                    editar informacoes basicas ou ate mesmo exclui-lo. Caso
-                    precise, podera utilizar os campos de busca para ter uma
-                    listagem mais assertiva
+                    {{ t("docs.planningList.description") }}
                 </p>
             </section>
 
@@ -180,81 +168,49 @@ onUnmounted(() => {
                 <figure class="dinoHappyYellow">
                     <img src="../assets/happy_yellow.png" alt="yellow dino" />
                 </figure>
-                <h3># Sobre planos e assinatura</h3>
-                <h4>## Como fazer um upgrade ?</h4>
+                <h3># {{ t("docs.plans.title") }}</h3>
+                <h4>## {{ t("docs.plans.upgrade.title") }}</h4>
                 <p class="aboutPlans">
-                    Ao realizar o login no app, eh possivel verificar nas suas
-                    abas que possuimos a aba de "plano", clicando nessa aba
-                    podera ver as informacoes do plano e do historico de
-                    pagamentos. Para fazer o upgrade, click no botao "Alterar
-                    plano", escolha o plano que mais encaixa com seu perfil e
-                    click em "Escolher". Sera aberta uma nova pagina para voce
-                    fazer o pagamento, apos isso, volte ao sistema e atualize a
-                    pagina, caso nao funcione, sai e entre no sistema novamente,
-                    caso nao funcione, espere alguns minutos. Se nada disso
-                    funcionar, podera entrar em contato conosco que iremos
-                    resolver seu problema.
+                    {{ t("docs.plans.upgrade.description") }}
                 </p>
 
-                <h4>## Como fazer um downgrade ?</h4>
+                <h4>## {{ t("docs.plans.downgrade.title") }}</h4>
                 <p class="aboutPlans">
-                    Para fazer o downgrade eh o mesmo processo, porem voce
-                    precisara escolher um plano diferente do seu atual, apos
-                    fazer isso, confirme a escolha do plano e ele sera
-                    atualizado automaticamente.
+                    {{ t("docs.plans.downgrade.description") }}
                 </p>
 
-                <h4>## Como cancelar um plano ?</h4>
+                <h4>## {{ t("docs.plans.cancel.title") }}</h4>
                 <p class="aboutPlans">
-                    Cancelar um plano eh bem simples, voce simplesmente vai ate
-                    a aba de planos, e clica no botao de cancelar e depois no
-                    botao de confirmar, fazendo isso voce volta para o plano
-                    gratuito
+                    {{ t("docs.plans.cancel.description") }}
                 </p>
 
-                <h4>## Como Alterar o cartao ?</h4>
+                <h4>## {{ t("docs.plans.changeCard.title") }}</h4>
                 <p class="aboutPlans">
-                    Na pagina de planos, clique no botao de alterar cartao,
-                    nesse momento sera aberta uma tela para atualizar seus dados
-                    de pagamentos, apos isso, volte ao sistema e seu cartao sera
-                    atualizado
+                    {{ t("docs.plans.changeCard.description") }}
                 </p>
 
-                <h4>## Como baixar o comprovante de pagamento ?</h4>
+                <h4>## {{ t("docs.plans.downloadReceipt.title") }}</h4>
                 <p class="aboutPlans">
-                    No historico de pagamentos, clique no botao "download", voce
-                    recebera um .pdf com todas as informacoes necessarios sobre
-                    a comprovacao de seu pagamento.
+                    {{ t("docs.plans.downloadReceipt.description") }}
                 </p>
             </section>
             <section id="support">
-                <h3># Ajuda / Suporte</h3>
+                <h3># {{ t("docs.support.title") }}</h3>
                 <p>
-                    Para acessar a ajuda/suporte voce pode ir na aba de perfil e
-                    clickar no botao "Acessar ajuda", na categoria Ajuda/Suporte
+                    {{ t("docs.support.description") }}
                 </p>
             </section>
             <section id="accountDelete">
-                <h3># Exclusao de conta</h3>
+                <h3># {{ t("docs.accountDelete.title") }}</h3>
 
                 <p>
-                    Para realizar a exclusao de uma conta, primeiro voce deve
-                    validar ela, para isso clique no botao de validar que se
-                    encontra na aba de perfil, ao clicar nesse botao, ira
-                    receber um email na sua caixa de entrada e dentro do nosso
-                    app sera redirecionado para uma pagina para colocar o codigo
-                    de validacao. Ao colocar esse codigo, agora podera clicar no
-                    botao de excluir conta, apos isso, sua conta estara suspensa
-                    por 30 dias, podendo reativa-la a qualquer momento durante
-                    esse tempo. Passado esse periodo, sua conta sera excluida
-                    permanentemente
+                    {{ t("docs.accountDelete.description") }}
                 </p>
             </section>
         </div>
     </main>
     <footer>
-        App desenvolvido com muito amor, carinho e paciencia ❤️, por Gustavo S.
-        Melo
+        {{ t("docs.footer") }}
     </footer>
 </template>
 <style lang="scss" src="../styles/docspage.style.scss" scoped />
