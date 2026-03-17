@@ -75,7 +75,7 @@ onMounted(async () => {
             ).data as IAccessSanctumToken;
 
             setToken(response.token.plainTextToken);
-            sessionStorage.setItem("user", JSON.stringify(userHelper));
+            sessionStorage.setItem("user", JSON.stringify(userData));
             sessionStorage.setItem("loginType", "google");
             sessionStorage.setItem("accessToken", accessToken);
             sessionStorage.setItem("uuid", userData.uuid);
