@@ -19,7 +19,7 @@ const handleLogout = () => {
 
 const handleRestoreAccount = async () => {
     try {
-        const uuid = sessionStorage.getItem("uuid");
+        const uuid = JSON.parse(sessionStorage.getItem('user')).uuid;
         const response = await backendApi.patch(`/user/restore/${uuid}`);
 
         if (response.status === 200) {

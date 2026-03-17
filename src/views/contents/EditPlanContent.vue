@@ -94,7 +94,11 @@ const handleEditYourPlan = async (
 };
 
 const handleCancelSubscription = async () => {
-    const subscriptionId = sessionStorage.getItem("subscriptionId") ?? "";
+    const userUUID = JSON.parse(sessionStorage.getItem("user")).uuid ?? "";
+    const subscriptionResponse = await backendApi.get(
+        `/subscription/${userUUID}`,
+    );
+    const subscriptionId = subscriptionResponse.data.subscription.uuid;
     await backendApi.delete(`/subscription/cancel/${subscriptionId}`);
     handleChangePopupInfo(
         "Plano free assinado, plano anterior cancelado",
@@ -105,7 +109,7 @@ const handleCancelSubscription = async () => {
 };
 
 onMounted(async () => {
-    const userUUID = sessionStorage.getItem("uuid") ?? "";
+    const userUUID = JSON.parse(sessionStorage.getItem("user")).uuid ?? "";
 
     if (!userUUID.length) return;
 

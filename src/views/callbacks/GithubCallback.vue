@@ -89,7 +89,6 @@ watchEffect(async () => {
                 setToken(response.token.plainTextToken);
                 sessionStorage.setItem("user", JSON.stringify(userData));
                 sessionStorage.setItem("loginType", "github");
-                sessionStorage.setItem("uuid", userData.uuid);
                 popupContext.handleChangePopupInfo(
                     t("githubcallback.messageSuccess"),
                     "success",

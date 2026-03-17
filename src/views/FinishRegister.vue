@@ -161,7 +161,6 @@ const handleGithubSave = async () => {
             user.value = { ...responseData };
             user.value.github_is_validated = false;
             showCodeConfirmationScreen.value = true;
-            sessionStorage.setItem("uuid", responseData.uuid);
             sessionStorage.setItem("user", JSON.stringify(user.value));
             popupContext.handleChangePopupInfo(
                 t("finishRegister.registrationSuccess"),
@@ -235,7 +234,6 @@ const handleGoogleSave = async () => {
                 `/subscription/assign/free/${responseData.uuid}`,
             );
 
-            sessionStorage.setItem("uuid", responseData.uuid);
             sessionStorage.setItem("user", JSON.stringify(user.value));
             popupContext.handleChangePopupInfo(
                 t("finishRegister.registrationSuccess"),

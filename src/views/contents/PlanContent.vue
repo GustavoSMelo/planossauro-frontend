@@ -40,7 +40,7 @@ const { t } = useI18n();
 const { handleChangePopupInfo } = inject("popup") as IPopupContext;
 
 const handleGetPlanContent = async () => {
-    const uuid = sessionStorage.getItem("uuid");
+    const uuid = JSON.parse(sessionStorage.getItem("user")).uuid;
     const response = (await backendApi.get(`/subscription/${uuid}`)).data as {
         subscription: ISubscription;
         plan: IPlan;
@@ -57,7 +57,7 @@ const handleGetPlanContent = async () => {
 };
 
 const handleGetPaymentHistory = async () => {
-    const uuid = await sessionStorage.getItem("uuid");
+    const uuid = await JSON.parse(sessionStorage.getItem("user")).uuid;
     const response = (await backendApi.get(`/payment/history/${uuid}`))
         .data as IPaymentHistory;
 
@@ -66,7 +66,7 @@ const handleGetPaymentHistory = async () => {
 };
 
 const handleChangeCardNumbers = async () => {
-    const userId = sessionStorage.getItem("uuid") ?? "";
+    const userId = JSON.parse(sessionStorage.getItem("user")).uuid ?? "";
     if (!userId) return;
 
     const response = await backendApi.put(
@@ -81,7 +81,11 @@ const handleChangeCardNumbers = async () => {
 };
 
 const handleCancelSubscription = async () => {
-    const subscriptionId = sessionStorage.getItem("subscriptionId") ?? "";
+    const userUUID = JSON.parse(sessionStorage.getItem("user")).uuid ?? "";
+    const subscriptionResponse = await backendApi.get(
+        `/subscription/${userUUID}`,
+    );
+    const subscriptionId = subscriptionResponse.data.subscription.uuid;
     await backendApi.delete(`/subscription/cancel/${subscriptionId}`);
     handleChangePopupInfo(
         "Plano free assinado, plano anterior cancelado",
@@ -229,7 +233,10 @@ onMounted(() => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(paymentH, index) in paymentHistory.payments" :key="paymentH.payment_date">
+                    <tr
+                        v-for="(paymentH, index) in paymentHistory.payments"
+                        :key="paymentH.payment_date"
+                    >
                         <td :data-cell="`${t('plans.date')}:`">
                             {{ convertIsoDateToBR(paymentH.payment_date) }}
                         </td>

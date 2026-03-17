@@ -89,7 +89,7 @@ const getTicketId = (length: number = 12) => {
 const handleSendSupport = async () => {
     if (hasEmptyFields()) return;
 
-    const uuid = sessionStorage.getItem("uuid") ?? "";
+    const uuid = JSON.parse(sessionStorage.getItem('user')).uuid ?? "";
 
     if (!uuid) return;
 
@@ -121,7 +121,7 @@ const handleSendSupport = async () => {
 const handleGetInformations = async () => {
     try {
         const token = getToken();
-        const uuid = sessionStorage.getItem("uuid");
+        const uuid = JSON.parse(sessionStorage.getItem('user')).uuid;
         const user = sessionStorage.getItem("user") ?? "";
 
         if (!user || !user.length || user === null)

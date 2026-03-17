@@ -77,8 +77,6 @@ onMounted(async () => {
             setToken(response.token.plainTextToken);
             sessionStorage.setItem("user", JSON.stringify(userData));
             sessionStorage.setItem("loginType", "google");
-            sessionStorage.setItem("accessToken", accessToken);
-            sessionStorage.setItem("uuid", userData.uuid);
             popupContext.handleChangePopupInfo(
                 "Login realizado com sucesso",
                 "success",
@@ -92,7 +90,6 @@ onMounted(async () => {
         sessionStorage.setItem("loginType", "google");
         sessionStorage.setItem("googleEmail", googleResponse.email);
         sessionStorage.setItem("googleId", googleResponse.sub);
-        sessionStorage.setItem("accessToken", accessToken);
         sessionStorage.setItem("fullName", googleResponse.name);
 
         router.push(`/finish/login?at=${accessToken}`);
@@ -101,7 +98,6 @@ onMounted(async () => {
     sessionStorage.setItem("loginType", "google");
     sessionStorage.setItem("googleEmail", googleResponse.email);
     sessionStorage.setItem("googleId", googleResponse.sub);
-    sessionStorage.setItem("accessToken", accessToken);
     sessionStorage.setItem("fullName", googleResponse.name);
 
     router.push(`/finish/login?at=${accessToken}`);

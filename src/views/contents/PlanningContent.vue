@@ -215,7 +215,7 @@ const showTemplatePreviewChoose = () => {
 
 const generatePlan = async () => {
     try {
-        const uuid = sessionStorage.getItem("uuid");
+        const uuid = JSON.parse(sessionStorage.getItem('user')).uuid;
         const dashboardResponse = (
             await backendApi.get(`/subscription/dashboard/${uuid}`)
         ).data as IDashboard;
@@ -402,7 +402,7 @@ const generatePlan = async () => {
             saveAs(blob, "planejamento.docx");
 
             const docB64 = doc.toBase64();
-            const uuid = sessionStorage.getItem("uuid");
+            const uuid = JSON.parse(sessionStorage.getItem('user')).uuid;
 
             await backendApi.post("/planning", {
                 document_b64: docB64,
@@ -564,7 +564,7 @@ const generatePlan = async () => {
             saveAs(blob, "planejamento.docx");
 
             const docB64 = doc.toBase64();
-            const uuid = sessionStorage.getItem("uuid");
+            const uuid = JSON.parse(sessionStorage.getItem('user')).uuid;
 
             await backendApi.post("/planning", {
                 document_b64: docB64,

@@ -31,7 +31,7 @@ const { handleChangeIsLoading } = inject("isLoading") as ILoadingContext;
 const getDataFromAPI = async () => {
     try {
         handleChangeIsLoading(true);
-        const uuid = sessionStorage.getItem("uuid");
+        const uuid = JSON.parse(sessionStorage.getItem('user')).uuid;
         const { data: planningsDataList }: { data: Array<IPlanning> } = (
             await backendApi.get(
                 `/planning/paginate/${uuid}?page=${currentPage.value}`,
@@ -99,7 +99,7 @@ const searchByFilterParameters = async () => {
     try {
         handleChangeIsLoading(true);
 
-        const uuid = sessionStorage.getItem("uuid");
+        const uuid = JSON.parse(sessionStorage.getItem('user')).uuid;
         const planningsResponse = (
             await backendApi.post(`/planning/search/${uuid}`, {
                 school_name: schoolName.value,

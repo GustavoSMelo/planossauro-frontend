@@ -26,13 +26,12 @@ const handleGetPercentual = (usedTokens: number, maxTokens: number): number => {
 const handleGetDashboardInformation = async () => {
     try {
         handleChangeIsLoading(true);
-        const uuid = sessionStorage.getItem("uuid");
+        const uuid = JSON.parse(sessionStorage.getItem("user")).uuid;
         const response = (
             await backendApi.get(`/subscription/dashboard/${uuid}`)
         ).data as IDashboard;
 
         dashboard.value = { ...response };
-        sessionStorage.setItem("subscriptionId", response.subscription_id);
         handleChangeIsLoading(false);
     } catch {
         handleChangeIsLoading(false);

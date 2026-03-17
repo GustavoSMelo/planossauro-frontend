@@ -187,7 +187,7 @@ const handleConnectGoogleAccount = () => {
 
 const handleDeleteAccount = async () => {
     try {
-        const uuid = sessionStorage.getItem("uuid") ?? "";
+        const uuid = JSON.parse(sessionStorage.getItem('user')).uuid ?? "";
         const response = await backendApi.delete(`/user/${uuid}`);
 
         if (response.status === 200) {
@@ -201,7 +201,7 @@ const handleDeleteAccount = async () => {
 };
 
 const logout = async () => {
-    const uuid = sessionStorage.getItem("uuid") ?? "";
+    const uuid = JSON.parse(sessionStorage.getItem('user')).uuid ?? "";
     await backendApi.delete(`/logout/${uuid}`);
     sessionStorage.clear();
     handleChangePopupInfo(t("profile.logoutMessage"), "info", true);
@@ -261,7 +261,7 @@ const handleSendValidationEmail = async (loginType: ILoginType["types"]) => {
 const handleUnlinkAccount = async () => {
     try {
         handleChangeIsLoading(true);
-        const uuid = sessionStorage.getItem("uuid") ?? "";
+        const uuid = JSON.parse(sessionStorage.getItem('user')).uuid ?? "";
         await backendApi.patch(`/user/unlink/${uuid}`, {
             unlink: unlinkAccountChoose.value,
         });

@@ -28,7 +28,7 @@ const logout = () => {
 };
 
 const getPlan = async () => {
-    const uuid = sessionStorage.getItem("uuid");
+    const uuid = JSON.parse(sessionStorage.getItem('user')).uuid;
     const subscription = (await backendApi.get(`/subscription/${uuid}`)).data
         .subscription as ISubscription;
     const selectedPlan = (
