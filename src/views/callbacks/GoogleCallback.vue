@@ -68,6 +68,7 @@ onMounted(async () => {
                 uuid: userData.uuid,
                 google_email: userData.google_email,
                 github_email: userData.github_email,
+                created_at: userData.created_at,
             };
 
             const response = (
@@ -75,7 +76,7 @@ onMounted(async () => {
             ).data as IAccessSanctumToken;
 
             setToken(response.token.plainTextToken);
-            sessionStorage.setItem("user", JSON.stringify(userData));
+            sessionStorage.setItem("user", JSON.stringify(userHelper));
             sessionStorage.setItem("loginType", "google");
             popupContext.handleChangePopupInfo(
                 "Login realizado com sucesso",

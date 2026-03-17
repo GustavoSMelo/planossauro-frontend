@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, ref } from "vue";
+import { inject, ref, onMounted } from "vue";
 import type { IUser } from "../../interfaces/api/user.interface";
 import convertIsoDateToBR from "../../helpers/dateIsoConvertToBR";
 import type { ILoadingContext } from "../../interfaces/context/loading.interface";
@@ -32,11 +32,30 @@ const unlinkAccountChoose = ref<"" | "google" | "github">("");
 const router = useRouter();
 const { handleChangeIsLoading } = inject("isLoading") as ILoadingContext;
 const { handleChangePopupInfo } = inject("popup") as IPopupContext;
-const userFromSession = sessionStorage.getItem("user") as string;
+const userFromSession = JSON.parse(sessionStorage.getItem("user") as string);
+const userUuid = userFromSession?.uuid ?? "";
 const { t, locale } = useI18n();
 
-user.value = { ...JSON.parse(userFromSession) };
-duplicateUser.value = { ...JSON.parse(userFromSession) };
+onMounted(async () => {
+    try {
+        handleChangeIsLoading(true);
+        const userResponse = await backendApi.get(`/user/${userUuid}`);
+        user.value = userResponse.data;
+        duplicateUser.value = { ...userResponse.data };
+
+        const minimalUserData = {
+            google_email: userResponse.data.google_email,
+            github_email: userResponse.data.github_email,
+            uuid: userResponse.data.uuid,
+            created_at: userResponse.data.created_at,
+        };
+        sessionStorage.setItem("user", JSON.stringify(minimalUserData));
+        handleChangeIsLoading(false);
+    } catch {
+        handleChangePopupInfo(t("profile.errorLoadingUser"), "error", true);
+        handleChangeIsLoading(false);
+    }
+});
 
 const handleChangeCellphone = (event: Event): void => {
     let { value } = event.target as HTMLInputElement;
@@ -187,7 +206,7 @@ const handleConnectGoogleAccount = () => {
 
 const handleDeleteAccount = async () => {
     try {
-        const uuid = JSON.parse(sessionStorage.getItem('user')).uuid ?? "";
+        const uuid = JSON.parse(sessionStorage.getItem("user")).uuid ?? "";
         const response = await backendApi.delete(`/user/${uuid}`);
 
         if (response.status === 200) {
@@ -201,7 +220,7 @@ const handleDeleteAccount = async () => {
 };
 
 const logout = async () => {
-    const uuid = JSON.parse(sessionStorage.getItem('user')).uuid ?? "";
+    const uuid = JSON.parse(sessionStorage.getItem("user")).uuid ?? "";
     await backendApi.delete(`/logout/${uuid}`);
     sessionStorage.clear();
     handleChangePopupInfo(t("profile.logoutMessage"), "info", true);
@@ -261,7 +280,7 @@ const handleSendValidationEmail = async (loginType: ILoginType["types"]) => {
 const handleUnlinkAccount = async () => {
     try {
         handleChangeIsLoading(true);
-        const uuid = JSON.parse(sessionStorage.getItem('user')).uuid ?? "";
+        const uuid = JSON.parse(sessionStorage.getItem("user")).uuid ?? "";
         await backendApi.patch(`/user/unlink/${uuid}`, {
             unlink: unlinkAccountChoose.value,
         });
@@ -538,7 +557,7 @@ const handleUnlinkAccount = async () => {
                 </p>
                 <p class="createdAtText">
                     {{ t("profile.userSince") }}:
-                    {{ convertIsoDateToBR(user?.created_at as string) }}
+                    {{ convertIsoDateToBR((user?.created_at as string) ?? "") }}
                 </p>
                 <button type="button" @click="deleteAccountPopup = true">
                     <i class="pi pi-trash"></i>

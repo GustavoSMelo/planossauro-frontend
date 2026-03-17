@@ -212,11 +212,11 @@
             align-items: center;
 
             .planInfoContainer {
-                width: 80%;
+                width: 100%;
             }
 
             .fullColumnContentContainer {
-                width: 80%;
+                width: 100%;
                 margin-top: 40px;
 
                 .planningInfoContainer {
@@ -229,17 +229,20 @@
 }
 
 @media screen and (max-width: 960px) and (min-width: 700px) {
-    .homeContentContainer {
+    .initialHomeContent {
         width: 100%;
-        padding: 20px;
-        align-content: center;
-        align-items: center;
-        justify-content: center;
-        display: flex;
-        flex-direction: column;
+        .homeContentContainer {
+            width: 100%;
+            padding: 20px;
+            align-content: center;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            flex-direction: column;
 
-        .aditionalInformationsContainer {
-            width: 78%;
+            .aditionalInformationsContainer {
+                width: 100%;
+            }
         }
     }
 }

@@ -41,11 +41,11 @@ const goToAboutPage = () => {
                     </figure>
                     <h2>Seu planejador pessoal</h2>
                     <p>
-                        Lorem ipsum dolor sit, amet consectetur adipisicing
-                        elit. Ut nobis rem, perspiciatis nesciunt nulla mollitia
-                        quam fugit veniam et veritatis asperiores libero
-                        corrupti magnam. Molestias tenetur saepe laborum porro
-                        eveniet!
+                        Cansado(a) de demorar 1 hora ou mais todos os fins de
+                        semana para fazer seu planejamento? Seus problemas estao
+                        a 1 click de serem resolvidos, venha fazer seu
+                        planejamento em questao de segundos com o Planossauro
+                        (inicie gratuitamente sem vinculos)
                     </p>
 
                     <button
