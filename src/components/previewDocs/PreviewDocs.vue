@@ -11,7 +11,7 @@ const {
     planType: "Semanal" | "Diario";
 }>();
 
-import { inject, ref } from "vue";
+import { inject, nextTick, ref } from "vue";
 import type {
     ITemplateChoose,
     ITemplateChooseContext,
@@ -69,14 +69,16 @@ const handleChooseTemplate = (event: Event) => {
     event.stopPropagation();
 
     const newTemplateChoose = {
-        choosed: true,
         templateStyle: planVersion,
         templateType: planType,
     } as unknown as ITemplateChoose;
 
     handleChangeTemplateChoose({ ...newTemplateChoose, choosed: false });
-    handleChangeTemplateChoose({ ...newTemplateChoose });
+    nextTick(() =>
+        handleChangeTemplateChoose({ ...newTemplateChoose, choosed: true }),
+    );
 
+    console.log("cliquei");
     return;
 };
 </script>

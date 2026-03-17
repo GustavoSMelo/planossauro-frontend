@@ -29,6 +29,7 @@ import monthConverter from "../../helpers/monthConverter";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { useDark } from "@vueuse/core";
 import type { IUser } from "../../interfaces/api/user.interface";
+import sanitizeInput from "../../helpers/sanitizeInput";
 
 const isDark = useDark({
     attribute: "data-theme",
@@ -305,7 +306,9 @@ const generatePlan = async () => {
         if (planType.value === "Diario") {
             let activities = [];
             activities.push({
-                day1: plans.value.day1.map((classAtv) => classAtv),
+                day1: plans.value.day1.map((classAtv) =>
+                    sanitizeInput(classAtv),
+                ),
             });
             const qsnstring = JSON.stringify(qsnPTBR);
             const activity = JSON.stringify(activities);
@@ -354,23 +357,20 @@ const generatePlan = async () => {
             };
 
             if (response && import.meta.env.VITE_APP_MODE === "prod") {
+                console.log(response.data.message);
                 responseData = JSON.parse(
                     response.data.message
-                        .replaceAll(/\\/g, "")
+                        .toString()
                         .replaceAll("\n", "")
                         .replaceAll("`", "")
                         .replaceAll("json", "")
-                        .replaceAll("\n", ""),
+                        .replaceAll("-", ""),
                 ) as IClassPlanResponse;
             } else if (response) {
-                responseData = JSON.parse(
-                    (response!.data as IOllamaGemmaResponse).response
-                        .replaceAll(/\\/g, "")
-                        .replaceAll("\n", "")
-                        .replaceAll("`", "")
-                        .replaceAll("json", "")
-                        .replaceAll("\n", ""),
-                ) as IClassPlanResponse;
+                // [TODO] - CRIAR UM SISTEMA PARA CHECKAR A TIPAGEM DO JSON, SE FOR STRING, CAST TO JSON AND FIX IT
+                console.log(response.data.message["eixo"]);
+                console.log(response.data.message.eixo);
+                responseData = JSON.parse(response!.data.response);
             }
 
             const data = {
@@ -417,8 +417,8 @@ const generatePlan = async () => {
             for (let i = 1; i < 6; i++) {
                 const dayValue = `day${i}` as IDays["days"];
                 const temp = {} as Record<string, string[]>;
-                temp[dayValue] = plans.value[dayValue].map(
-                    (classAtv) => classAtv,
+                temp[dayValue] = plans.value[dayValue].map((classAtv) =>
+                    sanitizeInput(classAtv),
                 );
 
                 activities.push({ ...temp });
@@ -435,7 +435,9 @@ const generatePlan = async () => {
                     const qsn =
                         locale.value === "pt-BR" ? qsnPTBR : qsnENUS.qsn;
                     const qsnstring = JSON.stringify(qsn);
-                    const activity = JSON.stringify(item);
+                    const activity = sanitizeInput(
+                        JSON.stringify(item),
+                    ).toString();
 
                     let response: AxiosResponse | null = null;
 
@@ -463,21 +465,17 @@ const generatePlan = async () => {
                     if (response && import.meta.env.VITE_APP_MODE === "local") {
                         return JSON.parse(
                             (response.data as IOllamaGemmaResponse).response
-                                .replaceAll(/\\/g, "")
+                                .toString()
+                                .replaceAll("\\", "")
                                 .replaceAll("\n", "")
                                 .replaceAll("`", "")
-                                .replaceAll("json", ""),
+                                .replaceAll("json", "")
+                                .replaceAll("-", ""),
                         ) as IClassPlanResponse;
                     }
 
-                    return JSON.parse(
-                        response!.data.message
-                            .replaceAll(/\\/g, "")
-                            .replaceAll("\n", "")
-                            .replaceAll("`", "")
-                            .replaceAll("json", "")
-                            .replaceAll("\n", ""),
-                    ) as IClassPlanResponse;
+                    console.log(response?.data.message);
+                    return JSON.parse(response!.data.message);
                 }),
             );
 

@@ -1,30 +1,30 @@
 <script setup lang="ts">
-import { inject, watchEffect } from 'vue';
-import { useRouter } from 'vue-router';
-import { useI18n } from 'vue-i18n';
-import { setToken } from '../../helpers/token';
-import backendApi from '../../api/api';
-import isApiHealth from '../../api/healthCheck';
-import type { IGithubCallbackResponse } from '../../interfaces/githubCallback.interface';
-import type { IUser } from '../../interfaces/api/user.interface';
-import type { IPopupContext } from '../../interfaces/context/popup.interface';
-import type { IAccessSanctumToken } from '../../interfaces/auth.interface';
+import { inject, watchEffect } from "vue";
+import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
+import { setToken } from "../../helpers/token";
+import backendApi from "../../api/api";
+import isApiHealth from "../../api/healthCheck";
+import type { IGithubCallbackResponse } from "../../interfaces/githubCallback.interface";
+import type { IUser } from "../../interfaces/api/user.interface";
+import type { IPopupContext } from "../../interfaces/context/popup.interface";
+import type { IAccessSanctumToken } from "../../interfaces/auth.interface";
 
 const { t } = useI18n();
 
 watchEffect(async () => {
-    const popupContext: IPopupContext = inject('popup') as IPopupContext;
+    const popupContext: IPopupContext = inject("popup") as IPopupContext;
     const router = useRouter();
     const searchQueryString = window.location.search;
     const urlParams = new URLSearchParams(searchQueryString);
-    const codeParam = urlParams.get('code')
-    const error = urlParams.get('error');
-    const userJson = sessionStorage.getItem('user');
+    const codeParam = urlParams.get("code");
+    const error = urlParams.get("error");
+    const userJson = sessionStorage.getItem("user");
 
     const apiIsRunning = await isApiHealth();
 
     if (apiIsRunning === false) {
-        router.push('/offline');
+        router.push("/offline");
         return;
     }
 
@@ -35,31 +35,46 @@ watchEffect(async () => {
     }
 
     if (error) {
-        popupContext.handleChangePopupInfo(t('githubcallback.notAuthorized'), 'error', true);
-        router.push('/');
+        popupContext.handleChangePopupInfo(
+            t("githubcallback.notAuthorized"),
+            "error",
+            true,
+        );
+        router.push("/");
         return;
     }
 
-    const { data }: { data: IGithubCallbackResponse } = await backendApi.get(`/token/github/${codeParam}`);
+    const { data }: { data: IGithubCallbackResponse } = await backendApi.get(
+        `/token/github/${codeParam}`,
+    );
     if (data.data.email === null) {
-        popupContext.handleChangePopupInfo('', 'info', true);
-        router.push('/login');
+        popupContext.handleChangePopupInfo("", "info", true);
+        router.push("/login");
         return;
     }
 
     try {
         if (data.accessToken && data.accessToken.length) {
-            let { data: userData }: { data: IUser } = await backendApi.get(`/user/github/${data.data.email}`);
-            const userHasUuid = Object.keys(userData).find(key => key === 'uuid') ? true : false;
+            let { data: userData }: { data: IUser } = await backendApi.get(
+                `/user/github/${data.data.email}`,
+            );
+            const userHasUuid = Object.keys(userData).find(
+                (key) => key === "uuid",
+            )
+                ? true
+                : false;
 
             if (userHasUuid) {
-                if (user && user.uuid && (userData.uuid === user.uuid)) {
-                    const updatedUser = await backendApi.put(`/user/${user.uuid}`, {
-                        ...user,
-                        github_id: userData.github_id,
-                        github_email: userData.github_email,
-                        github_is_validated: false
-                    });
+                if (user && user.uuid && userData.uuid === user.uuid) {
+                    const updatedUser = await backendApi.put(
+                        `/user/${user.uuid}`,
+                        {
+                            ...user,
+                            github_id: userData.github_id,
+                            github_email: userData.github_email,
+                            github_is_validated: false,
+                        },
+                    );
 
                     userData = { ...updatedUser.data.user };
                 }
@@ -67,52 +82,70 @@ watchEffect(async () => {
                 userData.google_validation_code = null;
                 userData.sms_validation_code = null;
 
-                const response = (await backendApi.get(`/auth/github/${data.accessToken}`)).data as IAccessSanctumToken;
+                const response = (
+                    await backendApi.get(`/auth/github/${data.accessToken}`)
+                ).data as IAccessSanctumToken;
 
                 setToken(response.token.plainTextToken);
-                sessionStorage.setItem('user', JSON.stringify(userData));
-                sessionStorage.setItem('loginType', 'github');
-                sessionStorage.setItem('accessToken', data.accessToken);
-                sessionStorage.setItem('uuid', userData.uuid);
-                popupContext.handleChangePopupInfo(t('githubcallback.messageSuccess'), 'success', true);
+                sessionStorage.setItem("user", JSON.stringify(userData));
+                sessionStorage.setItem("loginType", "github");
+                sessionStorage.setItem("uuid", userData.uuid);
+                popupContext.handleChangePopupInfo(
+                    t("githubcallback.messageSuccess"),
+                    "success",
+                    true,
+                );
 
-                const editProfile = Boolean(sessionStorage.getItem('editProfile'));
+                const editProfile = Boolean(
+                    sessionStorage.getItem("editProfile"),
+                );
 
-                if (user && user.uuid === userData.uuid && editProfile && !userData.github_is_validated) {
-                    router.push('/finish/login?jumpToValidationCode=true');
+                if (
+                    user &&
+                    user.uuid === userData.uuid &&
+                    editProfile &&
+                    !userData.github_is_validated
+                ) {
+                    router.push("/finish/login?jumpToValidationCode=true");
                 } else {
-                    router.push('/app');
+                    router.push("/app");
                 }
                 return;
             }
 
-            sessionStorage.setItem('loginType', 'github');
-            sessionStorage.setItem('githubEmail', data.data.email);
-            sessionStorage.setItem('githubId', Number(data.data.id).toString());
-            sessionStorage.setItem('accessToken', data.accessToken);
-            sessionStorage.setItem('fullName', data.data.name ? data.data.name : data.data.login);
+            sessionStorage.setItem("loginType", "github");
+            sessionStorage.setItem("githubEmail", data.data.email);
+            sessionStorage.setItem("githubId", Number(data.data.id).toString());
+            sessionStorage.setItem(
+                "fullName",
+                data.data.name ? data.data.name : data.data.login,
+            );
 
             router.push(`/finish/login?at=${data.accessToken}`);
         }
     } catch {
-        sessionStorage.setItem('loginType', 'github');
-        sessionStorage.setItem('githubEmail', data.data.email);
-        sessionStorage.setItem('githubId', Number(data.data.id).toString());
-        sessionStorage.setItem('accessToken', data.accessToken);
-        sessionStorage.setItem('fullName', data.data.name ? data.data.name : data.data.login);
+        sessionStorage.setItem("loginType", "github");
+        sessionStorage.setItem("githubEmail", data.data.email);
+        sessionStorage.setItem("githubId", Number(data.data.id).toString());
+        sessionStorage.setItem(
+            "fullName",
+            data.data.name ? data.data.name : data.data.login,
+        );
 
         router.push(`/finish/login?githubCode=${codeParam}`);
     }
-
 });
-
 </script>
 
 <template>
     <div class="githubCallbackContainer">
-        <h2>{{ t('githubcallback.workingOnLogin') }}</h2>
+        <h2>{{ t("githubcallback.workingOnLogin") }}</h2>
         <i class="pi pi-github"></i>
     </div>
 </template>
 
-<style src="../../styles/callbacks/githubcallback.style.scss" lang="scss" scoped />
+<style
+    src="../../styles/callbacks/githubcallback.style.scss"
+    lang="scss"
+    scoped
+/>

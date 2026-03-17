@@ -464,10 +464,23 @@ footer {
                     overflow: scroll;
                     justify-content: left;
                     width: fit-content;
+                    scroll-snap-type: x mandatory;
+                    scroll-behavior: smooth;
+                    user-select: none;
+                    scrollbar-width: none;
+                    -ms-overflow-style: none;
 
                     figure {
                         width: 280px;
                     }
+
+                    figure:hover {
+                        transform: scale(1);
+                    }
+                }
+
+                section:hover {
+                    transform: scale(1);
                 }
             }
             .featuresContainer::-webkit-scrollbar {

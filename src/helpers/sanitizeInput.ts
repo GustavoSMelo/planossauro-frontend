@@ -1,0 +1,38 @@
+const sanitizeInput = (input: string) => {
+    return input
+        .trim()
+        .toLowerCase()
+        .replaceAll("[", "")
+        .replaceAll("]", "")
+        .replaceAll("!", "")
+        .replaceAll("@", "")
+        .replaceAll("#", "")
+        .replaceAll("$", "")
+        .replaceAll("%", "")
+        .replaceAll("^", "")
+        .replaceAll("&", "")
+        .replaceAll("*", "")
+        .replaceAll("+", "")
+        .replaceAll("-", "")
+        .replaceAll("(", "")
+        .replaceAll(")", "")
+        .replaceAll("'", "")
+        .replaceAll("<", "")
+        .replaceAll(">", "")
+        .replaceAll("/", "")
+        .replaceAll("\\", "")
+        .replaceAll("`", "")
+        .replaceAll("|", "")
+        .replaceAll("{", "")
+        .replaceAll("}", "")
+        .replaceAll("_", "")
+        .replaceAll(";", "")
+        .replaceAll("=", "(sinal de igual)")
+        .replaceAll("create", "")
+        .replaceAll("drop", "")
+        .replaceAll("truncate", "")
+        .trim()
+        .toString();
+};
+
+export default sanitizeInput;

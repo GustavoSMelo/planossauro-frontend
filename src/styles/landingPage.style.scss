@@ -220,7 +220,7 @@
     }
 }
 
-@media screen and (max-width: 980px) {
+@media screen and (max-width: 1150px) {
     .containerLP {
         .wrapper {
             .mainContent {
@@ -254,6 +254,15 @@
 
                 div {
                     width: 90%;
+
+                    figure {
+                        img {
+                            width: 65px;
+                        }
+                        figcaption {
+                            font-size: 42pt;
+                        }
+                    }
                 }
             }
         }
@@ -278,7 +287,7 @@
                             width: 65px;
                         }
                         figcaption {
-                            font-size: 40pt;
+                            font-size: 32pt;
                         }
                     }
                 }
@@ -303,7 +312,7 @@
                             width: 55px;
                         }
                         figcaption {
-                            font-size: 32pt;
+                            font-size: 30pt;
                         }
                     }
 
@@ -323,7 +332,7 @@
                 div {
                     figure {
                         figcaption {
-                            font-size: 26pt;
+                            font-size: 24pt;
                         }
                     }
                 }
