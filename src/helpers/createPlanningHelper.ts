@@ -38,7 +38,7 @@ const parseLLMResponse = (rawResponse: string): IClassPlanResponse => {
     }
 };
 
-const validateAndFillResponse = (parsed: Array<string>): IClassPlanResponse => {
+const validateAndFillResponse = (parsed: Record<string, unknown>): IClassPlanResponse => {
     const requiredFields = [
         "contextualizacao",
         "aprendizagem01",
@@ -63,7 +63,7 @@ const validateAndFillResponse = (parsed: Array<string>): IClassPlanResponse => {
 
     for (const field of requiredFields) {
         if (parsed[field] && typeof parsed[field] === "string") {
-            response[field] = parsed[field].trim();
+            (response as unknown as Record<string, string>)[field] = parsed[field].trim();
         }
     }
 
@@ -89,9 +89,9 @@ const extractResponseData = (
 ): IClassPlanResponse => {
     if (isLocal) {
         const localData = (response.data as IOllamaGemmaResponse).response;
-        return parseLLMResponse(localData, true);
+        return parseLLMResponse(localData);
     } else {
-        return parseLLMResponse(response.data.message, false);
+        return parseLLMResponse(response.data.message);
     }
 };
 

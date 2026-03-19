@@ -7,6 +7,7 @@ import type { IPopupContext } from "../interfaces/context/popup.interface";
 import { getToken } from "../helpers/token";
 import type { IUser } from "../interfaces/api/user.interface";
 import { useI18n } from "vue-i18n";
+import { useDark } from "@vueuse/core";
 
 const title = ref("");
 const category = ref("");
@@ -18,6 +19,11 @@ const { handleChangeIsLoading } = inject("isLoading") as ILoadingContext;
 const { handleChangePopupInfo } = inject("popup") as IPopupContext;
 const router = useRouter();
 const { t } = useI18n();
+const isDark = useDark({
+    attribute: "data-theme",
+    valueLight: "light",
+    valueDark: "dark",
+});
 
 const handleChangeTitle = (event: Event): void => {
     const target = event.target as HTMLInputElement;
@@ -55,7 +61,7 @@ const handleChangeFiles = (fileList: FileList): void => {
         ),
     );
 
-    files.value = validFiles;
+    files.value = [...files.value, ...validFiles];
 };
 
 const handleRemoveFileFromList = (removeIndex: number): void => {
@@ -89,7 +95,8 @@ const getTicketId = (length: number = 12) => {
 const handleSendSupport = async () => {
     if (hasEmptyFields()) return;
 
-    const uuid = JSON.parse(sessionStorage.getItem('user')).uuid ?? "";
+    const uuid =
+        JSON.parse(sessionStorage.getItem("user") ?? "{uuid: ''}").uuid ?? "";
 
     if (!uuid) return;
 
@@ -121,7 +128,9 @@ const handleSendSupport = async () => {
 const handleGetInformations = async () => {
     try {
         const token = getToken();
-        const uuid = JSON.parse(sessionStorage.getItem('user')).uuid;
+        const uuid = JSON.parse(
+            sessionStorage.getItem("user") ?? "{uuid: ''}",
+        ).uuid;
         const user = sessionStorage.getItem("user") ?? "";
 
         if (!user || !user.length || user === null)
@@ -146,8 +155,12 @@ onMounted(() => {
 });
 </script>
 <template>
-    <div class="supportContainer">
-        <div v-if="success" class="supportSuccess">
+    <div class="supportContainer" :data-theme="isDark ? 'dark' : 'light'">
+        <div
+            v-if="success"
+            class="supportSuccess"
+            :data-theme="isDark ? 'dark' : 'light'"
+        >
             <i class="pi pi-check-circle"></i>
             <h2>{{ t("support.success") }}</h2>
 
@@ -160,12 +173,20 @@ onMounted(() => {
                 <br />
                 {{ t("support.supportSuccessDescription") }}
             </p>
-            <button type="button" @click="router.push('/app')">
+            <button
+                type="button"
+                @click="router.push('/app')"
+                :data-theme="isDark ? 'dark' : 'light'"
+            >
                 {{ t("support.returnToApp") }}
             </button>
         </div>
 
-        <div v-else class="supportContent">
+        <div
+            v-else
+            class="supportContent"
+            :data-theme="isDark ? 'dark' : 'light'"
+        >
             <header>
                 <img src="../assets/DinoSupport.png" alt="dino support" />
                 <h3>{{ t("support.messageDinoBob") }}</h3>
@@ -231,14 +252,15 @@ onMounted(() => {
                         class="itemList"
                     >
                         <span
+                            :data-theme="isDark ? 'dark' : 'light'"
                             class="itemContainer"
                             v-if="item.type === 'application/pdf'"
                         >
                             <small
                                 >{{ item.name.slice(0, 8) }}.{{
                                     item.type.split("/")[1]
-                                }}</small
-                            >
+                                }}
+                            </small>
                             <img
                                 class="image"
                                 src="../assets/pdf.png"
@@ -249,12 +271,16 @@ onMounted(() => {
                                 @click="handleRemoveFileFromList(index)"
                             ></i>
                         </span>
-                        <span class="itemContainer" v-else>
+                        <span
+                            :data-theme="isDark ? 'dark' : 'light'"
+                            class="itemContainer"
+                            v-else
+                        >
                             <small
                                 >{{ item.name.slice(0, 8) }}.{{
                                     item.type.split("/")[1]
-                                }}</small
-                            >
+                                }}
+                            </small>
                             <img :src="returnTempURL(item)" alt="pdf icon" />
                             <i
                                 class="pi pi-trash"
@@ -265,10 +291,15 @@ onMounted(() => {
                 </div>
 
                 <span class="buttonsContainer">
-                    <button type="button" @click="router.push('/app')">
+                    <button
+                        :data-theme="isDark ? 'dark' : 'light'"
+                        type="button"
+                        @click="router.push('/app')"
+                    >
                         {{ t("support.cancel") }}
                     </button>
                     <button
+                        :data-theme="isDark ? 'dark' : 'light'"
                         type="button"
                         :class="hasEmptyFields() ? 'btnDisabled' : ''"
                         @click="handleSendSupport()"

@@ -94,7 +94,7 @@ const handleEditYourPlan = async (
 };
 
 const handleCancelSubscription = async () => {
-    const userUUID = JSON.parse(sessionStorage.getItem("user")).uuid ?? "";
+    const userUUID = JSON.parse(sessionStorage.getItem("user") ?? '{}').uuid ?? "";
     const subscriptionResponse = await backendApi.get(
         `/subscription/${userUUID}`,
     );
@@ -109,7 +109,7 @@ const handleCancelSubscription = async () => {
 };
 
 onMounted(async () => {
-    const userUUID = JSON.parse(sessionStorage.getItem("user")).uuid ?? "";
+    const userUUID = JSON.parse(sessionStorage.getItem("user") ?? '{}').uuid ?? "";
 
     if (!userUUID.length) return;
 

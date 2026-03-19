@@ -33,7 +33,8 @@ const loadGoogleSignInPage = () => {
 
 onMounted(async () => {
     const token = sessionStorage.getItem("@auth/token") ?? "";
-    const uuid = JSON.parse(sessionStorage.getItem('user')).uuid ?? "";
+    const uuid =
+        JSON.parse(sessionStorage.getItem("user") || "{uuid: ''}").uuid ?? "";
 
     if (!token || !uuid) return;
 

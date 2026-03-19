@@ -1,21 +1,20 @@
-FROM node:24.14-alpine
-
+# Estágio 1: Build
+FROM node:24.14-alpine AS build-stage
 WORKDIR /app
-
-COPY . .
-
-RUN apk update
-RUN apk add nginx
-
+COPY package*.json ./
 RUN npm install
+COPY . .
 RUN npm run build
+RUN rm -rf /app/node_modules
 
-RUN mkdir -p /usr/share/nginx/html
-RUN cp -r /app/dist/* /usr/share/nginx/html/
-RUN cp -r /app/nginx.conf /etc/nginx/http.d/default.conf
+FROM nginx:stable-alpine
 
-WORKDIR /usr/share/nginx/html
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+RUN touch /var/run/nginx.pid && \
+    chown -R nginx:nginx /var/run/nginx.pid /var/cache/nginx /var/log/nginx /etc/nginx/conf.d
+
+USER nginx
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
-
-EXPOSE 80

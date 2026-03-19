@@ -29,11 +29,18 @@
 
         h2 {
             margin-bottom: 20px;
+            color: var(--dp-text-color);
         }
 
         .ticket {
             margin-bottom: 20px;
             text-align: left;
+        }
+
+        b,
+        p {
+            color: var(--dp-text-color);
+            text-align: center;
         }
 
         button {
@@ -54,6 +61,15 @@
             transition: 0.4s;
             box-shadow: 2px 2px 8px var(--dp-light-gray);
         }
+
+        button:hover[data-theme="dark"] {
+            box-shadow: 0 0 0;
+        }
+    }
+
+    .supportSuccess[data-theme="dark"] {
+        box-shadow: 0 0 0;
+        border: solid 2px var(--dp-accent-color);
     }
 
     .supportContent {
@@ -78,6 +94,10 @@
             img {
                 width: 100px;
             }
+
+            h3 {
+                color: var(--dp-text-color);
+            }
         }
 
         form {
@@ -88,6 +108,7 @@
             label {
                 margin-top: 20px;
                 font-weight: bold;
+                color: var(--dp-text-color);
 
                 b {
                     color: var(--dp-red);
@@ -155,6 +176,11 @@
                             width: 110px;
                         }
 
+                        small {
+                            margin-bottom: 20px;
+                            font-weight: bold;
+                        }
+
                         i {
                             position: absolute;
                             right: -15px;
@@ -169,6 +195,14 @@
                         i:hover {
                             transition: 0.4s;
                             transform: scale(1.15);
+                        }
+                    }
+
+                    .itemContainer[data-theme="dark"] {
+                        box-shadow: 0 0 0;
+
+                        small {
+                            color: var(--dp-text-color);
                         }
                     }
                 }
@@ -207,6 +241,10 @@
                 box-shadow: 2px 2px 8px var(--dp-light-gray);
             }
 
+            button:hover[data-theme="dark"] {
+                box-shadow: 0 0 0;
+            }
+
             button:nth-child(1) {
                 border: solid 2px var(--dp-accent-color);
                 background-color: var(--dp-lightfall);
@@ -223,6 +261,11 @@
             color: var(--dp-text-color);
             font-weight: 500;
         }
+    }
+
+    .supportContent[data-theme="dark"] {
+        box-shadow: 0 0 0;
+        border: solid 2px var(--dp-text-color);
     }
 }
 

@@ -26,7 +26,7 @@ const handleGetPercentual = (usedTokens: number, maxTokens: number): number => {
 const handleGetDashboardInformation = async () => {
     try {
         handleChangeIsLoading(true);
-        const uuid = JSON.parse(sessionStorage.getItem("user")).uuid;
+        const uuid = JSON.parse(sessionStorage.getItem("user") ?? '{}').uuid;
         const response = (
             await backendApi.get(`/subscription/dashboard/${uuid}`)
         ).data as IDashboard;

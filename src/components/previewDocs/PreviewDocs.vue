@@ -28,7 +28,10 @@ const showPreviewContext = inject("showPreview") as IShowPreviewContext;
 const urlDoc = ref(
     isCustomDocs.trim().toLowerCase() === "true"
         ? customURLDoc
-        : `../../../public/planejamento${planType}${planVersion.value}.pdf`,
+        : new URL(
+              `../../assets/planejamento${planType}${planVersion.value}.pdf`,
+              import.meta.url,
+          ).href,
 );
 
 const stopPropagation = (event: Event): void => {
@@ -42,7 +45,10 @@ const handleNextButton = (): void => {
         planVersion.value = (planVersion.value + 1) as TPlanVersion;
     }
 
-    urlDoc.value = `../../../public/planejamento${planType}${planVersion.value}.pdf`;
+    urlDoc.value = new URL(
+        `../../assets/planejamento${planType}${planVersion.value}.pdf`,
+        import.meta.url,
+    ).href;
 };
 
 const handlePreviousButton = (): void => {
@@ -52,7 +58,10 @@ const handlePreviousButton = (): void => {
         planVersion.value = (planVersion.value - 1) as TPlanVersion;
     }
 
-    urlDoc.value = `../../../public/planejamento${planType}${planVersion.value}.pdf`;
+    urlDoc.value = new URL(
+        `../../assets/planejamento${planType}${planVersion.value}.pdf`,
+        import.meta.url,
+    ).href;
 };
 
 const handleClose = (): void => {

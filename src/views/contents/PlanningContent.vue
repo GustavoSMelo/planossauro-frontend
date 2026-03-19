@@ -215,7 +215,9 @@ const showTemplatePreviewChoose = () => {
 
 const generatePlan = async () => {
     try {
-        const uuid = JSON.parse(sessionStorage.getItem('user')).uuid;
+        const uuid = JSON.parse(
+            sessionStorage.getItem("user") ?? "{uuid: ''}",
+        ).uuid;
         const dashboardResponse = (
             await backendApi.get(`/subscription/dashboard/${uuid}`)
         ).data as IDashboard;
@@ -334,7 +336,10 @@ const generatePlan = async () => {
             }
 
             const planejamentoQSNFetch = await fetch(
-                `../../../public/planejamento${templateChoose.templateType}${templateChoose.templateStyle}.docx`,
+                new URL(
+                    `../../assets/planejamento${templateChoose.templateType}${templateChoose.templateStyle}.docx`,
+                    import.meta.url,
+                ).href,
             );
             const [arrayBuffer] = await Promise.all([
                 planejamentoQSNFetch.arrayBuffer(),
@@ -368,9 +373,15 @@ const generatePlan = async () => {
                 ) as IClassPlanResponse;
             } else if (response) {
                 // [TODO] - CRIAR UM SISTEMA PARA CHECKAR A TIPAGEM DO JSON, SE FOR STRING, CAST TO JSON AND FIX IT
-                console.log(response.data.message["eixo"]);
-                console.log(response.data.message.eixo);
-                responseData = JSON.parse(response!.data.response);
+                console.log(response.data.response);
+
+                responseData = JSON.parse(
+                    response!.data.response
+                        .replaceAll("\n", "")
+                        .replaceAll("`", "")
+                        .replaceAll("json", "")
+                        .replaceAll("-", ""),
+                );
             }
 
             const data = {
@@ -402,7 +413,9 @@ const generatePlan = async () => {
             saveAs(blob, "planejamento.docx");
 
             const docB64 = doc.toBase64();
-            const uuid = JSON.parse(sessionStorage.getItem('user')).uuid;
+            const uuid = JSON.parse(
+                sessionStorage.getItem("user") ?? "{uuid: ''}",
+            ).uuid;
 
             await backendApi.post("/planning", {
                 document_b64: docB64,
@@ -480,7 +493,10 @@ const generatePlan = async () => {
             );
 
             const planejamentoQSNFetch = await fetch(
-                `../../../public/planejamento${templateChoose.templateType}${templateChoose.templateStyle}.docx`,
+                new URL(
+                    `../../assets/planejamento${templateChoose.templateType}${templateChoose.templateStyle}.docx`,
+                    import.meta.url,
+                ).href,
             );
             const [arrayBuffer] = await Promise.all([
                 planejamentoQSNFetch.arrayBuffer(),
@@ -564,7 +580,9 @@ const generatePlan = async () => {
             saveAs(blob, "planejamento.docx");
 
             const docB64 = doc.toBase64();
-            const uuid = JSON.parse(sessionStorage.getItem('user')).uuid;
+            const uuid = JSON.parse(
+                sessionStorage.getItem("user") ?? "{uuid: ''}",
+            ).uuid;
 
             await backendApi.post("/planning", {
                 document_b64: docB64,

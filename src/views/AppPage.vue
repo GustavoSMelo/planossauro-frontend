@@ -39,7 +39,7 @@ const handleChangeValidationLoginType = (newValue: ILoginType["types"]) => {
 const handleGetInformations = async () => {
     try {
         const token = getToken();
-        const uuid = JSON.parse(sessionStorage.getItem('user')).uuid;
+        const uuid = JSON.parse(sessionStorage.getItem("user") ?? "").uuid;
         const user = sessionStorage.getItem("user") ?? "";
 
         if (!user || !user.length || user === null)

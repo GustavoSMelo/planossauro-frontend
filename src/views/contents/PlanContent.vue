@@ -40,7 +40,7 @@ const { t } = useI18n();
 const { handleChangePopupInfo } = inject("popup") as IPopupContext;
 
 const handleGetPlanContent = async () => {
-    const uuid = JSON.parse(sessionStorage.getItem("user")).uuid;
+    const uuid = JSON.parse(sessionStorage.getItem("user") ?? '{}').uuid;
     const response = (await backendApi.get(`/subscription/${uuid}`)).data as {
         subscription: ISubscription;
         plan: IPlan;
@@ -57,7 +57,7 @@ const handleGetPlanContent = async () => {
 };
 
 const handleGetPaymentHistory = async () => {
-    const uuid = await JSON.parse(sessionStorage.getItem("user")).uuid;
+    const uuid = JSON.parse(sessionStorage.getItem("user") ?? '{}').uuid;
     const response = (await backendApi.get(`/payment/history/${uuid}`))
         .data as IPaymentHistory;
 
@@ -66,7 +66,7 @@ const handleGetPaymentHistory = async () => {
 };
 
 const handleChangeCardNumbers = async () => {
-    const userId = JSON.parse(sessionStorage.getItem("user")).uuid ?? "";
+    const userId = JSON.parse(sessionStorage.getItem("user") ?? '{}').uuid ?? "";
     if (!userId) return;
 
     const response = await backendApi.put(
@@ -81,7 +81,7 @@ const handleChangeCardNumbers = async () => {
 };
 
 const handleCancelSubscription = async () => {
-    const userUUID = JSON.parse(sessionStorage.getItem("user")).uuid ?? "";
+    const userUUID = JSON.parse(sessionStorage.getItem("user") ?? '{}').uuid ?? "";
     const subscriptionResponse = await backendApi.get(
         `/subscription/${userUUID}`,
     );

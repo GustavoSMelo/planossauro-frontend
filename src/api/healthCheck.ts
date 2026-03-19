@@ -3,31 +3,34 @@ import backendApi from "./api";
 
 const isApiHealth = async () => {
     try {
-        const healthResponse = await backendApi.get('/health');
+        const healthResponse = await backendApi.get("/health");
 
         if (healthResponse.status > 300) {
-            sessionStorage.setItem('backendOfflineError', 'API is not running');
+            sessionStorage.setItem("backendOfflineError", "API is not running");
             return false;
-        };
+        }
 
         const healthServicesStatus = healthResponse.data as IHealthCheck;
 
         if (healthServicesStatus.api.status !== 200) {
-            sessionStorage.setItem('backendOfflineError', 'API is not running');
-            return false
-        };
+            sessionStorage.setItem("backendOfflineError", "API is not running");
+            return false;
+        }
 
         if (healthServicesStatus.database.status !== 200) {
-            sessionStorage.setItem('backendOfflineError', 'Database is not connected');
-            return false
-        };
+            sessionStorage.setItem(
+                "backendOfflineError",
+                "Database is not connected",
+            );
+            return false;
+        }
 
-        if (healthServicesStatus.github_api.status !== 200) {
-            sessionStorage.setItem('backendOfflineError', 'Github API is offline');
-            return false
-        };
+        // if (healthServicesStatus.github_api.status !== 200) {
+        //     sessionStorage.setItem('backendOfflineError', 'Github API is offline');
+        //     return false
+        // };
     } catch {
-        sessionStorage.setItem('backendOfflineError', 'API is not running');
+        sessionStorage.setItem("backendOfflineError", "API is not running");
         return false;
     }
 };

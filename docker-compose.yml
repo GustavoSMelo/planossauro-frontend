@@ -1,8 +1,9 @@
 services:
     planossauro-frontend:
+        restart: always
         build: .
         ports:
-            - 80:80
+            - 8081:8080
         networks:
             - frontend_network
 networks:
