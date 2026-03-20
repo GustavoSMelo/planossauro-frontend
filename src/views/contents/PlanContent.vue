@@ -40,7 +40,7 @@ const { t } = useI18n();
 const { handleChangePopupInfo } = inject("popup") as IPopupContext;
 
 const handleGetPlanContent = async () => {
-    const uuid = JSON.parse(sessionStorage.getItem("user") ?? '{}').uuid;
+    const uuid = JSON.parse(sessionStorage.getItem("user") ?? "{}").uuid;
     const response = (await backendApi.get(`/subscription/${uuid}`)).data as {
         subscription: ISubscription;
         plan: IPlan;
@@ -57,7 +57,7 @@ const handleGetPlanContent = async () => {
 };
 
 const handleGetPaymentHistory = async () => {
-    const uuid = JSON.parse(sessionStorage.getItem("user") ?? '{}').uuid;
+    const uuid = JSON.parse(sessionStorage.getItem("user") ?? "{}").uuid;
     const response = (await backendApi.get(`/payment/history/${uuid}`))
         .data as IPaymentHistory;
 
@@ -66,7 +66,8 @@ const handleGetPaymentHistory = async () => {
 };
 
 const handleChangeCardNumbers = async () => {
-    const userId = JSON.parse(sessionStorage.getItem("user") ?? '{}').uuid ?? "";
+    const userId =
+        JSON.parse(sessionStorage.getItem("user") ?? "{}").uuid ?? "";
     if (!userId) return;
 
     const response = await backendApi.put(
@@ -81,7 +82,8 @@ const handleChangeCardNumbers = async () => {
 };
 
 const handleCancelSubscription = async () => {
-    const userUUID = JSON.parse(sessionStorage.getItem("user") ?? '{}').uuid ?? "";
+    const userUUID =
+        JSON.parse(sessionStorage.getItem("user") ?? "{}").uuid ?? "";
     const subscriptionResponse = await backendApi.get(
         `/subscription/${userUUID}`,
     );
@@ -142,7 +144,7 @@ onMounted(() => {
                     <b>{{ $t("plans.plan") }}:</b> {{ planInfo?.plan_name }}
                 </li>
                 <li>
-                    <b>{{ $t("plans.nextBilling") }}:</b>
+                    <b>{{ $t("plans.nextBilling") }}</b>
                     {{
                         subscriptionInfo?.next_billing
                             ? convertIsoDateToBR(
@@ -161,9 +163,24 @@ onMounted(() => {
                     }}
                 </li>
                 <li>
-                    <b>{{ $t("plans.planStatus") }}: </b>
-                    <p class="statusActive">
-                        <i class="pi pi-verified"></i>
+                    <b>{{ $t("plans.planStatus") }} </b>
+                    <p
+                        :class="
+                            subscriptionInfo?.status.toLowerCase() ===
+                                'active' ||
+                            subscriptionInfo?.status.toLowerCase() === 'paid'
+                                ? 'statusActive'
+                                : 'statusWarning'
+                        "
+                    >
+                        <i
+                            :class="
+                                subscriptionInfo?.status.toLowerCase() ===
+                                'paid'
+                                    ? 'pi pi-verified'
+                                    : 'pi pi-exclamation-triangle'
+                            "
+                        ></i>
                         {{ subscriptionInfo?.status }}
                     </p>
                 </li>
@@ -180,7 +197,12 @@ onMounted(() => {
             <span class="btnContainers">
                 <button
                     type="button"
-                    @click="handleChangeCardNumbers()"
+                    @click="
+                        subscriptionInfo &&
+                        subscriptionInfo?.last_four_digits === null
+                            ? () => {}
+                            : handleChangeCardNumbers()
+                    "
                     :class="
                         (subscriptionInfo &&
                             subscriptionInfo?.last_four_digits === 0) ||
@@ -199,7 +221,12 @@ onMounted(() => {
                 </button>
                 <button
                     type="button"
-                    @click="showCancelPlan = true"
+                    @click="
+                        subscriptionInfo &&
+                        subscriptionInfo?.last_four_digits === null
+                            ? () => {}
+                            : (showCancelPlan = true)
+                    "
                     :class="
                         (subscriptionInfo &&
                             subscriptionInfo?.last_four_digits === 0) ||

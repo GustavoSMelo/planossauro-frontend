@@ -86,6 +86,16 @@
             span:first-child {
                 margin-right: 10px;
             }
+
+            .rangeDatePickerContainer {
+                width: 80%;
+
+                .datepicker {
+                    border: solid 2px var(--dp-accent-color);
+                    border-radius: 5px;
+                    color: var(--dp-accent-color);
+                }
+            }
         }
 
         span.btnContainer {

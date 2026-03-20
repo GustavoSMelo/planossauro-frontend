@@ -1,15 +1,14 @@
 # Estágio 1: Build
 FROM node:24.14-alpine AS build-stage
-WORKDIR /app
+WORKDIR /webapp
 COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
-RUN rm -rf /app/node_modules
 
 FROM nginx:stable-alpine
 
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY --from=build-stage /webapp/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 RUN touch /var/run/nginx.pid && \

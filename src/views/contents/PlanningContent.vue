@@ -628,8 +628,8 @@ watch(rangeDates, () => {
     const initialDateHelper = new Date(initialDate);
     const lastDateHelper = new Date(lastDate);
 
-    planDateStart.value = `${initialDateHelper.getFullYear()}-${initialDateHelper.getMonth() + 1}-${initialDateHelper.getDay()}`;
-    planDateEnd.value = `${lastDateHelper.getFullYear()}-${lastDateHelper.getMonth() + 1}-${lastDateHelper.getDay()}`;
+    planDateStart.value = `${initialDateHelper.getFullYear()}-${String(initialDateHelper.getMonth() + 1).padStart(2, "0")}-${String(initialDateHelper.getDate()).padStart(2, "0")}`;
+    planDateEnd.value = `${lastDateHelper.getFullYear()}-${String(lastDateHelper.getMonth() + 1).padStart(2, "0")}-${String(lastDateHelper.getDate()).padStart(2, "0")}`;
 });
 </script>
 <template>
