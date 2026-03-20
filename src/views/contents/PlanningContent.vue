@@ -362,7 +362,6 @@ const generatePlan = async () => {
             };
 
             if (response && import.meta.env.VITE_APP_MODE === "prod") {
-                console.log(response.data.message);
                 responseData = JSON.parse(
                     response.data.message
                         .toString()
@@ -373,8 +372,6 @@ const generatePlan = async () => {
                 ) as IClassPlanResponse;
             } else if (response) {
                 // [TODO] - CRIAR UM SISTEMA PARA CHECKAR A TIPAGEM DO JSON, SE FOR STRING, CAST TO JSON AND FIX IT
-                console.log(response.data.response);
-
                 responseData = JSON.parse(
                     response!.data.response
                         .replaceAll("\n", "")
@@ -486,8 +483,6 @@ const generatePlan = async () => {
                                 .replaceAll("-", ""),
                         ) as IClassPlanResponse;
                     }
-
-                    console.log(response?.data.message);
                     return JSON.parse(response!.data.message);
                 }),
             );
@@ -607,8 +602,7 @@ const generatePlan = async () => {
             true,
         );
         handleChangeTemplateChoose({ ...templateChoose, choosed: false });
-    } catch (err) {
-        console.error(err);
+    } catch {
         isLoadingContext.handleChangeIsLoading(false);
         popupContext.handleChangePopupInfo(
             `${t("design.errorMessage")}`,

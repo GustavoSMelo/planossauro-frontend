@@ -6,6 +6,10 @@ services:
             - 8081:8080
         networks:
             - frontend_network
+        deploy:
+            resources:
+                limits:
+                    memory: 128M
 networks:
     frontend_network:
         driver: bridge

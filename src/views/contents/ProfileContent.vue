@@ -162,30 +162,30 @@ const handleEditProfile = async () => {
     }
 };
 
-const handleChangeGithubAccount = async () => {
-    const user = JSON.parse(sessionStorage.getItem("user") as string) as IUser;
+// const handleChangeGithubAccount = async () => {
+//     const user = JSON.parse(sessionStorage.getItem("user") as string) as IUser;
 
-    if (!user.google_email || !user.google_email.length) {
-        handleChangePopupInfo(t("profile.connectGoogle"), "warning", true);
-        return;
-    }
+//     if (!user.google_email || !user.google_email.length) {
+//         handleChangePopupInfo(t("profile.connectGoogle"), "warning", true);
+//         return;
+//     }
 
-    const logoutPage = window.open(
-        "https://github.com/logout",
-        "githubLogout",
-        "width=600,height=700",
-    );
+//     const logoutPage = window.open(
+//         "https://github.com/logout",
+//         "githubLogout",
+//         "width=600,height=700",
+//     );
 
-    sessionStorage.setItem("editProfile", "true");
-    const timer = setInterval(() => {
-        if (logoutPage?.closed) {
-            clearInterval(timer);
-            window.location.assign(
-                `https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&scope=read:user,user:email&allow_signup=true`,
-            );
-        }
-    }, 300);
-};
+//     sessionStorage.setItem("editProfile", "true");
+//     const timer = setInterval(() => {
+//         if (logoutPage?.closed) {
+//             clearInterval(timer);
+//             window.location.assign(
+//                 `https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&scope=read:user,user:email&allow_signup=true`,
+//             );
+//         }
+//     }, 300);
+// };
 
 const handleConnectGithubAccout = async () => {
     window.location.assign(
@@ -379,13 +379,18 @@ const handleUnlinkAccount = async () => {
                     class="containerBtnChangeSocialMedia"
                     v-else-if="user?.github_email?.length && editProfile"
                 >
-                    <button
-                        @click="handleChangeGithubAccount"
-                        class="btnChangeSocialMediaProfile"
-                        type="button"
-                    >
-                        {{ t("profile.changeProfileGithub") }}
-                    </button>
+                    <input
+                        :disabled="true"
+                        type="text"
+                        :value="
+                            user.github_email.length
+                                ? user.github_email
+                                : 'Empty'
+                        "
+                        :placeholder="`${t('profile.email')}`"
+                        :data-theme="isDark ? 'dark' : 'light'"
+                        :class="editProfile ? 'unableToEdit' : ''"
+                    />
                     <button
                         type="button"
                         @click="
@@ -417,13 +422,18 @@ const handleUnlinkAccount = async () => {
                     class="containerBtnChangeSocialMedia"
                     v-else-if="user?.google_email?.length && editProfile"
                 >
-                    <button
-                        @click="handleConnectGoogleAccount"
-                        class="btnChangeSocialMediaProfile"
-                        type="button"
-                    >
-                        {{ t("profile.changeProfileGmail") }}
-                    </button>
+                    <input
+                        :disabled="true"
+                        type="text"
+                        :value="
+                            user.google_email.length
+                                ? user.google_email
+                                : 'Empty'
+                        "
+                        :placeholder="`${t('profile.emailPlaceholder')}`"
+                        :class="editProfile ? 'unableToEdit' : ''"
+                        :data-theme="isDark ? 'dark' : 'light'"
+                    />
                     <button
                         type="button"
                         @click="

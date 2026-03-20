@@ -162,6 +162,15 @@
                 border: solid 2px var(--dp-accent-color);
                 color: var(--dp-accent-color);
                 font-weight: bold;
+                margin-left: 0;
+            }
+
+            input.unableToEdit {
+                border: solid 2px var(--dp-gray);
+                color: var(--dp-gray);
+                font-weight: bold;
+                margin-left: 0;
+                cursor: not-allowed;
             }
 
             button {

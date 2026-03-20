@@ -29,16 +29,14 @@ const parseLLMResponse = (rawResponse: string): IClassPlanResponse => {
             const parsed = JSON.parse(cleaned);
             return validateAndFillResponse(parsed);
         } catch {
-            console.error(
-                "Failed to parse after cleanup:",
-                cleaned.substring(0, 500),
-            );
             return getDefaultResponse();
         }
     }
 };
 
-const validateAndFillResponse = (parsed: Record<string, unknown>): IClassPlanResponse => {
+const validateAndFillResponse = (
+    parsed: Record<string, unknown>,
+): IClassPlanResponse => {
     const requiredFields = [
         "contextualizacao",
         "aprendizagem01",
@@ -63,7 +61,8 @@ const validateAndFillResponse = (parsed: Record<string, unknown>): IClassPlanRes
 
     for (const field of requiredFields) {
         if (parsed[field] && typeof parsed[field] === "string") {
-            (response as unknown as Record<string, string>)[field] = parsed[field].trim();
+            (response as unknown as Record<string, string>)[field] =
+                parsed[field].trim();
         }
     }
 

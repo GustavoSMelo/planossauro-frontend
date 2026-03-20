@@ -49,6 +49,21 @@ onMounted(async () => {
             : false;
 
         if (userHasUuid) {
+            if (
+                user &&
+                user.uuid &&
+                user.uuid !== userData.uuid &&
+                user.google_email !== userData.google_email
+            ) {
+                popupContext.handleChangePopupInfo(
+                    "Realize via google login novamente",
+                    "info",
+                    true,
+                );
+                router.push("/");
+                return;
+            }
+
             if (user && user.uuid && userData.uuid === user.uuid) {
                 const updatedUser = await backendApi.put(`/user/${user.uuid}`, {
                     ...user,

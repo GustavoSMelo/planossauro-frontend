@@ -87,7 +87,6 @@ const handleChooseTemplate = (event: Event) => {
         handleChangeTemplateChoose({ ...newTemplateChoose, choosed: true }),
     );
 
-    console.log("cliquei");
     return;
 };
 </script>

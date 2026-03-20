@@ -10,6 +10,7 @@ import type {
 import type { IPopupContext } from "../../interfaces/context/popup.interface";
 import type { IPageContent } from "../../interfaces/pageContents.interface";
 import { useDark } from "@vueuse/core";
+import type { ILoadingContext } from "../../interfaces/context/loading.interface";
 
 const isDark = useDark({
     attribute: "data-theme",
@@ -43,6 +44,7 @@ const planInfo = ref<IPlan>({
 
 const showPopupCancel = ref(false);
 const { handleChangePopupInfo } = inject("popup") as IPopupContext;
+const { handleChangeIsLoading } = inject("isLoading") as ILoadingContext;
 
 const handleEditYourPlan = async (
     choosedPlan: "essential" | "premium" | "free",
@@ -60,18 +62,25 @@ const handleEditYourPlan = async (
         return;
 
     if (!subscriptionInfo.value.last_four_digits) {
-        if (choosedPlan === "essential") {
-            const essentialLink = import.meta.env
-                .VITE_STRIPE_ESSENTIAL_PLAN_URL;
-            return window.open(
-                `${essentialLink}${loginType === "google" ? user.google_email : user.github_email}`,
-            );
-        }
+        try {
+            handleChangeIsLoading(true);
+            if (choosedPlan === "essential") {
+                const essentialLink = import.meta.env
+                    .VITE_STRIPE_ESSENTIAL_PLAN_URL;
+                handleChangeIsLoading(false);
+                return window.open(
+                    `${essentialLink}${loginType === "google" ? user.google_email : user.github_email}`,
+                );
+            }
 
-        const premiumLink = import.meta.env.VITE_STRIPE_PREMIUM_PLAN_URL;
-        return window.open(
-            `${premiumLink}${loginType === "google" ? user.google_email : user.github_email}`,
-        );
+            const premiumLink = import.meta.env.VITE_STRIPE_PREMIUM_PLAN_URL;
+            handleChangeIsLoading(false);
+            return window.open(
+                `${premiumLink}${loginType === "google" ? user.google_email : user.github_email}`,
+            );
+        } catch {
+            handleChangeIsLoading(false);
+        }
     } else if (choosedPlan === "free") {
         return (showPopupCancel.value = true);
     }
@@ -94,7 +103,8 @@ const handleEditYourPlan = async (
 };
 
 const handleCancelSubscription = async () => {
-    const userUUID = JSON.parse(sessionStorage.getItem("user") ?? '{}').uuid ?? "";
+    const userUUID =
+        JSON.parse(sessionStorage.getItem("user") ?? "{}").uuid ?? "";
     const subscriptionResponse = await backendApi.get(
         `/subscription/${userUUID}`,
     );
@@ -109,7 +119,8 @@ const handleCancelSubscription = async () => {
 };
 
 onMounted(async () => {
-    const userUUID = JSON.parse(sessionStorage.getItem("user") ?? '{}').uuid ?? "";
+    const userUUID =
+        JSON.parse(sessionStorage.getItem("user") ?? "{}").uuid ?? "";
 
     if (!userUUID.length) return;
 

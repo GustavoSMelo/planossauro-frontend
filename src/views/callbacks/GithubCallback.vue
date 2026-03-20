@@ -29,10 +29,7 @@ watchEffect(async () => {
     }
 
     let user;
-
-    if (userJson?.length) {
-        user = JSON.parse(userJson) as IUser;
-    }
+    if (userJson?.length) user = JSON.parse(userJson) as IUser;
 
     if (error) {
         popupContext.handleChangePopupInfo(
@@ -58,6 +55,7 @@ watchEffect(async () => {
             let { data: userData }: { data: IUser } = await backendApi.get(
                 `/user/github/${data.data.email}`,
             );
+
             const userHasUuid = Object.keys(userData).find(
                 (key) => key === "uuid",
             )
@@ -65,6 +63,20 @@ watchEffect(async () => {
                 : false;
 
             if (userHasUuid) {
+                if (
+                    user &&
+                    user.uuid &&
+                    user.uuid !== userData.uuid &&
+                    user.github_email !== userData.github_email
+                ) {
+                    popupContext.handleChangePopupInfo(
+                        "Realize via github login novamente",
+                        "info",
+                        true,
+                    );
+                    router.push("/");
+                    return;
+                }
                 if (user && user.uuid && userData.uuid === user.uuid) {
                     const updatedUser = await backendApi.put(
                         `/user/${user.uuid}`,

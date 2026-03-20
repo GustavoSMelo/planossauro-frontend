@@ -3,10 +3,9 @@ import backendApi from "./api";
 
 const createUser = (data: ICreateUser) => {
     try {
-        return backendApi.post('/user', data);
-    } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Error creating user:', error);
+        return backendApi.post("/user", data);
+    } catch {
+        return null;
     }
 };
 
