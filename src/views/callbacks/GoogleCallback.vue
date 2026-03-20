@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
 import isApiHealth from "../../api/healthCheck";
 import { useRouter } from "vue-router";
 import axios from "axios";
@@ -9,6 +10,8 @@ import type { IGoogleResponse } from "../../interfaces/api/googleResponse.interf
 import type { IUser } from "../../interfaces/api/user.interface";
 import type { IPopupContext } from "../../interfaces/context/popup.interface";
 import type { IAccessSanctumToken } from "../../interfaces/auth.interface";
+
+const { t } = useI18n();
 
 onMounted(async () => {
     const popupContext = inject("popup") as IPopupContext;
@@ -56,10 +59,11 @@ onMounted(async () => {
                 user.google_email !== userData.google_email
             ) {
                 popupContext.handleChangePopupInfo(
-                    "Realize via google login novamente",
+                    t("googlecallback.loginAgain"),
                     "info",
                     true,
                 );
+                sessionStorage.clear();
                 router.push("/");
                 return;
             }
@@ -94,7 +98,7 @@ onMounted(async () => {
             sessionStorage.setItem("user", JSON.stringify(userHelper));
             sessionStorage.setItem("loginType", "google");
             popupContext.handleChangePopupInfo(
-                "Login realizado com sucesso",
+                t("googlecallback.messageSuccess"),
                 "success",
                 true,
             );
@@ -123,7 +127,7 @@ onMounted(async () => {
 <template>
     <div class="googleCallbackContainer">
         <i class="pi pi-google"></i>
-        <h2>Realizando login com o Google...</h2>
+        <h2>{{ t("googlecallback.workingOnLogin") }}</h2>
     </div>
 </template>
 

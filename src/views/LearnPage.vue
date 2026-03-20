@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { useDark, useToggle } from "@vueuse/core";
-import { useRouter } from "vue-router";
-import GalleryPhoto from "../components/galleryPhotos/GalleryPhoto.vue";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
+import { useDark, useToggle } from "@vueuse/core";
+import GalleryPhoto from "../components/galleryPhotos/GalleryPhoto.vue";
 
 const showPhoto = ref(false);
 const router = useRouter();
@@ -16,6 +16,10 @@ const isDark = useDark({
 });
 const toggle = useToggle(isDark);
 const { t } = useI18n();
+
+const handleSendEmail = () => {
+    window.open("mailto:email@provedor.com.br", "_blank");
+};
 
 const handleShowPhoto = (show: boolean) => (showPhoto.value = show);
 </script>
@@ -184,17 +188,17 @@ const handleShowPhoto = (show: boolean) => (showPhoto.value = show);
                 />
 
                 <p>
-                    {{ t("learn.help_content_1") }} <br /><br />
-
-                    {{ t("learn.help_content_2") }}
+                    {{ t("learn.help_content_1") }} <br />
+                    {{ t("learn.help_content_2") }} <br />
+                    {{ t("learn.help_content_3") }}
                 </p>
 
                 <span class="buttonContainer">
-                    <button type="button">
+                    <button type="button" @click="router.push('/docs')">
                         <i class="pi pi-book"></i>
                         {{ t("learn.buttons.documentation") }}
                     </button>
-                    <button type="button">
+                    <button type="button" @click="handleSendEmail()">
                         <i class="pi pi-at"></i>
                         {{ t("learn.buttons.support") }}
                     </button>

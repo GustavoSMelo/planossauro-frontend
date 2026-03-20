@@ -45,6 +45,9 @@ import loadingENUS from "./locales/en-US/loading.json";
 import githubcallbackPTBR from "./locales/pt-BR/githubcallback.json";
 import githubcallbackENUS from "./locales/en-US/githubcallback.json";
 
+import googlecallbackPTBR from "./locales/pt-BR/googlecallback.json";
+import googlecallbackENUS from "./locales/en-US/googlecallback.json";
+
 import finishRegisterPTBR from "./locales/pt-BR/finishRegister.json";
 import finishRegisterENUS from "./locales/en-US/finishRegister.json";
 
@@ -92,6 +95,7 @@ const i18n = createI18n({
             support: supportPTBR,
             loading: loadingPTBR,
             githubcallback: githubcallbackPTBR,
+            googlecallback: googlecallbackPTBR,
             finishRegister: finishRegisterPTBR,
             validationCodeInputBox: validationCodeInputBoxPTBR,
             previewDocs: previewDocsPTBR,
@@ -118,6 +122,7 @@ const i18n = createI18n({
             support: supportENUS,
             loading: loadingENUS,
             githubcallback: githubcallbackENUS,
+            googlecallback: googlecallbackENUS,
             finishRegister: finishRegisterENUS,
             validationCodeInputBox: validationCodeInputBoxENUS,
             previewDocs: previewDocsENUS,

@@ -70,10 +70,11 @@ watchEffect(async () => {
                     user.github_email !== userData.github_email
                 ) {
                     popupContext.handleChangePopupInfo(
-                        "Realize via github login novamente",
+                        t("githubcallback.loginAgain"),
                         "info",
                         true,
                     );
+                    sessionStorage.clear();
                     router.push("/");
                     return;
                 }

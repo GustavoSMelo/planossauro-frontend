@@ -15,7 +15,7 @@
     "flag": "Bandeira",
     "status": "Status",
     "changeToFree": "Deseja trocar para o plano free ?",
-    "changeToFreeDescription": "Trocando para o plano gratuito, voce estara cancelando o seu plano atual, Deseja continuar ?",
+    "changeToFreeDescription": "Trocando para o plano gratuito, voce estara cancelando o seu plano atual (imediatamente), Deseja continuar ?",
     "back": "Voltar",
     "gotoFree": "Ir para o plano free",
     "nextBillingProcessing": "Proximo faturamento em processamento",

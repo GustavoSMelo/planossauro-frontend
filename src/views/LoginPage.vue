@@ -6,6 +6,7 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 const { handleChangeIsLoading } = inject("isLoading") as ILoadingContext;
+const lastLoginType = window.localStorage.getItem("lastLoginType");
 
 const clickFooter = () => {
     window.open(
@@ -15,12 +16,14 @@ const clickFooter = () => {
 };
 
 const loginGithubPage = () => {
+    localStorage.setItem("lastLoginType", "github");
     window.location.assign(
         `https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&scope=read:user,user:email,`,
     );
 };
 
 const loadGoogleSignInPage = () => {
+    localStorage.setItem("lastLoginType", "google");
     const params = new URLSearchParams({
         client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
         redirect_uri: `${window.location.origin}/callback/google`,
@@ -32,13 +35,14 @@ const loadGoogleSignInPage = () => {
 };
 
 onMounted(async () => {
-    const token = sessionStorage.getItem("@auth/token") ?? "";
-    const uuid =
-        JSON.parse(sessionStorage.getItem("user") || "{uuid: ''}").uuid ?? "";
-
-    if (!token || !uuid) return;
-
     try {
+        const token = sessionStorage.getItem("@auth/token") ?? "";
+        const uuid =
+            JSON.parse(sessionStorage.getItem("user") || "{uuid: ''}").uuid ??
+            "";
+
+        if (!token || !uuid) return;
+
         handleChangeIsLoading(true);
 
         const response = await backendApi.get(`/user/${uuid}`);
@@ -60,23 +64,35 @@ onMounted(async () => {
         <div class="loginWrapper">
             <h2>{{ $t("login.title") }}</h2>
 
-            <button
-                type="button"
-                class="btnSocialMediaLogin btnGoogle firstButton"
-                @click="loadGoogleSignInPage"
-            >
-                <i class="pi pi-google"></i>{{ $t("login.btnGoogle") }}
-            </button>
+            <span>
+                <label
+                    v-if="lastLoginType === 'google'"
+                    class="lastLoginGoogle"
+                    >{{ $t("login.lastLogin") }}</label
+                >
+                <button
+                    type="button"
+                    class="btnSocialMediaLogin btnGoogle firstButton"
+                    @click="loadGoogleSignInPage"
+                >
+                    <i class="pi pi-google"></i>{{ $t("login.btnGoogle") }}
+                </button>
 
-            <small>ou</small>
+                <small>ou</small>
 
-            <button
-                type="button"
-                class="btnSocialMediaLogin btnGithub"
-                @click="loginGithubPage()"
-            >
-                <i class="pi pi-github"></i>{{ $t("login.btnGithub") }}
-            </button>
+                <label
+                    v-if="lastLoginType === 'github'"
+                    class="lastLoginGithub"
+                    >{{ $t("login.lastLogin") }}</label
+                >
+                <button
+                    type="button"
+                    class="btnSocialMediaLogin btnGithub"
+                    @click="loginGithubPage()"
+                >
+                    <i class="pi pi-github"></i>{{ $t("login.btnGithub") }}
+                </button>
+            </span>
         </div>
         <footer @click="clickFooter()">{{ $t("login.developedBy") }}</footer>
     </div>

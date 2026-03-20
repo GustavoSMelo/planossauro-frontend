@@ -2,5 +2,6 @@
     "title": "Connect your accounts to continue: ",
     "btnGoogle": "Continue with Google",
     "btnGithub": "Continue with Github",
-    "developedBy": "Developed by Gustavo S. Melo"
+    "developedBy": "Developed by Gustavo S. Melo",
+    "lastLogin": "Last login"
 }

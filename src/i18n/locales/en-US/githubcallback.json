@@ -2,5 +2,6 @@
     "notPublicProfile": "GitHub email is not public, make it public and try again",
     "notAuthorized": "Login not authorized by user",
     "messageSuccess": "Login successful",
-    "workingOnLogin": "Working on github login..."
+    "workingOnLogin": "Working on github login...",
+    "loginAgain": "Login again with your github account"
 }

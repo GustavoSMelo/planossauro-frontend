@@ -63,38 +63,68 @@
             color: var(--dp-text-color);
         }
 
-        .btnSocialMediaLogin {
-            width: 300px;
-            padding: 14px 20px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 12pt;
-            margin: 10px 0;
-            border-radius: 5px;
-            transition: 0.3s;
-
-            i {
-                margin-right: 5px;
-            }
-        }
-
-        .btnSocialMediaLogin:hover {
-            transform: scale(1.05);
-            transition: 0.3s;
-        }
-
-        .firstButton {
+        span {
+            display: flex;
+            flex-direction: column;
+            justify-items: center;
             margin-top: 60px;
-        }
 
-        .btnGoogle {
-            background-color: var(--dp-accent-color);
-            color: var(--dp-full-white);
-        }
+            label {
+                width: fit-content;
+                text-align: left;
+                padding: 5px 10px;
+                font-size: 10pt;
+                margin-left: 10px;
+                color: var(--dp-full-white);
+                font-weight: bold;
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+            }
 
-        .btnGithub {
-            background-color: var(--dp-full-black);
-            color: var(--dp-full-white);
+            .lastLoginGoogle {
+                background-color: var(--dp-accent-color);
+            }
+
+            .lastLoginGithub {
+                background-color: var(--dp-full-black);
+            }
+
+            .btnSocialMediaLogin {
+                width: 300px;
+                padding: 14px 20px;
+                cursor: pointer;
+                font-weight: bold;
+                font-size: 12pt;
+                margin-bottom: 10px;
+                border-radius: 5px;
+                transition: 0.3s;
+
+                i {
+                    margin-right: 5px;
+                }
+            }
+
+            small {
+                margin: 10px 0;
+                width: 100%;
+                text-align: center;
+                color: var(--dp-text-color);
+            }
+
+            .btnSocialMediaLogin:hover {
+                transform: scale(1.05);
+                transition: 0.3s;
+            }
+
+            .btnGoogle {
+                background-color: var(--dp-accent-color);
+                color: var(--dp-full-white);
+            }
+
+            .btnGithub {
+                background-color: var(--dp-full-black);
+                color: var(--dp-full-white);
+            }
         }
     }
 
@@ -111,5 +141,11 @@
 @media screen and (max-width: 600px) {
     .loginContainer > .loginWrapper {
         width: 90%;
+
+        span {
+            .btnSocialMediaLogin {
+                width: 100%;
+            }
+        }
     }
 }
