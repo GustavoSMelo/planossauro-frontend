@@ -111,6 +111,6 @@ provide("hamburgueMenuToggle", {
             :planType="showPreview.planType"
         />
         <Loading v-if="isLoading" />
-        <Popup v-if="popup.show && popup.message.length > 0" />
+        <Popup v-if="popup.show && popup.message.length > 0" :key="popup.id" />
     </div>
 </template>

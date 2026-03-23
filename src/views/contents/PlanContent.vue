@@ -176,7 +176,9 @@ onMounted(() => {
                         <i
                             :class="
                                 subscriptionInfo?.status.toLowerCase() ===
-                                'paid'
+                                    'paid' ||
+                                subscriptionInfo?.status.toLowerCase() ===
+                                    'active'
                                     ? 'pi pi-verified'
                                     : 'pi pi-exclamation-triangle'
                             "
