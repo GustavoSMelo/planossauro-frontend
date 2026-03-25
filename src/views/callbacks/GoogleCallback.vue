@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { inject, onMounted } from "vue";
-import { useI18n } from "vue-i18n";
-import isApiHealth from "../../api/healthCheck";
-import { useRouter } from "vue-router";
 import axios from "axios";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
+import isApiHealth from "../../api/healthCheck";
 import backendApi from "../../api/api";
 import { setToken } from "../../helpers/token";
 import type { IGoogleResponse } from "../../interfaces/api/googleResponse.interface";
@@ -78,10 +78,6 @@ onMounted(async () => {
 
                 userData = { ...updatedUser.data.user };
             }
-
-            userData.github_validation_code = null;
-            userData.google_validation_code = null;
-            userData.sms_validation_code = null;
 
             const userHelper = {
                 uuid: userData.uuid,

@@ -44,6 +44,20 @@ const plans = ref<IPlanningDay>({
     day4: [""],
     day5: [""],
 });
+const startClassHour = ref({
+    day1: ["12:00"],
+    day2: ["12:00"],
+    day3: ["12:00"],
+    day4: ["12:00"],
+    day5: ["12:00"],
+});
+const endClassHour = ref({
+    day1: ["12:30"],
+    day2: ["12:30"],
+    day3: ["12:30"],
+    day4: ["12:30"],
+    day5: ["12:30"],
+});
 const selectedDay = ref<IDays["days"]>("day1");
 const planType = ref<IShowPreview["planType"]>("Semanal");
 const isOpenPlanMobileMenu = ref<boolean>(false);
@@ -78,8 +92,26 @@ const handleChangePlanText = (
     plans.value[day][index] = classAtv.replaceAll(",", "");
 };
 
+const handleChangeStartClassHour = (
+    day: IDays["days"],
+    index: number,
+    hour: string,
+): void => {
+    startClassHour.value[day][index] = hour;
+};
+
+const handleChangeEndClassHour = (
+    day: IDays["days"],
+    index: number,
+    hour: string,
+): void => {
+    endClassHour.value[day][index] = hour;
+};
+
 const handleAddNewClassInPlanning = (day: IDays["days"]): void => {
     plans.value[day].push("");
+    startClassHour.value[day].push("12:00");
+    endClassHour.value[day].push("12:30");
 };
 
 const handleRemoveClassAtvFromPlan = (
@@ -396,7 +428,8 @@ const generatePlan = async () => {
                 saber1: `${responseData.saber01}\n \n${responseData.saber02}`,
                 aprendizagem1: `${responseData.aprendizagem01}\n \n${responseData.aprendizagem02}`,
                 atividade1: plans.value.day1.map(
-                    (item) => `${item.toString()} \n \n`,
+                    (item, index) =>
+                        `${item.toString()} - (${startClassHour.value.day1[index]} Hr ~ ${endClassHour.value.day1[index]} Hr) \n \n`,
                 ),
                 contextualizacao1: responseData.contextualizacao,
                 foco1: responseData.foco_avaliativo,
@@ -517,7 +550,8 @@ const generatePlan = async () => {
                 saber1: `${responseDay1.saber01}\n \n${responseDay1.saber02}`,
                 aprendizagem1: `${responseDay1.aprendizagem01}\n \n${responseDay1.aprendizagem02}`,
                 atividade1: plans.value.day1.map(
-                    (item) => `${item.toString()} \n \n`,
+                    (item, index) =>
+                        `${item.toString()} - (${startClassHour.value.day1[index]} Hr ~ ${endClassHour.value.day1[index]} Hr) \n \n`,
                 ),
                 contextualizacao1: responseDay1.contextualizacao,
                 foco1: responseDay1.foco_avaliativo,
@@ -528,7 +562,8 @@ const generatePlan = async () => {
                 saber2: `${responseDay2.saber01}\n${responseDay2.saber02}`,
                 aprendizagem2: `${responseDay2.aprendizagem01}\n${responseDay2.aprendizagem02}`,
                 atividade2: plans.value.day2.map(
-                    (item) => `${item.toString()} \n \n`,
+                    (item, index) =>
+                        `${item.toString()} - (${startClassHour.value.day2[index]} Hr ~ ${endClassHour.value.day2[index]} Hr) \n \n`,
                 ),
                 contextualizacao2: responseDay2.contextualizacao,
                 foco2: responseDay2.foco_avaliativo,
@@ -539,7 +574,8 @@ const generatePlan = async () => {
                 saber3: `${responseDay3.saber01}\n \n${responseDay3.saber02}`,
                 aprendizagem3: `${responseDay3.aprendizagem01}\n \n${responseDay3.aprendizagem02}`,
                 atividade3: plans.value.day3.map(
-                    (item) => `${item.toString()} \n \n`,
+                    (item, index) =>
+                        `${item.toString()} - (${startClassHour.value.day3[index]} Hr ~ ${endClassHour.value.day3[index]} Hr) \n \n`,
                 ),
                 contextualizacao3: responseDay3.contextualizacao,
                 foco3: responseDay3.foco_avaliativo,
@@ -550,7 +586,8 @@ const generatePlan = async () => {
                 saber4: `${responseDay4.saber01}\n \n${responseDay4.saber02}`,
                 aprendizagem4: `${responseDay4.aprendizagem01}\n \n${responseDay4.aprendizagem02}`,
                 atividade4: plans.value.day4.map(
-                    (item) => `${item.toString()} \n \n`,
+                    (item, index) =>
+                        `${item.toString()} - (${startClassHour.value.day4[index]} Hr ~ ${endClassHour.value.day4[index]} Hr) \n \n`,
                 ),
                 contextualizacao4: responseDay4.contextualizacao,
                 foco4: responseDay4.foco_avaliativo,
@@ -561,7 +598,8 @@ const generatePlan = async () => {
                 saber5: `${responseDay5.saber01}\n \n${responseDay5.saber02}`,
                 aprendizagem5: `${responseDay5.aprendizagem01}\n \n${responseDay5.aprendizagem02}`,
                 atividade5: plans.value.day5.map(
-                    (item) => `${item.toString()} \n \n`,
+                    (item, index) =>
+                        `${item.toString()} - (${startClassHour.value.day5[index]} Hr ~ ${endClassHour.value.day5[index]} Hr) \n \n`,
                 ),
                 contextualizacao5: responseDay5.contextualizacao,
                 foco5: responseDay5.foco_avaliativo,
@@ -678,6 +716,13 @@ watch(rangeDates, () => {
                     <VueDatePicker
                         v-model="rangeDates"
                         :range="{ maxRange: 4, minRange: 4 }"
+                        class="rangeDatePicker"
+                        :style="{
+                            '--dp-background-color': 'transparent',
+                            '--dp-border-color': '#e9688c',
+                            '--dp-border-color-hover': '#e9688c',
+                            '--dp-text-color': '#e9688c',
+                        }"
                     />
                 </span>
 
@@ -1009,20 +1054,65 @@ watch(rangeDates, () => {
                                 📚 {{ t("design.classActivity") }}
                                 {{ index + 1 }}:
                             </h2>
-                            <input
-                                type="text"
-                                :placeholder="`${t('design.inputPlaceholder')}`"
-                                :value="value"
-                                @change="
-                                    (event) =>
-                                        handleChangePlanText(
-                                            selectedDay,
-                                            index,
-                                            (event.target! as HTMLInputElement)
-                                                .value,
-                                        )
-                                "
-                            />
+                            <div class="hourClass">
+                                <input
+                                    type="text"
+                                    :placeholder="`${t('design.inputPlaceholder')}`"
+                                    :value="value"
+                                    @change="
+                                        (event) =>
+                                            handleChangePlanText(
+                                                selectedDay,
+                                                index,
+                                                (
+                                                    event.target! as HTMLInputElement
+                                                ).value,
+                                            )
+                                    "
+                                />
+                                <span>
+                                    <input
+                                        class="timeInput"
+                                        type="time"
+                                        lang="pt-BR"
+                                        step="900"
+                                        title="Inicio da aula"
+                                        :value="
+                                            startClassHour[selectedDay][index]
+                                        "
+                                        @change="
+                                            (event) =>
+                                                handleChangeStartClassHour(
+                                                    selectedDay,
+                                                    index,
+                                                    (
+                                                        event.target! as HTMLInputElement
+                                                    ).value,
+                                                )
+                                        "
+                                    />
+                                    <input
+                                        class="timeInput"
+                                        type="time"
+                                        lang="pt-BR"
+                                        step="900"
+                                        title="Fim da aula"
+                                        :value="
+                                            endClassHour[selectedDay][index]
+                                        "
+                                        @change="
+                                            (event) =>
+                                                handleChangeEndClassHour(
+                                                    selectedDay,
+                                                    index,
+                                                    (
+                                                        event.target! as HTMLInputElement
+                                                    ).value,
+                                                )
+                                        "
+                                    />
+                                </span>
+                            </div>
                         </span>
                         <button
                             @click="
@@ -1075,6 +1165,11 @@ watch(rangeDates, () => {
                     )
                         ? false
                         : true)
+            "
+            :title="
+                hasEmptyStringsInClasses().find((element) => element === true)
+                    ? 'Planejamento nao finalizado'
+                    : 'Avancar'
             "
         >
             {{ t("design.forward") }}

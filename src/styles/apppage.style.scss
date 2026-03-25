@@ -1,5 +1,15 @@
 @charset "UTF-8";
 
+@keyframes contentAnimationSpawn {
+    0% {
+        transform: translateY(-4000px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
 .appPageContainer {
     display: flex;
     align-items: center;
@@ -13,7 +23,7 @@
 
     .fullContentContainer {
         background-color: var(--dp-lightfall);
-        width: 65%;
+        width: 60%;
         display: flex;
         border-radius: 10px;
         box-shadow: 1px 1px 8px var(--dp-shadow-low-pink);
@@ -27,13 +37,11 @@
     }
 }
 
-@keyframes contentAnimationSpawn {
-    0% {
-        transform: translateY(-4000px);
-    }
-
-    100% {
-        transform: translateY(0px);
+@media screen and (max-width: 1600px) {
+    .appPageContainer {
+        .fullContentContainer {
+            width: 65%;
+        }
     }
 }
 
@@ -47,10 +55,13 @@
 
 @media screen and (max-width: 500px) {
     .appPageContainer {
-        padding: 20px;
+        padding: 0px;
+        padding-top: 0;
+
         .fullContentContainer {
             width: 100%;
             margin-top: 0;
+            margin-bottom: 0;
         }
     }
 }

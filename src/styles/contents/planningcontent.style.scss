@@ -366,7 +366,7 @@ input {
 
             .classContent {
                 height: 85%;
-                overflow-y: scroll;
+                overflow-y: auto;
                 display: flex;
                 flex-direction: column;
 
@@ -391,19 +391,49 @@ input {
                             color: var(--dp-full-white);
                         }
 
-                        input {
-                            width: 97%;
-                            border: solid 1px var(--dp-gray);
-                            color: var(--dp-accent-color);
-                            margin-top: 5px;
-                        }
+                        .hourClass {
+                            display: flex;
+                            gap: 10px;
 
-                        input::placeholder {
-                            color: var(--dp-gray);
-                        }
+                            input {
+                                width: 100%;
+                                border: solid 1px var(--dp-gray);
+                                color: var(--dp-accent-color);
+                                margin-top: 5px;
+                                padding-right: 10px;
+                            }
 
-                        input:focus {
-                            border: solid 2px var(--dp-accent-color);
+                            input::placeholder {
+                                color: var(--dp-gray);
+                            }
+
+                            input:focus {
+                                border: solid 2px var(--dp-accent-color);
+                            }
+                            span {
+                                display: flex;
+                                justify-content: space-between;
+                                gap: 5px;
+
+                                input {
+                                    border: solid 1px var(--dp-gray);
+                                    color: var(--dp-accent-color);
+                                    margin-top: 5px;
+                                    padding-right: 10px;
+                                }
+
+                                .timeInput {
+                                    width: 50%;
+                                    font-size: 10pt;
+                                    color: var(--dp-accent-color);
+
+                                    &::-webkit-calendar-picker-indicator {
+                                        filter: invert(48%) sepia(79%)
+                                            saturate(2476%) hue-rotate(316deg)
+                                            brightness(100%) contrast(97%);
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -607,6 +637,38 @@ input {
         .btnGeneratePlan,
         .btnGeneratePlanCancel {
             width: 92%;
+        }
+    }
+}
+
+@media screen and (max-width: 660px) {
+    .planningContainer {
+        .classContentContainer {
+            .classContent {
+                overflow: visible;
+                height: auto;
+
+                .classWrapper {
+                    overflow: visible;
+
+                    .classDescription {
+                        .hourClass {
+                            flex-direction: column;
+                            overflow: visible;
+
+                            input[type="time"] {
+                                width: 100%;
+                                overflow: visible;
+
+                                &::-webkit-calendar-picker-indicator {
+                                    position: relative;
+                                    right: 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
