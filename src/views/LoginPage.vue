@@ -52,6 +52,7 @@ onMounted(async () => {
             router.push("/app");
         }
 
+        sessionStorage.clear();
         handleChangeIsLoading(false);
     } catch {
         handleChangeIsLoading(false);

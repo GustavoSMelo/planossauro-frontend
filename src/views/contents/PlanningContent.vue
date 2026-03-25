@@ -774,25 +774,71 @@ watch(rangeDates, () => {
                         {{ index + 1 }}</label
                     >
                     <span class="row">
-                        <input
-                            type="text"
-                            :value="plano"
-                            :placeholder="`${t('design.inputPlaceholder')}`"
-                            @change="
-                                (event) =>
-                                    handleChangePlanText(
-                                        'day1',
-                                        index,
-                                        (event.target as HTMLInputElement)
-                                            .value,
-                                    )
-                            "
-                        />
+                        <div class="hourClass">
+                            <input
+                                type="text"
+                                :value="plano"
+                                :placeholder="`${t('design.inputPlaceholder')}`"
+                                @change="
+                                    (event) =>
+                                        handleChangePlanText(
+                                            'day1',
+                                            index,
+                                            (event.target as HTMLInputElement)
+                                                .value,
+                                        )
+                                "
+                            />
+                            <span class="timeInputContainer">
+                                <input
+                                    class="timeInput"
+                                    type="time"
+                                    lang="pt-BR"
+                                    step="900"
+                                    title="Inicio da aula"
+                                    :value="startClassHour[selectedDay][index]"
+                                    @change="
+                                        (event) =>
+                                            handleChangeStartClassHour(
+                                                'day1',
+                                                index,
+                                                (
+                                                    event.target! as HTMLInputElement
+                                                ).value,
+                                            )
+                                    "
+                                />
+                                <input
+                                    class="timeInput"
+                                    type="time"
+                                    lang="pt-BR"
+                                    step="900"
+                                    title="Fim da aula"
+                                    :value="endClassHour[selectedDay][index]"
+                                    @change="
+                                        (event) =>
+                                            handleChangeEndClassHour(
+                                                'day1',
+                                                index,
+                                                (
+                                                    event.target! as HTMLInputElement
+                                                ).value,
+                                            )
+                                    "
+                                />
+                            </span>
+                        </div>
                         <button
-                            v-if="index > 0"
                             type="button"
-                            class="btnTrash"
-                            @click="handleRemoveClassAtvFromPlan('day1', index)"
+                            :class="index > 0 ? 'btnTrash' : 'btnTrashDisabled'"
+                            @click="
+                                index > 0
+                                    ? handleRemoveClassAtvFromPlan(
+                                          'day1',
+                                          index,
+                                      )
+                                    : null
+                            "
                         >
                             <i class="pi pi-trash"></i>
                         </button>
