@@ -384,12 +384,10 @@ const generatePlan = async () => {
 
             let responseData: IClassPlanResponse = {
                 contextualizacao: "",
-                aprendizagem01: "",
-                aprendizagem02: "",
-                saber01: "",
-                saber02: "",
-                eixo: "",
-                foco_avaliativo: "",
+                aprendizagem: [""],
+                saber: [""],
+                eixo: [""],
+                foco_avaliativo: [""],
                 materiais: "",
             };
 
@@ -424,15 +422,20 @@ const generatePlan = async () => {
                 profName: user.full_name,
 
                 // day 1
-                eixo1: responseData.eixo,
-                saber1: `${responseData.saber01}\n \n${responseData.saber02}`,
-                aprendizagem1: `${responseData.aprendizagem01}\n \n${responseData.aprendizagem02}`,
-                atividade1: plans.value.day1.map(
-                    (item, index) =>
-                        `${item.toString()} - (${startClassHour.value.day1[index]} Hr ~ ${endClassHour.value.day1[index]} Hr) \n \n`,
-                ),
+                eixo1: responseData.eixo
+                    .map((item) => item.toString())
+                    .join("\n \n"),
+                saber1: `${responseData.saber.map((item) => item.toString()).join("\n \n")}\n \n`,
+                aprendizagem1: `${responseData.aprendizagem.map((item) => item.toString()).join("\n \n")}\n \n`,
+                atividade1: plans.value.day1
+                    .map((item, index) =>
+                        `${item.toString()} - (${startClassHour.value.day1[index]} Hr ~ ${endClassHour.value.day1[index]} Hr)`.toString(),
+                    )
+                    .join("\n \n"),
                 contextualizacao1: responseData.contextualizacao,
-                foco1: responseData.foco_avaliativo,
+                foco1: responseData.foco_avaliativo
+                    .map((item) => item.toString())
+                    .join("\n \n"),
                 materiais1: responseData.materiais,
             };
 
@@ -473,7 +476,7 @@ const generatePlan = async () => {
                 responseDay3,
                 responseDay4,
                 responseDay5,
-            ] = await Promise.all(
+            ]: IClassPlanResponse[] = await Promise.all(
                 activities.map(async (item) => {
                     const qsn =
                         locale.value === "pt-BR" ? qsnPTBR : qsnENUS.qsn;
@@ -546,63 +549,93 @@ const generatePlan = async () => {
                 profName: user.full_name,
 
                 // day 1
-                eixo1: responseDay1.eixo,
-                saber1: `${responseDay1.saber01}\n \n${responseDay1.saber02}`,
-                aprendizagem1: `${responseDay1.aprendizagem01}\n \n${responseDay1.aprendizagem02}`,
-                atividade1: plans.value.day1.map(
-                    (item, index) =>
-                        `${item.toString()} - (${startClassHour.value.day1[index]} Hr ~ ${endClassHour.value.day1[index]} Hr) \n \n`,
-                ),
+                eixo1: responseDay1.eixo
+                    .map((item) => item.toString())
+                    .join("\n"),
+                saber1: `${responseDay1.saber.map((item) => item.toString()).join("\n")}\n`,
+                aprendizagem1: `${responseDay1.aprendizagem.map((item) => item.toString()).join("\n")}\n`,
+                atividade1: plans.value.day1
+                    .map(
+                        (item, index) =>
+                            `${item.toString()} - (${startClassHour.value.day1[index]} Hr ~ ${endClassHour.value.day1[index]} Hr) \n \n`,
+                    )
+                    .join("\n \n"),
                 contextualizacao1: responseDay1.contextualizacao,
-                foco1: responseDay1.foco_avaliativo,
+                foco1: responseDay1.foco_avaliativo
+                    .map((item) => item.toString())
+                    .join("\n"),
                 materiais1: responseDay1.materiais,
 
                 // day 2
-                eixo2: responseDay2.eixo,
-                saber2: `${responseDay2.saber01}\n${responseDay2.saber02}`,
-                aprendizagem2: `${responseDay2.aprendizagem01}\n${responseDay2.aprendizagem02}`,
-                atividade2: plans.value.day2.map(
-                    (item, index) =>
-                        `${item.toString()} - (${startClassHour.value.day2[index]} Hr ~ ${endClassHour.value.day2[index]} Hr) \n \n`,
-                ),
+                eixo2: responseDay2.eixo
+                    .map((item) => item.toString())
+                    .join("\n"),
+                saber2: `${responseDay2.saber.map((item) => item.toString()).join("\n")}\n`,
+                aprendizagem2: `${responseDay2.aprendizagem.map((item) => item.toString()).join("\n")}\n`,
+                atividade2: plans.value.day1
+                    .map(
+                        (item, index) =>
+                            `${item.toString()} - (${startClassHour.value.day1[index]} Hr ~ ${endClassHour.value.day1[index]} Hr) \n \n`,
+                    )
+                    .join("\n \n"),
                 contextualizacao2: responseDay2.contextualizacao,
-                foco2: responseDay2.foco_avaliativo,
+                foco2: responseDay2.foco_avaliativo
+                    .map((item) => item.toString())
+                    .join("\n"),
                 materiais2: responseDay2.materiais,
 
                 // day 3
-                eixo3: responseDay3.eixo,
-                saber3: `${responseDay3.saber01}\n \n${responseDay3.saber02}`,
-                aprendizagem3: `${responseDay3.aprendizagem01}\n \n${responseDay3.aprendizagem02}`,
-                atividade3: plans.value.day3.map(
-                    (item, index) =>
-                        `${item.toString()} - (${startClassHour.value.day3[index]} Hr ~ ${endClassHour.value.day3[index]} Hr) \n \n`,
-                ),
+                eixo3: responseDay3.eixo
+                    .map((item) => item.toString())
+                    .join("\n"),
+                saber3: `${responseDay3.saber.map((item) => item.toString()).join("\n")}\n`,
+                aprendizagem3: `${responseDay3.aprendizagem.map((item) => item.toString()).join("\n")}\n`,
+                atividade3: plans.value.day1
+                    .map(
+                        (item, index) =>
+                            `${item.toString()} - (${startClassHour.value.day1[index]} Hr ~ ${endClassHour.value.day1[index]} Hr) \n \n`,
+                    )
+                    .join("\n \n"),
                 contextualizacao3: responseDay3.contextualizacao,
-                foco3: responseDay3.foco_avaliativo,
+                foco3: responseDay3.foco_avaliativo
+                    .map((item) => item.toString())
+                    .join("\n"),
                 materiais3: responseDay3.materiais,
 
                 // day 4
-                eixo4: responseDay4.eixo,
-                saber4: `${responseDay4.saber01}\n \n${responseDay4.saber02}`,
-                aprendizagem4: `${responseDay4.aprendizagem01}\n \n${responseDay4.aprendizagem02}`,
-                atividade4: plans.value.day4.map(
-                    (item, index) =>
-                        `${item.toString()} - (${startClassHour.value.day4[index]} Hr ~ ${endClassHour.value.day4[index]} Hr) \n \n`,
-                ),
+                eixo4: responseDay4.eixo
+                    .map((item) => item.toString())
+                    .join("\n"),
+                saber4: `${responseDay4.saber.map((item) => item.toString()).join("\n")}\n`,
+                aprendizagem4: `${responseDay4.aprendizagem.map((item) => item.toString()).join("\n")}\n`,
+                atividade4: plans.value.day1
+                    .map(
+                        (item, index) =>
+                            `${item.toString()} - (${startClassHour.value.day1[index]} Hr ~ ${endClassHour.value.day1[index]} Hr) \n \n`,
+                    )
+                    .join("\n \n"),
                 contextualizacao4: responseDay4.contextualizacao,
-                foco4: responseDay4.foco_avaliativo,
+                foco4: responseDay4.foco_avaliativo
+                    .map((item) => item.toString())
+                    .join("\n"),
                 materiais4: responseDay4.materiais,
 
                 // day 5
-                eixo5: responseDay5.eixo,
-                saber5: `${responseDay5.saber01}\n \n${responseDay5.saber02}`,
-                aprendizagem5: `${responseDay5.aprendizagem01}\n \n${responseDay5.aprendizagem02}`,
-                atividade5: plans.value.day5.map(
-                    (item, index) =>
-                        `${item.toString()} - (${startClassHour.value.day5[index]} Hr ~ ${endClassHour.value.day5[index]} Hr) \n \n`,
-                ),
+                eixo5: responseDay5.eixo
+                    .map((item) => item.toString())
+                    .join("\n"),
+                saber5: `${responseDay5.saber.map((item) => item.toString()).join("\n")}\n`,
+                aprendizagem5: `${responseDay5.aprendizagem.map((item) => item.toString()).join("\n")}\n`,
+                atividade5: plans.value.day1
+                    .map(
+                        (item, index) =>
+                            `${item.toString()} - (${startClassHour.value.day1[index]} Hr ~ ${endClassHour.value.day1[index]} Hr) \n \n`,
+                    )
+                    .join("\n \n"),
                 contextualizacao5: responseDay5.contextualizacao,
-                foco5: responseDay5.foco_avaliativo,
+                foco5: responseDay5.foco_avaliativo
+                    .map((item) => item.toString())
+                    .join("\n"),
                 materiais5: responseDay5.materiais,
             };
 

@@ -8,12 +8,10 @@ interface IOllamaGemmaResponse {
 
 interface IClassPlanResponse {
     contextualizacao: string;
-    aprendizagem01: string;
-    aprendizagem02: string;
-    saber01: string;
-    saber02: string;
-    eixo: string;
-    foco_avaliativo: string;
+    aprendizagem: Array<string>;
+    saber: Array<string>;
+    eixo: Array<string>;
+    foco_avaliativo: Array<string>;
     materiais: string;
 }
 
