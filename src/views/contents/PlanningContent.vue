@@ -67,6 +67,8 @@ const planDateStart = ref("");
 const planDateEnd = ref("");
 const showAditionalInformation = ref(false);
 const rangeDates = ref();
+const selectedElement = ref<number | null>(null);
+const dragSourceDay = ref<IDays["days"] | null>(null);
 const isLoadingContext = inject("isLoading") as ILoadingContext;
 const popupContext = inject("popup") as IPopupContext;
 const showPreviewContext = inject("showPreview") as IShowPreviewContext;
@@ -222,6 +224,77 @@ const isAditionInformationMissing = (): boolean => {
 
 const stopPropagation = (event: Event): void => {
     event.stopPropagation();
+};
+
+const onDragStart = (day: IDays["days"], index: number): void => {
+    selectedElement.value = index;
+    dragSourceDay.value = day;
+};
+
+const handleDragOver = (event: DragEvent): void => {
+    event.preventDefault();
+};
+
+const onDragEnd = (): void => {
+    selectedElement.value = null;
+    dragSourceDay.value = null;
+};
+
+const handleDrop = (day: IDays["days"], dropIndex: number): void => {
+    if (selectedElement.value === null || dragSourceDay.value !== day) return;
+
+    const sourceIndex = selectedElement.value;
+    if (sourceIndex === dropIndex) return;
+
+    const tempPlan = plans.value[day][sourceIndex];
+    const tempStart = startClassHour.value[day][sourceIndex];
+    const tempEnd = endClassHour.value[day][sourceIndex];
+
+    plans.value[day].splice(sourceIndex, 1);
+    plans.value[day].splice(dropIndex, 0, tempPlan);
+
+    startClassHour.value[day].splice(sourceIndex, 1);
+    startClassHour.value[day].splice(dropIndex, 0, tempStart);
+
+    endClassHour.value[day].splice(sourceIndex, 1);
+    endClassHour.value[day].splice(dropIndex, 0, tempEnd);
+
+    selectedElement.value = null;
+    dragSourceDay.value = null;
+};
+
+const moveClassUp = (index: number): void => {
+    if (index <= 0) return;
+    const day = selectedDay.value;
+
+    const tempPlan = plans.value[day][index];
+    plans.value[day][index] = plans.value[day][index - 1];
+    plans.value[day][index - 1] = tempPlan;
+
+    const tempStart = startClassHour.value[day][index];
+    startClassHour.value[day][index] = startClassHour.value[day][index - 1];
+    startClassHour.value[day][index - 1] = tempStart;
+
+    const tempEnd = endClassHour.value[day][index];
+    endClassHour.value[day][index] = endClassHour.value[day][index - 1];
+    endClassHour.value[day][index - 1] = tempEnd;
+};
+
+const moveClassDown = (index: number): void => {
+    const day = selectedDay.value;
+    if (index >= plans.value[day].length - 1) return;
+
+    const tempPlan = plans.value[day][index];
+    plans.value[day][index] = plans.value[day][index + 1];
+    plans.value[day][index + 1] = tempPlan;
+
+    const tempStart = startClassHour.value[day][index];
+    startClassHour.value[day][index] = startClassHour.value[day][index + 1];
+    startClassHour.value[day][index + 1] = tempStart;
+
+    const tempEnd = endClassHour.value[day][index];
+    endClassHour.value[day][index] = endClassHour.value[day][index + 1];
+    endClassHour.value[day][index + 1] = tempEnd;
 };
 
 const showTemplatePreviewChoose = () => {
@@ -551,7 +624,7 @@ const generatePlan = async () => {
                 // day 1
                 eixo1: responseDay1.eixo
                     .map((item) => item.toString())
-                    .join("\n"),
+                    .join("\n \n"),
                 saber1: `${responseDay1.saber.map((item) => item.toString()).join("\n")}\n`,
                 aprendizagem1: `${responseDay1.aprendizagem.map((item) => item.toString()).join("\n")}\n`,
                 atividade1: plans.value.day1
@@ -563,15 +636,15 @@ const generatePlan = async () => {
                 contextualizacao1: responseDay1.contextualizacao,
                 foco1: responseDay1.foco_avaliativo
                     .map((item) => item.toString())
-                    .join("\n"),
+                    .join("\n \n"),
                 materiais1: responseDay1.materiais,
 
                 // day 2
                 eixo2: responseDay2.eixo
                     .map((item) => item.toString())
-                    .join("\n"),
-                saber2: `${responseDay2.saber.map((item) => item.toString()).join("\n")}\n`,
-                aprendizagem2: `${responseDay2.aprendizagem.map((item) => item.toString()).join("\n")}\n`,
+                    .join("\n \n"),
+                saber2: `${responseDay2.saber.map((item) => item.toString()).join("\n \n")}\n`,
+                aprendizagem2: `${responseDay2.aprendizagem.map((item) => item.toString()).join("\n \n")}\n`,
                 atividade2: plans.value.day1
                     .map(
                         (item, index) =>
@@ -581,15 +654,15 @@ const generatePlan = async () => {
                 contextualizacao2: responseDay2.contextualizacao,
                 foco2: responseDay2.foco_avaliativo
                     .map((item) => item.toString())
-                    .join("\n"),
+                    .join("\n \n"),
                 materiais2: responseDay2.materiais,
 
                 // day 3
                 eixo3: responseDay3.eixo
                     .map((item) => item.toString())
-                    .join("\n"),
-                saber3: `${responseDay3.saber.map((item) => item.toString()).join("\n")}\n`,
-                aprendizagem3: `${responseDay3.aprendizagem.map((item) => item.toString()).join("\n")}\n`,
+                    .join("\n \n"),
+                saber3: `${responseDay3.saber.map((item) => item.toString()).join("\n \n")}\n`,
+                aprendizagem3: `${responseDay3.aprendizagem.map((item) => item.toString()).join("\n \n")}\n`,
                 atividade3: plans.value.day1
                     .map(
                         (item, index) =>
@@ -599,15 +672,15 @@ const generatePlan = async () => {
                 contextualizacao3: responseDay3.contextualizacao,
                 foco3: responseDay3.foco_avaliativo
                     .map((item) => item.toString())
-                    .join("\n"),
+                    .join("\n \n"),
                 materiais3: responseDay3.materiais,
 
                 // day 4
                 eixo4: responseDay4.eixo
                     .map((item) => item.toString())
                     .join("\n"),
-                saber4: `${responseDay4.saber.map((item) => item.toString()).join("\n")}\n`,
-                aprendizagem4: `${responseDay4.aprendizagem.map((item) => item.toString()).join("\n")}\n`,
+                saber4: `${responseDay4.saber.map((item) => item.toString()).join("\n \n")}\n`,
+                aprendizagem4: `${responseDay4.aprendizagem.map((item) => item.toString()).join("\n \n")}\n`,
                 atividade4: plans.value.day1
                     .map(
                         (item, index) =>
@@ -617,15 +690,15 @@ const generatePlan = async () => {
                 contextualizacao4: responseDay4.contextualizacao,
                 foco4: responseDay4.foco_avaliativo
                     .map((item) => item.toString())
-                    .join("\n"),
+                    .join("\n \n"),
                 materiais4: responseDay4.materiais,
 
                 // day 5
                 eixo5: responseDay5.eixo
                     .map((item) => item.toString())
-                    .join("\n"),
-                saber5: `${responseDay5.saber.map((item) => item.toString()).join("\n")}\n`,
-                aprendizagem5: `${responseDay5.aprendizagem.map((item) => item.toString()).join("\n")}\n`,
+                    .join("\n \n"),
+                saber5: `${responseDay5.saber.map((item) => item.toString()).join("\n \n")}\n`,
+                aprendizagem5: `${responseDay5.aprendizagem.map((item) => item.toString()).join("\n \n")}\n`,
                 atividade5: plans.value.day1
                     .map(
                         (item, index) =>
@@ -635,7 +708,7 @@ const generatePlan = async () => {
                 contextualizacao5: responseDay5.contextualizacao,
                 foco5: responseDay5.foco_avaliativo
                     .map((item) => item.toString())
-                    .join("\n"),
+                    .join("\n \n"),
                 materiais5: responseDay5.materiais,
             };
 
@@ -806,8 +879,21 @@ watch(rangeDates, () => {
                         >📚 {{ t("design.classActivity") }}
                         {{ index + 1 }}</label
                     >
-                    <span class="row">
+                    <span
+                        class="row"
+                        :class="{
+                            dragging:
+                                selectedElement === index ? 'dragging' : '',
+                        }"
+                        draggable="true"
+                        @dragstart="() => onDragStart(selectedDay, index)"
+                        @dragover="(event) => handleDragOver(event)"
+                        @drop="() => handleDrop(selectedDay, index)"
+                        @dragend="() => onDragEnd()"
+                    >
                         <div class="hourClass">
+                            <i class="pi pi-arrows-v iconReposition"></i>
+                            <div class="repositionButtonsContainer"></div>
                             <input
                                 type="text"
                                 :value="plano"
@@ -822,7 +908,24 @@ watch(rangeDates, () => {
                                         )
                                 "
                             />
-                            <span class="timeInputContainer">
+                            <div class="timeInputContainer">
+                                <span class="buttonRepositionContainer">
+                                    <button
+                                        class="repositionButton"
+                                        type="button"
+                                        @click="moveClassUp(index)"
+                                    >
+                                        <i class="pi pi-arrow-up"></i>
+                                    </button>
+
+                                    <button
+                                        class="repositionButton"
+                                        type="button"
+                                        @click="moveClassDown(index)"
+                                    >
+                                        <i class="pi pi-arrow-down"></i>
+                                    </button>
+                                </span>
                                 <input
                                     class="timeInput"
                                     type="time"
@@ -859,7 +962,7 @@ watch(rangeDates, () => {
                                             )
                                     "
                                 />
-                            </span>
+                            </div>
                         </div>
                         <button
                             type="button"
@@ -1127,6 +1230,15 @@ watch(rangeDates, () => {
                         v-for="(value, index) in plans[selectedDay]"
                         :key="index"
                         class="classWrapper"
+                        :class="{
+                            dragging:
+                                selectedElement === index ? 'dragging' : '',
+                        }"
+                        draggable="true"
+                        @dragstart="() => onDragStart(selectedDay, index)"
+                        @dragover="(event) => handleDragOver(event)"
+                        @drop="() => handleDrop(selectedDay, index)"
+                        @dragend="() => onDragEnd()"
                     >
                         <span class="classDescription">
                             <h2 :data-theme="isDark ? 'dark' : 'light'">
@@ -1134,6 +1246,7 @@ watch(rangeDates, () => {
                                 {{ index + 1 }}:
                             </h2>
                             <div class="hourClass">
+                                <i class="pi pi-arrows-v iconReposition"></i>
                                 <input
                                     type="text"
                                     :placeholder="`${t('design.inputPlaceholder')}`"
@@ -1150,6 +1263,23 @@ watch(rangeDates, () => {
                                     "
                                 />
                                 <span>
+                                    <span class="buttonRepositionContainer">
+                                        <button
+                                            class="repositionButton"
+                                            type="button"
+                                            @click="moveClassUp(index)"
+                                        >
+                                            <i class="pi pi-arrow-up"></i>
+                                        </button>
+
+                                        <button
+                                            class="repositionButton"
+                                            type="button"
+                                            @click="moveClassDown(index)"
+                                        >
+                                            <i class="pi pi-arrow-down"></i>
+                                        </button>
+                                    </span>
                                     <input
                                         class="timeInput"
                                         type="time"

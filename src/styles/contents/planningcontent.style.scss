@@ -43,13 +43,17 @@ label {
 
 input {
     background-color: var(--dp-lightfall);
-    border: 1px solid var(--dp-accent-color);
+    border: 1px solid var(--dp-gray);
     padding: 10px 30px 10px 8px;
     color: var(--dp-accent-color);
     font-weight: 600;
     border-radius: 5px;
     font-size: 14pt;
     width: 95%;
+}
+
+input:focus {
+    border: solid 2px var(--dp-accent-color);
 }
 
 .btnTrash {
@@ -93,6 +97,7 @@ input {
     display: flex;
     flex-direction: column;
     margin-top: 20px;
+    width: 95%;
 
     .aditionalInformationsContainer {
         display: flex;
@@ -243,337 +248,372 @@ input {
                 display: flex;
                 align-items: center;
                 gap: 10px;
+                width: 100%;
 
-                span {
+                .iconReposition {
+                    color: var(--dp-gray);
+                    cursor: grab;
+                    font-size: 16pt;
+                    margin-top: 5px;
+                }
+
+                .timeInputContainer {
                     display: flex;
-                    gap: 10px;
+                    justify-content: space-between;
+                    gap: 5px;
 
-                    .timeInputContainer {
-                        display: flex;
-                        justify-content: space-between;
-                        gap: 5px;
+                    .buttonRepositionContainer {
+                        display: none;
+                    }
 
-                        input {
-                            border: solid 1px var(--dp-gray);
-                            color: var(--dp-accent-color);
-                            margin-top: 5px;
-                            padding-right: 10px;
-                            font-size: 10pt;
+                    input {
+                        border: solid 1px var(--dp-gray);
+                        color: var(--dp-accent-color);
+                        padding-right: 10px;
+                        font-size: 10pt;
+                    }
+
+                    .timeInput {
+                        width: 100%;
+                        font-size: 10pt;
+                        color: var(--dp-accent-color);
+                        font-size: 13pt;
+
+                        &::-webkit-calendar-picker-indicator {
+                            filter: invert(48%) sepia(79%) saturate(2476%)
+                                hue-rotate(316deg) brightness(100%)
+                                contrast(97%);
                         }
+                    }
 
-                        .timeInput {
-                            width: 45%;
-                            font-size: 10pt;
-                            color: var(--dp-accent-color);
-
-                            &::-webkit-calendar-picker-indicator {
-                                filter: invert(48%) sepia(79%) saturate(2476%)
-                                    hue-rotate(316deg) brightness(100%)
-                                    contrast(97%);
-                            }
-                        }
+                    .timeInput:focus {
+                        border: solid 2px var(--dp-accent-color);
                     }
                 }
             }
         }
     }
+}
 
-    .dailyPlan {
-        min-height: 500px;
-        position: relative;
+.dailyPlan {
+    min-height: 500px;
+    position: relative;
+}
+
+form.dailyPlan > .btnContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    gap: 10px;
+    bottom: 0;
+    margin-top: 30px;
+
+    button {
+        border-radius: 5px;
+        padding: 10px;
+        width: 50%;
+        display: flex;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+        font-size: 16pt;
     }
 
-    form.dailyPlan > .btnContainer {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 30px;
-        gap: 10px;
-        bottom: 0;
-        margin-top: 30px;
+    button:nth-child(1) {
+        background-color: var(--dp-lightfall);
+        color: var(--dp-accent-color);
+        border: solid 2px var(--dp-accent-color);
+        transition: 0.4s;
+        font-weight: 500;
 
-        button {
-            border-radius: 5px;
-            padding: 10px;
-            width: 50%;
-            display: flex;
-            cursor: pointer;
-            align-items: center;
-            justify-content: center;
-            margin-top: 10px;
-            font-size: 16pt;
+        i {
+            margin-right: 5px;
         }
+    }
 
-        button:nth-child(1) {
+    button:nth-child(1):hover {
+        background-color: var(--dp-accent-color);
+        color: var(--dp-lightfall);
+        transition: 0.4s;
+    }
+
+    button:nth-child(2) {
+        font-weight: 600;
+    }
+
+    .btnDiaryGenerateCancel {
+        background-color: var(--dp-gray);
+        color: var(--dp-black);
+        transition: 0.4s;
+        border: var(--dp-gray);
+        cursor: not-allowed;
+    }
+
+    .btnDiaryGenerateCancel:hover {
+        background-color: var(--dp-dark-gray);
+        transition: 0.4s;
+        color: var(--dp-black);
+    }
+
+    .btnDiaryGenerate {
+        color: var(--dp-lightfall);
+        background-color: var(--dp-accent-color);
+        transition: 0.4s;
+    }
+
+    .btnDiaryGenerate:hover {
+        background-color: var(--dp-accent-color-dark);
+        transition: 0.4s;
+    }
+}
+
+div.weeklyPlan {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+    border: solid 2px var(--dp-accent-color);
+    border-radius: 10px;
+    height: 400px;
+    margin-left: 0px;
+    margin-right: 0px;
+
+    .weekDaysMobile {
+        display: none;
+    }
+
+    .weekDays {
+        width: 30%;
+        display: flex;
+        flex-direction: column;
+        border-right: solid 2px var(--dp-accent-color);
+
+        li.btnWeekDays {
+            height: 25%;
             background-color: var(--dp-lightfall);
             color: var(--dp-accent-color);
-            border: solid 2px var(--dp-accent-color);
-            transition: 0.4s;
+            border-bottom: solid 1px var(--dp-accent-color);
+            padding: 20px;
+            margin-right: 0;
+            font-size: 14pt;
+            display: flex;
+            align-items: center;
             font-weight: 500;
 
-            i {
-                margin-right: 5px;
+            i.iconUncheck {
+                color: var(--dp-gray);
+                margin-right: 7px;
+            }
+
+            i.iconCheck {
+                color: var(--dp-dark-green);
+                font-weight: bold;
+                margin-right: 7px;
             }
         }
 
-        button:nth-child(1):hover {
+        li.btnWeekDays:last-child {
+            border: none;
+            border-bottom-left-radius: 10px;
+        }
+
+        li.selected {
             background-color: var(--dp-accent-color);
-            color: var(--dp-lightfall);
-            transition: 0.4s;
-        }
-
-        button:nth-child(2) {
-            font-weight: 600;
-        }
-
-        .btnDiaryGenerateCancel {
-            background-color: var(--dp-gray);
-            color: var(--dp-black);
-            transition: 0.4s;
-            border: var(--dp-gray);
-            cursor: not-allowed;
-        }
-
-        .btnDiaryGenerateCancel:hover {
-            background-color: var(--dp-dark-gray);
-            transition: 0.4s;
-            color: var(--dp-black);
-        }
-
-        .btnDiaryGenerate {
-            color: var(--dp-lightfall);
-            background-color: var(--dp-accent-color);
-            transition: 0.4s;
-        }
-
-        .btnDiaryGenerate:hover {
-            background-color: var(--dp-accent-color-dark);
-            transition: 0.4s;
+            color: var(--dp-text-color);
+            font-weight: bold;
         }
     }
 
-    div.weeklyPlan {
+    .classContentContainer {
+        padding: 10px;
         display: flex;
-        flex-direction: row;
-        margin-top: 20px;
-        border: solid 2px var(--dp-accent-color);
-        border-radius: 10px;
-        height: 400px;
-        margin-left: 20px;
-        margin-right: 20px;
+        width: 100%;
+        flex-direction: column;
+        box-shadow: 4px 4px 12px var(--dp-light-gray);
 
-        .weekDaysMobile {
-            display: none;
-        }
-
-        .weekDays {
-            width: 30%;
+        .classContent {
+            height: 85%;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
-            border-right: solid 2px var(--dp-accent-color);
+            overflow-x: hidden;
 
-            li.btnWeekDays {
-                height: 25%;
-                background-color: var(--dp-lightfall);
-                color: var(--dp-accent-color);
-                border-bottom: solid 1px var(--dp-accent-color);
-                padding: 20px;
-                margin-right: 0;
-                font-size: 14pt;
+            .classWrapper {
                 display: flex;
-                align-items: center;
-                font-weight: 500;
+                align-items: end;
+                width: 100%;
+                height: fit-content;
 
-                i.iconUncheck {
-                    color: var(--dp-gray);
-                    margin-right: 7px;
-                }
-
-                i.iconCheck {
-                    color: var(--dp-dark-green);
-                    font-weight: bold;
-                    margin-right: 7px;
-                }
-            }
-
-            li.btnWeekDays:last-child {
-                border: none;
-                border-bottom-left-radius: 10px;
-            }
-
-            li.selected {
-                background-color: var(--dp-accent-color);
-                color: var(--dp-text-color);
-                font-weight: bold;
-            }
-        }
-
-        .classContentContainer {
-            padding: 10px;
-            display: flex;
-            width: 100%;
-            flex-direction: column;
-            box-shadow: 4px 4px 12px var(--dp-light-gray);
-
-            .classContent {
-                height: 85%;
-                overflow-y: auto;
-                display: flex;
-                flex-direction: column;
-
-                .classWrapper {
-                    display: flex;
-                    align-items: end;
+                .classDescription {
+                    display: block;
+                    margin-top: 20px;
+                    margin-bottom: 20px;
                     width: 100%;
                     height: fit-content;
 
-                    .classDescription {
-                        display: block;
-                        margin-top: 20px;
-                        margin-bottom: 20px;
-                        width: 100%;
-                        height: fit-content;
+                    h2 {
+                        color: var(--dp-gray);
+                    }
 
-                        h2 {
+                    h2[data-theme="dark"] {
+                        color: var(--dp-full-white);
+                    }
+
+                    .hourClass {
+                        display: flex;
+                        gap: 10px;
+
+                        .iconReposition {
+                            color: var(--dp-gray);
+                            cursor: grab;
+                            font-size: 16pt;
+                            margin-top: 17px;
+                        }
+
+                        input {
+                            width: 100%;
+                            border: solid 1px var(--dp-gray);
+                            color: var(--dp-accent-color);
+                            margin-top: 5px;
+                            padding-right: 10px;
+                        }
+
+                        input::placeholder {
                             color: var(--dp-gray);
                         }
 
-                        h2[data-theme="dark"] {
-                            color: var(--dp-full-white);
+                        input:focus {
+                            border: solid 2px var(--dp-accent-color);
                         }
 
-                        .hourClass {
+                        span {
                             display: flex;
-                            gap: 10px;
+                            justify-content: space-between;
+                            gap: 5px;
+
+                            .buttonRepositionContainer {
+                                display: none;
+                            }
 
                             input {
-                                width: 100%;
                                 border: solid 1px var(--dp-gray);
                                 color: var(--dp-accent-color);
                                 margin-top: 5px;
                                 padding-right: 10px;
                             }
 
-                            input::placeholder {
-                                color: var(--dp-gray);
-                            }
+                            .timeInput {
+                                width: 50%;
+                                font-size: 10pt;
+                                color: var(--dp-accent-color);
 
-                            input:focus {
-                                border: solid 2px var(--dp-accent-color);
-                            }
-                            span {
-                                display: flex;
-                                justify-content: space-between;
-                                gap: 5px;
-
-                                input {
-                                    border: solid 1px var(--dp-gray);
-                                    color: var(--dp-accent-color);
-                                    margin-top: 5px;
-                                    padding-right: 10px;
-                                }
-
-                                .timeInput {
-                                    width: 50%;
-                                    font-size: 10pt;
-                                    color: var(--dp-accent-color);
-
-                                    &::-webkit-calendar-picker-indicator {
-                                        filter: invert(48%) sepia(79%)
-                                            saturate(2476%) hue-rotate(316deg)
-                                            brightness(100%) contrast(97%);
-                                    }
+                                &::-webkit-calendar-picker-indicator {
+                                    filter: invert(48%) sepia(79%)
+                                        saturate(2476%) hue-rotate(316deg)
+                                        brightness(100%) contrast(97%);
                                 }
                             }
                         }
                     }
-
-                    .btnRemoveClass,
-                    .btnRemoveClassCancel {
-                        height: fit-content;
-                        font-size: 21pt;
-                        margin-bottom: 20px;
-                        color: var(--dp-accent-color);
-                        padding: 10px 10px 0 10px;
-                        background-color: var(--dp-lightfall);
-                        cursor: pointer;
-                        transition: 0.2s;
-                    }
-
-                    .btnRemoveClass:hover {
-                        transition: 0.2s;
-                        color: var(--dp-darker-red);
-                    }
-
-                    .btnRemoveClassCancel {
-                        color: var(--dp-gray);
-                        cursor: not-allowed;
-                    }
                 }
-            }
 
-            .btnControlsContainer {
-                width: 100%;
-                padding-top: 10px;
-                border-top: 1px solid var(--dp-gray);
-                position: relative;
-                bottom: 0;
-                display: flex;
-                justify-content: center;
-
-                button {
+                .btnRemoveClass,
+                .btnRemoveClassCancel {
                     height: fit-content;
-                    cursor: pointer;
-                    padding: 10px 50px;
-                    margin: 0 10px;
-                    background-color: var(--dp-lightfall);
+                    font-size: 21pt;
+                    margin-bottom: 20px;
                     color: var(--dp-accent-color);
-                    border: solid 2px var(--dp-accent-color);
-                    font-weight: bold;
-                    border-radius: 5px;
+                    padding: 10px 10px 0 10px;
+                    background-color: var(--dp-lightfall);
+                    cursor: pointer;
+                    transition: 0.2s;
                 }
 
-                button:last-child {
-                    background-color: var(--dp-accent-color);
-                    color: var(--dp-lightfall);
+                .btnRemoveClass:hover {
+                    transition: 0.2s;
+                    color: var(--dp-darker-red);
                 }
+
+                .btnRemoveClassCancel {
+                    color: var(--dp-gray);
+                    cursor: not-allowed;
+                }
+
+                &.dragging {
+                    opacity: 0.5;
+                    cursor: grabbing;
+                    transform: scale(1.02);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                }
+            }
+
+            .dragging {
+                cursor: grabbing;
             }
         }
 
-        .classContentContainer[data-theme="dark"] {
-            box-shadow: 0 0 0;
+        .btnControlsContainer {
+            width: 100%;
+            padding-top: 10px;
+            border-top: 1px solid var(--dp-gray);
+            position: relative;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+
+            button {
+                height: fit-content;
+                cursor: pointer;
+                padding: 10px 50px;
+                margin: 0 10px;
+                background-color: var(--dp-lightfall);
+                color: var(--dp-accent-color);
+                border: solid 2px var(--dp-accent-color);
+                font-weight: bold;
+                border-radius: 5px;
+            }
+
+            button:last-child {
+                background-color: var(--dp-accent-color);
+                color: var(--dp-lightfall);
+            }
         }
     }
 
-    .btnGeneratePlan,
-    .btnGeneratePlanCancel {
-        background-color: var(--dp-accent-color);
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--dp-lightfall);
-        font-size: 16pt;
-        font-weight: bold;
-        margin-top: 30px;
-        cursor: pointer;
-        padding: 10px;
-        border-radius: 5px;
-        width: 320px;
-        margin: 30px auto;
-        transition: 0.4s;
+    .classContentContainer[data-theme="dark"] {
+        box-shadow: 0 0 0;
     }
+}
 
-    .btnGeneratePlan:hover {
-        background-color: var(--dp-accent-color);
-        color: var(--dp-lightfall);
-        transition: 0.4s;
-    }
+.btnGeneratePlan,
+.btnGeneratePlanCancel {
+    background-color: var(--dp-accent-color);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dp-lightfall);
+    font-size: 16pt;
+    font-weight: bold;
+    margin-top: 30px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    width: 320px;
+    margin: 30px auto;
+    transition: 0.4s;
+}
 
-    .btnGeneratePlanCancel {
-        background-color: var(--dp-light-gray);
-        color: var(--dp-gray);
-        cursor: not-allowed;
-    }
+.btnGeneratePlan:hover {
+    background-color: var(--dp-accent-color);
+    color: var(--dp-lightfall);
+    transition: 0.4s;
+}
+
+.btnGeneratePlanCancel {
+    background-color: var(--dp-light-gray);
+    color: var(--dp-gray);
+    cursor: not-allowed;
 }
 
 @media screen and (max-width: 920px) {
@@ -702,19 +742,45 @@ input {
                     flex-direction: column;
                     width: 90%;
 
+                    .iconReposition {
+                        display: none;
+                    }
+
                     input {
                         width: 100%;
                     }
 
                     .timeInputContainer {
                         width: 100%;
+                        gap: 4px;
 
+                        .buttonRepositionContainer {
+                            display: flex;
+                            gap: 5px;
+                        }
+
+                        button {
+                            width: 100%;
+                            padding: 10px;
+                            background-color: var(--dp-lightfall);
+                            border: solid 1px var(--dp-accent-color);
+                            border-radius: 5px;
+                            color: var(--dp-accent-color);
+                            cursor: pointer;
+                        }
                         .timeInput {
                             width: 100%;
-                            font-size: 12pt;
+                            font-size: 10pt;
                             padding-right: 10px;
                         }
                     }
+                }
+
+                .btnTrashDisabled,
+                .btnTrash {
+                    align-self: end;
+                    height: fit-content;
+                    font-size: 10pt;
                 }
             }
         }
@@ -747,6 +813,10 @@ input {
                             flex-direction: column;
                             overflow: visible;
 
+                            .iconReposition {
+                                display: none;
+                            }
+
                             input[type="time"] {
                                 width: 100%;
                                 overflow: visible;
@@ -754,6 +824,23 @@ input {
                                 &::-webkit-calendar-picker-indicator {
                                     position: relative;
                                     right: 0;
+                                }
+                            }
+
+                            span {
+                                .buttonRepositionContainer {
+                                    display: flex !important;
+
+                                    button {
+                                        width: 100%;
+                                        padding: 10px;
+                                        margin-top: 5px;
+                                        background-color: var(--dp-lightfall);
+                                        border: solid 1px var(--dp-accent-color);
+                                        border-radius: 5px;
+                                        color: var(--dp-accent-color);
+                                        cursor: pointer;
+                                    }
                                 }
                             }
                         }
@@ -817,8 +904,6 @@ input {
         }
 
         div.weeklyPlan {
-            margin: 15px;
-
             .weekPlan {
                 display: flex;
                 align-items: center;
@@ -839,6 +924,44 @@ input {
                 button.btnAddClassAtv {
                     width: 90%;
                     margin: 10px 0;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 355px) {
+    .planningContainer {
+        .dailyPlanContentContainer {
+            section {
+                .hourClass {
+                    .timeInputContainer {
+                        flex-wrap: wrap;
+
+                        span {
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+
+        div.weeklyPlan {
+            .classContentContainer {
+                .classContent {
+                    .classWrapper {
+                        .classDescription {
+                            .hourClass {
+                                span {
+                                    flex-direction: column;
+
+                                    .timeInput {
+                                        width: 100%;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
