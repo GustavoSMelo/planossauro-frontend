@@ -157,7 +157,8 @@
         transition: 0.4s;
     }
 
-    .aditionalInformationsContainer {
+    .aditionalInformationsContainer,
+    .supportContainer {
         display: flex;
         width: 100%;
         border: solid 1px var(--dp-light-gray);
@@ -185,8 +186,19 @@
         }
     }
 
-    .aditionalInformationsContainer[data-theme="dark"] {
+    .aditionalInformationsContainer[data-theme="dark"],
+    .supportContainer {
         box-shadow: 0 0 0;
+    }
+
+    .supportContainer {
+        flex-direction: row-reverse;
+        align-items: right;
+        text-align: right;
+
+        img {
+            transform: scaleX(-1);
+        }
     }
 
     .aditionalInformationsContainer:hover {

@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { inject, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useDark } from "@vueuse/core";
+
 import backendApi from "../../api/api";
+import convertIsoDateToBR from "../../helpers/dateIsoConvertToBR";
 import type { IPlanning } from "../../interfaces/api/planning.interface";
 import type { ILoadingContext } from "../../interfaces/context/loading.interface";
 import type { IPageContent } from "../../interfaces/pageContents.interface";
-import convertIsoDateToBR from "../../helpers/dateIsoConvertToBR";
-import { useI18n } from "vue-i18n";
-import { useDark } from "@vueuse/core";
 
 const { handleChangeCurrentContent } = defineProps<{
     handleChangeCurrentContent: (newValue: IPageContent["contents"]) => void;
@@ -31,7 +32,7 @@ const { handleChangeIsLoading } = inject("isLoading") as ILoadingContext;
 const getDataFromAPI = async () => {
     try {
         handleChangeIsLoading(true);
-        const uuid = JSON.parse(sessionStorage.getItem('user') ?? '{}').uuid;
+        const uuid = JSON.parse(sessionStorage.getItem("user") ?? "{}").uuid;
         const { data: planningsDataList }: { data: Array<IPlanning> } = (
             await backendApi.get(
                 `/planning/paginate/${uuid}?page=${currentPage.value}`,
@@ -99,7 +100,7 @@ const searchByFilterParameters = async () => {
     try {
         handleChangeIsLoading(true);
 
-        const uuid = JSON.parse(sessionStorage.getItem('user') ?? '{}').uuid;
+        const uuid = JSON.parse(sessionStorage.getItem("user") ?? "{}").uuid;
         const planningsResponse = (
             await backendApi.post(`/planning/search/${uuid}`, {
                 school_name: schoolName.value,
@@ -125,6 +126,16 @@ const handleEditPlanningInformations = (uuid: string) => {
 const handleDeletePlanning = (uuid: string) => {
     sessionStorage.setItem("planning_selectedUUID", uuid);
     handleChangeCurrentContent("remove_planning");
+};
+
+const handleClearFilterAndSearch = () => {
+    className.value = "";
+    schoolName.value = "";
+    archived.value = false;
+    startDatePlanning.value = "";
+    planningType.value = "";
+    plannings.value = [];
+    getDataFromAPI();
 };
 
 onMounted(() => {
@@ -178,6 +189,9 @@ onMounted(() => {
 
         <button type="button" @click="searchByFilterParameters">
             {{ $t("planning.search") }}
+        </button>
+        <button type="button" @click="handleClearFilterAndSearch">
+            {{ $t("planning.clear") }}
         </button>
     </form>
     <section class="listingContainer">

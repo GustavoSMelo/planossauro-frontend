@@ -1,10 +1,13 @@
 <script lang="ts" setup>
 import { inject, onMounted, ref } from "vue";
+import { useDark } from "@vueuse/core";
+import { useRouter } from "vue-router";
+import backendApi from "../../api/api";
 import type { ILoadingContext } from "../../interfaces/context/loading.interface";
 import type { IDashboard } from "../../interfaces/dashboard.interface";
-import backendApi from "../../api/api";
 import type { IPageContent } from "../../interfaces/pageContents.interface";
-import { useDark } from "@vueuse/core";
+
+const router = useRouter();
 
 const { handleChangeCurrentContent } = defineProps<{
     handleChangeCurrentContent: (newValue: IPageContent["contents"]) => void;
@@ -26,7 +29,7 @@ const handleGetPercentual = (usedTokens: number, maxTokens: number): number => {
 const handleGetDashboardInformation = async () => {
     try {
         handleChangeIsLoading(true);
-        const uuid = JSON.parse(sessionStorage.getItem("user") ?? '{}').uuid;
+        const uuid = JSON.parse(sessionStorage.getItem("user") ?? "{}").uuid;
         const response = (
             await backendApi.get(`/subscription/dashboard/${uuid}`)
         ).data as IDashboard;
@@ -200,6 +203,19 @@ onMounted(() => {
                 </button>
             </span>
             <img src="../../assets/bills_dino.png" />
+        </section>
+
+        <section
+            class="supportContainer"
+            :data-theme="isDark ? 'dark' : 'light'"
+        >
+            <span>
+                <h2>{{ $t("home.support") }}</h2>
+                <button type="button" @click="router.push('support')">
+                    {{ $t("home.supportBtn") }}
+                </button>
+            </span>
+            <img src="../../assets/DinoSupport.png" />
         </section>
     </div>
 </template>

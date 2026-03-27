@@ -37,32 +37,33 @@ const parseLLMResponse = (rawResponse: string): IClassPlanResponse => {
 const validateAndFillResponse = (
     parsed: Record<string, unknown>,
 ): IClassPlanResponse => {
-    const requiredFields = [
-        "contextualizacao",
-        "aprendizagem01",
-        "aprendizagem02",
-        "saber01",
-        "saber02",
-        "eixo",
-        "foco_avaliativo",
-        "materiais",
-    ];
-
     const response: IClassPlanResponse = {
         contextualizacao: "",
-        aprendizagem01: "",
-        aprendizagem02: "",
-        saber01: "",
-        saber02: "",
-        eixo: "",
-        foco_avaliativo: "",
+        aprendizagem: [],
+        saber: [],
+        eixo: [],
+        foco_avaliativo: [],
         materiais: "",
     };
 
-    for (const field of requiredFields) {
-        if (parsed[field] && typeof parsed[field] === "string") {
-            (response as unknown as Record<string, string>)[field] =
-                parsed[field].trim();
+    if (parsed.contextualizacao && typeof parsed.contextualizacao === "string") {
+        response.contextualizacao = parsed.contextualizacao.trim();
+    }
+
+    if (parsed.materiais && typeof parsed.materiais === "string") {
+        response.materiais = parsed.materiais.trim();
+    }
+
+    const arrayFields = ["aprendizagem", "saber", "eixo", "foco_avaliativo"] as const;
+    for (const field of arrayFields) {
+        if (parsed[field]) {
+            if (Array.isArray(parsed[field])) {
+                response[field] = parsed[field]
+                    .filter((item): item is string => typeof item === "string")
+                    .map((item) => item.trim());
+            } else if (typeof parsed[field] === "string") {
+                response[field] = [parsed[field].trim()];
+            }
         }
     }
 
@@ -72,12 +73,10 @@ const validateAndFillResponse = (
 const getDefaultResponse = (): IClassPlanResponse => {
     return {
         contextualizacao: "Erro ao gerar - resposta inválida",
-        aprendizagem01: "Erro ao gerar",
-        aprendizagem02: "Erro ao gerar",
-        saber01: "Erro ao gerar",
-        saber02: "Erro ao gerar",
-        eixo: "Erro ao gerar",
-        foco_avaliativo: "Erro ao gerar",
+        aprendizagem: ["Erro ao gerar"],
+        saber: ["Erro ao gerar"],
+        eixo: ["Erro ao gerar"],
+        foco_avaliativo: ["Erro ao gerar"],
         materiais: "Erro ao gerar",
     };
 };
