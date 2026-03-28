@@ -49,7 +49,7 @@ const handleChangeFullName = (event: Event): void => {
 
 const handleChangeCellphoneNumber = (event: Event): void => {
     let { value } = event.target as HTMLInputElement;
-    value = value.replace(/[a-zA-Z!@#$%^&*_+=]/g, "").trim();
+    value = value.replace(/[^0-9() -]/g, "").trim();
 
     if (value[value.length - 1] === "(" || value[value.length - 1] === ")") {
         if (Boolean(value.length !== 0) && Boolean(value.length !== 4)) {

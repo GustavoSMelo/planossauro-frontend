@@ -61,13 +61,15 @@ const downloadDocument = (index: number) => {
         bytes[i] = documentContent.charCodeAt(i);
     }
 
-    const file = new File(
-        [bytes],
-        `planjemanto-${element.school_name}-${element.class_name}-${element.start_plan}.docx`,
-    );
+    const fileName = `planjemanto-${element.school_name}-${element.class_name}-${element.start_plan}.docx`;
+    const file = new File([bytes], fileName, {
+        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    });
     const link = window.document.createElement("a");
     link.href = URL.createObjectURL(file);
+    link.download = fileName;
     link.click();
+    URL.revokeObjectURL(link.href);
     link.remove();
 };
 
