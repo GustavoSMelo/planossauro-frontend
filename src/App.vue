@@ -19,6 +19,7 @@ const isDark = useDark({
 let timeoutId = ref<ReturnType<typeof setTimeout> | undefined>(undefined);
 const hamburgueMenuToggle = ref(false);
 const isLoading = ref(false);
+const planningType = ref<"Semanal" | "Diario">("Semanal");
 
 const popup = reactive<IPopup>({
     message: "",
@@ -39,14 +40,14 @@ const templateChoose = reactive<ITemplateChoose>({
     templateType: "Semanal",
 });
 
-watch(popup, () => {
+watch(popup, (): void => {
     timeoutId.value = setTimeout(() => {
         popup.show = false;
     }, 4000);
 });
 
 // changing states
-const handleChangeIsLoading = (newValue: boolean) => {
+const handleChangeIsLoading = (newValue: boolean): void => {
     isLoading.value = newValue;
 };
 
@@ -85,8 +86,12 @@ const handleChangeTemplateChoose = (
     templateChoose.templateType = newTemplateChoose.templateType;
 };
 
-const handleHamburgueMenuToggle = (toggle: boolean) => {
+const handleHamburgueMenuToggle = (toggle: boolean): void => {
     hamburgueMenuToggle.value = toggle;
+};
+
+const handleChangePlanningType = (newValue: "Semanal" | "Diario"): void => {
+    planningType.value = newValue;
 };
 
 // defining context
@@ -98,6 +103,7 @@ provide("hamburgueMenuToggle", {
     hamburgueMenuToggle,
     handleHamburgueMenuToggle,
 });
+provide("planningType", { planningType, handleChangePlanningType });
 </script>
 
 <template>

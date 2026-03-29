@@ -550,7 +550,7 @@ const handleUnlinkAccount = async () => {
                         }}
                     </button>
                 </p>
-                <p>
+                <!-- <p>
                     <b
                         ><i class="pi pi-phone"></i> SMS
                         {{ t("profile.validated") }}:
@@ -566,7 +566,7 @@ const handleUnlinkAccount = async () => {
                         ></i>
                         {{ t("profile.validate") }}
                     </button>
-                </p>
+                </p> -->
                 <p class="createdAtText">
                     {{ t("profile.userSince") }}:
                     {{ convertIsoDateToBR((user?.created_at as string) ?? "") }}
@@ -653,6 +653,9 @@ const handleUnlinkAccount = async () => {
                     <h3>{{ t("profile.appVersion") }}:</h3>
 
                     <p>Version 0.0.0</p>
+                </div>
+                <div>
+                    <h3>{{ t("profile.bibleVersicle") }}</h3>
                 </div>
             </details>
         </div>

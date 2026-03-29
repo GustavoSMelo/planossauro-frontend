@@ -28,7 +28,7 @@ const logout = () => {
 };
 
 const getPlan = async () => {
-    const uuid = JSON.parse(sessionStorage.getItem('user') ?? '{}').uuid;
+    const uuid = JSON.parse(sessionStorage.getItem("user") ?? "{}").uuid;
     const subscription = (await backendApi.get(`/subscription/${uuid}`)).data
         .subscription as ISubscription;
     const selectedPlan = (
@@ -68,9 +68,9 @@ onMounted(() => {
             <li class="planInfo">Plano {{ planName }}</li>
             <hr />
             <li
-                @click="handleChangeMobilePage('planning')"
+                @click="handleChangeMobilePage('design')"
                 :class="[
-                    currentContent === 'planning' ? 'choosed' : '',
+                    currentContent === 'design' ? 'choosed' : '',
                     'btnNavbar',
                 ]"
             >

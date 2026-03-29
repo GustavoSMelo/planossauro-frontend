@@ -268,7 +268,7 @@ onMounted(() => {
             <button
                 type="button"
                 class="btnGotoPlan"
-                @click="handleChangeCurrentContent('planning')"
+                @click="handleChangeCurrentContent('design')"
             >
                 <i class="pi pi-plus-circle"></i
                 >{{ $t("planning.createPlanning") }}

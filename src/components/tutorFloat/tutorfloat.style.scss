@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+.tutor-float {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+
+    .icon {
+        font-size: 20pt;
+        color: var(--dp-text-color);
+        background-color: var(--dp-accent-color);
+        padding: 20px;
+        border-radius: 200px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.5s;
+    }
+
+    .icon:hover {
+        transition: 0.5s;
+        transform: scale(1.1);
+    }
+}

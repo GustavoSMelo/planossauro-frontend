@@ -2,7 +2,7 @@
 
 @font-face {
     font-family: Roboto;
-    src: url("../assets/fonts/Roboto/Roboto.ttf");
+    src: url("../assets/fonts/Roboto/Roboto-Regular.ttf");
 }
 
 @font-face {
@@ -124,7 +124,7 @@
 
 html,
 body {
-    max-width: 1920px;
+    max-width: 100%;
     min-width: 320px;
     margin: auto;
     background-color: var(--dp-lightfall);

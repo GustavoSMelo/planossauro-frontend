@@ -157,16 +157,6 @@ onMounted(async () => {
     <div class="selectEditPlanContainer">
         <h2 class="choosePlanTitle">{{ $t("choosePlans.choosePlan") }}</h2>
 
-        <span class="planInformationPayment">
-            <span>
-                <i class="pi pi-info-circle"></i>
-                <h3>
-                    <i>{{ $t("choosePlans.weInformYou") }}</i>
-                </h3>
-            </span>
-            <p>{{ $t("choosePlans.informationDetails") }}</p>
-        </span>
-
         <div class="planScrollContainer">
             <section class="planListContainer">
                 <div

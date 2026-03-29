@@ -4,7 +4,7 @@ import { useRouter } from "vue-router";
 import { getToken } from "../helpers/token";
 import Navbar from "../components/navbar/Navbar.vue";
 import HomeContent from "./contents/HomeContent.vue";
-import PlanningContent from "./contents/PlanningContent.vue";
+import DesignContent from "./contents/DesignContent.vue";
 import NavbarMobile from "../components/navbarMobile/NavbarMobile.vue";
 import PlanningListContent from "./contents/PlanningListContent.vue";
 import EditPlanningContent from "./contents/EditPlanningContent.vue";
@@ -12,6 +12,7 @@ import RemovePlanningContent from "./contents/RemovePlanningContent.vue";
 import ProfileContent from "./contents/ProfileContent.vue";
 import ValidationCodeInputBox from "../components/validationCodeInputBox/ValidationCodeInputBox.vue";
 import PlanContent from "./contents/PlanContent.vue";
+import TutorFloat from "../components/tutorFloat/TutorFloat.vue";
 import backendApi from "../api/api";
 import type { IPageContent } from "../interfaces/pageContents.interface";
 import type { IHamburgueMenuToggleContext } from "../interfaces/context/hamburgueMenuToggle.interface";
@@ -89,7 +90,7 @@ onMounted(() => {
                 v-if="currentContent === 'home'"
                 :handle-change-current-content="handleChangeCurrentContent"
             />
-            <PlanningContent v-else-if="currentContent === 'planning'" />
+            <DesignContent v-else-if="currentContent === 'design'" />
             <PlanningListContent
                 v-else-if="currentContent === 'planning_list'"
                 :handle-change-current-content="handleChangeCurrentContent"
@@ -123,6 +124,8 @@ onMounted(() => {
                 :handle-change-current-content="handleChangeCurrentContent"
             />
         </div>
+
+        <TutorFloat :current-content="currentContent" />
     </main>
 </template>
 <style lang="scss" scoped src="../styles/apppage.style.scss" />
