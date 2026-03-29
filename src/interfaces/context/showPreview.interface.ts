@@ -1,12 +1,12 @@
 interface IShowPreview {
     show: boolean;
-    showChooseTemplate: 'true' | 'false';
-    isCustomDocs: 'true' | 'false';
+    showChooseTemplate: "true" | "false";
+    isCustomDocs: "true" | "false";
     customURLDoc: string;
-    planType: 'Semanal' | 'Diario';
-};
+    planType: "Semanal" | "Diario";
+}
 
-interface IShowPreviewContext  {
+interface IShowPreviewContext {
     showPreview: IShowPreview;
     handleChangeShowPreview: (newShowPreview: IShowPreview) => void;
 }

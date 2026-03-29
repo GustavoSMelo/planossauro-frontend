@@ -4,13 +4,13 @@
     "wednesday": "Quarta",
     "thursday": "Quinta",
     "friday": "Sexta",
-    "classActivity": "Aula/Atividade (Inicio - Fim)",
+    "classActivity": "Aula/Atividade (Início - Fim)",
     "back": "Voltar",
     "forward": "Avançar",
     "addActivity": "Adicionar atividade",
     "generatePlanning": "Gere seu planejamento",
     "weekly": "Semanal",
-    "daily": "Diario",
+    "daily": "Diário",
     "inputPlaceholder": "Descrição da atividade...",
     "aditionalInformations": "Informações adicionais",
     "schoolName": "Nome da escola",
@@ -21,6 +21,6 @@
     "successMessage": "Documento gerado com sucesso",
     "errorMessage": "Erro ao gerar documento",
     "missingWeeklyToken": "Todos os tokens semanais foram utilizados",
-    "missingDailyToken": "Todos os tokens diarios foram utilizados",
+    "missingDailyToken": "Todos os tokens diários foram utilizados",
     "fillAllFields": "Preencha os campos para escolher o template"
 }

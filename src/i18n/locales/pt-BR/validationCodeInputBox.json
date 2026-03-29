@@ -1,9 +1,9 @@
 {
     "validationSuccess": "Validado com sucesso",
-    "invalidCode": "Codigo invalido",
+    "invalidCode": "Código inválido",
     "confirmEmail": "Confirme seu email",
-    "sentCodeEmail": "Enviamos um codigo no email cadastraddo",
-    "insertCodePlaceholder": "Insira o codigo aqui...",
+    "sentCodeEmail": "Enviamos um código no email cadastrado",
+    "insertCodePlaceholder": "Insira o código aqui...",
     "cancel": "Cancelar",
     "validate": "Validar"
 }

@@ -33,10 +33,8 @@ const logout = () => {
 
         <ul class="navbarControls">
             <li
-                @click="handleChangeCurrentContent('planning')"
-                :class="[
-                    currentContent == 'planning' ? 'choosed' : 'btnNavbar',
-                ]"
+                @click="handleChangeCurrentContent('design')"
+                :class="[currentContent == 'design' ? 'choosed' : 'btnNavbar']"
             >
                 {{ $t("navbar.design") }}
             </li>

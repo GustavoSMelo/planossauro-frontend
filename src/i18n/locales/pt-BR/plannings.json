@@ -1,5 +1,5 @@
 {
-    "initialDate": "Data de inicio do planj:",
+    "initialDate": "Data de início do planj.:",
     "class": "Classe/Serie",
     "school": "Escola",
     "archived": "Arquivado",
@@ -14,7 +14,7 @@
     "yes": "Sim",
     "no": "Não",
     "both": "Ambos",
-    "daily": "Diario",
+    "daily": "Diário",
     "weekly": "Semanal",
     "date": "Data",
     "clear": "Limpar filtros"

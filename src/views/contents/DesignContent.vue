@@ -2,9 +2,13 @@
 import { ref, inject, nextTick, watchEffect, onMounted, watch } from "vue";
 import { VueDatePicker } from "@vuepic/vue-datepicker";
 import { useI18n } from "vue-i18n";
+import { useDark } from "@vueuse/core";
+import { saveAs } from "file-saver";
+import { debounce } from "lodash-es";
 import Docxtemplater from "docxtemplater";
 import PizZip from "pizzip";
 import axios, { type AxiosResponse } from "axios";
+import "@vuepic/vue-datepicker/dist/main.css";
 import type { IPlanningDay, IDays } from "../../interfaces/planning.interface";
 import type { ILoadingContext } from "../../interfaces/context/loading.interface";
 import type { IPopupContext } from "../../interfaces/context/popup.interface";
@@ -18,18 +22,15 @@ import type {
 } from "../../interfaces/context/showPreview.interface";
 import type { ITemplateChooseContext } from "../../interfaces/context/templateChoose.interface";
 import type { IDashboard } from "../../interfaces/dashboard.interface";
-import { qsn as qsnPTBR } from "../../assets/qsn.json";
+import type { IUser } from "../../interfaces/api/user.interface";
 import qsnENUS from "../../assets/qsn_en_US.json";
-import { saveAs } from "file-saver";
-import { debounce } from "lodash-es";
 import dayConverter from "../../helpers/dayConverter";
-import { getPrompt, getPromptEN } from "../../helpers/prompt";
 import backendApi from "../../api/api";
 import monthConverter from "../../helpers/monthConverter";
-import "@vuepic/vue-datepicker/dist/main.css";
-import { useDark } from "@vueuse/core";
-import type { IUser } from "../../interfaces/api/user.interface";
 import sanitizeInput from "../../helpers/sanitizeInput";
+import { getPrompt, getPromptEN } from "../../helpers/prompt";
+import { qsn as qsnPTBR } from "../../assets/qsn.json";
+import type { IPlanningTypeContext } from "../../interfaces/context/planningType.interface";
 
 const isDark = useDark({
     attribute: "data-theme",
@@ -66,9 +67,13 @@ const className = ref("");
 const planDateStart = ref("");
 const planDateEnd = ref("");
 const showAditionalInformation = ref(false);
-const rangeDates = ref();
+const selectedWeek = ref();
 const selectedElement = ref<number | null>(null);
 const dragSourceDay = ref<IDays["days"] | null>(null);
+
+const { planningType, handleChangePlanningType } = inject(
+    "planningType",
+) as IPlanningTypeContext;
 const isLoadingContext = inject("isLoading") as ILoadingContext;
 const popupContext = inject("popup") as IPopupContext;
 const showPreviewContext = inject("showPreview") as IShowPreviewContext;
@@ -84,6 +89,7 @@ const handleChangeSelectedDay = (changeSelectDay: IDays["days"]): void => {
 const handleChangePlanType = (event: Event): void => {
     const target = event.target as HTMLInputElement;
     planType.value = target.value as "Diario" | "Semanal";
+    handleChangePlanningType(target.value as "Diario" | "Semanal");
 };
 
 const handleChangePlanText = (
@@ -409,6 +415,8 @@ const generatePlan = async () => {
         isLoadingContext.handleChangeIsLoading(true);
 
         const user = JSON.parse(sessionStorage.getItem("user") ?? "") as IUser;
+        const fullName = (await backendApi.get(`/user/${user.uuid}`)).data
+            .full_name;
 
         if (planType.value === "Diario") {
             let activities = [];
@@ -492,7 +500,7 @@ const generatePlan = async () => {
                 diaEnd: planDateEnd.value.split("-")[2],
                 mes: monthConverter(planDateEnd.value.split("-")[1]),
                 ano: planDateEnd.value.split("-")[0],
-                profName: user.full_name,
+                profName: fullName,
 
                 // day 1
                 eixo1: responseData.eixo
@@ -619,7 +627,7 @@ const generatePlan = async () => {
                 diaEnd: planDateEnd.value.split("-")[2],
                 mes: monthConverter(planDateEnd.value.split("-")[1]),
                 ano: planDateEnd.value.split("-")[0],
-                profName: user.full_name,
+                profName: fullName,
 
                 // day 1
                 eixo1: responseDay1.eixo
@@ -758,6 +766,7 @@ const generatePlan = async () => {
 };
 
 onMounted(() => {
+    planType.value = planningType.value;
     handleChangeTemplateChoose({ ...templateChoose, choosed: false });
 });
 
@@ -765,15 +774,11 @@ watchEffect(() => {
     if (templateChoose.choosed) generatePlan();
 });
 
-watch(rangeDates, () => {
-    const initialDate = rangeDates.value[0].toString().split("(")[0].trim();
-    const lastDate = rangeDates.value[1].toString().split("(")[0].trim();
+watch(selectedWeek, () => {
+    if (!selectedWeek.value) return;
 
-    const initialDateHelper = new Date(initialDate);
-    const lastDateHelper = new Date(lastDate);
-
-    planDateStart.value = `${initialDateHelper.getFullYear()}-${String(initialDateHelper.getMonth() + 1).padStart(2, "0")}-${String(initialDateHelper.getDate()).padStart(2, "0")}`;
-    planDateEnd.value = `${lastDateHelper.getFullYear()}-${String(lastDateHelper.getMonth() + 1).padStart(2, "0")}-${String(lastDateHelper.getDate()).padStart(2, "0")}`;
+    planDateStart.value = `${selectedWeek.value[0].getFullYear()}-${String(selectedWeek.value[0].getMonth() + 1).padStart(2, "0")}-${String(selectedWeek.value[0].getDate()).padStart(2, "0")}`;
+    planDateEnd.value = `${selectedWeek.value[1].getFullYear()}-${String(selectedWeek.value[1].getMonth() + 1).padStart(2, "0")}-${String(selectedWeek.value[1].getDate() - 2).padStart(2, "0")}`;
 });
 </script>
 <template>
@@ -820,8 +825,8 @@ watch(rangeDates, () => {
                 />
                 <span v-else class="rangeDatePickerContainer">
                     <VueDatePicker
-                        v-model="rangeDates"
-                        :range="{ maxRange: 4, minRange: 4 }"
+                        v-model="selectedWeek"
+                        week-picker
                         class="rangeDatePicker"
                         :style="{
                             '--dp-background-color': 'transparent',
@@ -1387,7 +1392,7 @@ watch(rangeDates, () => {
 </template>
 
 <style
-    src="../../styles/contents/planningcontent.style.scss"
+    src="../../styles/contents/designcontent.style.scss"
     scoped
     lang="scss"
 />

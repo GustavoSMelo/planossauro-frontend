@@ -221,6 +221,11 @@ input:focus {
                 width: 240px;
                 margin-top: 10px;
                 font-weight: 500;
+
+                option {
+                    font-weight: 500;
+                    color: var(--dp-accent-color);
+                }
             }
         }
     }
