@@ -75,6 +75,9 @@ import learnENUS from "./locales/en-US/learn.json";
 import docsPTBR from "./locales/pt-BR/docs.json";
 import docsENUS from "./locales/en-US/docs.json";
 
+import tutorFloatPTBR from "./locales/pt-BR/tutorFloat.json";
+import tutorFloatENUS from "./locales/en-US/tutorFloat.json";
+
 const i18n = createI18n({
     locale: "pt-BR",
     fallbackLocale: "en-US",
@@ -105,6 +108,7 @@ const i18n = createI18n({
             months: monthsPTBR,
             learn: learnPTBR,
             docs: docsPTBR,
+            tutorFloat: tutorFloatPTBR,
         },
         "en-US": {
             login: loginENUS,
@@ -132,6 +136,7 @@ const i18n = createI18n({
             months: monthsENUS,
             learn: learnENUS,
             docs: docsENUS,
+            tutorFloat: tutorFloatENUS,
         },
     },
 });

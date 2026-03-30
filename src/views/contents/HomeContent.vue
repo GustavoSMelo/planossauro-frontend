@@ -51,9 +51,10 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="homeContentContainer">
+    <div class="homeContentContainer" id="homeContentContainer">
         <h1>{{ $t("home.homePage") }}</h1>
         <section
+            id="tutorialContent"
             class="tutorialContent"
             :data-theme="isDark ? 'dark' : 'light'"
         >
@@ -64,7 +65,7 @@ onMounted(() => {
                 <button type="button">Ver tutorial</button>
             </span>
         </section>
-        <section class="initialHomeContent">
+        <section id="initialHomeContent" class="initialHomeContent">
             <div
                 class="planInfoContainer"
                 :data-theme="isDark ? 'dark' : 'light'"
@@ -210,7 +211,7 @@ onMounted(() => {
                 </div>
             </aside>
         </section>
-        <section
+        <!-- <section
             class="aditionalInformationsContainer"
             :data-theme="isDark ? 'dark' : 'light'"
         >
@@ -224,10 +225,11 @@ onMounted(() => {
                 </button>
             </span>
             <img src="../../assets/bills_dino.png" />
-        </section>
+        </section> -->
 
         <section
             class="supportContainer"
+            id="supportContainer"
             :data-theme="isDark ? 'dark' : 'light'"
         >
             <span>

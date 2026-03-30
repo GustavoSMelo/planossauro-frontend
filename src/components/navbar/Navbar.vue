@@ -22,7 +22,7 @@ const logout = () => {
 };
 </script>
 <template>
-    <nav class="navbarContainer">
+    <nav class="navbarContainer" id="navbarContainer">
         <figure
             class="logoContainer"
             @click="handleChangeCurrentContent('home')"
@@ -31,14 +31,16 @@ const logout = () => {
             <figcaption>Planossauro</figcaption>
         </figure>
 
-        <ul class="navbarControls">
+        <ul class="navbarControls" id="navbarControls">
             <li
+                id="navbarDesign"
                 @click="handleChangeCurrentContent('design')"
                 :class="[currentContent == 'design' ? 'choosed' : 'btnNavbar']"
             >
                 {{ $t("navbar.design") }}
             </li>
             <li
+                id="navbarPlannings"
                 @click="handleChangeCurrentContent('planning_list')"
                 :class="[
                     currentContent == 'planning_list' ? 'choosed' : 'btnNavbar',
@@ -47,12 +49,14 @@ const logout = () => {
                 {{ $t("navbar.plannings") }}
             </li>
             <li
+                id="navbarPlans"
                 @click="handleChangeCurrentContent('plan')"
                 :class="[currentContent == 'plan' ? 'choosed' : 'btnNavbar']"
             >
                 {{ $t("navbar.plans") }}
             </li>
             <li
+                id="navbarProfile"
                 @click="handleChangeCurrentContent('profile')"
                 :class="[currentContent == 'profile' ? 'choosed' : 'btnNavbar']"
             >
