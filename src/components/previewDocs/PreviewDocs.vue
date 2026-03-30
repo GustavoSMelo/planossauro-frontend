@@ -18,7 +18,7 @@ import type {
 } from "../../interfaces/context/templateChoose.interface";
 import type { IShowPreviewContext } from "../../interfaces/context/showPreview.interface";
 
-type TPlanVersion = 1 | 2 | 3 | 4 | 5 | 6 | 7;
+type TPlanVersion = 1 | 2 | 3 | 4 | 5 | 6;
 
 const planVersion = ref<TPlanVersion>(1);
 const { handleChangeTemplateChoose } = inject(
@@ -39,7 +39,7 @@ const stopPropagation = (event: Event): void => {
 };
 
 const handleNextButton = (): void => {
-    if (planVersion.value === 7) {
+    if (planVersion.value === 6) {
         planVersion.value = 1;
     } else {
         planVersion.value = (planVersion.value + 1) as TPlanVersion;
@@ -53,7 +53,7 @@ const handleNextButton = (): void => {
 
 const handlePreviousButton = (): void => {
     if (planVersion.value === 1) {
-        planVersion.value = 7;
+        planVersion.value = 6;
     } else {
         planVersion.value = (planVersion.value - 1) as TPlanVersion;
     }

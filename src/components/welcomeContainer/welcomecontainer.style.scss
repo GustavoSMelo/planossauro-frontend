@@ -1,0 +1,99 @@
+@charset "UTF-8";
+
+@keyframes scaleToTop {
+    from {
+        transform: translateY(200%);
+    }
+    to {
+        transform: translateY(0%);
+    }
+}
+
+.welcomeContainer {
+    background-color: var(--dp-transparent-gray);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 2;
+
+    .welcomeContent {
+        background-color: var(--dp-lightfall);
+        padding: 20px;
+        border-radius: 5px;
+        animation: scaleToTop 1.2s;
+
+        navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--dp-text-color);
+            padding-bottom: 20px;
+
+            h2 {
+                color: var(--dp-text-color);
+            }
+
+            .closeIcon {
+                font-size: 16pt;
+                color: var(--dp-text-color);
+            }
+        }
+
+        .introductionContent {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            img {
+                margin-top: 20px;
+                width: 200px;
+            }
+
+            p {
+                font-weight: 500;
+                margin: 20px;
+                color: var(--dp-text-color);
+            }
+
+            button {
+                width: 100%;
+                background-color: var(--dp-accent-color);
+                margin: 10px;
+                padding: 14px;
+                border-radius: 5px;
+                font-size: 10pt;
+                font-weight: bold;
+                cursor: pointer;
+                transition: 0.4s;
+                text-align: left;
+                color: var(--dp-full-white);
+            }
+
+            .guideButton {
+                color: var(--dp-full-white);
+                background-color: var(--dp-blue-info);
+            }
+
+            .compassButton {
+                background-color: var(--dp-full-white);
+                border: solid 2px var(--dp-accent-color);
+                color: var(--dp-accent-color);
+            }
+
+            button:hover {
+                transition: 0.4s;
+                transform: scale(1.03);
+            }
+        }
+    }
+}
+
+@media (max-width: 660px) {
+    .welcomeContent {
+        width: 95%;
+    }
+}

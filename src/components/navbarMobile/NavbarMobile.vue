@@ -68,6 +68,7 @@ onMounted(() => {
             <li class="planInfo">Plano {{ planName }}</li>
             <hr />
             <li
+                id="navbarDesign"
                 @click="handleChangeMobilePage('design')"
                 :class="[
                     currentContent === 'design' ? 'choosed' : '',
@@ -77,6 +78,7 @@ onMounted(() => {
                 {{ $t("navbar.design") }}
             </li>
             <li
+                id="navbarPlannings"
                 @click="handleChangeMobilePage('planning_list')"
                 :class="[
                     currentContent === 'planning_list' ? 'choosed' : '',
@@ -86,6 +88,7 @@ onMounted(() => {
                 {{ $t("navbar.plannings") }}
             </li>
             <li
+                id="navbarPlans"
                 @click="handleChangeMobilePage('plan')"
                 :class="[
                     currentContent === 'plan' ? 'choosed' : '',
@@ -95,6 +98,7 @@ onMounted(() => {
                 {{ $t("navbar.plans") }}
             </li>
             <li
+                id="navbarProfile"
                 @click="handleChangeMobilePage('profile')"
                 :class="[
                     currentContent === 'profile' ? 'choosed' : '',

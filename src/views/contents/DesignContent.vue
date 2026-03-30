@@ -860,7 +860,7 @@ watch(selectedWeek, () => {
             </form>
         </section>
 
-        <div class="planningSelect">
+        <div class="planningSelect" id="planningSelect">
             <img src="../../assets/dinoPlanejador.png" alt="Dino planejador" />
             <span>
                 <h1>{{ t("design.generatePlanning") }}</h1>
@@ -900,6 +900,7 @@ watch(selectedWeek, () => {
                             <i class="pi pi-arrows-v iconReposition"></i>
                             <div class="repositionButtonsContainer"></div>
                             <input
+                                class="dailyInputDesign"
                                 type="text"
                                 :value="plano"
                                 :placeholder="`${t('design.inputPlaceholder')}`"
@@ -932,7 +933,7 @@ watch(selectedWeek, () => {
                                     </button>
                                 </span>
                                 <input
-                                    class="timeInput"
+                                    class="timeInput timeInputStart"
                                     type="time"
                                     lang="pt-BR"
                                     step="900"
@@ -950,7 +951,7 @@ watch(selectedWeek, () => {
                                     "
                                 />
                                 <input
-                                    class="timeInput"
+                                    class="timeInput timeInputEnd"
                                     type="time"
                                     lang="pt-BR"
                                     step="900"
@@ -997,6 +998,7 @@ watch(selectedWeek, () => {
                 </button>
 
                 <button
+                    id="btnDiaryGenerate"
                     :class="
                         hasEmptyStringsInDiary()
                             ? 'btnDiaryGenerateCancel'
@@ -1016,8 +1018,8 @@ watch(selectedWeek, () => {
         </form>
 
         <!-- Semanal -->
-        <div v-else class="weeklyPlan">
-            <ul class="weekDays">
+        <div v-else class="weeklyPlan" id="weeklyPlan">
+            <ul class="weekDays" id="weekDays">
                 <li
                     @click="() => handleChangeSelectedDay('day1')"
                     :class="[
@@ -1026,6 +1028,7 @@ watch(selectedWeek, () => {
                     ]"
                 >
                     <i
+                        id="iconHelp"
                         :class="[
                             'pi',
                             hasEmptyStringsInClasses()[0]
@@ -1106,11 +1109,13 @@ watch(selectedWeek, () => {
             </ul>
 
             <div class="weekDaysMobile">
-                <div class="selectedDay">
+                <div class="selectedDay" id="selectedDay">
                     <h2 class="selectedWeekDayMobile">
                         <i
                             :class="[
                                 'pi',
+                                'iconClock',
+                                'iconHelp',
                                 hasEmptyStringsInClasses()[
                                     Number.parseInt(
                                         selectedDay.split('day')[1],
@@ -1253,6 +1258,7 @@ watch(selectedWeek, () => {
                             <div class="hourClass">
                                 <i class="pi pi-arrows-v iconReposition"></i>
                                 <input
+                                    class="inputDescriptionText"
                                     type="text"
                                     :placeholder="`${t('design.inputPlaceholder')}`"
                                     :value="value"
@@ -1286,7 +1292,7 @@ watch(selectedWeek, () => {
                                         </button>
                                     </span>
                                     <input
-                                        class="timeInput"
+                                        class="timeInput timeInputStart"
                                         type="time"
                                         lang="pt-BR"
                                         step="900"
@@ -1306,7 +1312,7 @@ watch(selectedWeek, () => {
                                         "
                                     />
                                     <input
-                                        class="timeInput"
+                                        class="timeInput timeInputEnd"
                                         type="time"
                                         lang="pt-BR"
                                         step="900"
@@ -1348,16 +1354,17 @@ watch(selectedWeek, () => {
                 </div>
 
                 <span class="btnControlsContainer">
-                    <button @click="() => handleGoBack()">
+                    <button id="btnPreviousDay" @click="() => handleGoBack()">
                         <i class="pi pi-arrow-left"></i> {{ t("design.back") }}
                     </button>
                     <button
+                        id="btnAddActivity"
                         @click="() => handleAddNewClassInPlanning(selectedDay)"
                     >
                         <i class="pi pi-plus-circle"></i>
                         {{ t("design.addActivity") }}
                     </button>
-                    <button @click="() => handleGoFoward()">
+                    <button id="btnForwardDay" @click="() => handleGoFoward()">
                         {{ t("design.forward") }}
                         <i class="pi pi-arrow-right"></i>
                     </button>
@@ -1365,6 +1372,7 @@ watch(selectedWeek, () => {
             </div>
         </div>
         <button
+            id="btnGeneratePlan"
             :class="
                 hasEmptyStringsInClasses().find((element) => element === true)
                     ? 'btnGeneratePlanCancel'
