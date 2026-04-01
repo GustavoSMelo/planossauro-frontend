@@ -2,12 +2,14 @@
     "homePage": "Home Page",
     "currentPlan": "Your current plan",
     "managePlan": "Manage your plan",
-    "paymentDoubt": "Questions about payments ?",
+    "paymentDoubt": "Questions about payments?",
     "checkPayments": "Check payments",
     "weeklyPlannings": "Weekly plannings",
     "dailyPlannings": "Daily plannings",
     "design": "Design",
     "planningInformations": "Planning informations",
-    "support": "Wanna talk with support ?",
-    "supportBtn": "Click here"
+    "support": "Wanna talk with support?",
+    "supportBtn": "Click here",
+    "difficultiesUsingSystem": "Difficulties using the system?",
+    "watchTutorial": "Watch tutorial"
 }

@@ -12,6 +12,7 @@
         "lint:fix": "eslint --fix ."
     },
     "dependencies": {
+        "@hiseb/confetti": "^2.1.0",
         "@vuepic/vue-datepicker": "^12.1.0",
         "@vueuse/core": "^14.2.1",
         "axios": "^1.11.0",

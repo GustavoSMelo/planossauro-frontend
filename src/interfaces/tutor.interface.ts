@@ -5,5 +5,6 @@ export interface ITutorStep {
         description: string;
         side: "top" | "bottom" | "left" | "right";
         align: "start" | "end";
+        onNextClick?: () => void;
     };
 }

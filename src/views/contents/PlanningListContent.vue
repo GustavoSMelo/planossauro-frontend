@@ -197,7 +197,11 @@ onMounted(() => {
         </button>
     </form>
     <section class="listingContainer">
-        <table v-if="plannings.length" :data-theme="isDark ? 'dark' : 'light'">
+        <table
+            id="fullTablePlanningList"
+            v-if="plannings.length"
+            :data-theme="isDark ? 'dark' : 'light'"
+        >
             <thead>
                 <tr>
                     <th>Download</th>
@@ -255,7 +259,7 @@ onMounted(() => {
                     </td>
                 </tr>
             </tbody>
-            <tfoot>
+            <tfoot class="loadMoreCell">
                 <tr @click="loadDataFromPagination">
                     <td colspan="6">{{ $t("planning.loadMore") }}</td>
                 </tr>

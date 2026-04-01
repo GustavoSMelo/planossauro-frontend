@@ -12,6 +12,7 @@ const router = useRouter();
 
 const { handleChangeCurrentContent } = defineProps<{
     handleChangeCurrentContent: (newValue: IPageContent["contents"]) => void;
+    handleOpenTutorialVideo: (opens: boolean) => void;
 }>();
 
 const isDark = useDark({
@@ -51,20 +52,23 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="homeContentContainer">
+    <div class="homeContentContainer" id="homeContentContainer">
         <h1>{{ $t("home.homePage") }}</h1>
         <section
+            id="tutorialContent"
             class="tutorialContent"
             :data-theme="isDark ? 'dark' : 'light'"
         >
             <img src="../../assets/dino_tutor.png" alt="tutorial" />
 
             <span>
-                <h2>Dificuldades ao usar sistema ?</h2>
-                <button type="button">Ver tutorial</button>
+                <h2>{{ $t("home.difficultiesUsingSystem") }}</h2>
+                <button type="button" @click="handleOpenTutorialVideo(true)">
+                    {{ $t("home.watchTutorial") }}
+                </button>
             </span>
         </section>
-        <section class="initialHomeContent">
+        <section id="initialHomeContent" class="initialHomeContent">
             <div
                 class="planInfoContainer"
                 :data-theme="isDark ? 'dark' : 'light'"
@@ -210,7 +214,7 @@ onMounted(() => {
                 </div>
             </aside>
         </section>
-        <section
+        <!-- <section
             class="aditionalInformationsContainer"
             :data-theme="isDark ? 'dark' : 'light'"
         >
@@ -224,10 +228,11 @@ onMounted(() => {
                 </button>
             </span>
             <img src="../../assets/bills_dino.png" />
-        </section>
+        </section> -->
 
         <section
             class="supportContainer"
+            id="supportContainer"
             :data-theme="isDark ? 'dark' : 'light'"
         >
             <span>
