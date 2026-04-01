@@ -68,10 +68,9 @@ const handleShowPhoto = (show: boolean) => (showPhoto.value = show);
             </div>
 
             <div class="demoVideoContainer">
-                <video poster="../assets/video_thumbnail.png" controls>
-                    <source src="../assets/demo_plan.mp4" type="video/mp4" />
-                </video>
-                <small>{{ t("learn.videoInfo") }}</small>
+                <iframe
+                    src="https://www.youtube.com/embed/yLrn_MRANoE"
+                ></iframe>
             </div>
 
             <section class="whatIsContainer">
@@ -190,7 +189,10 @@ const handleShowPhoto = (show: boolean) => (showPhoto.value = show);
                 <p>
                     {{ t("learn.help_content_1") }} <br />
                     {{ t("learn.help_content_2") }} <br />
-                    {{ t("learn.help_content_3") }}
+                    {{
+                        t("learn.help_content_3")
+                    }}
+                    suporte.planossauro@gmail.com | gsantos15569.dev@gmail.com
                 </p>
 
                 <span class="buttonContainer">

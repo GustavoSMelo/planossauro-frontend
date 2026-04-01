@@ -12,6 +12,7 @@ const router = useRouter();
 
 const { handleChangeCurrentContent } = defineProps<{
     handleChangeCurrentContent: (newValue: IPageContent["contents"]) => void;
+    handleOpenTutorialVideo: (opens: boolean) => void;
 }>();
 
 const isDark = useDark({
@@ -61,8 +62,10 @@ onMounted(() => {
             <img src="../../assets/dino_tutor.png" alt="tutorial" />
 
             <span>
-                <h2>Dificuldades ao usar sistema ?</h2>
-                <button type="button">Ver tutorial</button>
+                <h2>{{ $t("home.difficultiesUsingSystem") }}</h2>
+                <button type="button" @click="handleOpenTutorialVideo(true)">
+                    {{ $t("home.watchTutorial") }}
+                </button>
             </span>
         </section>
         <section id="initialHomeContent" class="initialHomeContent">

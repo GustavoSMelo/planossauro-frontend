@@ -78,6 +78,12 @@ import docsENUS from "./locales/en-US/docs.json";
 import tutorFloatPTBR from "./locales/pt-BR/tutorFloat.json";
 import tutorFloatENUS from "./locales/en-US/tutorFloat.json";
 
+import welcomeContainerPTBR from "./locales/pt-BR/welcomeContainer.json";
+import welcomeContainerENUS from "./locales/en-US/welcomeContainer.json";
+
+import videoTutorialPTBR from "./locales/pt-BR/videoTutorial.json";
+import videoTutorialENUS from "./locales/en-US/videoTutorial.json";
+
 const i18n = createI18n({
     locale: "pt-BR",
     fallbackLocale: "en-US",
@@ -109,6 +115,8 @@ const i18n = createI18n({
             learn: learnPTBR,
             docs: docsPTBR,
             tutorFloat: tutorFloatPTBR,
+            welcomeContainer: welcomeContainerPTBR,
+            videoTutorial: videoTutorialPTBR,
         },
         "en-US": {
             login: loginENUS,
@@ -137,6 +145,8 @@ const i18n = createI18n({
             learn: learnENUS,
             docs: docsENUS,
             tutorFloat: tutorFloatENUS,
+            welcomeContainer: welcomeContainerENUS,
+            videoTutorial: videoTutorialENUS,
         },
     },
 });
