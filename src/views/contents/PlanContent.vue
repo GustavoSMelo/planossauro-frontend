@@ -140,10 +140,10 @@ onMounted(() => {
             <h2>{{ $t("plans.planInformations") }}</h2>
 
             <ul>
-                <li>
+                <li id="planName">
                     <b>{{ $t("plans.plan") }}:</b> {{ planInfo?.plan_name }}
                 </li>
-                <li>
+                <li id="nextBilling">
                     <b>{{ $t("plans.nextBilling") }}</b>
                     {{
                         subscriptionInfo?.next_billing
@@ -153,7 +153,7 @@ onMounted(() => {
                             : t("plans.nextBillingProcessing")
                     }}
                 </li>
-                <li>
+                <li id="planPrice">
                     <b>{{ $t("plans.value") }}:</b>
                     {{
                         planInfo?.price === 0
@@ -162,7 +162,7 @@ onMounted(() => {
                     ${planInfo?.price}.00`
                     }}
                 </li>
-                <li>
+                <li id="planStatus">
                     <b>{{ $t("plans.planStatus") }} </b>
                     <p
                         :class="
@@ -186,7 +186,7 @@ onMounted(() => {
                         {{ subscriptionInfo?.status }}
                     </p>
                 </li>
-                <li>
+                <li id="planCard">
                     <b>{{ $t("plans.card") }}: </b>
                     <span v-if="subscriptionInfo?.last_four_digits"
                         >**** **** ****
@@ -198,6 +198,7 @@ onMounted(() => {
 
             <span class="btnContainers">
                 <button
+                    id="planChangeCard"
                     type="button"
                     @click="
                         subscriptionInfo &&
@@ -216,12 +217,14 @@ onMounted(() => {
                     {{ $t("plans.changeCard") }}
                 </button>
                 <button
+                    id="planChangePlan"
                     type="button"
                     @click="handleChangeCurrentContent('edit_plan')"
                 >
                     {{ $t("plans.changePlan") }}
                 </button>
                 <button
+                    id="planCancelPlan"
                     type="button"
                     @click="
                         subscriptionInfo &&
