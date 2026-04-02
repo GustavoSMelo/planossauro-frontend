@@ -7,7 +7,9 @@ const { handleCloseFirstLogin } = defineProps<{
 }>();
 
 const handleStartGuidedTour = () => {
-    const tourButton = document.querySelector("#tutorFloatIcon");
+    const tourButton = document.querySelector(
+        "#tutorFloatIcon",
+    ) as HTMLButtonElement;
 
     if (tourButton) {
         tourButton.click();

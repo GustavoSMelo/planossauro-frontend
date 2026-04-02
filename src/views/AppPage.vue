@@ -76,13 +76,6 @@ const removeSessionStorageItems = () => {
     sessionStorage.removeItem("fullName");
 };
 
-const checkIfIsFirstLogin = (): void => {
-    const token = sessionStorage.getItem("@auth/token") ?? "";
-    const time = token.split("|")[0].toString();
-
-    if (time === "1") firstLogin.value = true;
-};
-
 onMounted(() => {
     handleGetInformations();
     removeSessionStorageItems();
