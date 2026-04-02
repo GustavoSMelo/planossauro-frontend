@@ -92,7 +92,7 @@ const handleEditYourPlan = async (
         `/subscription/change/subscription/plan`,
         {
             user_id: user.uuid,
-            return_url: "http://localhost:5173/callback/payment",
+            return_url: `${import.meta.env.VITE_APP_URL}/callback/payment`,
             price:
                 choosedPlan === "essential" ? essentialPriceId : premiumPriceId,
         },

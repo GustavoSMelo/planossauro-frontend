@@ -74,7 +74,7 @@ const handleChangeCardNumbers = async () => {
         `/subscription/change/payment/method`,
         {
             user_id: userId,
-            return_url: "http://localhost:5173/callback/payment",
+            return_url: `${import.meta.env.VITE_APP_URL}/callback/payment`,
         },
     );
 

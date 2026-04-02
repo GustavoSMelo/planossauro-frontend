@@ -76,26 +76,29 @@ onMounted(() => {
                         :value="showTutorialVideo"
                         @click="handleCloseWelcomePage(!showTutorialVideo)"
                     />
-                    <label for="tutorialVideo"
-                        >{{ t("welcomeContainer.continueShowingScreen") }}</label
-                    >
+                    <label for="tutorialVideo">{{
+                        t("welcomeContainer.continueShowingScreen")
+                    }}</label>
                 </span>
                 <button type="button" @click="handleToggleTutorialVideo()">
-                    <i class="pi pi-video"></i> {{ t("welcomeContainer.needCompleteVideo") }}
+                    <i class="pi pi-video"></i>
+                    {{ t("welcomeContainer.needCompleteVideo") }}
                 </button>
                 <button
                     type="button"
                     class="guideButton"
                     @click="handleStartGuidedTour()"
                 >
-                    <i class="pi pi-graduation-cap icon"></i> {{ t("welcomeContainer.needGuide") }}
+                    <i class="pi pi-graduation-cap icon"></i>
+                    {{ t("welcomeContainer.needGuide") }}
                 </button>
                 <button
                     type="button"
                     class="compassButton"
                     @click="handleCloseFirstLogin()"
                 >
-                    <i class="pi pi-compass"></i> {{ t("welcomeContainer.canGuideAlone") }}
+                    <i class="pi pi-compass"></i>
+                    {{ t("welcomeContainer.canGuideAlone") }}
                 </button>
             </div>
         </div>
