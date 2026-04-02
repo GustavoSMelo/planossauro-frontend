@@ -657,7 +657,7 @@ const handleUnlinkAccount = async () => {
                 <div>
                     <h3>{{ t("profile.appVersion") }}:</h3>
 
-                    <p>Version 0.0.0</p>
+                    <p>Version 1.0.0</p>
                 </div>
                 <div>
                     <h3>{{ t("profile.bibleVersicle") }}</h3>
