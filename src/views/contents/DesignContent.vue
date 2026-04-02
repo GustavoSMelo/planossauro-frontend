@@ -31,6 +31,7 @@ import sanitizeInput from "../../helpers/sanitizeInput";
 import { getPrompt, getPromptEN } from "../../helpers/prompt";
 import { qsn as qsnPTBR } from "../../assets/qsn.json";
 import type { IPlanningTypeContext } from "../../interfaces/context/planningType.interface";
+import confetti from "@hiseb/confetti";
 
 const isDark = useDark({
     attribute: "data-theme",
@@ -754,6 +755,16 @@ const generatePlan = async () => {
             true,
         );
         handleChangeTemplateChoose({ ...templateChoose, choosed: false });
+        confetti({
+            fade: true,
+            velocity: 200,
+            size: 1.6,
+            count: 230,
+            position: {
+                x: window.innerWidth * 0.5,
+                y: window.innerHeight * 0.5,
+            },
+        });
     } catch {
         isLoadingContext.handleChangeIsLoading(false);
         popupContext.handleChangePopupInfo(

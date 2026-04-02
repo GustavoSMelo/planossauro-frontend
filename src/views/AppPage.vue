@@ -13,6 +13,7 @@ import RemovePlanningContent from "./contents/RemovePlanningContent.vue";
 import ProfileContent from "./contents/ProfileContent.vue";
 import ValidationCodeInputBox from "../components/validationCodeInputBox/ValidationCodeInputBox.vue";
 import PlanContent from "./contents/PlanContent.vue";
+import VideoTutorial from "../components/videoTutorial/VideoTutorial.vue";
 import WelcomeContainer from "../components/welcomeContainer/WelcomeContainer.vue";
 import TutorFloat from "../components/tutorFloat/TutorFloat.vue";
 import backendApi from "../api/api";
@@ -24,7 +25,8 @@ import type { ILoginType } from "../interfaces/loginType.interface";
 import type { ILoadingContext } from "../interfaces/context/loading.interface";
 import type { IUser } from "../interfaces/api/user.interface";
 
-const firstLogin = ref<boolean>(false);
+const showTutorialVideo = ref<boolean>(false);
+const firstLogin = ref<boolean>(true);
 const currentContent = ref<IPageContent["contents"]>("home");
 const validationLoginType = ref<ILoginType["types"]>("github");
 const { hamburgueMenuToggle } = inject(
@@ -76,9 +78,22 @@ const removeSessionStorageItems = () => {
     sessionStorage.removeItem("fullName");
 };
 
+const handleOpenTutorialVideo = (opens: boolean) => {
+    showTutorialVideo.value = opens;
+};
+
+const checkIfIsFirstLogin = (): void => {
+    const showWelcomePage = localStorage.getItem("showWelcomePage");
+
+    if (showWelcomePage === "false") {
+        firstLogin.value = false;
+    }
+};
+
 onMounted(() => {
     handleGetInformations();
     removeSessionStorageItems();
+    checkIfIsFirstLogin();
 });
 </script>
 <template>
@@ -87,7 +102,15 @@ onMounted(() => {
         :current-content="currentContent"
         :handle-change-current-content="handleChangeCurrentContent"
     />
-    <WelcomeContainer :handle-close-first-login="handleCloseFirstLogin" />
+    <VideoTutorial
+        v-if="showTutorialVideo"
+        :handle-open-tutorial-video="handleOpenTutorialVideo"
+    />
+    <WelcomeContainer
+        v-if="firstLogin"
+        :handle-close-first-login="handleCloseFirstLogin"
+        :handle-open-tutorial-video="handleOpenTutorialVideo"
+    />
     <main class="appPageContainer" id="appPageContainer">
         <div class="fullContentContainer" id="fullContentContainer">
             <Navbar
@@ -98,6 +121,7 @@ onMounted(() => {
             <HomeContent
                 v-if="currentContent === 'home'"
                 :handle-change-current-content="handleChangeCurrentContent"
+                :handle-open-tutorial-video="handleOpenTutorialVideo"
             />
             <DesignContent v-else-if="currentContent === 'design'" />
             <PlanningListContent
