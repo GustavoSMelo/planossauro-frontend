@@ -654,10 +654,10 @@ const generatePlan = async () => {
                     .join("\n \n"),
                 saber2: `${responseDay2.saber.map((item) => item.toString()).join("\n \n")}\n`,
                 aprendizagem2: `${responseDay2.aprendizagem.map((item) => item.toString()).join("\n \n")}\n`,
-                atividade2: plans.value.day1
+                atividade2: plans.value.day2
                     .map(
                         (item, index) =>
-                            `${item.toString()} - (${startClassHour.value.day1[index]} Hr ~ ${endClassHour.value.day1[index]} Hr) \n \n`,
+                            `${item.toString()} - (${startClassHour.value.day2[index]} Hr ~ ${endClassHour.value.day2[index]} Hr) \n \n`,
                     )
                     .join("\n \n"),
                 contextualizacao2: responseDay2.contextualizacao,
@@ -672,10 +672,10 @@ const generatePlan = async () => {
                     .join("\n \n"),
                 saber3: `${responseDay3.saber.map((item) => item.toString()).join("\n \n")}\n`,
                 aprendizagem3: `${responseDay3.aprendizagem.map((item) => item.toString()).join("\n \n")}\n`,
-                atividade3: plans.value.day1
+                atividade3: plans.value.day3
                     .map(
                         (item, index) =>
-                            `${item.toString()} - (${startClassHour.value.day1[index]} Hr ~ ${endClassHour.value.day1[index]} Hr) \n \n`,
+                            `${item.toString()} - (${startClassHour.value.day3[index]} Hr ~ ${endClassHour.value.day3[index]} Hr) \n \n`,
                     )
                     .join("\n \n"),
                 contextualizacao3: responseDay3.contextualizacao,
@@ -690,10 +690,10 @@ const generatePlan = async () => {
                     .join("\n"),
                 saber4: `${responseDay4.saber.map((item) => item.toString()).join("\n \n")}\n`,
                 aprendizagem4: `${responseDay4.aprendizagem.map((item) => item.toString()).join("\n \n")}\n`,
-                atividade4: plans.value.day1
+                atividade4: plans.value.day4
                     .map(
                         (item, index) =>
-                            `${item.toString()} - (${startClassHour.value.day1[index]} Hr ~ ${endClassHour.value.day1[index]} Hr) \n \n`,
+                            `${item.toString()} - (${startClassHour.value.day4[index]} Hr ~ ${endClassHour.value.day4[index]} Hr) \n \n`,
                     )
                     .join("\n \n"),
                 contextualizacao4: responseDay4.contextualizacao,
@@ -708,10 +708,10 @@ const generatePlan = async () => {
                     .join("\n \n"),
                 saber5: `${responseDay5.saber.map((item) => item.toString()).join("\n \n")}\n`,
                 aprendizagem5: `${responseDay5.aprendizagem.map((item) => item.toString()).join("\n \n")}\n`,
-                atividade5: plans.value.day1
+                atividade5: plans.value.day5
                     .map(
                         (item, index) =>
-                            `${item.toString()} - (${startClassHour.value.day1[index]} Hr ~ ${endClassHour.value.day1[index]} Hr) \n \n`,
+                            `${item.toString()} - (${startClassHour.value.day5[index]} Hr ~ ${endClassHour.value.day5[index]} Hr) \n \n`,
                     )
                     .join("\n \n"),
                 contextualizacao5: responseDay5.contextualizacao,
@@ -810,7 +810,7 @@ watch(selectedWeek, () => {
                     type="text"
                     :value="schoolName"
                     placeholder="Nome da escola..."
-                    @change="(event) => handleChangeSchoolName(event)"
+                    @input="(event) => handleChangeSchoolName(event)"
                 />
 
                 <label>{{ t("design.className") }}</label>
@@ -818,7 +818,7 @@ watch(selectedWeek, () => {
                     type="text"
                     :value="className"
                     placeholder="Classe ou Serie"
-                    @change="(event) => handleChangeClassName(event)"
+                    @input="(event) => handleChangeClassName(event)"
                 />
 
                 <label>{{ t("design.datePlanning") }}</label>
@@ -827,7 +827,7 @@ watch(selectedWeek, () => {
                     v-if="planType === 'Diario'"
                     type="date"
                     :value="planDateStart"
-                    @change="
+                    @input="
                         (event) => {
                             handleChangeClassDateStart(event);
                             handleChangeClassDateEnd(event);
@@ -915,7 +915,7 @@ watch(selectedWeek, () => {
                                 type="text"
                                 :value="plano"
                                 :placeholder="`${t('design.inputPlaceholder')}`"
-                                @change="
+                                @input="
                                     (event) =>
                                         handleChangePlanText(
                                             'day1',
@@ -950,7 +950,7 @@ watch(selectedWeek, () => {
                                     step="900"
                                     title="Inicio da aula"
                                     :value="startClassHour[selectedDay][index]"
-                                    @change="
+                                    @input="
                                         (event) =>
                                             handleChangeStartClassHour(
                                                 'day1',
@@ -968,7 +968,7 @@ watch(selectedWeek, () => {
                                     step="900"
                                     title="Fim da aula"
                                     :value="endClassHour[selectedDay][index]"
-                                    @change="
+                                    @input="
                                         (event) =>
                                             handleChangeEndClassHour(
                                                 'day1',
@@ -1276,7 +1276,7 @@ watch(selectedWeek, () => {
                                     type="text"
                                     :placeholder="`${t('design.inputPlaceholder')}`"
                                     :value="value"
-                                    @change="
+                                    @input="
                                         (event) =>
                                             handleChangePlanText(
                                                 selectedDay,
@@ -1314,7 +1314,7 @@ watch(selectedWeek, () => {
                                         :value="
                                             startClassHour[selectedDay][index]
                                         "
-                                        @change="
+                                        @input="
                                             (event) =>
                                                 handleChangeStartClassHour(
                                                     selectedDay,
@@ -1334,7 +1334,7 @@ watch(selectedWeek, () => {
                                         :value="
                                             endClassHour[selectedDay][index]
                                         "
-                                        @change="
+                                        @input="
                                             (event) =>
                                                 handleChangeEndClassHour(
                                                     selectedDay,

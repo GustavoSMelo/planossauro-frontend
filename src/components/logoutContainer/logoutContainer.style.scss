@@ -1,0 +1,86 @@
+@charset "UTF-8";
+
+.logoutContainer {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--dp-transparent-gray);
+    z-index: 20;
+
+    .logoutContent {
+        width: 60%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        border-radius: 5px;
+        flex-direction: column;
+        background-color: var(--dp-lightfall);
+        color: var(--dp-text-color);
+
+        h2 {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        span {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 80%;
+
+            button {
+                padding: 20px;
+                border: none;
+                border-radius: 5px;
+                width: 48%;
+                color: white;
+                cursor: pointer;
+                text-align: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: 0.4s;
+                font-size: 14pt;
+            }
+
+            button.cancelButton {
+                background-color: transparent;
+                border: solid 2px var(--dp-accent-color);
+                color: var(--dp-accent-color);
+                font-weight: bold;
+            }
+
+            button.logoutButton {
+                background-color: var(--dp-accent-color);
+                color: var(--dp-text-color);
+                font-weight: bold;
+                border: solid 2px var(--dp-accent-color);
+            }
+
+            button:hover {
+                transition: 0.4s;
+                transform: scale(1.05);
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .logoutContainer {
+        .logoutContent {
+            width: 92%;
+            span {
+                flex-direction: column;
+
+                button {
+                    margin-top: 20px;
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

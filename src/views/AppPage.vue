@@ -18,6 +18,7 @@ import WelcomeContainer from "../components/welcomeContainer/WelcomeContainer.vu
 import TutorFloat from "../components/tutorFloat/TutorFloat.vue";
 import backendApi from "../api/api";
 import EditPlanContent from "./contents/EditPlanContent.vue";
+import LogoutContainer from "../components/logoutContainer/LogoutContainer.vue";
 
 import type { IPageContent } from "../interfaces/pageContents.interface";
 import type { IHamburgueMenuToggleContext } from "../interfaces/context/hamburgueMenuToggle.interface";
@@ -25,6 +26,7 @@ import type { ILoginType } from "../interfaces/loginType.interface";
 import type { ILoadingContext } from "../interfaces/context/loading.interface";
 import type { IUser } from "../interfaces/api/user.interface";
 
+const showLogoutPage = ref<boolean>(false);
 const showTutorialVideo = ref<boolean>(false);
 const firstLogin = ref<boolean>(true);
 const currentContent = ref<IPageContent["contents"]>("home");
@@ -45,6 +47,10 @@ const handleChangeValidationLoginType = (newValue: ILoginType["types"]) => {
 
 const handleCloseFirstLogin = () => {
     firstLogin.value = false;
+};
+
+const handleChangeLogoutPage = (newValue: boolean) => {
+    showLogoutPage.value = newValue;
 };
 
 const handleGetInformations = async () => {
@@ -101,6 +107,7 @@ onMounted(() => {
         v-if="hamburgueMenuToggle === true"
         :current-content="currentContent"
         :handle-change-current-content="handleChangeCurrentContent"
+        :handle-change-logout-page="handleChangeLogoutPage"
     />
     <VideoTutorial
         v-if="showTutorialVideo"
@@ -111,11 +118,16 @@ onMounted(() => {
         :handle-close-first-login="handleCloseFirstLogin"
         :handle-open-tutorial-video="handleOpenTutorialVideo"
     />
+    <LogoutContainer
+        v-if="showLogoutPage"
+        :handle-change-logout-page="handleChangeLogoutPage"
+    />
     <main class="appPageContainer" id="appPageContainer">
         <div class="fullContentContainer" id="fullContentContainer">
             <Navbar
                 :handle-change-current-content="handleChangeCurrentContent"
                 :current-content="currentContent"
+                :handle-change-logout-page="handleChangeLogoutPage"
             />
 
             <HomeContent
