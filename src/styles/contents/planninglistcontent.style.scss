@@ -17,12 +17,14 @@
     }
 
     label {
+        font-weight: 500;
         color: var(--dp-text-color);
     }
 
     input,
     select,
     button {
+        font-weight: bold;
         border: solid 1px var(--dp-accent-color);
         width: 200px;
         padding: 10px;

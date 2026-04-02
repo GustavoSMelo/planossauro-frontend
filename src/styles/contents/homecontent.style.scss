@@ -76,6 +76,7 @@
     .planningDetailsContainer {
         display: flex;
         flex-direction: column;
+        width: 50%;
     }
 
     .fullColumnContentContainer {
@@ -92,7 +93,7 @@
     .planningInfoContainer {
         box-shadow: 3px 3px 8px var(--dp-light-gray);
         border: solid 2px var(--dp-light-gray);
-        margin: 0px 15px;
+        margin: 0px 18px;
         height: fit-content;
         padding: 20px;
         border-radius: 5px;
@@ -158,16 +159,17 @@
     }
 
     .aditionalInformationsContainer,
-    .supportContainer {
+    .supportContainer,
+    .tutorialContent {
         display: flex;
         width: 100%;
         border: solid 1px var(--dp-light-gray);
         box-shadow: 4px 4px 8px var(--dp-light-gray);
         align-items: center;
-        justify-content: space-around;
+        justify-content: space-between;
         margin-top: 20px;
         border-radius: 5px;
-        padding: 10px;
+        padding: 10px 10%;
         transition: 0.4s;
 
         button {
@@ -179,6 +181,7 @@
             margin-top: 10px;
             border-radius: 3px;
             transition: 0.4s;
+            width: 200px;
         }
 
         img {
@@ -187,18 +190,34 @@
     }
 
     .aditionalInformationsContainer[data-theme="dark"],
-    .supportContainer {
+    .supportContainer[data-theme="dark"],
+    .tutorialContent[data-theme="dark"] {
         box-shadow: 0 0 0;
     }
 
-    .supportContainer {
-        flex-direction: row-reverse;
-        align-items: right;
+    .tutorialContent {
         text-align: right;
 
         img {
             transform: scaleX(-1);
         }
+
+        button:hover {
+            transition: 0.4s;
+            transform: scale(1.05);
+        }
+    }
+
+    .tutorialContent:hover,
+    .supportContainer:hover {
+        transform: scale(1.02);
+        transition: 0.4s;
+    }
+
+    .supportContainer {
+        flex-direction: row;
+        align-items: right;
+        text-align: left;
     }
 
     .aditionalInformationsContainer:hover {
@@ -287,6 +306,16 @@
                         margin-left: 0;
                     }
                 }
+            }
+        }
+
+        .aditionalInformationsContainer,
+        .supportContainer,
+        .tutorialContent {
+            padding: 10px;
+
+            button {
+                width: 160px;
             }
         }
     }

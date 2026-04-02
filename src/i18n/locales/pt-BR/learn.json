@@ -2,7 +2,7 @@
     "title": {
         "h1_1": "Cansado de fazer planejamento à mão?",
         "h1_2": "Automatize isso com o Planossauro",
-        "h3": "Não acredita? Então veja o vídeo"
+        "h3": "Da uma conferida no vídeo, você pode se impressionar"
     },
     "videoInfo": "Vídeo demonstrativo do software, imagens reais",
     "whatIsH2": "O que é o sistema?",
@@ -13,7 +13,7 @@
     "featureCloud": "Nuvem",
     "featureCloud_desc": "Guardamos seu planejamento na nuvem. Ter um backup nunca é demais",
     "featurePrice": "Preço",
-    "featurePrice_desc": "Temos preços super acessíveis, desde planos gratuitos até planos que cabem no seu bolso",
+    "featurePrice_desc": "Temos preços super acessíveis, desde planos gratuitos até planos que cabem exclusivos pra você",
     "featureDinos": "Dinossauros",
     "featureDinos_desc": "Nosso app é cheio de dinossauros legais que deixam a experiência mais leve e divertida",
     "featureEasy": "Facilidade",
@@ -25,7 +25,7 @@
     "helpH2": "Precisando de ajuda?",
     "help_content_1": "Está procurando o suporte ou a documentação?",
     "help_content_2": "Abaixo encontramos botões que vão te ajudar",
-    "help_content_3": "Email de suporte: suporte.planossauro at gmail.com ou gsantos15569.dev at gmail.com",
+    "help_content_3": "Email de suporte: ",
     "docH2": "Documentação",
     "supportH2": "Suporte",
     "photosH2": "Fotos do sistema",
@@ -43,7 +43,7 @@
     "faq_5_q": "O que acontece ao cancelar um plano?",
     "faq_5_a": "Seu plano volta à demonstração gratuita e você recebe o reembolso",
     "faq_6_q": "Por que o sistema é pago ?",
-    "faq_6_a": "Custo de operação e caridade, 10% dos ganhos irão para caridade para fornecer melhor educação para pessoas necessitadas e o resto sera para pagar hospagem e servidor",
+    "faq_6_a": "Custo de operação e caridade, 10% dos ganhos irão para caridade para fornecer melhor educação para pessoas necessitadas e o resto será para pagar hospedagem e servidor",
     "footer": "Obrigado por chegar aqui, app feito com ❤️ by Gustavo S. Melo",
     "buttons": {
         "login": "Login",

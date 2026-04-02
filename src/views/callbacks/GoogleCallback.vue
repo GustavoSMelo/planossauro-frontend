@@ -84,6 +84,7 @@ onMounted(async () => {
                 google_email: userData.google_email,
                 github_email: userData.github_email,
                 created_at: userData.created_at,
+                full_name: userData.full_name,
             };
 
             const response = (

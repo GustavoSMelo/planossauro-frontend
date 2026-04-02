@@ -354,7 +354,9 @@ const handleUnlinkAccount = async () => {
                 src="../../assets/dino_profile_logo.png"
                 alt="Dino user profile logo"
             />
-            <h3 v-if="!editProfile">{{ user?.full_name }}</h3>
+            <h3 id="fullNameInputText" v-if="!editProfile">
+                {{ user?.full_name }}
+            </h3>
             <input
                 v-if="editProfile"
                 type="text"
@@ -365,7 +367,7 @@ const handleUnlinkAccount = async () => {
                 class="fullNameInput"
             />
 
-            <span>
+            <span id="githubEmailInserted">
                 <b><i class="pi pi-github"></i> Github:</b>
                 <input
                     v-if="user?.github_email?.length && !editProfile"
@@ -406,9 +408,10 @@ const handleUnlinkAccount = async () => {
                     {{ t("profile.connect") }}
                 </button>
             </span>
-            <span>
+            <span id="googleEmailInserted">
                 <b><i class="pi pi-google"></i> Google:</b>
                 <input
+                    id="googleEmailInserted"
                     v-if="user?.google_email?.length && !editProfile"
                     :disabled="true"
                     type="text"
@@ -453,7 +456,7 @@ const handleUnlinkAccount = async () => {
                     {{ t("profile.connect") }}
                 </button>
             </span>
-            <span>
+            <span id="cellphoneInserted">
                 <b><i class="pi pi-phone"></i> {{ t("profile.cellphone") }}:</b>
                 <input
                     :disabled="editProfile ? false : true"
@@ -466,6 +469,7 @@ const handleUnlinkAccount = async () => {
                 />
             </span>
             <button
+                id="updateInformations"
                 v-if="!editProfile"
                 class="btnChangeProfile"
                 type="button"
@@ -498,6 +502,7 @@ const handleUnlinkAccount = async () => {
                         {{ t("profile.validated") }}:</b
                     >
                     <button
+                        id="validateEmail"
                         @click="handleSendValidationEmail('github')"
                         type="button"
                         :class="
@@ -550,7 +555,7 @@ const handleUnlinkAccount = async () => {
                         }}
                     </button>
                 </p>
-                <p>
+                <!-- <p>
                     <b
                         ><i class="pi pi-phone"></i> SMS
                         {{ t("profile.validated") }}:
@@ -566,7 +571,7 @@ const handleUnlinkAccount = async () => {
                         ></i>
                         {{ t("profile.validate") }}
                     </button>
-                </p>
+                </p> -->
                 <p class="createdAtText">
                     {{ t("profile.userSince") }}:
                     {{ convertIsoDateToBR((user?.created_at as string) ?? "") }}
@@ -580,7 +585,7 @@ const handleUnlinkAccount = async () => {
         <div class="appSettings">
             <details open>
                 <summary>{{ t("profile.appSettings") }}</summary>
-                <div>
+                <div id="languageSettings">
                     <h3>
                         <i class="pi pi-language"></i>
                         {{ t("profile.language") }}:
@@ -592,7 +597,7 @@ const handleUnlinkAccount = async () => {
                     </select>
                 </div>
 
-                <div>
+                <div id="themeSettings">
                     <h3>
                         <i class="pi pi-palette"></i> {{ t("profile.theme") }}:
                     </h3>
@@ -617,7 +622,7 @@ const handleUnlinkAccount = async () => {
                     </select>
                 </div>
 
-                <div>
+                <!-- <div id="documentationView">
                     <h3>
                         <i class="pi pi-book"></i>
                         {{ t("profile.documentation") }}
@@ -626,9 +631,9 @@ const handleUnlinkAccount = async () => {
                     <button type="button" @click="router.push('/docs')">
                         {{ t("profile.viewDocs") }}
                     </button>
-                </div>
+                </div> -->
 
-                <div>
+                <div id="helpView">
                     <h3>
                         <i class="pi pi-headphones"></i>
                         {{ t("profile.help") }}:
@@ -639,7 +644,7 @@ const handleUnlinkAccount = async () => {
                     </button>
                 </div>
 
-                <div>
+                <div id="logoutView">
                     <h3>
                         <i class="pi pi-sign-out"></i>
                         {{ t("profile.logout") }}:
@@ -653,6 +658,9 @@ const handleUnlinkAccount = async () => {
                     <h3>{{ t("profile.appVersion") }}:</h3>
 
                     <p>Version 0.0.0</p>
+                </div>
+                <div>
+                    <h3>{{ t("profile.bibleVersicle") }}</h3>
                 </div>
             </details>
         </div>

@@ -2,9 +2,10 @@
 import { inject, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { getToken } from "../helpers/token";
+
 import Navbar from "../components/navbar/Navbar.vue";
 import HomeContent from "./contents/HomeContent.vue";
-import PlanningContent from "./contents/PlanningContent.vue";
+import DesignContent from "./contents/DesignContent.vue";
 import NavbarMobile from "../components/navbarMobile/NavbarMobile.vue";
 import PlanningListContent from "./contents/PlanningListContent.vue";
 import EditPlanningContent from "./contents/EditPlanningContent.vue";
@@ -12,14 +13,20 @@ import RemovePlanningContent from "./contents/RemovePlanningContent.vue";
 import ProfileContent from "./contents/ProfileContent.vue";
 import ValidationCodeInputBox from "../components/validationCodeInputBox/ValidationCodeInputBox.vue";
 import PlanContent from "./contents/PlanContent.vue";
+import VideoTutorial from "../components/videoTutorial/VideoTutorial.vue";
+import WelcomeContainer from "../components/welcomeContainer/WelcomeContainer.vue";
+import TutorFloat from "../components/tutorFloat/TutorFloat.vue";
 import backendApi from "../api/api";
+import EditPlanContent from "./contents/EditPlanContent.vue";
+
 import type { IPageContent } from "../interfaces/pageContents.interface";
 import type { IHamburgueMenuToggleContext } from "../interfaces/context/hamburgueMenuToggle.interface";
 import type { ILoginType } from "../interfaces/loginType.interface";
 import type { ILoadingContext } from "../interfaces/context/loading.interface";
-import EditPlanContent from "./contents/EditPlanContent.vue";
 import type { IUser } from "../interfaces/api/user.interface";
 
+const showTutorialVideo = ref<boolean>(false);
+const firstLogin = ref<boolean>(true);
 const currentContent = ref<IPageContent["contents"]>("home");
 const validationLoginType = ref<ILoginType["types"]>("github");
 const { hamburgueMenuToggle } = inject(
@@ -34,6 +41,10 @@ const handleChangeCurrentContent = (newValue: IPageContent["contents"]) => {
 
 const handleChangeValidationLoginType = (newValue: ILoginType["types"]) => {
     validationLoginType.value = newValue;
+};
+
+const handleCloseFirstLogin = () => {
+    firstLogin.value = false;
 };
 
 const handleGetInformations = async () => {
@@ -67,9 +78,22 @@ const removeSessionStorageItems = () => {
     sessionStorage.removeItem("fullName");
 };
 
+const handleOpenTutorialVideo = (opens: boolean) => {
+    showTutorialVideo.value = opens;
+};
+
+const checkIfIsFirstLogin = (): void => {
+    const showWelcomePage = localStorage.getItem("showWelcomePage");
+
+    if (showWelcomePage === "false") {
+        firstLogin.value = false;
+    }
+};
+
 onMounted(() => {
     handleGetInformations();
     removeSessionStorageItems();
+    checkIfIsFirstLogin();
 });
 </script>
 <template>
@@ -78,8 +102,17 @@ onMounted(() => {
         :current-content="currentContent"
         :handle-change-current-content="handleChangeCurrentContent"
     />
-    <main class="appPageContainer">
-        <div class="fullContentContainer">
+    <VideoTutorial
+        v-if="showTutorialVideo"
+        :handle-open-tutorial-video="handleOpenTutorialVideo"
+    />
+    <WelcomeContainer
+        v-if="firstLogin"
+        :handle-close-first-login="handleCloseFirstLogin"
+        :handle-open-tutorial-video="handleOpenTutorialVideo"
+    />
+    <main class="appPageContainer" id="appPageContainer">
+        <div class="fullContentContainer" id="fullContentContainer">
             <Navbar
                 :handle-change-current-content="handleChangeCurrentContent"
                 :current-content="currentContent"
@@ -88,8 +121,9 @@ onMounted(() => {
             <HomeContent
                 v-if="currentContent === 'home'"
                 :handle-change-current-content="handleChangeCurrentContent"
+                :handle-open-tutorial-video="handleOpenTutorialVideo"
             />
-            <PlanningContent v-else-if="currentContent === 'planning'" />
+            <DesignContent v-else-if="currentContent === 'design'" />
             <PlanningListContent
                 v-else-if="currentContent === 'planning_list'"
                 :handle-change-current-content="handleChangeCurrentContent"
@@ -123,6 +157,8 @@ onMounted(() => {
                 :handle-change-current-content="handleChangeCurrentContent"
             />
         </div>
+
+        <TutorFloat :current-content="currentContent" />
     </main>
 </template>
 <style lang="scss" scoped src="../styles/apppage.style.scss" />

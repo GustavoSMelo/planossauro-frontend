@@ -2,12 +2,14 @@
     "homePage": "Página inicial",
     "currentPlan": "Seu plano atual",
     "managePlan": "Gerenciar plano",
-    "paymentDoubt": "Duvidas sobre o pagamento ?",
-    "checkPayments": "Confirir pagamentos",
+    "paymentDoubt": "Dúvidas sobre o pagamento?",
+    "checkPayments": "Confirmar pagamentos",
     "weeklyPlannings": "Planejamento Semanal",
-    "dailyPlannings": "Planejamento Diario",
+    "dailyPlannings": "Planejamento Diário",
     "design": "Planejar",
     "planningInformations": "Informações do planejamento",
-    "support": "Quer falar com o suporte ?",
-    "supportBtn": "Clique aqui"
+    "support": "Quer falar com o suporte?",
+    "supportBtn": "Clique aqui",
+    "difficultiesUsingSystem": "Dificuldades ao usar o sistema?",
+    "watchTutorial": "Ver tutorial"
 }
