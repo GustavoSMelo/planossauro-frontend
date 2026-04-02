@@ -1,25 +1,19 @@
 <script lang="ts" setup>
 import { inject } from "vue";
-import { useRouter } from "vue-router";
 import type { IPageContent } from "../../interfaces/pageContents.interface";
 import type { IHamburgueMenuToggleContext } from "../../interfaces/context/hamburgueMenuToggle.interface";
-import type { IPopupContext } from "../../interfaces/context/popup.interface";
 
-const { handleChangeCurrentContent, currentContent } = defineProps<{
-    handleChangeCurrentContent: (newValue: IPageContent["contents"]) => void;
-    currentContent: IPageContent["contents"];
-}>();
-const router = useRouter();
+const { handleChangeCurrentContent, currentContent, handleChangeLogoutPage } =
+    defineProps<{
+        handleChangeCurrentContent: (
+            newValue: IPageContent["contents"],
+        ) => void;
+        currentContent: IPageContent["contents"];
+        handleChangeLogoutPage: (newValue: boolean) => void;
+    }>();
 const hamburgerMenuContext: IHamburgueMenuToggleContext = inject(
     "hamburgueMenuToggle",
 ) as IHamburgueMenuToggleContext;
-const { handleChangePopupInfo } = inject("popup") as IPopupContext;
-
-const logout = () => {
-    sessionStorage.clear();
-    handleChangePopupInfo("Deslogado", "info", true);
-    router.push("/");
-};
 </script>
 <template>
     <nav class="navbarContainer" id="navbarContainer">
@@ -62,7 +56,7 @@ const logout = () => {
             >
                 {{ $t("navbar.profile") }}
             </li>
-            <li :class="['btnNavbar']" @click="logout">
+            <li :class="['btnNavbar']" @click="handleChangeLogoutPage(true)">
                 {{ $t("navbar.logout") }}
             </li>
             <li class="mobileIcon">

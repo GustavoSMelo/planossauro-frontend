@@ -70,12 +70,7 @@ const goToAboutPage = () => {
             </main>
         </div>
         <h4>
-            <a
-                href="https://github.com/GustavoSMelo/planossauro-frontend"
-                target="_blank"
-            >
-                Desenvolvido por Gustavo Santos Melo
-            </a>
+            <a> Desenvolvido por Gustavo Santos Melo </a>
         </h4>
     </div>
 </template>

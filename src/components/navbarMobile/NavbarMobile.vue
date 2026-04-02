@@ -2,29 +2,28 @@
 import { inject, onMounted, ref } from "vue";
 import type { IHamburgueMenuToggleContext } from "../../interfaces/context/hamburgueMenuToggle.interface";
 import type { IPageContent } from "../../interfaces/pageContents.interface";
-import type { IPopupContext } from "../../interfaces/context/popup.interface";
-import { useRouter } from "vue-router";
 import backendApi from "../../api/api";
 import type {
     IPlan,
     ISubscription,
 } from "../../interfaces/subscription.interface";
 
-const { handleChangeCurrentContent, currentContent } = defineProps<{
-    handleChangeCurrentContent: (newValue: IPageContent["contents"]) => void;
-    currentContent: IPageContent["contents"];
-}>();
+const { handleChangeCurrentContent, currentContent, handleChangeLogoutPage } =
+    defineProps<{
+        handleChangeCurrentContent: (
+            newValue: IPageContent["contents"],
+        ) => void;
+        currentContent: IPageContent["contents"];
+        handleChangeLogoutPage: (newValue: boolean) => void;
+    }>();
 const planName = ref("free");
-const router = useRouter();
-const { handleChangePopupInfo } = inject("popup") as IPopupContext;
 const { handleHamburgueMenuToggle } = inject(
     "hamburgueMenuToggle",
 ) as IHamburgueMenuToggleContext;
 
 const logout = () => {
-    sessionStorage.clear();
-    handleChangePopupInfo("Deslogado", "info", true);
-    router.push("/");
+    handleRemoveMenuHamburguer();
+    handleChangeLogoutPage(true);
 };
 
 const getPlan = async () => {
