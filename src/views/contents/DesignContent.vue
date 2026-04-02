@@ -1121,7 +1121,10 @@ watch(selectedWeek, () => {
 
             <div class="weekDaysMobile">
                 <div class="selectedDay" id="selectedDay">
-                    <h2 class="selectedWeekDayMobile">
+                    <h2
+                        class="selectedWeekDayMobile"
+                        @click="() => handleMobileMenu()"
+                    >
                         <i
                             :class="[
                                 'pi',
