@@ -100,6 +100,18 @@ onMounted(async () => {
                 true,
             );
 
+            const responseHour = await backendApi.get(
+                `/planninghour/${userData.uuid}`,
+            );
+            sessionStorage.setItem(
+                "initial_hour",
+                responseHour.data.initial_hour,
+            );
+            sessionStorage.setItem(
+                "interval",
+                responseHour.data.interval_between_classes,
+            );
+
             router.push("/app");
             return;
         }

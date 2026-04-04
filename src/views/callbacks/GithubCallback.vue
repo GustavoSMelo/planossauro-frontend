@@ -112,14 +112,21 @@ watchEffect(async () => {
                     sessionStorage.getItem("editProfile"),
                 );
 
-                if (
-                    user &&
-                    user.uuid === userData.uuid &&
-                    editProfile &&
-                    !userData.github_is_validated
-                ) {
+                if (editProfile && !userData.github_is_validated && !user) {
                     router.push("/finish/login?jumpToValidationCode=true");
                 } else {
+                    const responseHour = await backendApi.get(
+                        `/planninghour/${userData.uuid}`,
+                    );
+                    sessionStorage.setItem(
+                        "initial_hour",
+                        responseHour.data.initial_hour,
+                    );
+                    sessionStorage.setItem(
+                        "interval",
+                        responseHour.data.interval_between_classes,
+                    );
+
                     router.push("/app");
                 }
                 return;

@@ -1,14 +1,11 @@
 <script lang="ts" setup>
 import { inject, onMounted, ref } from "vue";
 import { useDark } from "@vueuse/core";
-import { useRouter } from "vue-router";
 import backendApi from "../../api/api";
 import type { ILoadingContext } from "../../interfaces/context/loading.interface";
 import type { IDashboard } from "../../interfaces/dashboard.interface";
 import type { IPageContent } from "../../interfaces/pageContents.interface";
 import type { IPlanningTypeContext } from "../../interfaces/context/planningType.interface";
-
-const router = useRouter();
 
 const { handleChangeCurrentContent } = defineProps<{
     handleChangeCurrentContent: (newValue: IPageContent["contents"]) => void;
@@ -59,7 +56,7 @@ onMounted(() => {
             class="tutorialContent"
             :data-theme="isDark ? 'dark' : 'light'"
         >
-            <img src="../../assets/dino_tutor.png" alt="tutorial" />
+            <img src="../../assets/tutor_dino.png" alt="tutorial" />
 
             <span>
                 <h2>{{ $t("home.difficultiesUsingSystem") }}</h2>
@@ -237,7 +234,10 @@ onMounted(() => {
         >
             <span>
                 <h2>{{ $t("home.support") }}</h2>
-                <button type="button" @click="router.push('support')">
+                <button
+                    type="button"
+                    @click="handleChangeCurrentContent('support')"
+                >
                     {{ $t("home.supportBtn") }}
                 </button>
             </span>

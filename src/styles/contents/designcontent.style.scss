@@ -210,6 +210,13 @@ input:focus {
                 color: var(--dp-text-color);
             }
 
+            .selectAndConfig {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                margin-top: 10px;
+            }
+
             .planSelect {
                 background-color: var(--dp-lightfall);
                 color: var(--dp-accent-color);
@@ -219,12 +226,30 @@ input:focus {
                 font-size: 14pt;
                 text-align: left;
                 width: 240px;
-                margin-top: 10px;
                 font-weight: 500;
 
                 option {
                     font-weight: 500;
                     color: var(--dp-accent-color);
+                }
+            }
+
+            .btnConfigTime {
+                background-color: var(--dp-lightfall);
+                color: var(--dp-accent-color);
+                border: solid 1px var(--dp-accent-color);
+                padding: 10px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: 0.4s;
+
+                &:hover {
+                    background-color: var(--dp-accent-color);
+                    color: var(--dp-lightfall);
+                }
+
+                i {
+                    font-size: 14pt;
                 }
             }
         }
@@ -867,7 +892,7 @@ div.weeklyPlan {
     }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 630px) {
     input {
         width: 95%;
     }
@@ -902,8 +927,11 @@ div.weeklyPlan {
                 text-align: center;
                 width: 94%;
 
-                .planSelect {
+                .selectAndConfig {
                     width: 100%;
+                    .planSelect {
+                        width: 100%;
+                    }
                 }
             }
         }

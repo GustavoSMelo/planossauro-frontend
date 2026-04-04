@@ -19,6 +19,7 @@ import TutorFloat from "../components/tutorFloat/TutorFloat.vue";
 import backendApi from "../api/api";
 import EditPlanContent from "./contents/EditPlanContent.vue";
 import LogoutContainer from "../components/logoutContainer/LogoutContainer.vue";
+import SupportContent from "./contents/SupportContent.vue";
 
 import type { IPageContent } from "../interfaces/pageContents.interface";
 import type { IHamburgueMenuToggleContext } from "../interfaces/context/hamburgueMenuToggle.interface";
@@ -39,6 +40,7 @@ const router = useRouter();
 
 const handleChangeCurrentContent = (newValue: IPageContent["contents"]) => {
     currentContent.value = newValue;
+    history.pushState({ content: newValue }, "", "");
 };
 
 const handleChangeValidationLoginType = (newValue: ILoginType["types"]) => {
@@ -100,6 +102,12 @@ onMounted(() => {
     handleGetInformations();
     removeSessionStorageItems();
     checkIfIsFirstLogin();
+
+    window.addEventListener("popstate", (event) => {
+        if (event.state?.content) {
+            currentContent.value = event.state.content;
+        }
+    });
 });
 </script>
 <template>
@@ -166,6 +174,10 @@ onMounted(() => {
             />
             <EditPlanContent
                 v-else-if="currentContent === 'edit_plan'"
+                :handle-change-current-content="handleChangeCurrentContent"
+            />
+            <SupportContent
+                v-else-if="currentContent === 'support'"
                 :handle-change-current-content="handleChangeCurrentContent"
             />
         </div>

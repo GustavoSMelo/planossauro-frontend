@@ -7,6 +7,7 @@ import { saveAs } from "file-saver";
 import { debounce } from "lodash-es";
 import Docxtemplater from "docxtemplater";
 import PizZip from "pizzip";
+import confetti from "@hiseb/confetti";
 import axios, { type AxiosResponse } from "axios";
 import "@vuepic/vue-datepicker/dist/main.css";
 import type { IPlanningDay, IDays } from "../../interfaces/planning.interface";
@@ -31,7 +32,7 @@ import sanitizeInput from "../../helpers/sanitizeInput";
 import { getPrompt, getPromptEN } from "../../helpers/prompt";
 import { qsn as qsnPTBR } from "../../assets/qsn.json";
 import type { IPlanningTypeContext } from "../../interfaces/context/planningType.interface";
-import confetti from "@hiseb/confetti";
+import ClassTimeConfigPopup from "../../components/ClassTimeConfigPopup/ClassTimeConfigPopup.vue";
 
 const isDark = useDark({
     attribute: "data-theme",
@@ -46,19 +47,39 @@ const plans = ref<IPlanningDay>({
     day4: [""],
     day5: [""],
 });
+const sessionInitialHour = sessionStorage.getItem("initial_hour") || "12:00";
+const sessionInterval = sessionStorage.getItem("interval") || "0:30";
+const intervalMinutes = ref(
+    parseInt(sessionInterval.split(":")[0]) * 60 +
+        parseInt(sessionInterval.split(":")[1]),
+);
+
+const addMinutesToTime = (time: string, minutes: number): string => {
+    const [hours, mins] = time.split(":").map(Number);
+    const totalMinutes = hours * 60 + mins + minutes;
+    const newHours = Math.floor(totalMinutes / 60);
+    const newMins = totalMinutes % 60;
+    return `${String(newHours).padStart(2, "0")}:${String(newMins).padStart(2, "0")}`;
+};
+
+const sessionEndHour = addMinutesToTime(
+    sessionInitialHour,
+    intervalMinutes.value,
+);
+
 const startClassHour = ref({
-    day1: ["12:00"],
-    day2: ["12:00"],
-    day3: ["12:00"],
-    day4: ["12:00"],
-    day5: ["12:00"],
+    day1: [sessionInitialHour],
+    day2: [sessionInitialHour],
+    day3: [sessionInitialHour],
+    day4: [sessionInitialHour],
+    day5: [sessionInitialHour],
 });
 const endClassHour = ref({
-    day1: ["12:30"],
-    day2: ["12:30"],
-    day3: ["12:30"],
-    day4: ["12:30"],
-    day5: ["12:30"],
+    day1: [sessionEndHour],
+    day2: [sessionEndHour],
+    day3: [sessionEndHour],
+    day4: [sessionEndHour],
+    day5: [sessionEndHour],
 });
 const selectedDay = ref<IDays["days"]>("day1");
 const planType = ref<IShowPreview["planType"]>("Semanal");
@@ -68,6 +89,7 @@ const className = ref("");
 const planDateStart = ref("");
 const planDateEnd = ref("");
 const showAditionalInformation = ref(false);
+const showClassTimeConfig = ref(false);
 const selectedWeek = ref();
 const selectedElement = ref<number | null>(null);
 const dragSourceDay = ref<IDays["days"] | null>(null);
@@ -119,8 +141,12 @@ const handleChangeEndClassHour = (
 
 const handleAddNewClassInPlanning = (day: IDays["days"]): void => {
     plans.value[day].push("");
-    startClassHour.value[day].push("12:00");
-    endClassHour.value[day].push("12:30");
+    const lastEndHour =
+        endClassHour.value[day][endClassHour.value[day].length - 1];
+    const newStartHour = lastEndHour;
+    const newEndHour = addMinutesToTime(lastEndHour, intervalMinutes.value);
+    startClassHour.value[day].push(newStartHour);
+    endClassHour.value[day].push(newEndHour);
 };
 
 const handleRemoveClassAtvFromPlan = (
@@ -128,9 +154,28 @@ const handleRemoveClassAtvFromPlan = (
     index: number,
 ): void => {
     if (index === 0) return;
-    plans.value[day] = plans.value[day].filter(
-        (_, planIndex) => planIndex !== index,
-    );
+    plans.value[day].splice(index, 1);
+    startClassHour.value[day].splice(index, 1);
+    endClassHour.value[day].splice(index, 1);
+
+    for (let i = 1; i < endClassHour.value[day].length; i++) {
+        startClassHour.value[day][i] = endClassHour.value[day][i - 1];
+        endClassHour.value[day][i] = addMinutesToTime(
+            startClassHour.value[day][i],
+            intervalMinutes.value,
+        );
+    }
+
+    const combined = plans.value[day].map((plan, i) => ({
+        plan,
+        start: startClassHour.value[day][i],
+        end: endClassHour.value[day][i],
+    }));
+    combined.sort((a, b) => a.start.localeCompare(b.start));
+
+    plans.value[day] = combined.map((c) => c.plan);
+    startClassHour.value[day] = combined.map((c) => c.start);
+    endClassHour.value[day] = combined.map((c) => c.end);
 };
 
 const handleGoBack = debounce(async () => {
@@ -216,8 +261,37 @@ const handleChangeClassDateStart = (event: Event): void => {
 };
 
 const handleChangeClassDateEnd = (event: Event): void => {
-    const target = event.target as HTMLInputElement;
-    planDateEnd.value = target.value;
+    planDateEnd.value = (event.target as HTMLInputElement).value;
+};
+
+const handleSaveClassTimeConfig = (
+    newInitialHour: string,
+    newInterval: string,
+) => {
+    sessionStorage.setItem("initial_hour", newInitialHour);
+    sessionStorage.setItem("interval", newInterval);
+
+    const newIntervalMinutes =
+        parseInt(newInterval.split(":")[0]) * 60 +
+        parseInt(newInterval.split(":")[1]);
+    intervalMinutes.value = newIntervalMinutes;
+    const newEndHour = addMinutesToTime(newInitialHour, newIntervalMinutes);
+
+    const days: IDays["days"][] = ["day1", "day2", "day3", "day4", "day5"];
+
+    days.forEach((day) => {
+        if (startClassHour.value[day].length > 0) {
+            startClassHour.value[day][0] = newInitialHour;
+            endClassHour.value[day][0] = newEndHour;
+        }
+        for (let i = 1; i < startClassHour.value[day].length; i++) {
+            startClassHour.value[day][i] = endClassHour.value[day][i - 1];
+            endClassHour.value[day][i] = addMinutesToTime(
+                startClassHour.value[day][i],
+                newIntervalMinutes,
+            );
+        }
+    });
 };
 
 const isAditionInformationMissing = (): boolean => {
@@ -875,16 +949,33 @@ watch(selectedWeek, () => {
             <img src="../../assets/dinoPlanejador.png" alt="Dino planejador" />
             <span>
                 <h1>{{ t("design.generatePlanning") }}</h1>
-                <select
-                    class="planSelect"
-                    :value="planType"
-                    @change="(event) => handleChangePlanType(event)"
-                >
-                    <option value="Diario">{{ t("design.daily") }}</option>
-                    <option value="Semanal">{{ t("design.weekly") }}</option>
-                </select>
+                <div class="selectAndConfig">
+                    <select
+                        class="planSelect"
+                        :value="planType"
+                        @change="(event) => handleChangePlanType(event)"
+                    >
+                        <option value="Diario">{{ t("design.daily") }}</option>
+                        <option value="Semanal">
+                            {{ t("design.weekly") }}
+                        </option>
+                    </select>
+                    <button
+                        type="button"
+                        class="btnConfigTime"
+                        @click="showClassTimeConfig = true"
+                        :title="t('design.configureTime')"
+                    >
+                        <i class="pi pi-cog"></i>
+                    </button>
+                </div>
             </span>
         </div>
+
+        <ClassTimeConfigPopup
+            v-model:show="showClassTimeConfig"
+            @save="handleSaveClassTimeConfig"
+        />
 
         <!-- Diario -->
 

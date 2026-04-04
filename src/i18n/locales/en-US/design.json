@@ -18,9 +18,16 @@
     "datePlanning": "Planning date",
     "chooseTemplate": "Choose template",
     "cancel": "Cancel",
+    "save": "Save",
     "successMessage": "Document generated with success",
     "errorMessage": "Error to generate a new document",
     "missingWeeklyToken": "All weekly tokens was used",
     "missingDailyToken": "All daily tokens was used",
-    "fillAllFields": "Fill all fields and try again"
+    "fillAllFields": "Fill all fields and try again",
+    "classTimeConfig": "Configure class time",
+    "initialHour": "Start time",
+    "intervalBetweenClasses": "Interval between classes",
+    "configureTime": "Configure time",
+    "classTimeConfigSaved": "Class time saved successfully",
+    "classTimeConfigError": "Error saving class time"
 }
