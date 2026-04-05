@@ -60,7 +60,7 @@ onMounted(() => {
 
             <span>
                 <h2>{{ $t("home.difficultiesUsingSystem") }}</h2>
-                <button type="button" @click="handleOpenTutorialVideo(true)">
+                <button type="button" @click="handleChangeCurrentContent('steps')">
                     {{ $t("home.watchTutorial") }}
                 </button>
             </span>

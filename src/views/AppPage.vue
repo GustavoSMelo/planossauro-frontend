@@ -20,6 +20,7 @@ import backendApi from "../api/api";
 import EditPlanContent from "./contents/EditPlanContent.vue";
 import LogoutContainer from "../components/logoutContainer/LogoutContainer.vue";
 import SupportContent from "./contents/SupportContent.vue";
+import StepsContent from "./contents/StepsContent.vue";
 
 import type { IPageContent } from "../interfaces/pageContents.interface";
 import type { IHamburgueMenuToggleContext } from "../interfaces/context/hamburgueMenuToggle.interface";
@@ -178,6 +179,10 @@ onMounted(() => {
             />
             <SupportContent
                 v-else-if="currentContent === 'support'"
+                :handle-change-current-content="handleChangeCurrentContent"
+            />
+            <StepsContent
+                v-else-if="currentContent === 'steps'"
                 :handle-change-current-content="handleChangeCurrentContent"
             />
         </div>

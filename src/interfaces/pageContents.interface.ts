@@ -9,7 +9,8 @@ interface IPageContent {
         | "profile"
         | "validation_code"
         | "edit_plan"
-        | "support";
+        | "support"
+        | "steps";
 }
 
 export type { IPageContent };
