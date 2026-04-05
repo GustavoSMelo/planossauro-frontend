@@ -18,9 +18,16 @@
     "datePlanning": "Data do planejamento",
     "chooseTemplate": "Escolher template",
     "cancel": "Cancelar",
+    "save": "Salvar",
     "successMessage": "Documento gerado com sucesso",
     "errorMessage": "Erro ao gerar documento",
     "missingWeeklyToken": "Todos os tokens semanais foram utilizados",
     "missingDailyToken": "Todos os tokens diários foram utilizados",
-    "fillAllFields": "Preencha os campos para escolher o template"
+    "fillAllFields": "Preencha os campos para escolher o template",
+    "classTimeConfig": "Configurar horário das aulas",
+    "initialHour": "Horário de início",
+    "intervalBetweenClasses": "Intervalo entre aulas",
+    "configureTime": "Configurar horário",
+    "classTimeConfigSaved": "Horário salvo com sucesso",
+    "classTimeConfigError": "Erro ao salvar horário"
 }

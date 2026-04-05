@@ -639,7 +639,7 @@ const handleUnlinkAccount = async () => {
                         {{ t("profile.help") }}:
                     </h3>
 
-                    <button @click="router.push('/support')">
+                    <button @click="handleChangeCurrentContent('support')">
                         {{ t("profile.viewHelp") }}
                     </button>
                 </div>

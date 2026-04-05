@@ -3,6 +3,7 @@ FROM node:24.14-alpine AS build-stage
 WORKDIR /webapp
 COPY package*.json ./
 RUN npm install
+RUN npm audit fix
 COPY . .
 RUN npm run build
 

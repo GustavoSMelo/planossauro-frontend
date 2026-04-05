@@ -1,0 +1,78 @@
+@charset "UTF-8";
+
+.classTimeConfigContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+.classTimeConfigContent {
+    background: var(--dp-lightfall);
+    padding: 2rem;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 80%;
+
+    h2 {
+        margin: 0 0 0.5rem 0;
+        color: var(--dp-text-color);
+    }
+
+    label {
+        color: var(--dp-text-color);
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    input[type="time"],
+    select {
+        border: solid 2px var(--dp-light-gray);
+        padding: 0.5rem;
+        border-radius: 4px;
+        background: var(--background-color);
+        color: var(--dp-light-gray);
+        font-weight: 500;
+    }
+
+    input[type="time"]:focus,
+    select:focus {
+        border: solid 2px var(--dp-accent-color);
+        font-weight: bold;
+        color: var(--dp-accent-color);
+    }
+
+    .btnControlsContainer {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+        justify-content: flex-end;
+    }
+
+    .btnCancel,
+    .btnSave {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .btnCancel {
+        background: #ccc;
+        color: #333;
+    }
+
+    .btnSave {
+        background: #e9688c;
+        color: white;
+    }
+}

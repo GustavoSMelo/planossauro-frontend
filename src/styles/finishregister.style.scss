@@ -46,7 +46,8 @@
             color: var(--dp-text-color);
         }
 
-        input {
+        input,
+        select {
             box-shadow: 2px 2px 6px var(--dp-light-gray);
             padding: 15px;
             border: solid 1px var(--dp-light-gray);
@@ -58,11 +59,13 @@
             font-weight: 500;
         }
 
-        input[data-theme="dark"] {
+        input[data-theme="dark"],
+        select[data-theme="dark"] {
             box-shadow: 0 0 0;
         }
 
-        input:focus {
+        input:focus,
+        select:focus {
             transition: 0.3s;
             border: solid 1px var(--dp-accent-color);
             color: var(--dp-accent-color);

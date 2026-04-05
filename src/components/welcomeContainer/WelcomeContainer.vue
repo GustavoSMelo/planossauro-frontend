@@ -38,15 +38,17 @@ onMounted(() => {
         showTutorialVideo.value = false;
     } else {
         showTutorialVideo.value = true;
+        confetti({
+            fade: true,
+            velocity: 100,
+            size: 1.6,
+            count: 230,
+            position: {
+                x: window.innerWidth * 0.5,
+                y: window.innerHeight * 0.5,
+            },
+        });
     }
-
-    confetti({
-        fade: true,
-        velocity: 100,
-        size: 1.6,
-        count: 230,
-        position: { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 },
-    });
 });
 </script>
 <template>

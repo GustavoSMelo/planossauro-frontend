@@ -31,16 +31,31 @@ const urlParams = new URLSearchParams(window.location.search);
 const fullName = ref(window.sessionStorage.getItem("fullName") || "");
 const popupContext = inject("popup") as IPopupContext;
 const loadingContext = inject("isLoading") as ILoadingContext;
-const validationCodeInput = ref("");
-const showCodeConfirmationScreen = ref(urlParams.has("jumpToValidationCode"));
-const user = ref<IUser>();
 const router = useRouter();
 const userFromSession: IUser | null = sessionStorage.getItem("user")
     ? JSON.parse(sessionStorage.getItem("user") as string)
     : null;
+
+const validationCodeInput = ref("");
+const showCodeConfirmationScreen = ref(urlParams.has("jumpToValidationCode"));
+const user = ref<IUser>();
 const cellphoneNumber = ref(
     userFromSession?.cellphone_number ? userFromSession.cellphone_number : "",
 );
+const initialHour = ref("12:00");
+const intervalBetweenClasses = ref("30min");
+
+// onMounted(async () => {
+//     const user = userFromSession;
+//     if (user?.uuid) {
+//         try {
+//             await backendApi.get(`/user/${user.uuid}`);
+//             router.push("/app");
+//         } catch {
+//             sessionStorage.removeItem("user");
+//         }
+//     }
+// });
 
 const handleChangeFullName = (event: Event): void => {
     const target = event.target as HTMLInputElement;
@@ -106,17 +121,37 @@ const isFormCompleted = (): boolean => {
         : false;
 };
 
+const handleChangeInitialHour = (hour: string) => {
+    initialHour.value = hour;
+};
+
+const handleChangeIntervalBetweenClasses = (interval: string) => {
+    intervalBetweenClasses.value = interval;
+};
+
 const handleGithubSave = async () => {
     try {
         loadingContext.handleChangeIsLoading(true);
         const githubEmail = sessionStorage.getItem("githubEmail");
         const githubId = sessionStorage.getItem("githubId");
+        const hours = Math.floor(
+            Number(intervalBetweenClasses.value.split("min")[0]) / 60,
+        );
+        const mins = Math.round(
+            Number(intervalBetweenClasses.value.split("min")[0]) % 60,
+        );
+        const interval = `${hours}:${mins}`;
+
+        sessionStorage.setItem("initial_hour", initialHour.value);
+        sessionStorage.setItem("interval", interval);
 
         const userData = {
             full_name: fullName.value,
             cellphone_number: cellphoneNumber.value,
             github_email: githubEmail,
             github_id: githubId,
+            initial_hour: initialHour.value,
+            interval_between_classes: interval,
         } as unknown as ICreateUser;
 
         let responseUserCreated: AxiosResponse<ICreatedUserResponseAPIOptions>;
@@ -184,12 +219,24 @@ const handleGoogleSave = async () => {
         loadingContext.handleChangeIsLoading(true);
         const googleEmail = sessionStorage.getItem("googleEmail");
         const googleId = sessionStorage.getItem("googleId") || "";
+        const hours = Math.floor(
+            Number(intervalBetweenClasses.value.split("min")[0]) / 60,
+        );
+        const mins = Math.round(
+            Number(intervalBetweenClasses.value.split("min")[0]) % 60,
+        );
+        const interval = `${hours}:${mins}`;
+
+        sessionStorage.setItem("initial_hour", initialHour.value);
+        sessionStorage.setItem("interval", interval);
 
         const userData = {
             full_name: fullName.value,
             cellphone_number: cellphoneNumber.value,
             google_email: googleEmail,
             google_id: googleId.toString(),
+            initial_hour: initialHour.value,
+            interval_between_classes: interval,
         } as unknown as ICreateUser;
 
         let responseUserCreated: AxiosResponse<ICreatedUserResponseAPIOptions>;
@@ -381,6 +428,39 @@ const finishValidation = async () => {
                 v-model="cellphoneNumber"
                 @input="handleChangeCellphoneNumber"
             />
+
+            <label>Horario de inicio de suas aulas</label>
+            <input
+                type="time"
+                :data-theme="isDark ? 'dark' : 'light'"
+                v-model="initialHour"
+                @input="
+                    (event) =>
+                        handleChangeInitialHour(
+                            (event.target! as HTMLInputElement).value,
+                        )
+                "
+            />
+
+            <label>Cada aula possui quantos minutos ?</label>
+            <select
+                :data-theme="isDark ? 'dark' : 'light'"
+                v-model="intervalBetweenClasses"
+                @input="
+                    (event) =>
+                        handleChangeIntervalBetweenClasses(
+                            (event.target! as HTMLSelectElement).value,
+                        )
+                "
+            >
+                <option value="15min">15 minutos</option>
+                <option value="30min">30 minutos</option>
+                <option value="45min">45 minutos</option>
+                <option value="60min">60 minutos</option>
+                <option value="75min">75 minutos</option>
+                <option value="90min">90 minutos</option>
+                <option value="120min">120 minutos</option>
+            </select>
 
             <button
                 :class="isFormCompleted() ? 'btnProceedRegister' : ''"
