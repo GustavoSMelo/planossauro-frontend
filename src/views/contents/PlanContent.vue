@@ -162,7 +162,7 @@ onMounted(() => {
                     ${planInfo?.price}.00`
                     }}
                 </li>
-                <li id="planStatus">
+                <!-- <li id="planStatus">
                     <b>{{ $t("plans.planStatus") }} </b>
                     <p
                         :class="
@@ -185,7 +185,7 @@ onMounted(() => {
                         ></i>
                         {{ subscriptionInfo?.status }}
                     </p>
-                </li>
+                </li> -->
                 <li id="planCard">
                     <b>{{ $t("plans.card") }}: </b>
                     <span v-if="subscriptionInfo?.last_four_digits"

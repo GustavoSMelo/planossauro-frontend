@@ -622,7 +622,7 @@ const handleUnlinkAccount = async () => {
                     </select>
                 </div>
 
-                <div id="documentationView">
+                <!-- <div id="documentationView">
                     <h3>
                         <i class="pi pi-book"></i>
                         {{ t("profile.documentation") }}
@@ -631,7 +631,7 @@ const handleUnlinkAccount = async () => {
                     <button type="button" @click="router.push('/docs')">
                         {{ t("profile.viewDocs") }}
                     </button>
-                </div>
+                </div> -->
 
                 <div id="helpView">
                     <h3>
