@@ -675,7 +675,14 @@ const generatePlan = async () => {
                                 .replaceAll("-", ""),
                         ) as IClassPlanResponse;
                     }
-                    return JSON.parse(response!.data.message);
+                    return JSON.parse(
+                        response!.data.message
+                            .toString()
+                            .replaceAll("\n", "")
+                            .replaceAll("`", "")
+                            .replaceAll("json", "")
+                            .replaceAll("-", ""),
+                    ) as IClassPlanResponse;
                 }),
             );
 
