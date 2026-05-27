@@ -34,6 +34,13 @@ const loadGoogleSignInPage = () => {
     window.location.href = `http://accounts.google.com/o/oauth2/v2/auth?${params}`;
 };
 
+const loadFacebookSignInPage = () => {
+    localStorage.setItem("lastLoginType", "facebook");
+    window.location.assign(
+        `https://www.facebook.com/v25.0/dialog/oauth?client_id=${import.meta.env.VITE_FACEBOOK_APP_ID}&redirect_uri=${window.location.origin}/callback/facebook`,
+    );
+};
+
 onMounted(async () => {
     try {
         const token = sessionStorage.getItem("@auth/token") ?? "";
@@ -67,6 +74,21 @@ onMounted(async () => {
 
             <span>
                 <label
+                    v-if="lastLoginType === 'facebook'"
+                    class="lastLoginFacebook"
+                    >{{ $t("login.lastLogin") }}</label
+                >
+                <button
+                    type="button"
+                    class="btnSocialMediaLogin btnFacebook firstButton"
+                    @click="loadFacebookSignInPage"
+                >
+                    <i class="pi pi-facebook"></i>{{ $t("login.btnFacebook") }}
+                </button>
+
+                <small></small>
+
+                <label
                     v-if="lastLoginType === 'google'"
                     class="lastLoginGoogle"
                     >{{ $t("login.lastLogin") }}</label
@@ -79,7 +101,7 @@ onMounted(async () => {
                     <i class="pi pi-google"></i>{{ $t("login.btnGoogle") }}
                 </button>
 
-                <small>ou</small>
+                <small></small>
 
                 <label
                     v-if="lastLoginType === 'github'"

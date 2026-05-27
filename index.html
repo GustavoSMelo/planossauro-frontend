@@ -27,6 +27,21 @@
     <body>
         <div id="app"></div>
 
+        <script
+            async
+            defer
+            crossorigin="anonymous"
+            src="https://connect.facebook.net/en_US/sdk.js"
+        ></script>
+        <script lang="js">
+            window.fbAsyncInit = function () {
+                FB.init({
+                    appId: "%VITE_FACEBOOK_APP_ID%",
+                    xfbml: true,
+                    version: "v25.0",
+                });
+            };
+        </script>
         <script async src="https://js.stripe.com/v3/buy-button.js"></script>
         <script type="module" src="/src/main.ts"></script>
     </body>

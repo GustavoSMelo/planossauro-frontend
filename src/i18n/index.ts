@@ -48,6 +48,9 @@ import githubcallbackENUS from "./locales/en-US/githubcallback.json";
 import googlecallbackPTBR from "./locales/pt-BR/googlecallback.json";
 import googlecallbackENUS from "./locales/en-US/googlecallback.json";
 
+import facebookcallbackPTBR from "./locales/pt-BR/facebookcallback.json";
+import facebookcallbackENUS from "./locales/en-US/facebookcallback.json";
+
 import finishRegisterPTBR from "./locales/pt-BR/finishRegister.json";
 import finishRegisterENUS from "./locales/en-US/finishRegister.json";
 
@@ -121,6 +124,7 @@ const i18n = createI18n({
             welcomeContainer: welcomeContainerPTBR,
             videoTutorial: videoTutorialPTBR,
             logout: logoutPTBR,
+            facebookcallback: facebookcallbackPTBR,
         },
         "en-US": {
             login: loginENUS,
@@ -134,6 +138,7 @@ const i18n = createI18n({
             editPlanning: editPlanningENUS,
             removePlanning: removePlanningENUS,
             paymentcallback: paymentCallbackENUS,
+            facebookcallback: facebookcallbackENUS,
             deleteCallback: deleteCallbackENUS,
             support: supportENUS,
             loading: loadingENUS,
