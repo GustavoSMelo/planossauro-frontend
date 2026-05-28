@@ -32,9 +32,11 @@ const fullName = ref(window.sessionStorage.getItem("fullName") || "");
 const popupContext = inject("popup") as IPopupContext;
 const loadingContext = inject("isLoading") as ILoadingContext;
 const router = useRouter();
-const userFromSession: IUser | null = sessionStorage.getItem("user")
-    ? JSON.parse(sessionStorage.getItem("user") as string)
-    : null;
+const raw = sessionStorage.getItem("user");
+const userFromSession: IUser | null =
+    raw !== undefined && raw !== null && raw !== "undefined"
+        ? JSON.parse(raw)
+        : null;
 
 const validationCodeInput = ref("");
 const showCodeConfirmationScreen = ref(urlParams.has("jumpToValidationCode"));
@@ -173,10 +175,10 @@ const handleGithubSave = async () => {
         ) as ICreateUserResponse["data"] | null;
 
         if (responseData && responseData.uuid) {
-            const urlParams = new URLSearchParams(window.location.search);
-            const at = urlParams.get("at");
-            const sanctumResponse = (await backendApi.get(`/auth/github/${at}`))
-                .data as IAccessSanctumToken;
+            const accessToken = sessionStorage.getItem("githubAccessToken");
+            const sanctumResponse = (
+                await backendApi.get(`/auth/github/${accessToken}`)
+            ).data as IAccessSanctumToken;
 
             setToken(sanctumResponse.token.plainTextToken);
             const userHasSubscription = (

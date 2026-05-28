@@ -6,7 +6,6 @@ import { setToken } from "../../helpers/token";
 import backendApi from "../../api/api";
 import isApiHealth from "../../api/healthCheck";
 import type { IGithubCallbackResponse } from "../../interfaces/githubCallback.interface";
-import type { IUser } from "../../interfaces/api/user.interface";
 import type { IPopupContext } from "../../interfaces/context/popup.interface";
 import type { IAccessSanctumToken } from "../../interfaces/auth.interface";
 
@@ -19,7 +18,6 @@ watchEffect(async () => {
     const urlParams = new URLSearchParams(searchQueryString);
     const codeParam = urlParams.get("code");
     const error = urlParams.get("error");
-    const userJson = sessionStorage.getItem("user");
 
     const apiIsRunning = await isApiHealth();
 
@@ -27,9 +25,6 @@ watchEffect(async () => {
         router.push("/offline");
         return;
     }
-
-    let user;
-    if (userJson?.length) user = JSON.parse(userJson) as IUser;
 
     if (error) {
         popupContext.handleChangePopupInfo(
@@ -44,6 +39,10 @@ watchEffect(async () => {
     const { data }: { data: IGithubCallbackResponse } = await backendApi.get(
         `/token/github/${codeParam}`,
     );
+
+    sessionStorage.setItem("githubAccessToken", data.accessToken);
+
+    console.log(data);
     if (data.data.email === null) {
         popupContext.handleChangePopupInfo("", "info", true);
         router.push("/login");
@@ -51,97 +50,37 @@ watchEffect(async () => {
     }
 
     try {
-        if (data.accessToken && data.accessToken.length) {
-            let { data: userData }: { data: IUser } = await backendApi.get(
-                `/user/github/${data.data.email}`,
-            );
+        const response = (
+            await backendApi.get(`/auth/github/${data.accessToken}`)
+        ).data as IAccessSanctumToken;
 
-            const userHasUuid = Object.keys(userData).find(
-                (key) => key === "uuid",
-            )
-                ? true
-                : false;
+        console.log(response);
 
-            if (userHasUuid) {
-                if (
-                    user &&
-                    user.uuid &&
-                    user.uuid !== userData.uuid &&
-                    user.github_email !== userData.github_email
-                ) {
-                    popupContext.handleChangePopupInfo(
-                        t("githubcallback.loginAgain"),
-                        "info",
-                        true,
-                    );
-                    sessionStorage.clear();
-                    router.push("/");
-                    return;
-                }
-                if (user && user.uuid && userData.uuid === user.uuid) {
-                    const updatedUser = await backendApi.put(
-                        `/user/${user.uuid}`,
-                        {
-                            ...user,
-                            github_id: userData.github_id,
-                            github_email: userData.github_email,
-                            github_is_validated: false,
-                        },
-                    );
+        setToken(response.token.plainTextToken);
+        sessionStorage.setItem("user", JSON.stringify(response.user));
+        sessionStorage.setItem("loginType", "github");
+        popupContext.handleChangePopupInfo(
+            t("githubcallback.messageSuccess"),
+            "success",
+            true,
+        );
 
-                    userData = { ...updatedUser.data.user };
-                }
-                userData.github_validation_code = null;
-                userData.google_validation_code = null;
-                userData.sms_validation_code = null;
+        const responseHour = await backendApi.get(
+            `/planninghour/${response.user.uuid}`,
+        );
+        sessionStorage.setItem(
+            "fullName",
+            data.data.name ? data.data.name : data.data.login,
+        );
 
-                const response = (
-                    await backendApi.get(`/auth/github/${data.accessToken}`)
-                ).data as IAccessSanctumToken;
+        sessionStorage.setItem("initial_hour", responseHour.data.initial_hour);
+        sessionStorage.setItem(
+            "interval",
+            responseHour.data.interval_between_classes,
+        );
 
-                setToken(response.token.plainTextToken);
-                sessionStorage.setItem("user", JSON.stringify(userData));
-                sessionStorage.setItem("loginType", "github");
-                popupContext.handleChangePopupInfo(
-                    t("githubcallback.messageSuccess"),
-                    "success",
-                    true,
-                );
-
-                const editProfile = Boolean(
-                    sessionStorage.getItem("editProfile"),
-                );
-
-                if (editProfile && !userData.github_is_validated && !user) {
-                    router.push("/finish/login?jumpToValidationCode=true");
-                } else {
-                    const responseHour = await backendApi.get(
-                        `/planninghour/${userData.uuid}`,
-                    );
-                    sessionStorage.setItem(
-                        "initial_hour",
-                        responseHour.data.initial_hour,
-                    );
-                    sessionStorage.setItem(
-                        "interval",
-                        responseHour.data.interval_between_classes,
-                    );
-
-                    router.push("/app");
-                }
-                return;
-            }
-
-            sessionStorage.setItem("loginType", "github");
-            sessionStorage.setItem("githubEmail", data.data.email);
-            sessionStorage.setItem("githubId", Number(data.data.id).toString());
-            sessionStorage.setItem(
-                "fullName",
-                data.data.name ? data.data.name : data.data.login,
-            );
-
-            router.push(`/finish/login?at=${data.accessToken}`);
-        }
+        router.push("/app");
+        return;
     } catch {
         sessionStorage.setItem("loginType", "github");
         sessionStorage.setItem("githubEmail", data.data.email);
@@ -153,6 +92,16 @@ watchEffect(async () => {
 
         router.push(`/finish/login?githubCode=${codeParam}`);
     }
+
+    sessionStorage.setItem("loginType", "github");
+    sessionStorage.setItem("githubEmail", data.data.email);
+    sessionStorage.setItem("githubId", Number(data.data.id).toString());
+    sessionStorage.setItem(
+        "fullName",
+        data.data.name ? data.data.name : data.data.login,
+    );
+
+    router.push(`/finish/login?githubCode=${codeParam}`);
 });
 </script>
 
