@@ -42,7 +42,6 @@ watchEffect(async () => {
 
     sessionStorage.setItem("githubAccessToken", data.accessToken);
 
-    console.log(data);
     if (data.data.email === null) {
         popupContext.handleChangePopupInfo("", "info", true);
         router.push("/login");
@@ -53,8 +52,6 @@ watchEffect(async () => {
         const response = (
             await backendApi.get(`/auth/github/${data.accessToken}`)
         ).data as IAccessSanctumToken;
-
-        console.log(response);
 
         setToken(response.token.plainTextToken);
         sessionStorage.setItem("user", JSON.stringify(response.user));

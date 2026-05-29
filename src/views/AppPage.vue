@@ -85,7 +85,7 @@ const removeSessionStorageItems = () => {
     sessionStorage.removeItem("githubId");
     sessionStorage.removeItem("githubEmail");
     sessionStorage.removeItem("fullName");
-    sessionStorage.removeItem("githubAccessToken");
+    sessionStorage.removeItem("facebookAccessToken");
 };
 
 const handleOpenTutorialVideo = (opens: boolean) => {
