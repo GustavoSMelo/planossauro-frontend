@@ -1,0 +1,6 @@
+{
+    "loginAgain": "Login again via Facebook",
+    "loginError": "Error logging in via Facebook, try again",
+    "messageSuccess": "Login successful",
+    "workingOnLogin": "Logging in via Facebook..."
+}

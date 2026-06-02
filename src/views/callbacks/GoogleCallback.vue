@@ -7,7 +7,6 @@ import isApiHealth from "../../api/healthCheck";
 import backendApi from "../../api/api";
 import { setToken } from "../../helpers/token";
 import type { IGoogleResponse } from "../../interfaces/api/googleResponse.interface";
-import type { IUser } from "../../interfaces/api/user.interface";
 import type { IPopupContext } from "../../interfaces/context/popup.interface";
 import type { IAccessSanctumToken } from "../../interfaces/auth.interface";
 
@@ -15,19 +14,12 @@ const { t } = useI18n();
 
 onMounted(async () => {
     const popupContext = inject("popup") as IPopupContext;
-    const userJson = sessionStorage.getItem("user");
     const router = useRouter();
     const isApiOnline = await isApiHealth();
 
     if (isApiOnline === false) {
         router.push("/offline");
         return;
-    }
-
-    let user;
-
-    if (userJson?.length) {
-        user = JSON.parse(userJson) as IUser;
     }
 
     const hashes = window.location.hash;
@@ -44,77 +36,29 @@ onMounted(async () => {
     const googleResponse = response.data as IGoogleResponse;
 
     try {
-        let { data: userData }: { data: IUser } = await backendApi.get(
-            `/user/google/${googleResponse.email}`,
+        const response = (await backendApi.get(`/auth/google/${accessToken}`))
+            .data as IAccessSanctumToken;
+
+        setToken(response.token.plainTextToken);
+        sessionStorage.setItem("user", JSON.stringify(response.user));
+        sessionStorage.setItem("loginType", "google");
+        popupContext.handleChangePopupInfo(
+            t("googlecallback.messageSuccess"),
+            "success",
+            true,
         );
-        const userHasUuid = Object.keys(userData).find((key) => key === "uuid")
-            ? true
-            : false;
 
-        if (userHasUuid) {
-            if (
-                user &&
-                user.uuid &&
-                user.uuid !== userData.uuid &&
-                user.google_email !== userData.google_email
-            ) {
-                popupContext.handleChangePopupInfo(
-                    t("googlecallback.loginAgain"),
-                    "info",
-                    true,
-                );
-                sessionStorage.clear();
-                router.push("/");
-                return;
-            }
+        const responseHour = await backendApi.get(
+            `/planninghour/${response.user.uuid}`,
+        );
+        sessionStorage.setItem("initial_hour", responseHour.data.initial_hour);
+        sessionStorage.setItem(
+            "interval",
+            responseHour.data.interval_between_classes,
+        );
 
-            if (user && user.uuid && userData.uuid === user.uuid) {
-                const updatedUser = await backendApi.put(`/user/${user.uuid}`, {
-                    ...user,
-                    google_email: userData.google_email,
-                    google_is_validated: false,
-                    google_id: userData.google_id,
-                });
-
-                userData = { ...updatedUser.data.user };
-            }
-
-            const userHelper = {
-                uuid: userData.uuid,
-                google_email: userData.google_email,
-                github_email: userData.github_email,
-                created_at: userData.created_at,
-                full_name: userData.full_name,
-            };
-
-            const response = (
-                await backendApi.get(`/auth/google/${accessToken}`)
-            ).data as IAccessSanctumToken;
-
-            setToken(response.token.plainTextToken);
-            sessionStorage.setItem("user", JSON.stringify(userHelper));
-            sessionStorage.setItem("loginType", "google");
-            popupContext.handleChangePopupInfo(
-                t("googlecallback.messageSuccess"),
-                "success",
-                true,
-            );
-
-            const responseHour = await backendApi.get(
-                `/planninghour/${userData.uuid}`,
-            );
-            sessionStorage.setItem(
-                "initial_hour",
-                responseHour.data.initial_hour,
-            );
-            sessionStorage.setItem(
-                "interval",
-                responseHour.data.interval_between_classes,
-            );
-
-            router.push("/app");
-            return;
-        }
+        router.push("/app");
+        return;
     } catch {
         sessionStorage.setItem("loginType", "google");
         sessionStorage.setItem("googleEmail", googleResponse.email);

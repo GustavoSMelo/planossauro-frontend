@@ -13,6 +13,7 @@ import PaymentCallback from "./views/callbacks/PaymentCallback.vue";
 import DeleteCallback from "./views/callbacks/DeleteCallback.vue";
 import DocsPage from "./views/DocsPage.vue";
 import LearnPage from "./views/LearnPage.vue";
+import FacebookCallback from "./views/callbacks/FacebookCallback.vue";
 
 const routes: Array<IRoutes> = [
     { path: "/:catchAll(.*)", component: NotFound },
@@ -22,6 +23,7 @@ const routes: Array<IRoutes> = [
     { path: "/finish/login", component: FinishRegister },
     { path: "/callback/github", component: GithubCallback },
     { path: "/callback/google", component: GoogleCallback },
+    { path: "/callback/facebook", component: FacebookCallback },
     { path: "/callback/payment", component: PaymentCallback },
     { path: "/callback/user/delete", component: DeleteCallback },
     { path: "/offline", component: BackendOffline },

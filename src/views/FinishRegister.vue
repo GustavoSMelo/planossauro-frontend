@@ -32,9 +32,11 @@ const fullName = ref(window.sessionStorage.getItem("fullName") || "");
 const popupContext = inject("popup") as IPopupContext;
 const loadingContext = inject("isLoading") as ILoadingContext;
 const router = useRouter();
-const userFromSession: IUser | null = sessionStorage.getItem("user")
-    ? JSON.parse(sessionStorage.getItem("user") as string)
-    : null;
+const raw = sessionStorage.getItem("user");
+const userFromSession: IUser | null =
+    raw !== undefined && raw !== null && raw !== "undefined"
+        ? JSON.parse(raw)
+        : null;
 
 const validationCodeInput = ref("");
 const showCodeConfirmationScreen = ref(urlParams.has("jumpToValidationCode"));
@@ -44,18 +46,6 @@ const cellphoneNumber = ref(
 );
 const initialHour = ref("12:00");
 const intervalBetweenClasses = ref("30min");
-
-// onMounted(async () => {
-//     const user = userFromSession;
-//     if (user?.uuid) {
-//         try {
-//             await backendApi.get(`/user/${user.uuid}`);
-//             router.push("/app");
-//         } catch {
-//             sessionStorage.removeItem("user");
-//         }
-//     }
-// });
 
 const handleChangeFullName = (event: Event): void => {
     const target = event.target as HTMLInputElement;
@@ -129,11 +119,47 @@ const handleChangeIntervalBetweenClasses = (interval: string) => {
     intervalBetweenClasses.value = interval;
 };
 
-const handleGithubSave = async () => {
+type OAuthProvider = "google" | "github" | "facebook";
+
+const oAuthProviders: Record<
+    OAuthProvider,
+    {
+        emailKey: string;
+        idKey: string;
+        accessTokenSource: "urlParam" | "sessionStorage";
+        accessTokenKey: string;
+        validatedKey: keyof IUser;
+    }
+> = {
+    google: {
+        emailKey: "googleEmail",
+        idKey: "googleId",
+        accessTokenSource: "urlParam",
+        accessTokenKey: "at",
+        validatedKey: "google_is_validated",
+    },
+    github: {
+        emailKey: "githubEmail",
+        idKey: "githubId",
+        accessTokenSource: "sessionStorage",
+        accessTokenKey: "githubCode",
+        validatedKey: "github_is_validated",
+    },
+    facebook: {
+        emailKey: "facebookEmail",
+        idKey: "facebookId",
+        accessTokenSource: "sessionStorage",
+        accessTokenKey: "facebookAccessToken",
+        validatedKey: "facebook_is_validated",
+    },
+};
+
+const handleOAuthSave = async (provider: OAuthProvider) => {
     try {
         loadingContext.handleChangeIsLoading(true);
-        const githubEmail = sessionStorage.getItem("githubEmail");
-        const githubId = sessionStorage.getItem("githubId");
+        const config = oAuthProviders[provider];
+        const email = sessionStorage.getItem(config.emailKey);
+        const id = sessionStorage.getItem(config.idKey) ?? "";
         const hours = Math.floor(
             Number(intervalBetweenClasses.value.split("min")[0]) / 60,
         );
@@ -148,8 +174,8 @@ const handleGithubSave = async () => {
         const userData = {
             full_name: fullName.value,
             cellphone_number: cellphoneNumber.value,
-            github_email: githubEmail,
-            github_id: githubId,
+            [`${provider}_email`]: email,
+            [`${provider}_id`]: id.toString(),
             initial_hour: initialHour.value,
             interval_between_classes: interval,
         } as unknown as ICreateUser;
@@ -166,21 +192,33 @@ const handleGithubSave = async () => {
                 ...userData,
             });
         }
+
+        const helper = responseUserCreated.data;
         const responseData = (
-            userFromSession?.uuid
-                ? responseUserCreated.data.user
-                : responseUserCreated.data.data
+            Object.prototype.hasOwnProperty.call(helper, "user")
+                ? helper.user
+                : helper.data
         ) as ICreateUserResponse["data"] | null;
 
         if (responseData && responseData.uuid) {
-            const urlParams = new URLSearchParams(window.location.search);
-            const at = urlParams.get("at");
-            const sanctumResponse = (await backendApi.get(`/auth/github/${at}`))
-                .data as IAccessSanctumToken;
+            const at =
+                config.accessTokenSource === "urlParam"
+                    ? new URLSearchParams(window.location.search).get(
+                          config.accessTokenKey,
+                      )
+                    : sessionStorage.getItem(config.accessTokenKey);
+
+            const sanctumResponse = (
+                await backendApi.get(`/auth/${provider}/${at}`)
+            ).data as IAccessSanctumToken;
 
             setToken(sanctumResponse.token.plainTextToken);
             const userHasSubscription = (
-                await backendApi.get(`/subscription/${responseData.uuid}`)
+                await backendApi.get(`/subscription/${responseData.uuid}`, {
+                    headers: {
+                        Authorization: `Bearer ${sanctumResponse.token.plainTextToken}`,
+                    },
+                })
             ).data.subscription as ISubscription;
 
             if (
@@ -194,7 +232,8 @@ const handleGithubSave = async () => {
                 );
 
             user.value = { ...responseData };
-            user.value.github_is_validated = false;
+            (user.value as unknown as Record<string, unknown>)[config.validatedKey] =
+                false;
             showCodeConfirmationScreen.value = true;
             sessionStorage.setItem("user", JSON.stringify(user.value));
             popupContext.handleChangePopupInfo(
@@ -202,92 +241,6 @@ const handleGithubSave = async () => {
                 "success",
                 true,
             );
-        }
-        loadingContext.handleChangeIsLoading(false);
-    } catch {
-        popupContext.handleChangePopupInfo(
-            t("finishRegister.emailSendError"),
-            "error",
-            true,
-        );
-        loadingContext.handleChangeIsLoading(false);
-    }
-};
-
-const handleGoogleSave = async () => {
-    try {
-        loadingContext.handleChangeIsLoading(true);
-        const googleEmail = sessionStorage.getItem("googleEmail");
-        const googleId = sessionStorage.getItem("googleId") || "";
-        const hours = Math.floor(
-            Number(intervalBetweenClasses.value.split("min")[0]) / 60,
-        );
-        const mins = Math.round(
-            Number(intervalBetweenClasses.value.split("min")[0]) % 60,
-        );
-        const interval = `${hours}:${mins}`;
-
-        sessionStorage.setItem("initial_hour", initialHour.value);
-        sessionStorage.setItem("interval", interval);
-
-        const userData = {
-            full_name: fullName.value,
-            cellphone_number: cellphoneNumber.value,
-            google_email: googleEmail,
-            google_id: googleId.toString(),
-            initial_hour: initialHour.value,
-            interval_between_classes: interval,
-        } as unknown as ICreateUser;
-
-        let responseUserCreated: AxiosResponse<ICreatedUserResponseAPIOptions>;
-
-        if (userFromSession && userFromSession.uuid) {
-            userData.google_email = sessionStorage.getItem("googleEmail");
-            userData.google_id = sessionStorage.getItem("googleId") ?? "";
-            responseUserCreated = await backendApi.put(
-                `/user/${userFromSession.uuid}`,
-                { ...userFromSession, ...userData },
-            );
-            sessionStorage.setItem(
-                "user",
-                JSON.stringify({
-                    ...userFromSession,
-                    google_email: sessionStorage.getItem("googleEmail") ?? "",
-                }),
-            );
-        } else {
-            responseUserCreated = await backendApi.post("/user", {
-                ...userData,
-            });
-        }
-        const helper = responseUserCreated.data;
-        const responseData = (
-            Object.prototype.hasOwnProperty.call(helper, "user")
-                ? helper.user
-                : helper.data
-        ) as ICreateUserResponse["data"] | null;
-
-        if (responseData && responseData.uuid) {
-            user.value = { ...responseData };
-            user.value.google_is_validated = false;
-            showCodeConfirmationScreen.value = true;
-            const urlParams = new URLSearchParams(window.location.search);
-            const at = urlParams.get("at");
-
-            const sanctumResponse = (await backendApi.get(`/auth/google/${at}`))
-                .data as IAccessSanctumToken;
-            setToken(sanctumResponse.token.plainTextToken);
-            await backendApi.post(
-                `/subscription/assign/free/${responseData.uuid}`,
-            );
-
-            sessionStorage.setItem("user", JSON.stringify(user.value));
-            popupContext.handleChangePopupInfo(
-                t("finishRegister.registrationSuccess"),
-                "success",
-                true,
-            );
-            loadingContext.handleChangeIsLoading(false);
         }
         loadingContext.handleChangeIsLoading(false);
     } catch (err) {
@@ -306,9 +259,11 @@ const handleGoogleSave = async () => {
 const handleProceed = async (): Promise<void> => {
     if (!isFormCompleted()) return;
 
-    const loginType = sessionStorage.getItem("loginType");
+    const loginType = sessionStorage.getItem(
+        "loginType",
+    ) as OAuthProvider | null;
 
-    if (!loginType || (loginType !== "github" && loginType !== "google")) {
+    if (!loginType || !Object.keys(oAuthProviders).includes(loginType)) {
         popupContext.handleChangePopupInfo(
             t("finishRegister.unauthorizedLoginType"),
             "error",
@@ -317,8 +272,7 @@ const handleProceed = async (): Promise<void> => {
         return;
     }
 
-    if (loginType === "github") return await handleGithubSave();
-    if (loginType === "google") return await handleGoogleSave();
+    return await handleOAuthSave(loginType);
 };
 
 const handleChangeValidationCodeInput = (event: Event): void => {
@@ -388,7 +342,9 @@ const finishValidation = async () => {
         );
 
         if (loginType === "github") user.value!.github_is_validated = true;
-        else user.value!.google_is_validated = true;
+        else if (loginType === "google") user.value!.google_is_validated = true;
+        else if (loginType === "facebook")
+            user.value!.facebook_is_validated = true;
 
         sessionStorage.setItem("user", JSON.stringify(user.value));
         router.push("/app");
@@ -407,7 +363,12 @@ const finishValidation = async () => {
     <div class="finishRegisterContainer">
         <form
             class="formContainer"
-            v-if="!showCodeConfirmationScreen && !user?.github_is_validated"
+            v-if="
+                !showCodeConfirmationScreen &&
+                !user?.github_is_validated &&
+                !user?.google_is_validated &&
+                !user?.facebook_is_validated
+            "
         >
             <h2>{{ t("finishRegister.completeRegistration") }}</h2>
 

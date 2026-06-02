@@ -16,6 +16,7 @@
     "userEditError": "Error updating user",
     "connectGoogle": "Link a Google account first",
     "connectGithub": "Link a GitHub account first",
+    "connectFacebook": "Link a Facebook account first",
     "validateYourEmail": "Validate your email and try again",
     "logoutMessage": "Logged out",
     "codeEmailSended": "Code sent to your email",

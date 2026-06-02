@@ -16,6 +16,7 @@
     "userEditError": "Erro ao editar usuário",
     "connectGoogle": "Vincule uma conta Google primeiro",
     "connectGithub": "Vincule uma conta Github primeiro",
+    "connectFacebook": "Vincule uma conta Facebook primeiro",
     "validateYourEmail": "Valide o seu email e tente novamente",
     "logoutMessage": "Deslogado",
     "codeEmailSended": "Código enviado para seu email",

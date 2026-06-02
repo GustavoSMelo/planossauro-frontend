@@ -28,7 +28,7 @@ const duplicateUser = ref<IUser>({} as IUser);
 const editProfile = ref(false);
 const deleteAccountPopup = ref(false);
 const unlinkAccountPopup = ref(false);
-const unlinkAccountChoose = ref<"" | "google" | "github">("");
+const unlinkAccountChoose = ref<"" | "google" | "github" | "facebook">("");
 const router = useRouter();
 const { handleChangeIsLoading } = inject("isLoading") as ILoadingContext;
 const { handleChangePopupInfo } = inject("popup") as IPopupContext;
@@ -46,6 +46,10 @@ onMounted(async () => {
         const minimalUserData = {
             google_email: userResponse.data.google_email,
             github_email: userResponse.data.github_email,
+            facebook_email: userResponse.data.facebook_email,
+            facebook_id: userResponse.data.facebook_id,
+            google_id: userResponse.data.google_id,
+            github_id: userResponse.data.github_id,
             uuid: userResponse.data.uuid,
             created_at: userResponse.data.created_at,
         };
@@ -204,6 +208,12 @@ const handleConnectGoogleAccount = () => {
     window.location.href = `http://accounts.google.com/o/oauth2/v2/auth?${params}`;
 };
 
+const handleConnectFacebookAccount = () => {
+    window.location.assign(
+        `https://www.facebook.com/v25.0/dialog/oauth?client_id=${import.meta.env.VITE_FACEBOOK_APP_ID}&redirect_uri=${window.location.origin}/callback/facebook`,
+    );
+};
+
 const handleDeleteAccount = async () => {
     try {
         const uuid =
@@ -239,6 +249,11 @@ const handleSendValidationEmail = async (loginType: ILoginType["types"]) => {
         user.value.google_is_validated.toString() == "true"
     )
         return;
+    if (
+        loginType === "facebook" &&
+        user.value.facebook_is_validated.toString() == "true"
+    )
+        return;
 
     try {
         handleChangeIsLoading(true);
@@ -260,6 +275,16 @@ const handleSendValidationEmail = async (loginType: ILoginType["types"]) => {
         if (loginType === "github" && !userResponse.github_email?.length) {
             handleChangeIsLoading(false);
             handleChangePopupInfo(t("profile.connectGithub"), "info", true);
+            return;
+        }
+
+        if (
+            (loginType === "facebook" &&
+                userResponse.facebook_is_validated == true) ||
+            (loginType === "facebook" && !userResponse.facebook_email?.length)
+        ) {
+            handleChangeIsLoading(false);
+            handleChangePopupInfo(t("profile.connectFacebook"), "info", true);
             return;
         }
 
@@ -456,6 +481,56 @@ const handleUnlinkAccount = async () => {
                     {{ t("profile.connect") }}
                 </button>
             </span>
+
+            <span id="facebookEmailInserted">
+                <b><i class="pi pi-facebook"></i> Facebook:</b>
+                <input
+                    id="facebookEmailInserted"
+                    v-if="user?.facebook_email?.length && !editProfile"
+                    :disabled="true"
+                    type="text"
+                    :value="user.facebook_email"
+                    :placeholder="`${t('profile.emailPlaceholder')}`"
+                    :class="editProfile ? 'ableToEdit' : ''"
+                    :data-theme="isDark ? 'dark' : 'light'"
+                />
+
+                <div
+                    class="containerBtnChangeSocialMedia"
+                    v-else-if="user?.facebook_email?.length && editProfile"
+                >
+                    <input
+                        :disabled="true"
+                        type="text"
+                        :value="
+                            user.facebook_email.length
+                                ? user.facebook_email
+                                : 'Empty'
+                        "
+                        :placeholder="`${t('profile.emailPlaceholder')}`"
+                        :class="editProfile ? 'unableToEdit' : ''"
+                        :data-theme="isDark ? 'dark' : 'light'"
+                    />
+                    <button
+                        type="button"
+                        @click="
+                            unlinkAccountChoose = 'facebook';
+                            unlinkAccountPopup = true;
+                        "
+                    >
+                        <i class="pi pi-lock-open"></i>
+                    </button>
+                </div>
+
+                <button
+                    v-else
+                    type="button"
+                    @click="handleConnectFacebookAccount"
+                >
+                    {{ t("profile.connect") }}
+                </button>
+            </span>
+
             <span id="cellphoneInserted">
                 <b><i class="pi pi-phone"></i> {{ t("profile.cellphone") }}:</b>
                 <input
@@ -550,6 +625,35 @@ const handleUnlinkAccount = async () => {
                         ></i
                         >{{
                             user?.google_is_validated == true
+                                ? `${t("profile.validated")}`
+                                : `${t("profile.validate")}`
+                        }}
+                    </button>
+                </p>
+                <p>
+                    <b
+                        ><i class="pi pi-facebook"></i> Facebook
+                        {{ t("profile.validated") }}:</b
+                    >
+                    <button
+                        @click="handleSendValidationEmail('facebook')"
+                        type="button"
+                        :class="
+                            user?.facebook_is_validated == true
+                                ? 'checked'
+                                : 'unchecked'
+                        "
+                    >
+                        <i
+                            :class="[
+                                'pi',
+                                user.facebook_is_validated == true
+                                    ? 'pi-verified'
+                                    : 'pi-unlock',
+                            ]"
+                        ></i
+                        >{{
+                            user?.facebook_is_validated == true
                                 ? `${t("profile.validated")}`
                                 : `${t("profile.validate")}`
                         }}
