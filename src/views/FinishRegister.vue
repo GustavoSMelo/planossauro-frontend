@@ -142,7 +142,7 @@ const oAuthProviders: Record<
         emailKey: "githubEmail",
         idKey: "githubId",
         accessTokenSource: "sessionStorage",
-        accessTokenKey: "githubCode",
+        accessTokenKey: "githubAccessToken",
         validatedKey: "github_is_validated",
     },
     facebook: {
@@ -232,8 +232,9 @@ const handleOAuthSave = async (provider: OAuthProvider) => {
                 );
 
             user.value = { ...responseData };
-            (user.value as unknown as Record<string, unknown>)[config.validatedKey] =
-                false;
+            (user.value as unknown as Record<string, unknown>)[
+                config.validatedKey
+            ] = false;
             showCodeConfirmationScreen.value = true;
             sessionStorage.setItem("user", JSON.stringify(user.value));
             popupContext.handleChangePopupInfo(
