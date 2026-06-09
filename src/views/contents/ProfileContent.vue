@@ -208,11 +208,11 @@ const handleConnectGoogleAccount = () => {
     window.location.href = `http://accounts.google.com/o/oauth2/v2/auth?${params}`;
 };
 
-const handleConnectFacebookAccount = () => {
-    window.location.assign(
-        `https://www.facebook.com/v25.0/dialog/oauth?client_id=${import.meta.env.VITE_FACEBOOK_APP_ID}&redirect_uri=${window.location.origin}/callback/facebook`,
-    );
-};
+// const handleConnectFacebookAccount = () => {
+//     window.location.assign(
+//         `https://www.facebook.com/v25.0/dialog/oauth?client_id=${import.meta.env.VITE_FACEBOOK_APP_ID}&redirect_uri=${window.location.origin}/callback/facebook`,
+//     );
+// };
 
 const handleDeleteAccount = async () => {
     try {
@@ -482,7 +482,7 @@ const handleUnlinkAccount = async () => {
                 </button>
             </span>
 
-            <span id="facebookEmailInserted">
+            <!-- <span id="facebookEmailInserted">
                 <b><i class="pi pi-facebook"></i> Facebook:</b>
                 <input
                     id="facebookEmailInserted"
@@ -529,7 +529,7 @@ const handleUnlinkAccount = async () => {
                 >
                     {{ t("profile.connect") }}
                 </button>
-            </span>
+            </span> -->
 
             <span id="cellphoneInserted">
                 <b><i class="pi pi-phone"></i> {{ t("profile.cellphone") }}:</b>
@@ -631,7 +631,7 @@ const handleUnlinkAccount = async () => {
                     </button>
                 </p>
                 <p>
-                    <b
+                    <!-- <b
                         ><i class="pi pi-facebook"></i> Facebook
                         {{ t("profile.validated") }}:</b
                     >
@@ -658,8 +658,8 @@ const handleUnlinkAccount = async () => {
                                 : `${t("profile.validate")}`
                         }}
                     </button>
-                </p>
-                <!-- <p>
+                </p> -->
+                    <!-- <p>
                     <b
                         ><i class="pi pi-phone"></i> SMS
                         {{ t("profile.validated") }}:
@@ -676,6 +676,8 @@ const handleUnlinkAccount = async () => {
                         {{ t("profile.validate") }}
                     </button>
                 </p> -->
+                </p>
+
                 <p class="createdAtText">
                     {{ t("profile.userSince") }}:
                     {{ convertIsoDateToBR((user?.created_at as string) ?? "") }}
