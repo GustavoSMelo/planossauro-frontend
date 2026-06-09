@@ -125,6 +125,17 @@
                 background-color: var(--dp-blue-info);
                 color: var(--dp-full-white);
             }
+
+            .lastLoginPlanossauro,
+            .btnPlanossauro {
+                background-color: var(--dp-full-white);
+                color: var(--dp-accent-color);
+                border: solid 2px var(--dp-accent-color);
+            }
+
+            .lastLoginPlanossauro {
+                border-bottom: 0;
+            }
         }
     }
 

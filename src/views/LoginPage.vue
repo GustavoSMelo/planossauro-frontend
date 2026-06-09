@@ -34,6 +34,11 @@ const loadGoogleSignInPage = () => {
     window.location.href = `http://accounts.google.com/o/oauth2/v2/auth?${params}`;
 };
 
+const continueWithPlanossauro = () => {
+    localStorage.setItem("lastLoginType", "planossauro");
+    router.push("/loginform");
+};
+
 // const loadFacebookSignInPage = () => {
 //     localStorage.setItem("lastLoginType", "facebook");
 //     window.location.assign(
@@ -114,6 +119,21 @@ onMounted(async () => {
                     @click="loginGithubPage()"
                 >
                     <i class="pi pi-github"></i>{{ $t("login.btnGithub") }}
+                </button>
+
+                <small></small>
+
+                <label
+                    v-if="lastLoginType === 'planossauro'"
+                    class="lastLoginPlanossauro"
+                    >{{ $t("login.lastLogin") }}</label
+                >
+                <button
+                    type="button"
+                    class="btnSocialMediaLogin btnPlanossauro"
+                    @click="continueWithPlanossauro()"
+                >
+                    <i class="pi pi-star-fill"></i>Continuar com o Planossauro
                 </button>
             </span>
         </div>

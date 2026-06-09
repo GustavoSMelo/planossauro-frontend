@@ -14,12 +14,14 @@ import DeleteCallback from "./views/callbacks/DeleteCallback.vue";
 import DocsPage from "./views/DocsPage.vue";
 import LearnPage from "./views/LearnPage.vue";
 import FacebookCallback from "./views/callbacks/FacebookCallback.vue";
+import LoginForm from "./views/LoginForm.vue";
 
 const routes: Array<IRoutes> = [
     { path: "/:catchAll(.*)", component: NotFound },
     { path: "", component: LPComponent },
     { path: "/app", component: AppPage },
     { path: "/login", component: LoginPage },
+    { path: "/loginform", component: LoginForm },
     { path: "/finish/login", component: FinishRegister },
     { path: "/callback/github", component: GithubCallback },
     { path: "/callback/google", component: GoogleCallback },

@@ -1,7 +1,8 @@
 @charset "UTF-8";
 
 .deletePopupContainer,
-.unlinkAccountContainer {
+.unlinkAccountContainer,
+.connectEmailPopupContainer {
     z-index: 10;
     background-color: var(--dp-transparent-gray);
     width: 100%;
@@ -15,7 +16,8 @@
     flex-direction: column;
 
     .deletePopupContent,
-    .unlinkAccountContent {
+    .unlinkAccountContent,
+    .connectEmailPopupContent {
         background-color: var(--dp-lightfall);
         padding: 20px;
         border-radius: 5px;
@@ -78,6 +80,69 @@
         p {
             color: var(--dp-text-color);
             font-weight: 500;
+        }
+    }
+
+    .connectEmailPopupContent {
+        width: 50%;
+        text-align: left;
+
+        label {
+            color: var(--dp-text-color);
+            font-weight: 500;
+            font-size: 14pt;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: solid 1px var(--dp-light-gray);
+            border-radius: 5px;
+            margin-top: 5px;
+            background-color: var(--dp-lightfall);
+            color: var(--dp-accent-color);
+            font-weight: 500;
+        }
+
+        input[data-theme="dark"] {
+            background-color: transparent;
+            border: solid 2px var(--dp-accent-color);
+        }
+
+        input:focus {
+            border: solid 1px var(--dp-accent-color);
+            outline: none;
+        }
+
+        input.inputError {
+            border: solid 2px var(--dp-red);
+        }
+
+        .emailError {
+            color: var(--dp-red);
+            font-weight: 500;
+            margin-top: 4px;
+            width: 100%;
+        }
+
+        .buttonsContainer {
+            button:nth-child(2) {
+                background-color: var(--dp-dark-gray);
+                color: var(--dp-lightfall);
+                cursor: not-allowed;
+            }
+
+            button.btnSaveConnect {
+                background-color: var(--dp-accent-color);
+                color: var(--dp-lightfall);
+                cursor: pointer;
+            }
+
+            button.btnSaveConnect:hover {
+                background-color: var(--dp-accent-color-dark);
+            }
         }
     }
 }
@@ -188,6 +253,14 @@
             button:hover {
                 background-color: var(--dp-accent-color-dark);
                 transform: scale(1.05);
+            }
+
+            .btnConnectPlanossauro {
+                background-color: var(--dp-accent-color);
+            }
+
+            .btnConnectPlanossauro:hover {
+                background-color: var(--dp-accent-color-dark);
             }
 
             .containerBtnChangeSocialMedia {
@@ -454,9 +527,13 @@
 
 @media screen and (max-width: 430px) {
     .deletePopupContainer,
-    .unlinkAccountContainer {
+    .unlinkAccountContainer,
+    .connectEmailPopupContainer {
         .deletePopupContent,
-        .unlinkAccountContent {
+        .unlinkAccountContent,
+        .connectEmailPopupContent {
+            width: 90%;
+
             .buttonsContainer {
                 flex-direction: column;
 
