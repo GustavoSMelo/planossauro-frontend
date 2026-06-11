@@ -1,0 +1,153 @@
+@charset "UTF-8";
+
+@keyframes appersLoginWrapper {
+    0% {
+        transform: translateY(-4000px);
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
+.loginFormContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    min-height: 100vh;
+    padding: 30px 0;
+    background-image: var(--dp-background-url);
+    background-repeat: repeat;
+    background-size: contain;
+
+    .formContainer {
+        background-color: var(--dp-lightfall);
+        box-shadow: 2px 2px 6px var(--dp-shadow-low-pink);
+        padding: 20px;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        width: 60%;
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: appersLoginWrapper 0.8s forwards;
+
+        h2 {
+            margin-bottom: 20px;
+            border-bottom: 1px var(--dp-light-gray) solid;
+            padding-bottom: 10px;
+            font-size: 20pt;
+            color: var(--dp-text-color);
+        }
+
+        .formGrid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 20px;
+        }
+
+        .formField {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 500;
+            font-size: 14pt;
+            margin-top: 12px;
+            color: var(--dp-text-color);
+        }
+
+        input,
+        select {
+            box-shadow: 2px 2px 6px var(--dp-light-gray);
+            padding: 12px;
+            border: solid 1px var(--dp-light-gray);
+            border-radius: 5px;
+            margin-top: 4px;
+            transition: 0.3s;
+            background-color: var(--dp-lightfall);
+            color: var(--dp-accent-color);
+            font-weight: 500;
+            font-size: 10pt;
+        }
+
+        input[data-theme="dark"],
+        select[data-theme="dark"] {
+            box-shadow: 0 0 0;
+        }
+
+        input:focus,
+        select:focus {
+            transition: 0.3s;
+            border: solid 1px var(--dp-accent-color);
+            color: var(--dp-accent-color);
+            font-weight: bold;
+            background-color: var(--dp-lightfall);
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 15pt;
+            font-weight: bold;
+            border-radius: 5px;
+            color: var(--dp-dark-gray);
+            cursor: not-allowed;
+            transition: 0.4s;
+        }
+
+        button.btnProceed {
+            background-color: var(--dp-accent-color);
+            color: var(--dp-lightfall);
+            border: solid 3px var(--dp-accent-color);
+            cursor: pointer;
+        }
+
+        button.btnProceed:hover {
+            background-color: var(--dp-accent-color-dark);
+            border-color: var(--dp-accent-color-dark);
+            transition: 0.4s;
+        }
+
+        .toggleMode {
+            color: var(--dp-text-color);
+            font-weight: 500;
+            margin-top: 20px;
+            text-align: center;
+
+            a {
+                color: var(--dp-accent-color);
+                cursor: pointer;
+                text-decoration: none;
+                font-weight: bold;
+            }
+
+            a:hover {
+                color: var(--dp-accent-color-dark);
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 960px) {
+    .loginFormContainer {
+        .formContainer {
+            width: 80%;
+        }
+    }
+}
+
+@media screen and (max-width: 620px) {
+    .loginFormContainer {
+        .formContainer {
+            width: 90%;
+
+            .formGrid {
+                grid-template-columns: 1fr;
+            }
+        }
+    }
+}

@@ -1,5 +1,7 @@
 interface IUser {
     full_name: string;
+    user_email: string | null;
+    email_is_validated: boolean;
     google_email: string | null;
     google_id: number | null;
     google_validation_code: number | null;
