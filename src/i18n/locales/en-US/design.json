@@ -29,5 +29,6 @@
     "intervalBetweenClasses": "Interval between classes",
     "configureTime": "Configure time",
     "classTimeConfigSaved": "Class time saved successfully",
-    "classTimeConfigError": "Error saving class time"
+    "classTimeConfigError": "Error saving class time",
+    "invalidResponseFallback": "Not possible to return this value"
 }
