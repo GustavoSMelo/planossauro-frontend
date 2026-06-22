@@ -28,7 +28,9 @@ const duplicateUser = ref<IUser>({} as IUser);
 const editProfile = ref(false);
 const deleteAccountPopup = ref(false);
 const unlinkAccountPopup = ref(false);
-const unlinkAccountChoose = ref<"" | "google" | "github">("");
+const unlinkAccountChoose = ref<
+    "" | "google" | "github" | "facebook" | "planossauro"
+>("");
 const router = useRouter();
 const { handleChangeIsLoading } = inject("isLoading") as ILoadingContext;
 const { handleChangePopupInfo } = inject("popup") as IPopupContext;
@@ -42,14 +44,6 @@ onMounted(async () => {
         const userResponse = await backendApi.get(`/user/${userUuid}`);
         user.value = userResponse.data;
         duplicateUser.value = { ...userResponse.data };
-
-        const minimalUserData = {
-            google_email: userResponse.data.google_email,
-            github_email: userResponse.data.github_email,
-            uuid: userResponse.data.uuid,
-            created_at: userResponse.data.created_at,
-        };
-        sessionStorage.setItem("user", JSON.stringify(minimalUserData));
         handleChangeIsLoading(false);
     } catch {
         handleChangePopupInfo(t("profile.errorLoadingUser"), "error", true);
@@ -204,6 +198,12 @@ const handleConnectGoogleAccount = () => {
     window.location.href = `http://accounts.google.com/o/oauth2/v2/auth?${params}`;
 };
 
+// const handleConnectFacebookAccount = () => {
+//     window.location.assign(
+//         `https://www.facebook.com/v25.0/dialog/oauth?client_id=${import.meta.env.VITE_FACEBOOK_APP_ID}&redirect_uri=${window.location.origin}/callback/facebook`,
+//     );
+// };
+
 const handleDeleteAccount = async () => {
     try {
         const uuid =
@@ -228,7 +228,9 @@ const logout = async () => {
     router.push("/");
 };
 
-const handleSendValidationEmail = async (loginType: ILoginType["types"]) => {
+const handleSendValidationEmail = async (
+    loginType: ILoginType["types"] | "email",
+) => {
     if (
         loginType === "github" &&
         user.value.github_is_validated.toString() === "true"
@@ -237,6 +239,16 @@ const handleSendValidationEmail = async (loginType: ILoginType["types"]) => {
     if (
         loginType === "google" &&
         user.value.google_is_validated.toString() == "true"
+    )
+        return;
+    if (
+        loginType === "facebook" &&
+        user.value.facebook_is_validated.toString() == "true"
+    )
+        return;
+    if (
+        loginType === "email" &&
+        user.value.email_is_validated?.toString() == "true"
     )
         return;
 
@@ -263,18 +275,114 @@ const handleSendValidationEmail = async (loginType: ILoginType["types"]) => {
             return;
         }
 
+        if (
+            (loginType === "facebook" &&
+                userResponse.facebook_is_validated == true) ||
+            (loginType === "facebook" && !userResponse.facebook_email?.length)
+        ) {
+            handleChangeIsLoading(false);
+            handleChangePopupInfo(t("profile.connectFacebook"), "info", true);
+            return;
+        }
+
+        if (loginType === "email" && !userResponse.user_email?.length) {
+            handleChangeIsLoading(false);
+            handleChangePopupInfo(
+                "Conecte uma conta planossauro primeiro",
+                "info",
+                true,
+            );
+            return;
+        }
+
         await backendApi.post("/user/resend/validationcode", {
             uuid: user.value.uuid,
             loginType,
         });
 
-        handleChangeValidationLoginType(loginType);
+        handleChangeValidationLoginType(loginType as ILoginType["types"]);
         handleChangePopupInfo(t("profile.codeEmailSended"), "success", true);
         handleChangeIsLoading(false);
         handleChangeCurrentContent("validation_code");
     } catch {
         handleChangePopupInfo(t("profile.errorCodeSended"), "error", true);
         handleChangeIsLoading(false);
+    }
+};
+
+const connectEmailPopup = ref(false);
+const connectEmail = ref("");
+const connectEmailError = ref("");
+const connectPassword = ref("");
+const connectPasswordConfirmation = ref("");
+
+const validateEmail = (email: string): boolean => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+};
+
+const handleConnectEmailChange = () => {
+    if (!connectEmail.value.length) {
+        connectEmailError.value = "";
+        return;
+    }
+    if (!validateEmail(connectEmail.value)) {
+        connectEmailError.value = "E-mail inválido";
+        return;
+    }
+    connectEmailError.value = "";
+};
+
+const handleConnectPlanossauroAccount = async () => {
+    if (!validateEmail(connectEmail.value)) {
+        handleChangePopupInfo("Digite um e-mail válido", "warning", true);
+        return;
+    }
+
+    if (
+        !connectPassword.value.length ||
+        connectPassword.value !== connectPasswordConfirmation.value
+    ) {
+        handleChangePopupInfo(
+            "Preencha todos os campos e confirme a senha corretamente",
+            "warning",
+            true,
+        );
+        return;
+    }
+
+    try {
+        handleChangeIsLoading(true);
+
+        await backendApi.put(`/user/${user.value.uuid}`, {
+            ...user.value,
+            user_email: connectEmail.value,
+            user_password: connectPassword.value,
+            password_confirmation: connectPasswordConfirmation.value,
+        });
+
+        user.value.user_email = connectEmail.value;
+        duplicateUser.value = { ...user.value };
+        sessionStorage.setItem("user", JSON.stringify(user.value));
+
+        connectEmailPopup.value = false;
+        connectEmail.value = "";
+        connectPassword.value = "";
+        connectPasswordConfirmation.value = "";
+
+        handleChangeIsLoading(false);
+        handleChangePopupInfo(
+            "Conta planossauro conectada com sucesso!",
+            "success",
+            true,
+        );
+    } catch {
+        handleChangeIsLoading(false);
+        handleChangePopupInfo(
+            "Erro ao conectar conta planossauro",
+            "error",
+            true,
+        );
     }
 };
 
@@ -301,6 +409,66 @@ const handleUnlinkAccount = async () => {
 };
 </script>
 <template>
+    <div
+        class="connectEmailPopupContainer"
+        v-if="connectEmailPopup"
+        @click="connectEmailPopup = false"
+    >
+        <div
+            class="connectEmailPopupContent"
+            @click="(event) => event.stopPropagation()"
+        >
+            <h2>Conectar conta planossauro</h2>
+
+            <label>E-mail</label>
+            <input
+                type="email"
+                v-model="connectEmail"
+                placeholder="seu@email.com"
+                :data-theme="isDark ? 'dark' : 'light'"
+                :class="connectEmailError.length ? 'inputError' : ''"
+                @input="handleConnectEmailChange"
+            />
+            <small v-if="connectEmailError.length" class="emailError">{{
+                connectEmailError
+            }}</small>
+
+            <label>Senha</label>
+            <input
+                type="password"
+                v-model="connectPassword"
+                placeholder="Sua senha"
+                :data-theme="isDark ? 'dark' : 'light'"
+            />
+
+            <label>Confirmar senha</label>
+            <input
+                type="password"
+                v-model="connectPasswordConfirmation"
+                placeholder="Confirme sua senha"
+                :data-theme="isDark ? 'dark' : 'light'"
+            />
+
+            <span class="buttonsContainer">
+                <button type="button" @click="connectEmailPopup = false">
+                    {{ t("profile.back") }}
+                </button>
+                <button
+                    type="button"
+                    :class="
+                        connectEmail.length &&
+                        connectPassword.length &&
+                        connectPassword === connectPasswordConfirmation
+                            ? 'btnSaveConnect'
+                            : ''
+                    "
+                    @click="handleConnectPlanossauroAccount"
+                >
+                    Salvar
+                </button>
+            </span>
+        </div>
+    </div>
     <div
         class="unlinkAccountContainer"
         v-if="unlinkAccountPopup"
@@ -456,6 +624,98 @@ const handleUnlinkAccount = async () => {
                     {{ t("profile.connect") }}
                 </button>
             </span>
+            <span id="planossauroEmailInserted">
+                <b><i class="pi pi-envelope"></i> E-mail:</b>
+                <input
+                    v-if="user?.user_email?.length && !editProfile"
+                    :disabled="true"
+                    type="text"
+                    :value="user.user_email"
+                    :placeholder="`${t('profile.emailPlaceholder')}`"
+                    :data-theme="isDark ? 'dark' : 'light'"
+                />
+                <div
+                    class="containerBtnChangeSocialMedia"
+                    v-else-if="user?.user_email?.length && editProfile"
+                >
+                    <input
+                        :disabled="true"
+                        type="text"
+                        :value="user.user_email"
+                        :placeholder="`${t('profile.emailPlaceholder')}`"
+                        :class="editProfile ? 'unableToEdit' : ''"
+                        :data-theme="isDark ? 'dark' : 'light'"
+                    />
+                    <button
+                        type="button"
+                        @click="
+                            unlinkAccountChoose = 'planossauro';
+                            unlinkAccountPopup = true;
+                        "
+                    >
+                        <i class="pi pi-lock-open"></i>
+                    </button>
+                </div>
+
+                <button
+                    v-else
+                    type="button"
+                    class="btnConnectPlanossauro"
+                    @click="connectEmailPopup = true"
+                >
+                    {{ t("profile.connect") }}
+                </button>
+            </span>
+
+            <!-- <span id="facebookEmailInserted">
+                <b><i class="pi pi-facebook"></i> Facebook:</b>
+                <input
+                    id="facebookEmailInserted"
+                    v-if="user?.facebook_email?.length && !editProfile"
+                    :disabled="true"
+                    type="text"
+                    :value="user.facebook_email"
+                    :placeholder="`${t('profile.emailPlaceholder')}`"
+                    :class="editProfile ? 'ableToEdit' : ''"
+                    :data-theme="isDark ? 'dark' : 'light'"
+                />
+
+                <div
+                    class="containerBtnChangeSocialMedia"
+                    v-else-if="user?.facebook_email?.length && editProfile"
+                >
+                    <input
+                        :disabled="true"
+                        type="text"
+                        :value="
+                            user.facebook_email.length
+                                ? user.facebook_email
+                                : 'Empty'
+                        "
+                        :placeholder="`${t('profile.emailPlaceholder')}`"
+                        :class="editProfile ? 'unableToEdit' : ''"
+                        :data-theme="isDark ? 'dark' : 'light'"
+                    />
+                    <button
+                        type="button"
+                        @click="
+                            unlinkAccountChoose = 'facebook';
+                            unlinkAccountPopup = true;
+                        "
+                    >
+                        <i class="pi pi-lock-open"></i>
+                    </button>
+                </div>
+
+                <button
+                    v-else
+                    type="button"
+                    @click="handleConnectFacebookAccount"
+                >
+                    {{ t("profile.connect") }}
+                </button>
+            </span> -->
+
             <span id="cellphoneInserted">
                 <b><i class="pi pi-phone"></i> {{ t("profile.cellphone") }}:</b>
                 <input
@@ -555,7 +815,65 @@ const handleUnlinkAccount = async () => {
                         }}
                     </button>
                 </p>
-                <!-- <p>
+                <p>
+                    <b
+                        ><i class="pi pi-envelope"></i> E-mail
+                        {{ t("profile.validated") }}:</b
+                    >
+                    <button
+                        @click="handleSendValidationEmail('email')"
+                        type="button"
+                        :class="
+                            user?.email_is_validated == true
+                                ? 'checked'
+                                : 'unchecked'
+                        "
+                    >
+                        <i
+                            :class="[
+                                'pi',
+                                user.email_is_validated == true
+                                    ? 'pi-verified'
+                                    : 'pi-unlock',
+                            ]"
+                        ></i
+                        >{{
+                            user?.email_is_validated == true
+                                ? `${t("profile.validated")}`
+                                : `${t("profile.validate")}`
+                        }}
+                    </button>
+                </p>
+                <p>
+                    <!-- <b
+                        ><i class="pi pi-facebook"></i> Facebook
+                        {{ t("profile.validated") }}:</b
+                    >
+                    <button
+                        @click="handleSendValidationEmail('facebook')"
+                        type="button"
+                        :class="
+                            user?.facebook_is_validated == true
+                                ? 'checked'
+                                : 'unchecked'
+                        "
+                    >
+                        <i
+                            :class="[
+                                'pi',
+                                user.facebook_is_validated == true
+                                    ? 'pi-verified'
+                                    : 'pi-unlock',
+                            ]"
+                        ></i
+                        >{{
+                            user?.facebook_is_validated == true
+                                ? `${t("profile.validated")}`
+                                : `${t("profile.validate")}`
+                        }}
+                    </button>
+                </p> -->
+                    <!-- <p>
                     <b
                         ><i class="pi pi-phone"></i> SMS
                         {{ t("profile.validated") }}:
@@ -572,6 +890,8 @@ const handleUnlinkAccount = async () => {
                         {{ t("profile.validate") }}
                     </button>
                 </p> -->
+                </p>
+
                 <p class="createdAtText">
                     {{ t("profile.userSince") }}:
                     {{ convertIsoDateToBR((user?.created_at as string) ?? "") }}

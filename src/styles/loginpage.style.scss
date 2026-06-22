@@ -81,14 +81,6 @@
                 border-top-right-radius: 5px;
             }
 
-            .lastLoginGoogle {
-                background-color: var(--dp-accent-color);
-            }
-
-            .lastLoginGithub {
-                background-color: var(--dp-full-black);
-            }
-
             .btnSocialMediaLogin {
                 width: 300px;
                 padding: 14px 20px;
@@ -116,14 +108,33 @@
                 transition: 0.3s;
             }
 
+            .lastLoginGoogle,
             .btnGoogle {
                 background-color: var(--dp-accent-color);
                 color: var(--dp-full-white);
             }
 
+            .lastLoginGithub,
             .btnGithub {
                 background-color: var(--dp-full-black);
                 color: var(--dp-full-white);
+            }
+
+            .lastLoginFacebook,
+            .btnFacebook {
+                background-color: var(--dp-blue-info);
+                color: var(--dp-full-white);
+            }
+
+            .lastLoginPlanossauro,
+            .btnPlanossauro {
+                background-color: var(--dp-full-white);
+                color: var(--dp-accent-color);
+                border: solid 2px var(--dp-accent-color);
+            }
+
+            .lastLoginPlanossauro {
+                border-bottom: 0;
             }
         }
     }

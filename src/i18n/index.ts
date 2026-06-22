@@ -3,6 +3,9 @@ import { createI18n } from "vue-i18n";
 import loginPTBR from "./locales/pt-BR/login.json";
 import loginENUS from "./locales/en-US/login.json";
 
+import loginFormPTBR from "./locales/pt-BR/loginForm.json";
+import loginFormENUS from "./locales/en-US/loginForm.json";
+
 import navbarPTBR from "./locales/pt-BR/navbar.json";
 import navbarENUS from "./locales/en-US/navbar.json";
 
@@ -47,6 +50,9 @@ import githubcallbackENUS from "./locales/en-US/githubcallback.json";
 
 import googlecallbackPTBR from "./locales/pt-BR/googlecallback.json";
 import googlecallbackENUS from "./locales/en-US/googlecallback.json";
+
+import facebookcallbackPTBR from "./locales/pt-BR/facebookcallback.json";
+import facebookcallbackENUS from "./locales/en-US/facebookcallback.json";
 
 import finishRegisterPTBR from "./locales/pt-BR/finishRegister.json";
 import finishRegisterENUS from "./locales/en-US/finishRegister.json";
@@ -93,6 +99,7 @@ const i18n = createI18n({
     messages: {
         "pt-BR": {
             login: loginPTBR,
+            loginForm: loginFormPTBR,
             navbar: navbarPTBR,
             home: homePTBR,
             design: designPTBR,
@@ -121,9 +128,11 @@ const i18n = createI18n({
             welcomeContainer: welcomeContainerPTBR,
             videoTutorial: videoTutorialPTBR,
             logout: logoutPTBR,
+            facebookcallback: facebookcallbackPTBR,
         },
         "en-US": {
             login: loginENUS,
+            loginForm: loginFormENUS,
             navbar: navbarENUS,
             home: homeENUS,
             design: designENUS,
@@ -134,6 +143,7 @@ const i18n = createI18n({
             editPlanning: editPlanningENUS,
             removePlanning: removePlanningENUS,
             paymentcallback: paymentCallbackENUS,
+            facebookcallback: facebookcallbackENUS,
             deleteCallback: deleteCallbackENUS,
             support: supportENUS,
             loading: loadingENUS,

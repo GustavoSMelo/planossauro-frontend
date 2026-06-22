@@ -1,5 +1,7 @@
 interface IUser {
     full_name: string;
+    user_email: string | null;
+    email_is_validated: boolean;
     google_email: string | null;
     google_id: number | null;
     google_validation_code: number | null;
@@ -8,6 +10,10 @@ interface IUser {
     github_id: number | null;
     github_is_validated: boolean;
     github_validation_code: number | null;
+    facebook_email: string | null;
+    facebook_id: number | null;
+    facebook_is_validated: boolean;
+    facebook_validation_code: number | null;
     cellphone_number: string;
     uuid: string;
     sms_validation_code: number | null;
@@ -23,6 +29,8 @@ interface ICreateUser {
     google_id: string | null;
     github_email: string | null;
     github_id: number | null;
+    facebook_email: string | null;
+    facebook_id: string | null;
     cellphone_number: string;
 }
 

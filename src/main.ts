@@ -1,11 +1,7 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './routes';
-import i18n from './i18n';
-import './styles/global.scss';
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./routes";
+import i18n from "./i18n";
+import "./styles/global.scss";
 
-
-createApp(App)
-    .use(i18n)
-    .use(router)
-    .mount('#app');
+createApp(App).use(i18n).use(router).mount("#app");

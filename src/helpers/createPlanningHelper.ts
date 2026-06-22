@@ -4,7 +4,7 @@ import type {
     IOllamaGemmaResponse,
 } from "../interfaces/ollama.res";
 
-const parseLLMResponse = (rawResponse: string): IClassPlanResponse => {
+const parseLLMResponse = (rawResponse: string, fallbackMessage?: string): IClassPlanResponse => {
     let cleaned = rawResponse
         .replace(/\\/g, "")
         .replace(/\n/g, "")
@@ -17,7 +17,7 @@ const parseLLMResponse = (rawResponse: string): IClassPlanResponse => {
     // Try to parse
     try {
         const parsed = JSON.parse(cleaned);
-        return validateAndFillResponse(parsed);
+        return validateAndFillResponse(parsed, fallbackMessage);
     } catch {
         cleaned = cleaned
             .replace(/(\w+):/g, '"$1":')
@@ -27,23 +27,25 @@ const parseLLMResponse = (rawResponse: string): IClassPlanResponse => {
 
         try {
             const parsed = JSON.parse(cleaned);
-            return validateAndFillResponse(parsed);
+            return validateAndFillResponse(parsed, fallbackMessage);
         } catch {
-            return getDefaultResponse();
+            return getDefaultResponse(fallbackMessage);
         }
     }
 };
 
 const validateAndFillResponse = (
     parsed: Record<string, unknown>,
+    fallbackMessage?: string,
 ): IClassPlanResponse => {
+    const msg = fallbackMessage ?? "Not possible to return this value";
     const response: IClassPlanResponse = {
-        contextualizacao: "",
-        aprendizagem: [],
-        saber: [],
-        eixo: [],
-        foco_avaliativo: [],
-        materiais: "",
+        contextualizacao: msg,
+        aprendizagem: [msg],
+        saber: [msg],
+        eixo: [msg],
+        foco_avaliativo: [msg],
+        materiais: msg,
     };
 
     if (parsed.contextualizacao && typeof parsed.contextualizacao === "string") {
@@ -70,26 +72,27 @@ const validateAndFillResponse = (
     return response;
 };
 
-const getDefaultResponse = (): IClassPlanResponse => {
+const getDefaultResponse = (fallbackMessage = "Not possible to return this value"): IClassPlanResponse => {
     return {
-        contextualizacao: "Erro ao gerar - resposta inválida",
-        aprendizagem: ["Erro ao gerar"],
-        saber: ["Erro ao gerar"],
-        eixo: ["Erro ao gerar"],
-        foco_avaliativo: ["Erro ao gerar"],
-        materiais: "Erro ao gerar",
+        contextualizacao: fallbackMessage,
+        aprendizagem: [fallbackMessage],
+        saber: [fallbackMessage],
+        eixo: [fallbackMessage],
+        foco_avaliativo: [fallbackMessage],
+        materiais: fallbackMessage,
     };
 };
 
 const extractResponseData = (
     response: AxiosResponse,
     isLocal: boolean,
+    fallbackMessage?: string,
 ): IClassPlanResponse => {
     if (isLocal) {
         const localData = (response.data as IOllamaGemmaResponse).response;
-        return parseLLMResponse(localData);
+        return parseLLMResponse(localData, fallbackMessage);
     } else {
-        return parseLLMResponse(response.data.message);
+        return parseLLMResponse(response.data.message, fallbackMessage);
     }
 };
 
