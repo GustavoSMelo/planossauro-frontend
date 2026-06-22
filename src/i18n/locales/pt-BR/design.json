@@ -29,5 +29,6 @@
     "intervalBetweenClasses": "Intervalo entre aulas",
     "configureTime": "Configurar horário",
     "classTimeConfigSaved": "Horário salvo com sucesso",
-    "classTimeConfigError": "Erro ao salvar horário"
+    "classTimeConfigError": "Erro ao salvar horário",
+    "invalidResponseFallback": "Não foi possível retornar este valor"
 }

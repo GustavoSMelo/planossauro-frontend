@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, inject, nextTick, watchEffect, onMounted, watch } from "vue";
+import "@vuepic/vue-datepicker/dist/main.css";
+import { ref, inject, nextTick, onMounted, watch } from "vue";
 import { VueDatePicker } from "@vuepic/vue-datepicker";
 import { useI18n } from "vue-i18n";
 import { useDark } from "@vueuse/core";
@@ -9,21 +10,6 @@ import Docxtemplater from "docxtemplater";
 import PizZip from "pizzip";
 import confetti from "@hiseb/confetti";
 import axios, { type AxiosResponse } from "axios";
-import "@vuepic/vue-datepicker/dist/main.css";
-import type { IPlanningDay, IDays } from "../../interfaces/planning.interface";
-import type { ILoadingContext } from "../../interfaces/context/loading.interface";
-import type { IPopupContext } from "../../interfaces/context/popup.interface";
-import type {
-    IClassPlanResponse,
-    IOllamaGemmaResponse,
-} from "../../interfaces/ollama.res";
-import type {
-    IShowPreview,
-    IShowPreviewContext,
-} from "../../interfaces/context/showPreview.interface";
-import type { ITemplateChooseContext } from "../../interfaces/context/templateChoose.interface";
-import type { IDashboard } from "../../interfaces/dashboard.interface";
-import type { IUser } from "../../interfaces/api/user.interface";
 import qsnENUS from "../../assets/qsn_en_US.json";
 import dayConverter from "../../helpers/dayConverter";
 import backendApi from "../../api/api";
@@ -31,8 +17,20 @@ import monthConverter from "../../helpers/monthConverter";
 import sanitizeInput from "../../helpers/sanitizeInput";
 import { getPrompt, getPromptEN } from "../../helpers/prompt";
 import { qsn as qsnPTBR } from "../../assets/qsn.json";
-import type { IPlanningTypeContext } from "../../interfaces/context/planningType.interface";
+import { extractResponseData } from "../../helpers/createPlanningHelper";
 import ClassTimeConfigPopup from "../../components/ClassTimeConfigPopup/ClassTimeConfigPopup.vue";
+import type { IPlanningTypeContext } from "../../interfaces/context/planningType.interface";
+import type { IPlanningDay, IDays } from "../../interfaces/planning.interface";
+import type { ILoadingContext } from "../../interfaces/context/loading.interface";
+import type { IPopupContext } from "../../interfaces/context/popup.interface";
+import type { IClassPlanResponse } from "../../interfaces/ollama.res";
+import type {
+    IShowPreview,
+    IShowPreviewContext,
+} from "../../interfaces/context/showPreview.interface";
+import type { ITemplateChooseContext } from "../../interfaces/context/templateChoose.interface";
+import type { IDashboard } from "../../interfaces/dashboard.interface";
+import type { IUser } from "../../interfaces/api/user.interface";
 
 const isDark = useDark({
     attribute: "data-theme",
@@ -513,6 +511,11 @@ const generatePlan = async () => {
                             ? getPrompt(qsnstring, activity)
                             : getPromptEN(qsnstring, activity),
                     stream: false,
+                    options: {
+                        num_predict: 8192,
+                        num_ctx: 32768,
+                        temperature: 0.2,
+                    },
                 });
             } else {
                 response = await backendApi.post("/planning/create", {
@@ -538,32 +541,19 @@ const generatePlan = async () => {
                 linebreaks: true,
             });
 
-            let responseData: IClassPlanResponse = {
-                contextualizacao: "",
-                aprendizagem: [""],
-                saber: [""],
-                eixo: [""],
-                foco_avaliativo: [""],
-                materiais: "",
-            };
+            let responseData: IClassPlanResponse;
 
-            if (response && import.meta.env.VITE_APP_MODE === "prod") {
-                responseData = JSON.parse(
-                    response.data.message
-                        .toString()
-                        .replaceAll("\n", "")
-                        .replaceAll("`", "")
-                        .replaceAll("json", "")
-                        .replaceAll("-", ""),
-                ) as IClassPlanResponse;
-            } else if (response) {
-                // [TODO] - CRIAR UM SISTEMA PARA CHECKAR A TIPAGEM DO JSON, SE FOR STRING, CAST TO JSON AND FIX IT
-                responseData = JSON.parse(
-                    response!.data.response
-                        .replaceAll("\n", "")
-                        .replaceAll("`", "")
-                        .replaceAll("json", "")
-                        .replaceAll("-", ""),
+            if (response) {
+                responseData = extractResponseData(
+                    response,
+                    import.meta.env.VITE_APP_MODE === "local",
+                    t("design.invalidResponseFallback"),
+                );
+            } else {
+                responseData = extractResponseData(
+                    {} as AxiosResponse,
+                    import.meta.env.VITE_APP_MODE === "local",
+                    t("design.invalidResponseFallback"),
                 );
             }
 
@@ -653,6 +643,11 @@ const generatePlan = async () => {
                                         ? getPrompt(qsnstring, activity)
                                         : getPromptEN(qsnstring, activity),
                                 stream: false,
+                                options: {
+                                    num_predict: 8192,
+                                    num_ctx: 32768,
+                                    temperature: 0.2,
+                                },
                             },
                         );
                     } else {
@@ -664,25 +659,18 @@ const generatePlan = async () => {
                         });
                     }
 
-                    if (response && import.meta.env.VITE_APP_MODE === "local") {
-                        return JSON.parse(
-                            (response.data as IOllamaGemmaResponse).response
-                                .toString()
-                                .replaceAll("\\", "")
-                                .replaceAll("\n", "")
-                                .replaceAll("`", "")
-                                .replaceAll("json", "")
-                                .replaceAll("-", ""),
-                        ) as IClassPlanResponse;
+                    if (response) {
+                        return extractResponseData(
+                            response,
+                            import.meta.env.VITE_APP_MODE === "local",
+                            t("design.invalidResponseFallback"),
+                        );
                     }
-                    return JSON.parse(
-                        response!.data.message
-                            .toString()
-                            .replaceAll("\n", "")
-                            .replaceAll("`", "")
-                            .replaceAll("json", "")
-                            .replaceAll("-", ""),
-                    ) as IClassPlanResponse;
+                    return extractResponseData(
+                        {} as AxiosResponse,
+                        import.meta.env.VITE_APP_MODE === "local",
+                        t("design.invalidResponseFallback"),
+                    );
                 }),
             );
 
@@ -768,7 +756,7 @@ const generatePlan = async () => {
                 // day 4
                 eixo4: responseDay4.eixo
                     .map((item) => item.toString())
-                    .join("\n"),
+                    .join("\n \n"),
                 saber4: `${responseDay4.saber.map((item) => item.toString()).join("\n \n")}\n`,
                 aprendizagem4: `${responseDay4.aprendizagem.map((item) => item.toString()).join("\n \n")}\n`,
                 atividade4: plans.value.day4
@@ -862,9 +850,12 @@ onMounted(() => {
     handleChangeTemplateChoose({ ...templateChoose, choosed: false });
 });
 
-watchEffect(() => {
-    if (templateChoose.choosed) generatePlan();
-});
+watch(
+    () => templateChoose.choosed,
+    (newVal) => {
+        if (newVal) generatePlan();
+    },
+);
 
 watch(selectedWeek, () => {
     if (!selectedWeek.value) return;

@@ -3,6 +3,9 @@ import { createI18n } from "vue-i18n";
 import loginPTBR from "./locales/pt-BR/login.json";
 import loginENUS from "./locales/en-US/login.json";
 
+import loginFormPTBR from "./locales/pt-BR/loginForm.json";
+import loginFormENUS from "./locales/en-US/loginForm.json";
+
 import navbarPTBR from "./locales/pt-BR/navbar.json";
 import navbarENUS from "./locales/en-US/navbar.json";
 
@@ -96,6 +99,7 @@ const i18n = createI18n({
     messages: {
         "pt-BR": {
             login: loginPTBR,
+            loginForm: loginFormPTBR,
             navbar: navbarPTBR,
             home: homePTBR,
             design: designPTBR,
@@ -128,6 +132,7 @@ const i18n = createI18n({
         },
         "en-US": {
             login: loginENUS,
+            loginForm: loginFormENUS,
             navbar: navbarENUS,
             home: homeENUS,
             design: designENUS,

@@ -10,7 +10,7 @@ export const getPrompt = (qsn: string, activity: string): string => {
         2. 'eixo', 'saber', 'aprendizagem' e 'foco_avaliativo' devem ser Arrays, com um item correspondente para cada atividade fornecida.
         3. 'materiais' deve ser uma string única ou lista com os itens necessários, gere apenas os itens que consegue encontrar no dia a dia.
 
-        Resposta esperada:
+        (Estrutura) Resposta em JSON esperada:
         {
           "contextualizacao": "string",
           "eixo": ["string"],
@@ -18,7 +18,9 @@ export const getPrompt = (qsn: string, activity: string): string => {
           "aprendizagem": ["string"],
           "foco_avaliativo": ["string"],
           "materiais": "string"
-        }`;
+        }
+
+        Respond ONLY with the JSON object`;
     return prompt;
 };
 
