@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 const { selectedPhoto, handleShowPhoto } = defineProps<{
     selectedPhoto: number;
@@ -17,6 +17,8 @@ const handlePreviousPhoto = () => {
     else currentPhoto.value--;
 };
 
+const photoSrc = computed(() => new URL(`../../assets/screenshots/screenshot${currentPhoto.value}.png`, import.meta.url).href);
+
 onMounted(() => {
     currentPhoto.value = selectedPhoto;
 });
@@ -24,7 +26,7 @@ onMounted(() => {
 <template>
     <div class="galleryPhotoContainer" @click="handleShowPhoto(false)">
         <img
-            :src="`/src/assets/screenshots/screenshot${currentPhoto}.png`"
+            :src="photoSrc"
             alt="photo"
             @click="(event) => event.stopPropagation()"
         />
