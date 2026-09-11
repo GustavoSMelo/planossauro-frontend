@@ -19,7 +19,7 @@ const isDark = useDark({
 let timeoutId = ref<ReturnType<typeof setTimeout> | undefined>(undefined);
 const hamburgueMenuToggle = ref(false);
 const isLoading = ref(false);
-const planningType = ref<"Semanal" | "Diario">("Semanal");
+const planningType = ref<"Semanal" | "Diario" | "Contexto">("Semanal");
 
 const popup = reactive<IPopup>({
     message: "",
@@ -90,7 +90,9 @@ const handleHamburgueMenuToggle = (toggle: boolean): void => {
     hamburgueMenuToggle.value = toggle;
 };
 
-const handleChangePlanningType = (newValue: "Semanal" | "Diario"): void => {
+const handleChangePlanningType = (
+    newValue: "Semanal" | "Diario" | "Contexto",
+): void => {
     planningType.value = newValue;
 };
 
