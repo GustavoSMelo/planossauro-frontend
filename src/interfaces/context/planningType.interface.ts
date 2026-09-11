@@ -1,6 +1,8 @@
 export interface IPlanningTypeContext {
     planningType: {
-        value: "Semanal" | "Diario";
+        value: "Semanal" | "Diario" | "Contexto";
     };
-    handleChangePlanningType: (newValue: "Semanal" | "Diario") => void;
+    handleChangePlanningType: (
+        newValue: "Semanal" | "Diario" | "Contexto",
+    ) => void;
 }

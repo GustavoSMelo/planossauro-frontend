@@ -8,7 +8,7 @@ const {
     showChooseTemplate: "false" | "true";
     isCustomDocs: "false" | "true";
     customURLDoc: string;
-    planType: "Semanal" | "Diario";
+    planType: "Semanal" | "Diario" | "Contexto";
 }>();
 
 import { inject, nextTick, ref } from "vue";
@@ -25,11 +25,12 @@ const { handleChangeTemplateChoose } = inject(
     "templateChoose",
 ) as ITemplateChooseContext;
 const showPreviewContext = inject("showPreview") as IShowPreviewContext;
+const effectivePlanType = planType === "Contexto" ? "Semanal" : planType;
 const urlDoc = ref(
     isCustomDocs.trim().toLowerCase() === "true"
         ? customURLDoc
         : new URL(
-              `../../assets/planejamento${planType}${planVersion.value}.pdf`,
+              `../../assets/planejamento${effectivePlanType}${planVersion.value}.pdf`,
               import.meta.url,
           ).href,
 );
@@ -46,7 +47,7 @@ const handleNextButton = (): void => {
     }
 
     urlDoc.value = new URL(
-        `../../assets/planejamento${planType}${planVersion.value}.pdf`,
+        `../../assets/planejamento${effectivePlanType}${planVersion.value}.pdf`,
         import.meta.url,
     ).href;
 };
@@ -59,7 +60,7 @@ const handlePreviousButton = (): void => {
     }
 
     urlDoc.value = new URL(
-        `../../assets/planejamento${planType}${planVersion.value}.pdf`,
+        `../../assets/planejamento${effectivePlanType}${planVersion.value}.pdf`,
         import.meta.url,
     ).href;
 };
@@ -79,7 +80,7 @@ const handleChooseTemplate = (event: Event) => {
 
     const newTemplateChoose = {
         templateStyle: planVersion,
-        templateType: planType,
+        templateType: effectivePlanType,
     } as unknown as ITemplateChoose;
 
     handleChangeTemplateChoose({ ...newTemplateChoose, choosed: false });
