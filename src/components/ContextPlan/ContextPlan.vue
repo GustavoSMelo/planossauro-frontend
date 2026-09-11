@@ -18,7 +18,7 @@ const props = defineProps<{
     hasEmptyStringsInClasses: () => Array<boolean>;
 }>();
 
-const { t, locale } = useI18n();
+const { t } = useI18n();
 
 const isDark = useDark({
     attribute: "data-theme",
@@ -29,6 +29,30 @@ const isDark = useDark({
 const isForwardDisabled = computed<boolean>(() =>
     props.hasEmptyStringsInClasses().find((element) => element === true) ?? false,
 );
+
+const contextDescription = computed<string>(() =>
+    props.planType === "Contexto"
+        ? t("design.contextDescriptionWeekly")
+        : t("design.contextDescriptionDefault"),
+);
+
+const contextPlaceholder = computed<string>(() =>
+    props.planType === "Contexto"
+        ? t("design.contextPlaceholderWeekly")
+        : t("design.contextPlaceholderDefault"),
+);
+
+const classCountLabel = computed<string>(() =>
+    props.planType === "Contexto"
+        ? t("design.classesPerDay")
+        : t("design.howManyClasses"),
+);
+
+const forwardTitle = computed<string>(() =>
+    isForwardDisabled.value
+        ? t("design.planningIncomplete")
+        : t("design.forward"),
+);
 </script>
 
 <template>
@@ -36,51 +60,25 @@ const isForwardDisabled = computed<boolean>(() =>
         <div class="contextHeader">
             <h2>
                 <i class="pi pi-sparkles"></i>
-                {{
-                    locale === "pt-BR"
-                        ? "Gerar aulas baseado no contexto"
-                        : "Generate classes based on context"
-                }}
+                {{ t("design.contextTitle") }}
             </h2>
             <p class="contextDescription">
-                {{
-                    planType === "Contexto"
-                        ? locale === "pt-BR"
-                            ? "Descreva o tema e a IA preencherá os 5 dias (Segunda a Sexta) automaticamente."
-                            : "Describe the theme and AI will fill all 5 days (Monday to Friday) automatically."
-                        : locale === "pt-BR"
-                          ? "Descreva o tema da turma e deixe a IA criar as atividades para você."
-                          : "Describe the class theme and let AI create the activities for you."
-                }}
+                {{ contextDescription }}
             </p>
         </div>
 
         <div class="contextForm">
             <div class="fieldGroup">
                 <label for="classContextInput">
-                    {{
-                        locale === "pt-BR" ? "Contexto da aula" : "Class context"
-                    }}
+                    {{ t("design.contextLabel") }}
                     <span class="hint">
-                        ({{
-                            locale === "pt-BR"
-                                ? "mín. 10 caracteres"
-                                : "min. 10 chars"
-                        }})
+                        ({{ t("design.contextHint") }})
                     </span>
                 </label>
                 <textarea
                     id="classContextInput"
                     @input="event => handleChangeContextText(event)"
-                    :placeholder="
-                        locale === 'pt-BR'
-                            ? planType === 'Contexto'
-                                ? 'Ex: Turma 3 anos, projeto horta, 3 aulas por dia com foco em natureza e contagem...'
-                                : 'Ex: Turma de 4 anos, tema animais da fazenda, foco em coordenação motora e contagem...'
-                            : planType === 'Contexto'
-                              ? 'Ex: 3-year class, garden project, 3 lessons per day focusing on nature and counting...'
-                              : 'Ex: 4-year-old class, farm animals theme, focus on motor skills and counting...'
-                    "
+                    :placeholder="contextPlaceholder"
                     rows="3"
                     maxlength="600"
                 ></textarea>
@@ -89,15 +87,7 @@ const isForwardDisabled = computed<boolean>(() =>
 
             <div class="fieldGroup countGroup">
                 <label for="classCountInput">
-                    {{
-                        planType === "Contexto"
-                            ? locale === "pt-BR"
-                                ? "Aulas por dia"
-                                : "Classes per day"
-                            : locale === "pt-BR"
-                              ? "Quantas aulas gerar?"
-                              : "How many classes?"
-                    }}
+                    {{ classCountLabel }}
                 </label>
                 <div class="countControl">
                     <button
@@ -105,7 +95,7 @@ const isForwardDisabled = computed<boolean>(() =>
                         class="countBtn"
                         @click="onDecrementClassCount"
                         :disabled="classCount <= 1"
-                        aria-label="decrease"
+                        :aria-label="t('design.decrease')"
                     >
                         <i class="pi pi-minus"></i>
                     </button>
@@ -122,7 +112,7 @@ const isForwardDisabled = computed<boolean>(() =>
                         class="countBtn"
                         @click="onIncrementClassCount"
                         :disabled="classCount >= 10"
-                        aria-label="increase"
+                        :aria-label="t('design.increase')"
                     >
                         <i class="pi pi-plus"></i>
                     </button>
@@ -135,7 +125,7 @@ const isForwardDisabled = computed<boolean>(() =>
             type="button"
             :class="contextTextLength < 10 ? 'btnDisabled' : 'btnGenerateContext'"
             :disabled="contextTextLength < 10"
-            :title="isForwardDisabled ? 'Planejamento nao finalizado' : 'Avancar'"
+            :title="forwardTitle"
             @click="() => onRequestShowAdditional()"
         >
             {{ t("design.forward") }}
