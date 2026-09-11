@@ -1,0 +1,234 @@
+.contextGenerator {
+    background: var(--dp-lightfall);
+    border: 2px solid var(--dp-accent-color);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 24px;
+    margin-bottom: 10px;
+    box-shadow: 4px 4px 12px var(--dp-light-gray);
+
+    &[data-theme="dark"] {
+        box-shadow: none;
+    }
+
+    .contextHeader {
+        margin-bottom: 16px;
+
+        h2 {
+            color: var(--dp-accent-color);
+            font-size: 16pt;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 0 6px 0;
+
+            i {
+                font-size: 16pt;
+            }
+        }
+
+        .contextDescription {
+            color: var(--dp-gray);
+            font-size: 10pt;
+            margin: 0;
+            line-height: 1.4;
+            font-weight: bold;
+        }
+    }
+
+    .contextForm {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .fieldGroup {
+            display: flex;
+            flex-direction: column;
+
+            label {
+                color: var(--dp-text-color);
+                font-weight: 600;
+                font-size: 11pt;
+                margin-bottom: 6px;
+
+                .hint {
+                    color: var(--dp-red);
+                    font-weight: bold;
+                    font-size: 9pt;
+                }
+            }
+
+            textarea {
+                background-color: var(--dp-lightfall);
+                border: 1px solid var(--dp-gray);
+                color: var(--dp-accent-color);
+                border-radius: 5px;
+                padding: 10px 12px;
+                font-size: 11pt;
+                font-family: inherit;
+                resize: vertical;
+                min-height: 80px;
+                width: 100%;
+                outline: none;
+                font-weight: bold;
+                resize: none;
+
+                &:focus {
+                    border: 2px solid var(--dp-accent-color);
+                }
+
+                &::placeholder {
+                    color: var(--dp-gray);
+                    opacity: 0.8;
+                }
+            }
+
+            .charCount {
+                align-self: flex-end;
+                font-size: 8pt;
+                color: var(--dp-text-color);
+                margin-top: 4px;
+            }
+
+            &.countGroup {
+                .countControl {
+                    display: flex;
+                    align-items: center;
+                    gap: 0;
+                    width: fit-content;
+                    border: 1px solid var(--dp-gray);
+                    border-radius: 5px;
+                    overflow: hidden;
+
+                    input {
+                        width: 60px;
+                        text-align: center;
+                        border: none;
+                        border-left: 1px solid var(--dp-gray);
+                        border-right: 1px solid var(--dp-gray);
+                        border-radius: 0;
+                        padding: 8px 4px;
+                        font-size: 14pt;
+                        font-weight: 700;
+                        color: var(--dp-accent-color);
+                        background: var(--dp-lightfall);
+                        appearance: textfield;
+                        -moz-appearance: textfield;
+
+                        &::-webkit-outer-spin-button,
+                        &::-webkit-inner-spin-button {
+                            -webkit-appearance: none;
+                            margin: 0;
+                        }
+
+                        &:focus {
+                            border-left: 1px solid var(--dp-gray);
+                            border-right: 1px solid var(--dp-gray);
+                        }
+                    }
+
+                    .countBtn {
+                        background: var(--dp-lightfall);
+                        border: none;
+                        color: var(--dp-accent-color);
+                        padding: 10px 14px;
+                        cursor: pointer;
+                        font-size: 10pt;
+                        transition: 0.2s;
+
+                        &:hover:not(:disabled) {
+                            background: var(--dp-accent-color);
+                            color: var(--dp-lightfall);
+                        }
+
+                        &:disabled {
+                            color: var(--dp-gray);
+                            cursor: not-allowed;
+                            opacity: 0.5;
+                        }
+                    }
+                }
+
+                .targetInfo {
+                    margin-top: 6px;
+                    font-size: 8pt;
+                    color: var(--dp-gray);
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+
+                    i {
+                        font-size: 8pt;
+                    }
+                }
+            }
+        }
+    }
+
+    .btnGenerateContext {
+        margin-top: 18px;
+        width: 100%;
+        background: var(--dp-accent-color);
+        color: var(--dp-lightfall);
+        border: 2px solid var(--dp-accent-color);
+        border-radius: 5px;
+        padding: 12px;
+        font-size: 12pt;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: 0.3s;
+
+        &:hover:not(.disabled) {
+            background: var(--dp-accent-color-dark);
+            border-color: var(--dp-accent-color-dark);
+        }
+
+        &.disabled {
+            background: var(--dp-gray);
+            border-color: var(--dp-gray);
+            color: var(--dp-black);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        i {
+            font-size: 12pt;
+        }
+    }
+
+    .btnDisabled {
+
+                margin-top: 18px;
+        width: 100%;
+
+        color: var(--dp-lightfall);
+        border: 2px solid var(--dp-accent-color);
+        border-radius: 5px;
+        padding: 12px;
+        font-size: 12pt;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: 0.3s;
+
+
+        background: var(--dp-gray);
+        border-color: var(--dp-gray);
+        color: var(--dp-black);
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+}
+
+@media screen and (max-width: 660px) {
+    .contextGenerator {
+        padding: 16px;
+    }
+}

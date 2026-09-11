@@ -3,7 +3,6 @@ import "@vuepic/vue-datepicker/dist/main.css";
 import { ref, inject, nextTick, onMounted, watch } from "vue";
 import { VueDatePicker } from "@vuepic/vue-datepicker";
 import { useI18n } from "vue-i18n";
-import { useDark } from "@vueuse/core";
 import { saveAs } from "file-saver";
 import { debounce } from "lodash-es";
 import Docxtemplater from "docxtemplater";
@@ -11,14 +10,20 @@ import PizZip from "pizzip";
 import confetti from "@hiseb/confetti";
 import axios, { type AxiosResponse } from "axios";
 import qsnENUS from "../../assets/qsn_en_US.json";
-import dayConverter from "../../helpers/dayConverter";
 import backendApi from "../../api/api";
 import monthConverter from "../../helpers/monthConverter";
 import sanitizeInput from "../../helpers/sanitizeInput";
 import { getPrompt, getPromptEN } from "../../helpers/prompt";
+import {
+    getContextWeeklyPrompt,
+    getContextWeeklyPromptEN,
+} from "../../helpers/prompt";
 import { qsn as qsnPTBR } from "../../assets/qsn.json";
 import { extractResponseData } from "../../helpers/createPlanningHelper";
 import ClassTimeConfigPopup from "../../components/ClassTimeConfigPopup/ClassTimeConfigPopup.vue";
+import DailyPlan from "../../components/DailyPlan/DailyPlan.vue";
+import WeeklyPlan from "../../components/WeeklyPlan/WeeklyPlan.vue";
+import ContextPlan from "../../components/ContextPlan/ContextPlan.vue";
 import type { IPlanningTypeContext } from "../../interfaces/context/planningType.interface";
 import type { IPlanningDay, IDays } from "../../interfaces/planning.interface";
 import type { ILoadingContext } from "../../interfaces/context/loading.interface";
@@ -32,11 +37,6 @@ import type { ITemplateChooseContext } from "../../interfaces/context/templateCh
 import type { IDashboard } from "../../interfaces/dashboard.interface";
 import type { IUser } from "../../interfaces/api/user.interface";
 
-const isDark = useDark({
-    attribute: "data-theme",
-    valueLight: "light",
-    valueDark: "dark",
-});
 const { t, locale } = useI18n();
 const plans = ref<IPlanningDay>({
     day1: [""],
@@ -91,6 +91,8 @@ const showClassTimeConfig = ref(false);
 const selectedWeek = ref();
 const selectedElement = ref<number | null>(null);
 const dragSourceDay = ref<IDays["days"] | null>(null);
+const contextText = ref("");
+const classCount = ref(3);
 
 const { planningType, handleChangePlanningType } = inject(
     "planningType",
@@ -109,8 +111,23 @@ const handleChangeSelectedDay = (changeSelectDay: IDays["days"]): void => {
 
 const handleChangePlanType = (event: Event): void => {
     const target = event.target as HTMLInputElement;
-    planType.value = target.value as "Diario" | "Semanal";
-    handleChangePlanningType(target.value as "Diario" | "Semanal");
+    planType.value = target.value as "Diario" | "Semanal" | "Contexto";
+    handleChangePlanningType(
+        target.value as "Diario" | "Semanal" | "Contexto",
+    );
+};
+
+const handleChangeContextText = (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    contextText.value = target.value;
+};
+
+const handleIncrementClassCount = (): void => {
+    if (classCount.value < 10) classCount.value++;
+};
+
+const handleDecrementClassCount = (): void => {
+    if (classCount.value > 1) classCount.value--;
 };
 
 const handleChangePlanText = (
@@ -386,15 +403,358 @@ const showTemplatePreviewChoose = () => {
         return;
     }
     showAditionalInformation.value = false;
+    const effectivePreviewPlanType =
+        planType.value === "Contexto" ? "Semanal" : planType.value;
     const showPreviewContextHelper = {
         isCustomDocs: "false",
         showChooseTemplate: "true",
         show: true,
-        planType,
+        planType: effectivePreviewPlanType as IShowPreview["planType"],
         customURLDoc: "",
     } as unknown as IShowPreview;
 
     showPreviewContext.handleChangeShowPreview({ ...showPreviewContextHelper });
+};
+
+const handleDailyForward = (): void => {
+    showAditionalInformation.value = hasEmptyStringsInDiary() ? false : true;
+};
+
+const handleWeeklyForward = (): void => {
+    const hasEmpty = hasEmptyStringsInClasses().find(
+        (element) => element === true,
+    );
+    showAditionalInformation.value = hasEmpty ? false : true;
+};
+
+const handleApplyContextActivities = (
+    day: IDays["days"],
+    activities: string[],
+): void => {
+    plans.value[day] = activities;
+
+    const baseStart =
+        sessionStorage.getItem("initial_hour") || sessionInitialHour;
+    const starts: string[] = [];
+    const ends: string[] = [];
+
+    for (let i = 0; i < activities.length; i++) {
+        if (i === 0) {
+            starts.push(baseStart);
+            ends.push(addMinutesToTime(baseStart, intervalMinutes.value));
+        } else {
+            starts.push(ends[i - 1]);
+            ends.push(addMinutesToTime(ends[i - 1], intervalMinutes.value));
+        }
+    }
+
+    startClassHour.value[day] = starts;
+    endClassHour.value[day] = ends;
+    selectedDay.value = day;
+};
+
+const handleApplyWeeklyContext = (planning: IPlanningDay): void => {
+    const baseStart =
+        sessionStorage.getItem("initial_hour") || sessionInitialHour;
+    const days: IDays["days"][] = ["day1", "day2", "day3", "day4", "day5"];
+
+    for (const day of days) {
+        const activities = planning[day];
+        if (!activities || activities.length === 0) continue;
+        plans.value[day] = activities.map((a) => a.replaceAll(",", "").trim());
+
+        const starts: string[] = [];
+        const ends: string[] = [];
+        for (let i = 0; i < plans.value[day].length; i++) {
+            if (i === 0) {
+                starts.push(baseStart);
+                ends.push(addMinutesToTime(baseStart, intervalMinutes.value));
+            } else {
+                starts.push(ends[i - 1]);
+                ends.push(addMinutesToTime(ends[i - 1], intervalMinutes.value));
+            }
+        }
+        startClassHour.value[day] = starts;
+        endClassHour.value[day] = ends;
+    }
+    selectedDay.value = "day1";
+};
+
+const isLocalMode = (): boolean =>
+    import.meta.env.VITE_APP_MODE === "local";
+
+const parseWeeklyActivitiesResponse = (raw: string): IPlanningDay | null => {
+    const jsonMatch = raw.match(/\{[\s\S]*\}/);
+    const jsonStr = jsonMatch ? jsonMatch[0] : raw;
+    try {
+        const parsed = JSON.parse(
+            jsonStr
+                .replace(/\\/g, "")
+                .replace(/\n/g, "")
+                .replace(/`/g, "")
+                .replace(/json/g, ""),
+        ) as Record<string, unknown>;
+        const days: IDays["days"][] = ["day1", "day2", "day3", "day4", "day5"];
+        const result: Partial<IPlanningDay> = {};
+        let hasAny = false;
+        for (const day of days) {
+            const val = parsed[day];
+            if (Array.isArray(val) && val.length > 0) {
+                const clean = val
+                    .filter((x: unknown): x is string => typeof x === "string")
+                    .map((s) => s.replaceAll(",", "").trim())
+                    .filter(Boolean);
+                if (clean.length > 0) {
+                    result[day] = clean.slice(0, classCount.value);
+                    hasAny = true;
+                }
+            }
+        }
+        if (
+            !hasAny &&
+            Array.isArray(parsed.activities) &&
+            parsed.activities.length >= 5
+        ) {
+            const flat = parsed.activities
+                .filter((x: unknown): x is string => typeof x === "string")
+                .map((s) => s.replaceAll(",", "").trim())
+                .filter(Boolean);
+            const perDay = Math.max(1, Math.floor(flat.length / 5));
+            for (let i = 0; i < 5; i++) {
+                const day = `day${i + 1}` as IDays["days"];
+                const chunk = flat.slice(i * perDay, i * perDay + perDay);
+                if (chunk.length > 0)
+                    result[day] = chunk.slice(0, classCount.value);
+            }
+            hasAny = Object.keys(result).length > 0;
+        }
+        return hasAny ? (result as IPlanningDay) : null;
+    } catch {
+        return null;
+    }
+};
+
+const CONTEXT_DAYS: IDays["days"][] = ["day1", "day2", "day3", "day4", "day5"];
+
+const joinPlanList = (items: string[]): string =>
+    items.map((item) => item.toString()).join("\n \n");
+
+const buildContextDayActivity = (day: IDays["days"]): string =>
+    plans.value[day]
+        .map(
+            (item, index) =>
+                `${item.toString()} - (${startClassHour.value[day][index]} Hr ~ ${endClassHour.value[day][index]} Hr) \n \n`,
+        )
+        .join("\n \n");
+
+const fetchRawContextActivities = async (prompt: string): Promise<string> => {
+    if (isLocalMode()) {
+        const response = await axios.post(import.meta.env.VITE_API_URL, {
+            model: import.meta.env.VITE_LLM_MODEL,
+            prompt,
+            stream: false,
+            options: {
+                num_predict: 4096,
+                num_ctx: 8192,
+                temperature: 0.7,
+            },
+        });
+        return (response.data as { response: string }).response ?? "";
+    }
+    const response = await backendApi.post("/planning/create", { prompt });
+    return (
+        (response.data as { message: string }).message ??
+        JSON.stringify(response.data)
+    );
+};
+
+const sanitizeContextActivities = (
+    weekly: Partial<IPlanningDay>,
+): IPlanningDay => {
+    const sanitized = {
+        day1: [],
+        day2: [],
+        day3: [],
+        day4: [],
+        day5: [],
+    } as unknown as IPlanningDay;
+    for (const day of CONTEXT_DAYS) {
+        const arr = weekly[day] ?? [];
+        sanitized[day] = arr
+            .slice(0, classCount.value)
+            .map((a) => a.replaceAll(",", "").trim())
+            .filter(Boolean);
+        if (sanitized[day].length === 0) {
+            sanitized[day] = [
+                locale.value === "pt-BR"
+                    ? "Atividade gerada pela IA"
+                    : "AI generated activity",
+            ];
+        }
+    }
+    return sanitized;
+};
+
+// Step 1: context text + classCount (ContextPlan counter) -> day1..day5 activities.
+// Local: Ollama via VITE_API_URL. Prod: backend POST /planning/create.
+const fetchContextActivities = async (): Promise<IPlanningDay> => {
+    const qsn = locale.value === "pt-BR" ? qsnPTBR : qsnENUS.qsn;
+    const qsnString = JSON.stringify(qsn);
+    const context = contextText.value.trim();
+    const prompt =
+        locale.value === "pt-BR"
+            ? getContextWeeklyPrompt(qsnString, context, classCount.value)
+            : getContextWeeklyPromptEN(qsnString, context, classCount.value);
+
+    const raw = await fetchRawContextActivities(prompt);
+    const weekly = parseWeeklyActivitiesResponse(raw);
+    if (!weekly || Object.keys(weekly).length === 0) {
+        throw new Error("empty weekly activities");
+    }
+    return sanitizeContextActivities(weekly);
+};
+
+const fetchPlanningByContext = async (
+    qsn: string,
+    activity: string,
+): Promise<AxiosResponse> => {
+    if (isLocalMode()) {
+        return axios.post(import.meta.env.VITE_API_URL, {
+            model: import.meta.env.VITE_LLM_MODEL,
+            prompt:
+                locale.value === "pt-BR"
+                    ? getPrompt(qsn, activity)
+                    : getPromptEN(qsn, activity),
+            stream: false,
+            options: {
+                num_predict: 8192,
+                num_ctx: 32768,
+                temperature: 0.2,
+            },
+        });
+    }
+    return backendApi.post("/planning/create-by-context", {
+        qsn,
+        activity,
+        locale: locale.value,
+    });
+};
+
+const buildContextDayPayloads = (): Record<string, string[]>[] =>
+    CONTEXT_DAYS.map((day) => ({
+        [day]: plans.value[day].map((classAtv) => sanitizeInput(classAtv)),
+    }));
+
+// Step 2: day1..day5 activities -> per-day enriched plan.
+// Local: Ollama via VITE_API_URL. Prod: backend POST /planning/create-by-context.
+const fetchEnrichedDayPlans = async (
+    payloads: Record<string, string[]>[],
+): Promise<IClassPlanResponse[]> => {
+    const qsn = locale.value === "pt-BR" ? qsnPTBR : qsnENUS.qsn;
+    const qsnString = JSON.stringify(qsn);
+    return Promise.all(
+        payloads.map(async (item) => {
+            const activity = sanitizeInput(JSON.stringify(item)).toString();
+            const response = await fetchPlanningByContext(
+                qsnString,
+                activity,
+            );
+            return extractResponseData(
+                response,
+                isLocalMode(),
+                t("design.invalidResponseFallback"),
+            );
+        }),
+    );
+};
+
+// Step 3: enriched day plans + header info -> docxtemplater data.
+const buildContextPlanDocData = (
+    fullName: string,
+    dayPlans: IClassPlanResponse[],
+): Record<string, string> => {
+    const data: Record<string, string> = {
+        nomeEscola: schoolName.value,
+        sala: className.value,
+        diaStart: planDateStart.value.split("-")[2],
+        diaEnd: planDateEnd.value.split("-")[2],
+        mes: monthConverter(planDateEnd.value.split("-")[1]),
+        ano: planDateEnd.value.split("-")[0],
+        profName: fullName,
+    };
+    CONTEXT_DAYS.forEach((day, i) => {
+        const n = i + 1;
+        const plan = dayPlans[i];
+        data[`eixo${n}`] = joinPlanList(plan.eixo);
+        data[`saber${n}`] = `${joinPlanList(plan.saber)}\n`;
+        data[`aprendizagem${n}`] = `${joinPlanList(plan.aprendizagem)}\n`;
+        data[`atividade${n}`] = buildContextDayActivity(day);
+        data[`contextualizacao${n}`] = plan.contextualizacao;
+        data[`foco${n}`] = joinPlanList(plan.foco_avaliativo);
+        data[`materiais${n}`] = plan.materiais;
+    });
+    return data;
+};
+
+// Step 4: render weekly template, download docx, persist base64.
+const renderAndPersistContextPlan = async (
+    data: Record<string, string>,
+): Promise<void> => {
+    const planejamentoQSNFetch = await fetch(
+        new URL(
+            `../../assets/planejamentoSemanal${templateChoose.templateStyle}.docx`,
+            import.meta.url,
+        ).href,
+    );
+    const arrayBuffer = await planejamentoQSNFetch.arrayBuffer();
+    const planZip = new PizZip(arrayBuffer);
+    const doc = new Docxtemplater(planZip, {
+        paragraphLoop: true,
+        linebreaks: true,
+    });
+
+    doc.render(data);
+    const blob = new Blob([doc.toBlob()], {
+        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    });
+    saveAs(blob, "planejamento.docx");
+
+    const docB64 = doc.toBase64();
+    const uuid = JSON.parse(
+        sessionStorage.getItem("user") ?? "{uuid: ''}",
+    ).uuid;
+
+    await backendApi.post("/planning", {
+        document_b64: docB64,
+        start_plan: planDateStart.value,
+        end_plan: planDateEnd.value,
+        school_name: schoolName.value,
+        class_name: className.value,
+        user_id: uuid,
+    });
+};
+
+const generatePlanByContext = async (fullName: string): Promise<void> => {
+    if (contextText.value.trim().length < 10) {
+        popupContext.handleChangePopupInfo(
+            `${t("design.fillAllFields")}`,
+            "warning",
+            true,
+        );
+        return;
+    }
+
+    // Step 1: get day1..day5 activities from context (sized by classCount).
+    const contextPlanning = await fetchContextActivities();
+    handleApplyWeeklyContext(contextPlanning);
+
+    // Step 2: enrich each day via API (prod) or Ollama (local).
+    const payloads = buildContextDayPayloads();
+    const dayPlans = await fetchEnrichedDayPlans(payloads);
+
+    // Steps 3-4: build doc data, render + persist.
+    const data = buildContextPlanDocData(fullName, dayPlans);
+    await renderAndPersistContextPlan(data);
 };
 
 const generatePlan = async () => {
@@ -406,7 +766,9 @@ const generatePlan = async () => {
             await backendApi.get(`/subscription/dashboard/${uuid}`)
         ).data as IDashboard;
 
-        if (planType.value === "Semanal") {
+        const isWeeklyPlan =
+            planType.value === "Semanal" || planType.value === "Contexto";
+        if (isWeeklyPlan) {
             if (
                 Number(dashboardResponse.used_weekly_planning) >=
                 Number(dashboardResponse.max_amount_planning_week)
@@ -435,6 +797,7 @@ const generatePlan = async () => {
         const hasEmptyStrings = hasEmptyStringsInClasses().find(
             (element) => element === true,
         );
+
         if (planType.value === "Semanal" && hasEmptyStrings) {
             popupContext.handleChangePopupInfo(
                 `${t("design.fillAllFields")}`,
@@ -462,7 +825,7 @@ const generatePlan = async () => {
 
                 return;
             }
-        } else {
+        } else if (planType.value === "Semanal") {
             let hasEmptyFields = false;
 
             for (let i = 1; i < 6; i++) {
@@ -475,6 +838,16 @@ const generatePlan = async () => {
             }
 
             if (hasEmptyFields) {
+                popupContext.handleChangePopupInfo(
+                    `${t("design.fillAllFields")}`,
+                    "warning",
+                    true,
+                );
+
+                return;
+            }
+        } else {
+            if (!contextText.value.length) {
                 popupContext.handleChangePopupInfo(
                     `${t("design.fillAllFields")}`,
                     "warning",
@@ -604,6 +977,8 @@ const generatePlan = async () => {
                 class_name: className.value,
                 user_id: uuid,
             });
+        } else if (planType.value === "Contexto") {
+            await generatePlanByContext(fullName);
         } else {
             let activities = [];
             for (let i = 1; i < 6; i++) {
@@ -674,9 +1049,10 @@ const generatePlan = async () => {
                 }),
             );
 
+            const effectiveTemplateType = templateChoose.templateType;
             const planejamentoQSNFetch = await fetch(
                 new URL(
-                    `../../assets/planejamento${templateChoose.templateType}${templateChoose.templateStyle}.docx`,
+                    `../../assets/planejamento${effectiveTemplateType}${templateChoose.templateStyle}.docx`,
                     import.meta.url,
                 ).href,
             );
@@ -804,10 +1180,7 @@ const generatePlan = async () => {
             await backendApi.post("/planning", {
                 document_b64: docB64,
                 start_plan: planDateStart.value,
-                end_plan:
-                    planType.value === "Semanal"
-                        ? planDateEnd.value
-                        : planDateStart.value,
+                end_plan: planDateEnd.value,
                 school_name: schoolName.value,
                 class_name: className.value,
                 user_id: uuid,
@@ -815,7 +1188,7 @@ const generatePlan = async () => {
         }
 
         await backendApi.patch(
-            `/subscription/${planType.value === "Semanal" ? "week" : "daily"}/${dashboardResponse.subscription_id}`,
+            `/subscription/${planType.value === "Semanal" || planType.value === "Contexto" ? "week" : "daily"}/${dashboardResponse.subscription_id}`,
         );
         isLoadingContext.handleChangeIsLoading(false);
         popupContext.handleChangePopupInfo(
@@ -957,6 +1330,9 @@ watch(selectedWeek, () => {
                         <option value="Semanal">
                             {{ t("design.weekly") }}
                         </option>
+                        <option value="Contexto">
+                            {{ locale === "pt-BR" ? "Contexto (IA)" : "Context (AI)" }}
+                        </option>
                     </select>
                     <button
                         type="button"
@@ -975,530 +1351,69 @@ watch(selectedWeek, () => {
             @save="handleSaveClassTimeConfig"
         />
 
-        <!-- Diario -->
+        <ContextPlan
+            v-if="planType === 'Contexto'"
+            :context-text-length="contextText.length"
+            :handle-change-context-text="handleChangeContextText"
+            :class-count="classCount"
+            :on-increment-class-count="handleIncrementClassCount"
+            :on-decrement-class-count="handleDecrementClassCount"
+            :plan-type="planType"
+            :selected-day="selectedDay"
+            :on-apply-activities="handleApplyContextActivities"
+            :on-apply-weekly="handleApplyWeeklyContext"
+            :on-request-show-additional="() => showAditionalInformation = true"
+            :has-empty-strings-in-classes="hasEmptyStringsInClasses"
+        />
 
-        <form v-if="planType === 'Diario'" class="dailyPlan">
-            <div class="dailyPlanContentContainer">
-                <section v-for="(plano, index) in plans.day1" :key="index">
-                    <label
-                        >📚 {{ t("design.classActivity") }}
-                        {{ index + 1 }}</label
-                    >
-                    <span
-                        class="row"
-                        :class="{
-                            dragging:
-                                selectedElement === index ? 'dragging' : '',
-                        }"
-                        draggable="true"
-                        @dragstart="() => onDragStart(selectedDay, index)"
-                        @dragover="(event) => handleDragOver(event)"
-                        @drop="() => handleDrop(selectedDay, index)"
-                        @dragend="() => onDragEnd()"
-                    >
-                        <div class="hourClass">
-                            <i class="pi pi-arrows-v iconReposition"></i>
-                            <div class="repositionButtonsContainer"></div>
-                            <input
-                                class="dailyInputDesign"
-                                type="text"
-                                :value="plano"
-                                :placeholder="`${t('design.inputPlaceholder')}`"
-                                @input="
-                                    (event) =>
-                                        handleChangePlanText(
-                                            'day1',
-                                            index,
-                                            (event.target as HTMLInputElement)
-                                                .value,
-                                        )
-                                "
-                            />
-                            <div class="timeInputContainer">
-                                <span class="buttonRepositionContainer">
-                                    <button
-                                        class="repositionButton"
-                                        type="button"
-                                        @click="moveClassUp(index)"
-                                    >
-                                        <i class="pi pi-arrow-up"></i>
-                                    </button>
+        <DailyPlan
+            v-if="planType === 'Diario'"
+            :plans="plans"
+            :start-class-hour="startClassHour"
+            :end-class-hour="endClassHour"
+            :selected-day="selectedDay"
+            :selected-element="selectedElement"
+            :has-empty-strings-in-diary="hasEmptyStringsInDiary"
+            :on-change-plan-text="handleChangePlanText"
+            :on-change-start-hour="handleChangeStartClassHour"
+            :on-change-end-hour="handleChangeEndClassHour"
+            :on-add-new-class="handleAddNewClassInPlanning"
+            :on-remove-class="handleRemoveClassAtvFromPlan"
+            :on-drag-start="onDragStart"
+            :on-drag-over="handleDragOver"
+            :on-drag-end="onDragEnd"
+            :on-drop="handleDrop"
+            :on-move-up="moveClassUp"
+            :on-move-down="moveClassDown"
+            :on-request-show-additional="handleDailyForward"
+        />
 
-                                    <button
-                                        class="repositionButton"
-                                        type="button"
-                                        @click="moveClassDown(index)"
-                                    >
-                                        <i class="pi pi-arrow-down"></i>
-                                    </button>
-                                </span>
-                                <input
-                                    class="timeInput timeInputStart"
-                                    type="time"
-                                    lang="pt-BR"
-                                    step="900"
-                                    title="Inicio da aula"
-                                    :value="startClassHour[selectedDay][index]"
-                                    @input="
-                                        (event) =>
-                                            handleChangeStartClassHour(
-                                                'day1',
-                                                index,
-                                                (
-                                                    event.target! as HTMLInputElement
-                                                ).value,
-                                            )
-                                    "
-                                />
-                                <input
-                                    class="timeInput timeInputEnd"
-                                    type="time"
-                                    lang="pt-BR"
-                                    step="900"
-                                    title="Fim da aula"
-                                    :value="endClassHour[selectedDay][index]"
-                                    @input="
-                                        (event) =>
-                                            handleChangeEndClassHour(
-                                                'day1',
-                                                index,
-                                                (
-                                                    event.target! as HTMLInputElement
-                                                ).value,
-                                            )
-                                    "
-                                />
-                            </div>
-                        </div>
-                        <button
-                            type="button"
-                            :class="index > 0 ? 'btnTrash' : 'btnTrashDisabled'"
-                            @click="
-                                index > 0
-                                    ? handleRemoveClassAtvFromPlan(
-                                          'day1',
-                                          index,
-                                      )
-                                    : null
-                            "
-                        >
-                            <i class="pi pi-trash"></i>
-                        </button>
-                    </span>
-                </section>
-            </div>
-            <div class="btnContainer">
-                <button
-                    class="btnAddClassAtv"
-                    type="button"
-                    @click="handleAddNewClassInPlanning('day1')"
-                >
-                    <i class="pi pi-plus-circle"></i>
-                    {{ t("design.addActivity") }}
-                </button>
-
-                <button
-                    id="btnDiaryGenerate"
-                    :class="
-                        hasEmptyStringsInDiary()
-                            ? 'btnDiaryGenerateCancel'
-                            : 'btnDiaryGenerate'
-                    "
-                    type="button"
-                    @click="
-                        () =>
-                            (showAditionalInformation = hasEmptyStringsInDiary()
-                                ? false
-                                : true)
-                    "
-                >
-                    {{ t("design.forward") }}
-                </button>
-            </div>
-        </form>
-
-        <!-- Semanal -->
-        <div v-else class="weeklyPlan" id="weeklyPlan">
-            <ul class="weekDays" id="weekDays">
-                <li
-                    @click="() => handleChangeSelectedDay('day1')"
-                    :class="[
-                        'btnWeekDays',
-                        selectedDay === 'day1' ? 'selected' : '',
-                    ]"
-                >
-                    <i
-                        id="iconHelp"
-                        :class="[
-                            'pi',
-                            hasEmptyStringsInClasses()[0]
-                                ? 'pi-clock iconUncheck'
-                                : 'pi-verified iconCheck',
-                        ]"
-                    ></i>
-                    {{ t("design.monday") }}
-                </li>
-                <li
-                    @click="() => handleChangeSelectedDay('day2')"
-                    :class="[
-                        'btnWeekDays',
-                        selectedDay === 'day2' ? 'selected' : '',
-                    ]"
-                >
-                    <i
-                        :class="[
-                            'pi',
-                            hasEmptyStringsInClasses()[1]
-                                ? 'pi-clock iconUncheck'
-                                : 'pi-verified iconCheck',
-                        ]"
-                    ></i>
-                    {{ t("design.tuesday") }}
-                </li>
-                <li
-                    @click="() => handleChangeSelectedDay('day3')"
-                    :class="[
-                        'btnWeekDays',
-                        selectedDay === 'day3' ? 'selected' : '',
-                    ]"
-                >
-                    <i
-                        :class="[
-                            'pi',
-                            hasEmptyStringsInClasses()[2]
-                                ? 'pi-clock iconUncheck'
-                                : 'pi-verified iconCheck',
-                        ]"
-                    ></i>
-                    {{ t("design.wednesday") }}
-                </li>
-                <li
-                    @click="() => handleChangeSelectedDay('day4')"
-                    :class="[
-                        'btnWeekDays',
-                        selectedDay === 'day4' ? 'selected' : '',
-                    ]"
-                >
-                    <i
-                        :class="[
-                            'pi',
-                            hasEmptyStringsInClasses()[3]
-                                ? 'pi-clock iconUncheck'
-                                : 'pi-verified iconCheck',
-                        ]"
-                    ></i>
-                    {{ t("design.thursday") }}
-                </li>
-                <li
-                    @click="() => handleChangeSelectedDay('day5')"
-                    :class="[
-                        'btnWeekDays',
-                        selectedDay === 'day5' ? 'selected' : '',
-                    ]"
-                >
-                    <i
-                        :class="[
-                            'pi',
-                            hasEmptyStringsInClasses()[4]
-                                ? 'pi-clock iconUncheck'
-                                : 'pi-verified iconCheck',
-                        ]"
-                    ></i>
-                    {{ t("design.friday") }}
-                </li>
-            </ul>
-
-            <div class="weekDaysMobile">
-                <div class="selectedDay" id="selectedDay">
-                    <h2
-                        class="selectedWeekDayMobile"
-                        @click="() => handleMobileMenu()"
-                    >
-                        <i
-                            :class="[
-                                'pi',
-                                'iconClock',
-                                'iconHelp',
-                                hasEmptyStringsInClasses()[
-                                    Number.parseInt(
-                                        selectedDay.split('day')[1],
-                                    ) - 1
-                                ]
-                                    ? 'pi-clock iconUncheck'
-                                    : 'pi-verified iconCheck',
-                            ]"
-                        ></i
-                        >{{ dayConverter(selectedDay) }}
-                    </h2>
-                    <button
-                        class="btnChangeWeekMobile"
-                        @click="() => handleMobileMenu()"
-                    >
-                        <i
-                            :class="[
-                                'pi',
-                                isOpenPlanMobileMenu
-                                    ? 'pi-chevron-up'
-                                    : 'pi-chevron-down',
-                            ]"
-                        ></i>
-                    </button>
-                </div>
-                <ul v-if="isOpenPlanMobileMenu === true" class="mobileDayLists">
-                    <li
-                        :class="[
-                            'mobileDayItemList',
-                            selectedDay === 'day1' ? 'mobileDaySelected' : '',
-                        ]"
-                        @click="() => handleChangeSelectedDay('day1')"
-                    >
-                        <i
-                            :class="[
-                                'pi',
-                                hasEmptyStringsInClasses()[0]
-                                    ? 'pi-clock iconUncheck'
-                                    : 'pi-verified iconCheck',
-                            ]"
-                        ></i>
-                        {{ t("design.monday") }}
-                    </li>
-                    <li
-                        :class="[
-                            'mobileDayItemList',
-                            selectedDay === 'day2' ? 'mobileDaySelected' : '',
-                        ]"
-                        @click="() => handleChangeSelectedDay('day2')"
-                    >
-                        <i
-                            :class="[
-                                'pi',
-                                hasEmptyStringsInClasses()[1]
-                                    ? 'pi-clock iconUncheck'
-                                    : 'pi-verified iconCheck',
-                            ]"
-                        ></i>
-                        {{ t("design.tuesday") }}
-                    </li>
-                    <li
-                        :class="[
-                            'mobileDayItemList',
-                            selectedDay === 'day3' ? 'mobileDaySelected' : '',
-                        ]"
-                        @click="() => handleChangeSelectedDay('day3')"
-                    >
-                        <i
-                            :class="[
-                                'pi',
-                                hasEmptyStringsInClasses()[2]
-                                    ? 'pi-clock iconUncheck'
-                                    : 'pi-verified iconCheck',
-                            ]"
-                        ></i>
-                        {{ t("design.wednesday") }}
-                    </li>
-                    <li
-                        :class="[
-                            'mobileDayItemList',
-                            selectedDay === 'day4' ? 'mobileDaySelected' : '',
-                        ]"
-                        @click="() => handleChangeSelectedDay('day4')"
-                    >
-                        <i
-                            :class="[
-                                'pi',
-                                hasEmptyStringsInClasses()[3]
-                                    ? 'pi-clock iconUncheck'
-                                    : 'pi-verified iconCheck',
-                            ]"
-                        ></i>
-                        {{ t("design.thursday") }}
-                    </li>
-                    <li
-                        :class="[
-                            'mobileDayItemList',
-                            selectedDay === 'day5' ? 'mobileDaySelected' : '',
-                        ]"
-                        @click="() => handleChangeSelectedDay('day5')"
-                    >
-                        <i
-                            :class="[
-                                'pi',
-                                hasEmptyStringsInClasses()[4]
-                                    ? 'pi-clock iconUncheck'
-                                    : 'pi-verified iconCheck',
-                            ]"
-                        ></i>
-                        {{ t("design.friday") }}
-                    </li>
-                </ul>
-                <span v-else></span>
-            </div>
-
-            <div
-                class="classContentContainer"
-                :data-theme="isDark ? 'dark' : 'light'"
-            >
-                <div class="classContent">
-                    <div
-                        v-for="(value, index) in plans[selectedDay]"
-                        :key="index"
-                        class="classWrapper"
-                        :class="{
-                            dragging:
-                                selectedElement === index ? 'dragging' : '',
-                        }"
-                        draggable="true"
-                        @dragstart="() => onDragStart(selectedDay, index)"
-                        @dragover="(event) => handleDragOver(event)"
-                        @drop="() => handleDrop(selectedDay, index)"
-                        @dragend="() => onDragEnd()"
-                    >
-                        <span class="classDescription">
-                            <h2 :data-theme="isDark ? 'dark' : 'light'">
-                                📚 {{ t("design.classActivity") }}
-                                {{ index + 1 }}:
-                            </h2>
-                            <div class="hourClass">
-                                <i class="pi pi-arrows-v iconReposition"></i>
-                                <input
-                                    class="inputDescriptionText"
-                                    type="text"
-                                    :placeholder="`${t('design.inputPlaceholder')}`"
-                                    :value="value"
-                                    @input="
-                                        (event) =>
-                                            handleChangePlanText(
-                                                selectedDay,
-                                                index,
-                                                (
-                                                    event.target! as HTMLInputElement
-                                                ).value,
-                                            )
-                                    "
-                                />
-                                <span>
-                                    <span class="buttonRepositionContainer">
-                                        <button
-                                            class="repositionButton"
-                                            type="button"
-                                            @click="moveClassUp(index)"
-                                        >
-                                            <i class="pi pi-arrow-up"></i>
-                                        </button>
-
-                                        <button
-                                            class="repositionButton"
-                                            type="button"
-                                            @click="moveClassDown(index)"
-                                        >
-                                            <i class="pi pi-arrow-down"></i>
-                                        </button>
-                                    </span>
-                                    <input
-                                        class="timeInput timeInputStart"
-                                        type="time"
-                                        lang="pt-BR"
-                                        step="900"
-                                        title="Inicio da aula"
-                                        :value="
-                                            startClassHour[selectedDay][index]
-                                        "
-                                        @input="
-                                            (event) =>
-                                                handleChangeStartClassHour(
-                                                    selectedDay,
-                                                    index,
-                                                    (
-                                                        event.target! as HTMLInputElement
-                                                    ).value,
-                                                )
-                                        "
-                                    />
-                                    <input
-                                        class="timeInput timeInputEnd"
-                                        type="time"
-                                        lang="pt-BR"
-                                        step="900"
-                                        title="Fim da aula"
-                                        :value="
-                                            endClassHour[selectedDay][index]
-                                        "
-                                        @input="
-                                            (event) =>
-                                                handleChangeEndClassHour(
-                                                    selectedDay,
-                                                    index,
-                                                    (
-                                                        event.target! as HTMLInputElement
-                                                    ).value,
-                                                )
-                                        "
-                                    />
-                                </span>
-                            </div>
-                        </span>
-                        <button
-                            @click="
-                                () =>
-                                    handleRemoveClassAtvFromPlan(
-                                        selectedDay,
-                                        index,
-                                    )
-                            "
-                            :class="
-                                index === 0
-                                    ? 'btnRemoveClassCancel'
-                                    : 'btnRemoveClass'
-                            "
-                        >
-                            <i class="pi pi-trash"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <span class="btnControlsContainer">
-                    <button id="btnPreviousDay" @click="() => handleGoBack()">
-                        <i class="pi pi-arrow-left"></i> {{ t("design.back") }}
-                    </button>
-                    <button
-                        id="btnAddActivity"
-                        @click="() => handleAddNewClassInPlanning(selectedDay)"
-                    >
-                        <i class="pi pi-plus-circle"></i>
-                        {{ t("design.addActivity") }}
-                    </button>
-                    <button id="btnForwardDay" @click="() => handleGoFoward()">
-                        {{ t("design.forward") }}
-                        <i class="pi pi-arrow-right"></i>
-                    </button>
-                </span>
-            </div>
-        </div>
-        <button
-            id="btnGeneratePlan"
-            :class="
-                hasEmptyStringsInClasses().find((element) => element === true)
-                    ? 'btnGeneratePlanCancel'
-                    : 'btnGeneratePlan'
-            "
+        <WeeklyPlan
             v-if="planType === 'Semanal'"
-            type="button"
-            @click="
-                () =>
-                    (showAditionalInformation = hasEmptyStringsInClasses().find(
-                        (element) => element === true,
-                    )
-                        ? false
-                        : true)
-            "
-            :title="
-                hasEmptyStringsInClasses().find((element) => element === true)
-                    ? 'Planejamento nao finalizado'
-                    : 'Avancar'
-            "
-        >
-            {{ t("design.forward") }}
-        </button>
+            :plans="plans"
+            :start-class-hour="startClassHour"
+            :end-class-hour="endClassHour"
+            :selected-day="selectedDay"
+            :selected-element="selectedElement"
+            :is-open-plan-mobile-menu="isOpenPlanMobileMenu"
+            :has-empty-strings-in-classes="hasEmptyStringsInClasses"
+            :on-change-selected-day="handleChangeSelectedDay"
+            :on-change-plan-text="handleChangePlanText"
+            :on-change-start-hour="handleChangeStartClassHour"
+            :on-change-end-hour="handleChangeEndClassHour"
+            :on-add-new-class="handleAddNewClassInPlanning"
+            :on-remove-class="handleRemoveClassAtvFromPlan"
+            :on-go-back="handleGoBack"
+            :on-go-forward="handleGoFoward"
+            :on-mobile-menu="handleMobileMenu"
+            :on-drag-start="onDragStart"
+            :on-drag-over="handleDragOver"
+            :on-drag-end="onDragEnd"
+            :on-drop="handleDrop"
+            :on-move-up="moveClassUp"
+            :on-move-down="moveClassDown"
+            :on-request-show-additional="handleWeeklyForward"
+        />
     </div>
 </template>
 
