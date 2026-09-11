@@ -30,5 +30,17 @@
     "configureTime": "Configure time",
     "classTimeConfigSaved": "Class time saved successfully",
     "classTimeConfigError": "Error saving class time",
-    "invalidResponseFallback": "Not possible to return this value"
+    "invalidResponseFallback": "Not possible to return this value",
+    "contextTitle": "Generate classes based on context",
+    "contextDescriptionWeekly": "Describe the theme and AI will fill all 5 days (Monday to Friday) automatically.",
+    "contextDescriptionDefault": "Describe the class theme and let AI create the activities for you.",
+    "contextLabel": "Class context",
+    "contextHint": "min. 10 chars",
+    "contextPlaceholderWeekly": "Ex: 3-year class, garden project, 3 lessons per day focusing on nature and counting...",
+    "contextPlaceholderDefault": "Ex: 4-year-old class, farm animals theme, focus on motor skills and counting...",
+    "classesPerDay": "Classes per day",
+    "howManyClasses": "How many classes?",
+    "planningIncomplete": "Planning not finished",
+    "decrease": "decrease",
+    "increase": "increase"
 }

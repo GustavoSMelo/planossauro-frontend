@@ -30,5 +30,17 @@
     "configureTime": "Configurar horário",
     "classTimeConfigSaved": "Horário salvo com sucesso",
     "classTimeConfigError": "Erro ao salvar horário",
-    "invalidResponseFallback": "Não foi possível retornar este valor"
+    "invalidResponseFallback": "Não foi possível retornar este valor",
+    "contextTitle": "Gerar aulas baseado no contexto",
+    "contextDescriptionWeekly": "Descreva o tema e a IA preencherá os 5 dias (Segunda a Sexta) automaticamente.",
+    "contextDescriptionDefault": "Descreva o tema da turma e deixe a IA criar as atividades para você.",
+    "contextLabel": "Contexto da aula",
+    "contextHint": "mín. 10 caracteres",
+    "contextPlaceholderWeekly": "Ex: Turma 3 anos, projeto horta, 3 aulas por dia com foco em natureza e contagem...",
+    "contextPlaceholderDefault": "Ex: Turma de 4 anos, tema animais da fazenda, foco em coordenação motora e contagem...",
+    "classesPerDay": "Aulas por dia",
+    "howManyClasses": "Quantas aulas gerar?",
+    "planningIncomplete": "Planejamento não finalizado",
+    "decrease": "diminuir",
+    "increase": "aumentar"
 }
