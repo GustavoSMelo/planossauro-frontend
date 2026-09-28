@@ -4,7 +4,7 @@
 
 ## 1. Project Purpose
 
-**Planossauro** (`planossauro-frontend`) is an AI-powered lesson-planning platform for teachers (Brazilian early childhood / elementary focus).
+**Planossauro** (`planossauro-frontend`) is an AI-powered lesson-planning platform for teachers (Brazilian early childhood (4-5 y/o) / elementary focus).
 
 Tagline: *“Seu gerador de planejamento de aulas alavancado por IA”* (`index.html:8`).
 
