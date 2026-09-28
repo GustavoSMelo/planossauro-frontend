@@ -5,14 +5,14 @@ export const getContextWeeklyPrompt = (
 ): string => {
     const prompt = `
         Contexto (JSON de referência - QSN): ${JSON.stringify(qsn)}
-        Contexto da turma/professor: "${context}"
+        Contexto da aula semanal: "${context}"
         Quantidade de aulas por dia: ${countPerDay}
 
-        Você é um professor educador especialista em educação infantil (BNCC/QSN).
+        Você é um professor educador especialista em educação infantil de criancas de 4 a 5 anos (BNCC/QSN).
         Tarefa: Com base no contexto da turma e no QSN, gere exatamente ${countPerDay} atividades para CADA um dos 5 dias (day1 a day5).
 
         Regras:
-        1. Cada atividade deve ser string única de 10 a 25 palavras, clara, prática e adequada para educação infantil.
+        1. Cada atividade deve ser string única de 10 a 25 palavras, clara, prática e adequada para educação infantil de criancas de 4 a 5 anos.
         2. Atividades diversificadas, lúdicas e coerentes com o contexto; progrida levemente de day1 a day5.
         3. Alinhe implicitamente a eixos/saberes do QSN sem citar QSN.
         4. Não use vírgulas nas atividades.
@@ -27,6 +27,38 @@ export const getContextWeeklyPrompt = (
           "day5": ["atividade 1", ...]
         }
 
+        atividades fixas:
+        - todo dia fixo (qualquer horario): roda de conversa
+        - todo dia fixo (qualquer horario): roda de musica (sobre o tema da semana)
+        - todo dia fixo (13:00 as 14:00): acolhimento, higiene, cafe e combinados
+        - toda segunda feira (day1): parque as 14horas
+        - toda sexta feira (day5): parque as 14horas
+        - toda quarta feira (day3): quadra
+        - todo dia fixo as 16:45 ate 17:00: jantar
+
+        atividades possiveis:
+        - solario
+        - brincadeira livre
+        - brincadeira de peteca
+        - brincadeira de mimica
+        - brincadeira de roda
+        - brincadeira de caca ao tesouro
+        - brincadeira de exploracao da natureza
+        - desenho guiado sobre o tema da semana
+        - brincadeira guiadas sobre o tema da semana
+        - brincadeira de advinha
+        - momento da historia (historias infantis de acordo com o tema proposto)
+        - momento de video
+        - brincadeira com slime
+        - brincadeira com brinquedos pedagogicos
+        - brincadeira de casinha
+        - recorte e colagem
+        - desenho livre
+        - chamada viva
+        - contagem de numeros de zero a 10
+
+        Nao saia dessas atividades que citei anteriormente, ao menos que esteja injetado dentro do prompt, pode repitir atividades durante os dias da semana
+        Nao gere textos com jargoes em ingles nem nada do genero, nao utilize interacoes nem nada relacionado a libras, todos os materiais devem ser possiveis de encontrar em sala de aula ou em uma escola de baixa renda
         Gere exatamente ${countPerDay} itens em cada array day1..day5.
         Responda SOMENTE com JSON válido.`;
     return prompt;
