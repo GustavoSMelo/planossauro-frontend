@@ -17,6 +17,15 @@ export const getContextWeeklyPrompt = (
         3. Alinhe implicitamente a eixos/saberes do QSN sem citar QSN.
         4. Não use vírgulas nas atividades.
         5. Não inclua numeração.
+        6. Nao pode praticar sequencia
+        7. Nao pode ter trabalhos robotizados
+        8. Nao pode ter contagem de zero a 10 todos os dias, precisa ser em dias espacados
+        9. Nao saia dessas atividades que citei anteriormente, ao menos que esteja injetado dentro do prompt, pode repitir atividades durante os dias da semana
+        10. Nao gere textos com jargoes em ingles nem nada do genero, nao utilize interacoes nem nada relacionado a libras, todos os materiais devem ser possiveis de encontrar em sala de aula ou em uma escola de baixa renda
+        11. As atividades e contextualizacao precisam ser simples
+        12. As atividades nao podem sair das atividades mencionadas
+
+        Gere exatamente ${countPerDay} itens em cada array day1..day5.
 
         Resposta esperada em JSON estrito:
         {
@@ -30,7 +39,7 @@ export const getContextWeeklyPrompt = (
         atividades fixas:
         - todo dia fixo (qualquer horario): roda de conversa
         - todo dia fixo (qualquer horario): roda de musica (sobre o tema da semana)
-        - todo dia fixo (13:00 as 14:00): acolhimento, higiene, cafe e combinados
+        - todo dia fixo (13:00 ~ 14:00): acolhimento, higiene, cafe e combinados
         - toda segunda feira (day1): parque as 14horas
         - toda sexta feira (day5): parque as 14horas
         - toda quarta feira (day3): quadra
@@ -55,11 +64,20 @@ export const getContextWeeklyPrompt = (
         - recorte e colagem
         - desenho livre
         - chamada viva
-        - contagem de numeros de zero a 10
+        - contagem de numeros de zero a 20
 
-        Nao saia dessas atividades que citei anteriormente, ao menos que esteja injetado dentro do prompt, pode repitir atividades durante os dias da semana
-        Nao gere textos com jargoes em ingles nem nada do genero, nao utilize interacoes nem nada relacionado a libras, todos os materiais devem ser possiveis de encontrar em sala de aula ou em uma escola de baixa renda
-        Gere exatamente ${countPerDay} itens em cada array day1..day5.
+        Materiais possiveis:
+        - papel
+        - lapis
+        - canetinha
+        - brinquedos pedagogicos
+        - tv
+        - radio
+        - laptop
+
+        Os materiais nao podem fugir doque foi especificado nessa lista anteriormente
+        NAO INCLUA trabalho de libras
+
         Responda SOMENTE com JSON válido.`;
     return prompt;
 };
