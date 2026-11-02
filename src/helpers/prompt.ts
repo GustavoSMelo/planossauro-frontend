@@ -17,6 +17,15 @@ export const getContextWeeklyPrompt = (
         3. Alinhe implicitamente a eixos/saberes do QSN sem citar QSN.
         4. Não use vírgulas nas atividades.
         5. Não inclua numeração.
+        6. Nao pode praticar sequencia
+        7. Nao pode ter trabalhos robotizados
+        8. Nao pode ter contagem de zero a 10 todos os dias, precisa ser em dias espacados
+        9. Nao saia dessas atividades que citei anteriormente, ao menos que esteja injetado dentro do prompt, pode repitir atividades durante os dias da semana
+        10. Nao gere textos com jargoes em ingles nem nada do genero, nao utilize interacoes nem nada relacionado a libras, todos os materiais devem ser possiveis de encontrar em sala de aula ou em uma escola de baixa renda
+        11. As atividades e contextualizacao precisam ser simples
+        12. As atividades nao podem sair das atividades mencionadas
+
+        Gere exatamente ${countPerDay} itens em cada array day1..day5.
 
         Resposta esperada em JSON estrito:
         {
@@ -69,9 +78,6 @@ export const getContextWeeklyPrompt = (
         Os materiais nao podem fugir doque foi especificado nessa lista anteriormente
         NAO INCLUA trabalho de libras
 
-        Nao saia dessas atividades que citei anteriormente, ao menos que esteja injetado dentro do prompt, pode repitir atividades durante os dias da semana
-        Nao gere textos com jargoes em ingles nem nada do genero, nao utilize interacoes nem nada relacionado a libras, todos os materiais devem ser possiveis de encontrar em sala de aula ou em uma escola de baixa renda
-        Gere exatamente ${countPerDay} itens em cada array day1..day5.
         Responda SOMENTE com JSON válido.`;
     return prompt;
 };
