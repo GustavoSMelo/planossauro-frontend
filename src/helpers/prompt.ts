@@ -24,6 +24,7 @@ export const getContextWeeklyPrompt = (
         10. Nao gere textos com jargoes em ingles nem nada do genero, nao utilize interacoes nem nada relacionado a libras, todos os materiais devem ser possiveis de encontrar em sala de aula ou em uma escola de baixa renda
         11. As atividades e contextualizacao precisam ser simples
         12. As atividades nao podem sair das atividades mencionadas
+        13. Os materiais nao podem ser diferentes do mencionando
 
         Gere exatamente ${countPerDay} itens em cada array day1..day5.
 
@@ -36,13 +37,13 @@ export const getContextWeeklyPrompt = (
           "day5": ["atividade 1", ...]
         }
 
-        atividades fixas:
+        atividades fixas estrito:
         - todo dia fixo (qualquer horario): roda de conversa
         - todo dia fixo (qualquer horario): roda de musica (sobre o tema da semana)
         - todo dia fixo (13:00 ~ 14:00): acolhimento, higiene, cafe e combinados
         - toda segunda feira (day1): parque as 14horas
-        - toda sexta feira (day5): parque as 14horas
         - toda quarta feira (day3): quadra
+        - toda sexta feira (day5): parque as 14horas
         - todo dia fixo as 16:45 ate 17:00: jantar
 
         atividades possiveis:
@@ -74,9 +75,10 @@ export const getContextWeeklyPrompt = (
         - tv
         - radio
         - laptop
-
-        Os materiais nao podem fugir doque foi especificado nessa lista anteriormente
-        NAO INCLUA trabalho de libras
+        - Revistas/Jornais para recorte e colagem
+        - Cola
+        - Tesoura sem ponta
+        - Materiais reciclaveis
 
         Responda SOMENTE com JSON válido.`;
     return prompt;
